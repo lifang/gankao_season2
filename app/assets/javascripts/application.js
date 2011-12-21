@@ -6,4 +6,4 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= main
+//= require main
