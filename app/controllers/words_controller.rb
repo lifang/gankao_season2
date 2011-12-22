@@ -1,8 +1,10 @@
 # encoding: utf-8
 class WordsController < ApplicationController
   def index
-    @already_recited = Action_log.return_log_by_types({"type" => ActionLog::TYPES[:RECITE],
+    @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i})
-    @total_count = Word.recite_words
+    level_word_count = Word.recite_words
+    user_word_count = UserWordRelation.user_words(cookies[:user_id].to_i)
+    @leaving_count = level_word_count + user_word_count
   end
 end

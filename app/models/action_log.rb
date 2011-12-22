@@ -11,7 +11,12 @@ class ActionLog < ActiveRecord::Base
     sql = "select count(id) from action_logs "
     unless options.empty?
       sql += "where"
-      options.each { |key, value| sql += "#{key} = #{value}" }
+      index = 1
+      options.each { |key, value| 
+        sql += " #{key} = #{value} "
+        sql += " and " if options.length != index
+        index += 1
+      }
     end
     return ActionLog.count_by_sql(sql)
   end

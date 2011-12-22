@@ -1,14 +1,5 @@
 #encoding: utf-8
 class Word < ActiveRecord::Base
-  require 'net/https'
-  require 'uri'
-  require 'mechanize'
-  require 'hpricot'
-  require 'open-uri'
-  require 'rubygems'
-  require 'fileutils'
-  require 'rexml/document'
-  include REXML
   
   belongs_to :category
   has_many :word_sentences
@@ -26,7 +17,7 @@ class Word < ActiveRecord::Base
     7 => "七", 8 => "八", 9 => "九", 10 => "十"}  #单词的等级
 
   def self.recite_words
-    reuturn Word.count('id', :conditions => "level < #{WORD_LEVEL[:third]}")
+    return Word.count('id', :conditions => "level < #{WORD_LEVEL[:third]}")
   end
 
 end
