@@ -8,7 +8,7 @@ class ActionLog < ActiveRecord::Base
   TYPE_NAMES = {0 => "登录", 1 => "真题", 2 => "模考", 3 => "背单词", 4 => "学习计划"}
 
   def self.return_log_by_types(options={})
-    sql = "select count(id) from action_logs "
+    sql = "select ifnull(sum(total_num), 0) total_num from action_logs "
     unless options.empty?
       sql += "where"
       index = 1
@@ -18,7 +18,7 @@ class ActionLog < ActiveRecord::Base
         index += 1
       }
     end
-    return ActionLog.count_by_sql(sql)
+    return ActionLog.find_by_sql(sql)[0]
   end
   
 end

@@ -7,19 +7,20 @@ img { border: none;}
 button { cursor: pointer;}
 .clear { clear: both;}
 .float_right { float: right;}
-.position_re { position: relative;} 
+
+.position_re { position: relative;}
 .red { color: #F00;}
 .orange { color: #ff6c00;}
 .gray { color: #999;}
 .xx_x { cursor: pointer; float: right;}
-.t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none; cursor: pointer;}
+.t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none;}
 .btn_box { width: 81px; height: 27px; margin: 0 auto;}
 .border_radius {
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-ms-border-radius: 5px;
-	-o-border-radius: 5px;
-	border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
 }
 
 
@@ -102,19 +103,20 @@ button { cursor: pointer;}
 .problem_text { line-height: 24px; text-indent: 24px; padding: 10px; text-align:justify;}
 .problem_text div { padding: 5px 0;}
 
-/*小题------------------*/
+/*选择题小题------------------*/
 
 .pro_question_list {
-        overflow: hidden;
-	margin: 5px 0;
-	padding: 5px 10px;
-	line-height: 24px;
+
+    overflow: hidden;
+    margin: 5px 0;
+    padding: 5px 10px;
+    line-height: 24px;
     -moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-ms-border-radius: 5px;
-	-o-border-radius: 5px;
-	border-radius: 5px;
-	background: #f9f9f9; border: 1px #666 solid;
+    -webkit-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    background: #f9f9f9; border: 1px #666 solid;
 }
 
 .pql_left { width: 5%; float: left; height: 32px; line-height: 32px;}
@@ -133,13 +135,13 @@ button { cursor: pointer;}
 .pro_qu_ul li span {
     cursor: pointer;
     background: url(/assets/li.png) no-repeat 0 0;
-	width: 23px;
-	height: 23px;
-	line-height: 23px;
-	display: block;
-	float: left;
-	text-align: center;
-	margin-right: 10px;
+    width: 23px;
+    height: 23px;
+    line-height: 23px;
+    display: block;
+    float: left;
+    text-align: center;
+    margin-right: 10px;
 }
 .pro_qu_ul li span.hover { background: url(/assets/li.png) no-repeat 0 -23px; color: #FFF;}
 
@@ -157,14 +159,14 @@ button { cursor: pointer;}
 .input_tk { height: 21px; line-height: 21px; border: 1px #e2e2e2 solid; float: left;}
 .button_tk {
     width: 41px;
-	height: 23px;
-	text-align: center;
-	line-height: 23px;
-	text-indent: 0;
-	border: none;
-	background: url(/assets/button_tk.png) no-repeat;
-	float: left;
-	color: #ff6c00;
+    height: 23px;
+    text-align: center;
+    line-height: 23px;
+    text-indent: 0;
+    border: none;
+    background: url(/assets/button_tk.png) no-repeat;
+    float: left;
+    color: #ff6c00;
 }
 .span_tk { display: inline-block; width: 195px; height: 18px;}
 .select_tk { float: left; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid;}
@@ -172,13 +174,14 @@ button { cursor: pointer;}
 /*拖拽---*/
 .drag_tk_box {}
 .drag_tk {
-	width: 47%;
+
+    width: 46%;
     padding: 10px;
-	background: #d8d5ca;
-	overflow: hidden;
+    background: #d8d5ca;
+    overflow: hidden;
     z-index: 100;
-	position: fixed;
-	bottom: 30px;
+    position: fixed;
+    bottom: 30px;
 }
 
 .drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #d1cab6; float: left; margin: 5px; cursor:move;}
@@ -191,7 +194,8 @@ button { cursor: pointer;}
 .xg_words li a.hover { color:#ff6c00;}
 .xg_words_ny { float: left; border-left: 1px #CCC solid;}
 
-
+.textarea_xz { width: 520px; height: 150px;}
+.textarea_tk { width: 520px; height: 25px;}
 
 /*翻页-----------------------*/
 /*CSS sabrosus style pagination*/
@@ -245,23 +249,23 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 /*单词认读--回想释义--词汇运用--拼写游戏*/
 .cihui_lx { width:627px; margin: 0 auto; overflow: hidden;}
 .ch_lx_nav {
-   width: 620px;
-   margin: 0 auto;
-   border-left: 1px #c1c1c1 solid;
-   border-right: 1px #c1c1c1 solid;
-   background: url(/assets/lx_ul_bg.png) repeat-x;
-   overflow: hidden;
+    width: 620px;
+    margin: 0 auto;
+    border-left: 1px #c1c1c1 solid;
+    border-right: 1px #c1c1c1 solid;
+    background: url(/assets/lx_ul_bg.png) repeat-x;
+    overflow: hidden;
 }
 .lx_ul li { width: 150px; height: 35px; line-height: 33px; color: #b9b9b9; float: left;}
 .lx_ul li.hover { background: url(/assets/lx_ul_li_hover_bg.png) no-repeat;}
 .lx_ul li a {
     width: 90px;
-	height: 35px;
-	line-height: 33px;
-	padding-left: 60px;
-	color: #b9b9b9;
-	display: block;
-	background: url(/assets/lx_ul_li.png) no-repeat 30px 0;
+    height: 35px;
+    line-height: 33px;
+    padding-left: 60px;
+    color: #b9b9b9;
+    display: block;
+    background: url(/assets/lx_ul_li.png) no-repeat 30px 0;
 }
 .lx_ul li.hover a {background: url(/assets/lx_ul_li.png) no-repeat 30px bottom; color: #333;}
 
@@ -276,36 +280,40 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .font_size_16 { font-size: 16px; font-family: Arial;}
 .words_ul_font14 { font-size: 14px; font-family: Arial; color: #666; list-style: inside disc;}
 
+.next_down { width: 19px; height: 18px; display: block; margin-left: 50px;}
 
 /*words_tishi---------------*/
-.words_tishi { width: 150px; height: 450px; border: 1px #000 solid; overflow-y: auto; background: url(/assets/black_bg.png) repeat; padding: 2px; position: absolute; top: 100px; left: -145px;}
+.words_tishi { width: 150px; height: 450px; border: 1px #000 solid; overflow-y: auto; background: url(/assets/black_bg.png) repeat; padding: 2px; position: absolute; top: 100px; left: 0px;}
 .words_ts_box { padding: 10px 0; height: 430px; background: url(/assets/black01_bg.png) repeat;}
 .words_ts_box p {
-    text-align: center;
-	font-size: 12px;
-	font-family: Arial;
-	color: #FFF;
-	line-height: 24px;
-	overflow:hidden;
-	text-overflow:ellipsis;
-	white-space:nowrap;
+    text-align: left;
+    padding-left: 20px;
+    font-size: 12px;
+    font-family: Arial;
+    color: #FFF;
+    line-height: 24px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
+
+.z_five { float: left; margin-right: 5px;}
 
 /*回想释义---------------------*/
 .words_btn {margin: 10px 0; line-height: 24px; text-align: center;}
 .words_btn a {
     width: 150px;
-	margin: 0 auto;
-	display: block;
-	color: #333;
-	padding: 5px;
-	border: 1px #a8a08a solid;
-	border-bottom: 2px #a8a08a solid;
-	border-right: 2px #a8a08a solid;
-	background: #cdc5b0;
+    margin: 0 auto;
+    display: block;
+    color: #333;
+    padding: 5px;
+    border: 1px #a8a08a solid;
+    border-bottom: 2px #a8a08a solid;
+    border-right: 2px #a8a08a solid;
+    background: #cdc5b0;
     overflow:hidden;
-	text-overflow:ellipsis;
-	white-space:nowrap;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 .words_btn a:hover { background: #e7e3d7;}
 
@@ -322,3 +330,10 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 /* 提示弹出层*/
 .tishi_tab {width: 288px; height: 82px; padding:30px 10px 10px 10px; background: url(/assets/tishi_tab_bg.png) no-repeat; position: fixed; display: none;z-index: 9999;}
 .tishi_tab p  { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; font-weight:bold; color: #ffffff;}
+
+/*tab_box------------*/
+.tab_box { width: 300px; padding: 5px; min-height: 200px; border: 3px #CCC solid; background: #FFF;position: fixed;z-index: 900;}
+.tab_x { float: right;}
+.tab_con { padding: 60px 10px; text-align: center;}
+.icon_false { background: url(/assets/false.png) no-repeat #FFF center center;}
+.icon_true { background: url(/assets/true.png) no-repeat #FFF center center;}

@@ -1,6 +1,12 @@
 <h1>词汇练习</h1>
 <div class="cihui_f">
-  <div class="ch_f_line"><a href="#" class="danci_hg">回顾</a><p>已掌握单词：<span class="orange"><%= @already_recited %></span></p></div>
-  <div class="ch_f_line"><a href="#" class="danci_bc">背词</a><p>未掌握单词：<span class="orange"><%= @leaving_count %></span></p></div>
+  <div class="ch_f_line">
+    <a href="#" class="danci_hg">回顾</a>
+    <p>已掌握单词：<span class="orange"><%= @already_recited.total_num %></span></p>
+  </div>
+  <div class="ch_f_line">
+    <a href="/words/recite_word?category=<%= params[:category] %>" class="danci_bc">背词</a>
+    <p>未掌握单词：<span class="orange"><%= @leaving_count %></span></p>
+  </div>
   <div><span class="orange">*</span>会从需要学习的词语中随机选出对应数量的词汇进行练习。</div>
 </div>
