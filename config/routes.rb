@@ -14,7 +14,14 @@ GankaoSeason2::Application.routes.draw do
   #   resources :products
   resources :similarities
   resources :study_plans
-  resources :words
+  resources :words do
+    collection do
+      get 'recite_word'
+    end
+    member do
+      get 'recollection', 'use', 'hand_man'
+    end
+  end
   # Sample resource route with options:
   #   resources :products do
   #     member do

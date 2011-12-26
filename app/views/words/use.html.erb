@@ -1,0 +1,41 @@
+<%= javascript_include_tag "words" %>
+<h1>词汇练习</h1>
+<div class="cihui_lx">
+  <div class="ch_lx_nav">
+    <ul class="lx_ul">
+      <li><a href="javascript:void(0);">单词认读</a></li>
+      <li><a href="javascript:void(0);">回想释义</a></li>
+      <li class="hover"><a href="/words/<%= @word.id %>/use?category=<%= params[:category] %>">词汇运用</a></li>
+      <li><a href="javascript:void(0);">拼写游戏</a></li>
+    </ul>
+  </div>
+  <div class="ch_box">
+    <div class="ch_text">
+      <div class="ch_words_shu">(<%= (@already_recited.total_num + 1) %>)</div>
+      <% discriminate = @word.discriminates[0] unless @word.discriminates.blank? or @word.discriminates[0].nil? %>
+
+      <% @word.word_sentences.each_with_index do |sentence, index| %>
+      <div id="sentence_<%= index %>" <% if index > 0 %>style="display: none;"<% end %>>
+          <div class="ch_words_line">
+            <p class="font_size_16"><%= sentence.description.gsub("#{@word.name}", "_________") %></p>
+          </div>
+          <div class="ch_words_line">
+            <%  unless discriminate.words.blank? %>
+              <% (discriminate.words.to_a.sort_by{ rand }).each do |word| %>
+                <div class="words_btn font_size_16">
+                  <a href="javascript:void(0);"
+                     onclick="javascript:recollection_word(<%= @word.id %>, <%= word.id %>, <%= params[:category] %>, <%= index %>);">
+                       <%= word.name %>
+                  </a>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end unless @word.word_sentences.blank? %>
+    </div>
+    <div class="box_bottom_bg"></div>
+  </div>
+</div>
+<div id="tab_box" class="tab_box border_radius icon_false" style="display: none;">
+</div>

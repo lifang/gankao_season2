@@ -1,0 +1,44 @@
+<%= javascript_include_tag "words" %>
+<%= javascript_include_tag "/assets/jplayer/jquery.jplayer.min.js" %>
+<h1>词汇练习</h1>
+<div class="cihui_lx">
+  <div class="ch_lx_nav">
+    <ul class="lx_ul">
+      <li class="hover"><a href="/words/recite_word?category=<%= params[:category] %>">单词认读</a></li>
+      <li><a href="javascript:void(0);">回想释义</a></li>
+      <li><a href="javascript:void(0);">词汇运用</a></li>
+      <li><a href="javascript:void(0);">拼写游戏</a></li>
+    </ul>
+  </div>
+  <div class="ch_box">
+    <div class="ch_text">
+      <div class="ch_words_shu">(<%= (@already_recited.total_num + 1) %>)</div>
+      <div class="ch_words_line">
+        <span class="font_size_24"><%= @word.name %></span>
+        <span><%= Word::TYPES[@word.types] %></span>
+        <span><%= @word.phonetic %></span>
+        <a href="javascript:void(0);" onclick="javascript:control_media();"><img src="/assets/icon_fy.png" /></a>
+        <input type="hidden" name="enunciate_url" id="enunciate_url"
+               value="<%= Constant::BACK_SERVER_PATH + @word.enunciate_url %>" />
+        <div id="jquery_jplayer" class="jp-jplayer" style="width:0px;height:1px;"></div>
+      </div>
+      <div class="ch_words_line">
+        <p class="font_size_16"><%= @word.en_mean %></p>
+        <p><%= @word.ch_mean %></p>
+      </div>
+      <div class="ch_words_line">
+        <ul class="words_ul_font14">
+          <% @word.word_sentences.each do |sentence| %>
+            <li><%= sentence.description %></li>
+          <% end unless @word.word_sentences.blank? %>
+        </ul>
+      </div>
+      <div class="ch_words_line">
+        <button class="t_btn">熟悉了</button>
+        <button class="t_btn" 
+                onclick="javascript:window.location.href='/words/<%= @word.id %>/recollection?category=<%= params[:category] %>';" >不熟悉</button>
+      </div>
+    </div>
+    <div class="box_bottom_bg"></div>
+  </div>
+</div>
