@@ -28,6 +28,8 @@ GankaoSeason2::Application.routes.draw do
       get :renren_login
     end
   end
+  resources :study_plans
+  resources :words
   # Sample resource route with options:
   #   resources :products do
   #     member do
