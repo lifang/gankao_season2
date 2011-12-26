@@ -161,26 +161,26 @@
 </div>
 <input type="hidden" value="" id="all_days"/>
 <script type="text/javascript">
-  
+ 
   var cale = new Calendar("idCalendar", {
     //        SelectDay: new Date().setDate(10),
     onSelectDay: function(o){ o.className = "onSelect"; },
 <%#*onToday: function(o){ o.className = "pt_day_new"; },%>
     onFinish: function(){
+      var year=this.Year;
+      
       var month=this.Month;
-      var days=this.Days
+      var days=this.Days;
       var divs=jQuery("#idCalendar div");
       divs.splice(divs[0],7);
       $("date").innerHTML=today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-      var start=this.Year+"-"+(this.Month)+"-1";
-      var end=this.Year+"-"+(this.Month)+"-31";
-      var sql_prams="created_at between '"+start +"' and '"+ end+"'";
+      var start=this.Year+"-"+(this.Month)+"-"+ parseInt(days[1].innerHTML);
+      var end=this.Year+"-"+(this.Month)+"-"+parseInt(days[days.length-1].innerHTML);
       jQuery.ajax({
         type: "POST",
         url: "/study_plans/plan_status.json",
         dataType: "json",
         data : {
-          "sql" : sql_prams,
           start :start,
           end : end
         },
@@ -189,14 +189,18 @@
         success : function(data) {
           var flag = data.days
           var done_plans=new Array();
-          for(var n = 0, lens = flag.length; n < lens; n++){
-            done_plans[n]=days[flag[n]]
-          }
           for(var i =0, len = divs.length; i < len; i++){
-            if(flag.length==0){
-              divs[i].className= "gray";
-            }else{alert((month-1)==today.getMonth());
-              if (today.getDate()==parseInt(divs[i].innerHTML && (month-1)==today.getMonth())){
+            if(flag[month]==undefined){
+              if (today.getDate()==parseInt(divs[i].innerHTML)&&month==(today.getMonth()+1)&&today.getFullYear()==year){
+                divs[i].className= "pt_day_new";
+                divs[i].innerHTML=$("today").innerHTML;
+              }else{
+                divs[i].className= "gray";}
+            }else{
+              for(var n = 0, lens = flag[month].length; n < lens; n++){
+                done_plans[n]=days[flag[month][n]]
+              }
+              if (today.getDate()==parseInt(divs[i].innerHTML)&&month==(today.getMonth()+1)&&today.getFullYear()==year){
                 divs[i].className= "pt_day_new";
                 divs[i].innerHTML=$("today").innerHTML;
               }else{
