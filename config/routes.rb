@@ -15,6 +15,7 @@ GankaoSeason2::Application.routes.draw do
   resources :similarities
   resources :study_plans
   resources :words
+  resources :exam_users
   # Sample resource route with options:
   #   resources :products do
   #     member do

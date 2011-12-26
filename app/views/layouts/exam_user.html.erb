@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>赶考-英语真题练习网站</title>
+    <%= stylesheet_link_tag    "style" %>
+    <%= stylesheet_link_tag    "public" %>
+    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "cookie.js" %>
+    <%= javascript_include_tag "exam_user.js" %>
+    <%= csrf_meta_tags %>
+    <!--[if IE 6]>
+    <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>
+      /* EXAMPLE */
+      DD_belatedPNG.fix('*');
+
+      /* string argument can be any CSS selector */
+      /* .png_bg example is unnecessary */
+      /* change it to what suits you! */
+    </script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="head">
+        <div class="head_info">
+          <div class="h_user"><a href="#" class="h_email email_u">邮件</a><a href="#">yesen</a>|<a href="#">退出</a>
+            <div class="email_tab" style="display: none; ">
+              <ul>
+                <li><a href="#">收件箱:<span class="orange">10</span></a></li>
+                <li><a href="#">通&nbsp;&nbsp;知:<span class="orange">10</span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="h_banner"><a href="#"><img src="/assets/banner.png"/></a></div>
+          <div class="h_weibo"><a href="#"><img src="/assets/icon_renren.png"></a><a href="#"><img src="/assets/icon_sina.png"/></a></div>
+        </div>
+        <div class="logo"><a href="#"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
+        <div class="nav">
+          <ul>
+            <li><a href="#" class="hover">真题</a></li>
+            <li><a href="#">专题</a></li>
+            <li><a href="#">词汇</a></li>
+            <li><a href="#">模考</a></li>
+            <li><a href="#">计划</a></li>
+            <li><a href="#">收藏</a></li>
+          </ul>
+        </div>
+        <div class="clear"></div>
+      </div>
+
+      <div class="clear"></div>
+      <div class="main">
+        <%= yield %>
+        <div class="clear"></div>
+      </div>
+      <div class="foot"></div>
+    </div>
+  </body>
+</html>
+
