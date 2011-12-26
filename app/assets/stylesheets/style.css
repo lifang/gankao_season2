@@ -192,6 +192,9 @@ button { cursor: pointer;}
 .xg_words_ny { float: left; border-left: 1px #CCC solid;}
 
 
+.textarea_xz { width: 520px; height: 150px;}
+.textarea_tk { width: 520px; height: 25px;}
+
 
 /*翻页-----------------------*/
 /*CSS sabrosus style pagination*/
@@ -278,7 +281,6 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .words_ul_font14 { font-size: 14px; font-family: Arial; color: #666; list-style: inside disc;}
 
 .next_down { width: 19px; height: 18px; display: block; margin-left: 50px;}
-
 
 /*words_tishi---------------*/
 .words_tishi { width: 150px; height: 450px; border: 1px #000 solid; overflow-y: auto; background: url(/assets/black_bg.png) repeat; padding: 2px; position: absolute; top: 100px; left: 0px;}
