@@ -8,6 +8,7 @@ img { border: none;}
 .float_right { float: right;}
 .red { color: #F00;}
 .orange { color: #ff6c00;}
+.gray { color: #999;}
 .xx_x { cursor: pointer; float: right;}
 .t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none; cursor: pointer;}
 .btn_box { width: 81px; height: 27px; margin: 0 auto;}
@@ -43,7 +44,7 @@ img { border: none;}
 
 
 .main { background: url(/assets/main_bg.png) repeat  #FFF; overflow: hidden; width: 100%;}
-.main_Div { background: #FFF; overflow: hidden; width: 100%;}
+.main_Div { background: #FFF; overflow: hidden; width: 100%; overflow-y: auto;}
 .m_box { width: 700px; margin: 0 auto;}
 .m_box h1 { height: 32px; line-height: 32px; margin: 20px 0 10px 0; font-size: 18px; text-align: center;}
 
@@ -94,7 +95,7 @@ img { border: none;}
 .problem_text { line-height: 24px; text-indent: 24px; padding: 10px; text-align:justify;}
 .problem_text div { padding: 5px 0;}
 
-/*小题------------------*/
+/*选择题小题------------------*/
 
 .pro_question_list {
 
@@ -127,8 +128,8 @@ img { border: none;}
 }
 .pro_qu_ul li span.hover { background: url(/assets/li.png) no-repeat 0 -23px; color: #FFF;}
 
-.green_dui { color: #090;}
-.red_cuo { color: #F00;}
+.green_dui { color: #090; padding-left: 50px;}
+.red_cuo { color: #F00; padding-left: 50px;}
 
 .pro_btn { padding: 10px 0 0 50px;}
 .pro_btn button { margin: 0 10px;}
@@ -136,7 +137,10 @@ img { border: none;}
 
 .jiexi { background: #FFFCE9; border: 1px solid #EBDEBC; padding: 5px; margin: 10px 0;}
 
-.foot { height: 30px; line-height: 30px;}
+.textarea_xz { width: 520px; height: 150px;}
+.textarea_tk { width: 520px; height: 25px;}
+
+
 
 /*翻页-----------------------*/
 /*CSS sabrosus style pagination*/
@@ -159,6 +163,26 @@ img { border: none;}
 .jihua_wei { width: 625px; margin: 0 auto; background: #efede7; border: 1px #c2bdae solid; position: relative;}
 .jihua_w_text { padding: 20px; line-height: 24px;}
 .box_bottom_bg { width: 620px; height: 12px; position: absolute; bottom: -12px; background: url(/assets/box_bottom_bg.png) no-repeat;}
+
+.planTable { width: 698px; border: 1px #bebebe solid;}
+.planTable_h { height: 38px; padding-left: 290px; background: url(/assets/planTable_h_bg.png) repeat-x;}
+.planTable_month { width: 100px; height: 38px; text-align: center; font-weight: bold; line-height: 38px; float: left;}
+.planTable_up, .planTable_down { width: 13px; height: 16px; float: left; margin-top: 12px; cursor: pointer; overflow: hidden; text-indent: -999px;}
+.planTable_up { width: 13px; height: 16px; background: url(/assets/planTable_move.png) no-repeat 0 0;}
+.planTable_down { background: url(/assets/planTable_move.png) no-repeat right 0;}
+
+.planTable_box { width: 698px; overflow: hidden; padding-bottom: 5px;}
+.planTable_box div { width: 93px; height: 68px; border: 1px #fff solid; margin: 2px 0 2px 4px; text-align: center; float: left; font-size: 36px;}
+div.pt_day { color: #333; background: url(/assets/planTable_box_bg.png) repeat-x 0 bottom; border: 1px #cccccc solid;}
+div.pt_day_new { background: url(/assets/pt_day_new_bg.png) no-repeat center top; border: 1px #3d6d92 solid; color: #FFF;}
+div.pt_day_new p { font-size: 12px; height: 22px; line-height: 22px;}
+div.pt_day_new p span { margin: 0 5px;}
+div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
+.pt_lianxi, .pt_beici { width: 25px; height: 22px; padding-left: 10px; display: block; float: left;}
+.pt_lianxi { background: url(/assets/icon_bi.png) no-repeat left center;}
+.pt_beici { background: url(/assets/icon_ben.png) no-repeat left center;}
+.pt_ztai { width: 16px; height: 16px; margin: 0 auto;}
+
 
 /*词汇练习---------------*/
 .cihui_f { width: 370px; margin: 0 auto;}
@@ -197,9 +221,11 @@ img { border: none;}
 .ch_words_shu { color: #ff6c00; text-align: right;}
 .ch_words_line { padding: 10px;}
 .ch_words_line span { margin-right: 10px;}
+.ch_words_line button { margin: 0 10px;}
 .font_size_24 { font-size: 24px; font-family: Arial;}
 .font_size_16 { font-size: 16px; font-family: Arial;}
 .words_ul_font14 { font-size: 14px; font-family: Arial; color: #666; list-style: inside disc;}
+
 
 /*words_tishi---------------*/
 .words_tishi { width: 150px; height: 450px; border: 1px #000 solid; overflow-y: auto; background: url(/assets/black_bg.png) repeat; padding: 2px; position: absolute; top: 100px; left: -145px;}
@@ -214,3 +240,32 @@ img { border: none;}
 	text-overflow:ellipsis;
 	white-space:nowrap;
 }
+
+
+/*回想释义---------------------*/
+.words_btn {margin: 10px 0; line-height: 24px; text-align: center;}
+.words_btn a {
+    width: 150px;
+	margin: 0 auto;
+	display: block;
+	color: #333;
+	padding: 5px;
+	border: 1px #a8a08a solid;
+	border-bottom: 2px #a8a08a solid;
+	border-right: 2px #a8a08a solid;
+	background: #cdc5b0;
+    overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+.words_btn a:hover { background: #e7e3d7;}
+
+/*拼写游戏-----------*/
+.words_input { width: 20px; font-size: 16px; font-family: Arial;}
+.words_letter { overflow: hidden;}
+.words_letter li { width: 24px; height: 24px; border: 1px #c8c3b5 solid; margin:5px; line-height: 24px; text-align: center; float: left; background: #e7e3d7; color: #333;}
+.words_letter li.hover { color: #c8c3b5;}
+.xiaoren { width: 180px; height: 200px; margin: 0 auto;}
+
+/*foot----------------*/
+.foot { height: 30px; line-height: 30px;}

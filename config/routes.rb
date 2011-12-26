@@ -13,7 +13,21 @@ GankaoSeason2::Application.routes.draw do
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
   resources :similarities
-  resources :study_plans
+  resources :study_plans do
+    collection do
+      get :done_plans
+      post :plan_status
+    end
+  end
+  resources :words
+  resources :logins do
+    collection do
+      get :friend_add_request,:renren_like,:sina_index,:add_user
+      get :renren_index,:follow_me,:login_from_qq,:qq_index,:get_code,:user_code
+      get :sina_login,:friend_add
+      get :renren_login
+    end
+  end
   # Sample resource route with options:
   #   resources :products do
   #     member do
