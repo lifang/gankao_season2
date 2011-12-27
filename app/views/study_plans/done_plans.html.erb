@@ -1,138 +1,8 @@
+<%= javascript_include_tag "calender_done" %>
 <script type="text/javascript">
   var today=new Date();
   var arr = [];
   var new_arr=[];
-  var $ = function (id) {
-    return "string" == typeof id ? document.getElementById(id) : id;
-  };
-  var Class = {
-    create: function() {
-      return function() {
-        this.initialize.apply(this, arguments);
-      }
-    }
-  }
-  Object.extend = function(destination, source) {
-    for (var property in source) {
-      destination[property] = source[property];
-    }
-    return destination;
-  }
-  var Calendar = Class.create();
-  Calendar.prototype = {
-    initialize: function(container, options) {
-      this.Container = $(container);//table结构容器
-      this.Days = [];//日期列表
-      this.SetOptions(options);
-      this.Year = this.options.Year;
-      this.Month = this.options.Month;
-      this.SelectDay = this.options.SelectDay ? new Date(this.options.SelectDay) : null;
-      this.onSelectDay = this.options.onSelectDay;
-      this.onToday = this.options.onToday;
-      this.onFinish = this.options.onFinish;
-      this.Draw();
-    },
-
-    SetOptions: function(options) {
-      this.options = {//默认值
-        Year: new Date().getFullYear(),
-        Month: new Date().getMonth() + 1,
-        SelectDay: null,//选择日期
-        onSelectDay: function(){},
-        onToday: function(){},
-        onFinish: function(){}
-      };
-      Object.extend(this.options, options || {});
-    },
-    //上月
-    PreMonth: function() {
-      //取得上月日期对象
-      var d = new Date(this.Year, this.Month - 2, 1);
-      //设置属性
-      this.Year = d.getFullYear();
-      this.Month = d.getMonth() + 1;
-      //重绘日历
-      this.Draw();
-    },
-    //下一个月
-    NextMonth: function() {
-      var d = new Date(this.Year, this.Month, 1);
-      this.Year = d.getFullYear();
-      this.Month = d.getMonth() + 1;
-      this.Draw();
-    },
-
-    Draw: function() {
-      //保存日期列表
-      //用当月第一天在一周中的日期值作为当月离第一天的天数
-      for(var i = 1, firstDay = new Date(this.Year, this.Month - 1, 1).getDay(); i <= firstDay; i++){ arr.push(" "); }
-      //用当月最后一天在一个月中的日期值作为当月的天数
-      for(var i = 1, monthDay = new Date(this.Year, this.Month, 0).getDate(); i <= monthDay; i++){ arr.push(i);new_arr.push(i); }
-      var frag = document.createDocumentFragment();
-      this.Days = [];
-      var head=["SE","MO","TU","WE","TH","FR","SU"]
-      for(var i = 1; i <= 7; i++){
-        var  div=document.createElement("div");
-        var strong=document.createElement("strong");
-        strong.innerHTML=head[i-1]
-        div.appendChild(strong)
-        frag.appendChild(div);
-      }
-
-      Array.prototype.remove = function() {
-        for(var i = 0; i <=this.length-1; i++){
-          if(isNaN(this[i]))  {
-            this.splice(i, 1);
-          }
-        }
-        return this;
-      };
-      while(arr.length > 0){
-        var cell = document.createElement("div");
-        cell.innerHTML = " ";
-        if(arr.length > 0){
-          var d = arr.shift();
-          cell.innerHTML = d;
-          if(d > 0){
-            this.Days[d] = cell;
-            //获取今日
-            if(this.IsSame(new Date(this.Year, this.Month - 1, d), new Date())){ this.onToday(cell); }
-            //判断用户是否作了选择
-            if(this.SelectDay && this.IsSame(new Date(this.Year, this.Month - 1, d), this.SelectDay)){ this.onSelectDay(cell); }
-          }
-        }
-        frag.appendChild(cell);
-      }
-
-      //此先清空然后再插入(ie的table不能用innerHTML)
-      while(this.Container.hasChildNodes()){ this.Container.removeChild(this.Container.firstChild); }
-      this.Container.appendChild(frag);
-      this.onFinish();
-    },
-    //判断是否同一日
-    IsSame: function(d1, d2) {
-      return (d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate());
-    }
-  };
-  function dateBECurrent(datestr){
-    if (!isValidDate(datestr)) return false;
-    var currentDate = new Date();
-    var cYear = currentDate.getYear();
-    var cMonth = currentDate.getMonth()+1;
-    var cDate = currentDate.getDate();
-    var dateArr = datestr.split("-");
-    var year = parseInt(dateArr[0]);
-    var month = parseInt(dateArr[1]*1);
-    var date = parseInt(dateArr[2]*1);
-    if (year < cYear) return false;
-    if (year == cYear){//年相等，判断月
-      if(month < cMonth) return false;
-      if(month == cMonth){//月相等，判断日
-        if (date < cDate) return false;
-      }
-    }
-    return true;
-  }
 </script>
 
 <div class="m_box">
@@ -147,10 +17,10 @@
     </div>
   </div>
   <div id="today" style="display:none">
-    <p><span>第20天</span><span>11/15</span></p>
+    <p><span id="whichs">第20天</span><span><%= "#{Time.now.strftime("%m/%d")}" %></span></p>
     <p><a href="#">添加标记</a></p>
-    <p><span class="pt_lianxi tooltip" title="练习">40</span>
-      <span class="pt_beici tooltip" title="背词">30</span></p>
+    <p><span class="pt_lianxi tooltip" title="练习" id="practice">40</span>
+      <span class="pt_beici tooltip" title="背词" id="exercise">30</span></p>
   </div>
   <div id="medal" style="display:none">
     <p class="pt_ztai"><img src="/assets/icon_xz.png" /></p>
@@ -160,93 +30,8 @@
   </div>
 </div>
 <input type="hidden" value="" id="all_days"/>
+<input type="hidden" value="<%= params[:category] %>" id="category"/>
 <script type="text/javascript">
- 
-  var cale = new Calendar("idCalendar", {
-    //        SelectDay: new Date().setDate(10),
-    onSelectDay: function(o){ o.className = "onSelect"; },
-<%#*onToday: function(o){ o.className = "pt_day_new"; },%>
-    onFinish: function(){
-      var year=this.Year;
-      
-      var month=this.Month;
-      var days=this.Days;
-      var divs=jQuery("#idCalendar div");
-      divs.splice(divs[0],7);
-      $("date").innerHTML=today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-      var start=this.Year+"-"+(this.Month)+"-"+ parseInt(days[1].innerHTML);
-      var end=this.Year+"-"+(this.Month)+"-"+parseInt(days[days.length-1].innerHTML);
-      jQuery.ajax({
-        type: "POST",
-        url: "/study_plans/plan_status.json",
-        dataType: "json",
-        data : {
-          start :start,
-          end : end,
-          category : <%= params[:category] %>
-        },
-        beforeSend: function() {
-        },
-        success : function(data) {
-          var flag = data.days
-          var status=data.status
-          var done_plans=new Array();
-          for(var i =0, len = divs.length; i < len; i++){
-            if(flag[month]==undefined){
-              if (today.getDate()==parseInt(divs[i].innerHTML)&&month==(today.getMonth()+1)&&today.getFullYear()==year){
-                divs[i].className= "pt_day_new";
-                divs[i].innerHTML=$("today").innerHTML;
-              }else{
-                divs[i].className= "gray";}
-            }else{
-              for(var n = 0, lens = flag[month].length; n < lens; n++){
-                done_plans[n]=days[flag[month][n]]
-              }
-              if (today.getDate()==parseInt(divs[i].innerHTML)&&month==(today.getMonth()+1)&&today.getFullYear()==year){
-                divs[i].className= "pt_day_new";
-                  if(status[parseInt(divs[i].innerHTML)]){
-                      divs[i].innerHTML=  divs[i].innerHTML+$("medal").innerHTML;
-                    }else{
-                       divs[i].innerHTML=$("today").innerHTML;
-                    }
-              }else{
-                if(done_plans.indexOf(divs[i])>=0){
-                  if(parseInt(divs[i].innerHTML)<today.getDate()){
-                    if(status[parseInt(divs[i].innerHTML)]){
-                      divs[i].innerHTML=  divs[i].innerHTML+$("medal").innerHTML;
-                    }else{
-                      divs[i].innerHTML= divs[i].innerHTML+$("yellow_card").innerHTML;
-                    }
-                  }
-                  divs[i].className= "pt_day";
-                }else{
-                  divs[i].className= "gray";
-                }
-              }
-            }
-          }
-        }
-      });
-    }
-  });
-  $("idCalendarPre").onclick = function(){ cale.PreMonth(); }
-  $("idCalendarNext").onclick = function(){ cale.NextMonth(); }
-  jQuery.noConflict();
-<%#*var start=today.getFullYear()+"-"+(today.getMonth()+1)+"-"+new_arr[0];%>
-<%#*var end=today.getFullYear()+"-"+(today.getMonth()+1)+"-"+new_arr[new_arr.length-1]%>
-<%#*var sql_prams="created_at between "+start +"and "+ end;%>
-<%#*var flag = [10,15,20]%>
-<%#*for(var i = 0, len = flag.length; i < len; i++){%>
-<%#*this.Days[flag[i]].innerHTML = "<a href='javascript:void(0);' onclick=\"alert('您选择的日期是："+this.Year+"/"+this.Month+"/"+flag[i]+"');return false;\">" + flag[i] + "</a>";%>
-<%#*}%>
-<%#*var day=new Date(today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate());%>
-<%#*var new_day=new Date(this.Year, this.Month - 1, d);%>
-<%#*if(!isNaN(parseInt(d))&& day<new_day) {%>
-<%#*cell.className="pt_day"%>
-<%#*}else{%>
-<%#*cell.className="gray"%>
-<%#*}%>
-<%#*if(!isNaN(parseInt(d)) &&  this.IsSame(new_day, day)){%>
-<%#*cell.className="pt_day_new"%>
-<%#*}%>
+  new_calender();
+  var $ = jQuery;
 </script>
