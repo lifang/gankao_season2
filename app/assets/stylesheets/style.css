@@ -4,13 +4,15 @@ body { background: url(/assets/body_bg.png) repeat; font-family: "宋体", Arial
 a { text-decoration: none;}
 ul { list-style: none;}
 img { border: none;}
+button { cursor: pointer;}
 .clear { clear: both;}
 .float_right { float: right;}
+.position_re { position: relative;}
 .red { color: #F00;}
 .orange { color: #ff6c00;}
 .gray { color: #999;}
 .xx_x { cursor: pointer; float: right;}
-.t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none; cursor: pointer;}
+.t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none;}
 .btn_box { width: 81px; height: 27px; margin: 0 auto;}
 .border_radius {
 	-moz-border-radius: 5px;
@@ -21,7 +23,7 @@ img { border: none;}
 }
 
 
-.head {padding: 6px 0; overflow: hidden;}
+.head {padding: 6px 0;}
 .logo {margin-left: 50px; float: left; display: inline;}
 .nav { height: 46px; line-height: 46px; float: left; margin-left: 80px;}
 .nav li { float: left; display: inline;}
@@ -31,11 +33,16 @@ img { border: none;}
 
 
 .head_info {float: right; height: 46px; line-height: 46px;}
-.h_user {color: #FFF; float: left;}
+.h_user {color: #FFF; float: left; position: relative; z-index: 100;}
 .h_user a { color: #FFF; padding: 0 10px; text-decoration: underline;}
 .h_email { width: 20px; height: 15px; display: block; float: left; margin-top: 17px; overflow: hidden; text-indent: -999px;}
 .email_u { background: url(/assets/icon_email.png) no-repeat center bottom;}
 .email_w { background: url(/assets/icon_email.png) no-repeat center top;}
+
+.email_tab { width: 83px; height: 60px; display: none; padding-top: 30px; background: url(/assets/email_tab_bg.png) no-repeat; top: 12px; left: 4px; position: absolute; z-index:-1;}
+.email_tab li { height: 24px; line-height: 24px;}
+.email_tab li a { color: #333; text-decoration: none;}
+.email_tab li a span { padding-left: 5px;}
 
 .h_banner { float: left; margin: 0 20px;}
 
@@ -50,7 +57,7 @@ img { border: none;}
 
 
 .m_top { height: 34px; line-height: 34px; background: #595d63;}
-.m_side { width: 50%; _width: 49.9%; display: inline; float: left; overflow-y: scroll;}
+.m_side { width: 50%; display: inline; float: left; overflow-y: scroll;}
 .m_problem_bg { background: #efede7;}
 
 
@@ -98,7 +105,7 @@ img { border: none;}
 /*选择题小题------------------*/
 
 .pro_question_list {
-
+	overflow: hidden;
 	margin: 5px 0;
 	padding: 5px 10px;
 	line-height: 24px;
@@ -109,8 +116,16 @@ img { border: none;}
 	border-radius: 5px;
 	background: #f9f9f9; border: 1px #666 solid;
 }
-.p_q_line {	overflow: hidden; height: 32px; line-height: 32px; background: #EFEDE7; }
+
+.pql_left { width: 5%; float: left; height: 32px; line-height: 32px;}
+.pql_right { width: 95%; float: left;}
+
+.p_q_line { overflow: hidden; height: 32px; background: #EFEDE7;}
+
 .pro_qu_t { cursor: pointer;}
+.pro_qu_k { height: 32px;}
+.pro_qu_h { height: 32px; line-height: 32px;}
+
 
 .pro_qu_div {}
 .pro_qu_ul { padding: 10px 0 0 50px;}
@@ -128,18 +143,57 @@ img { border: none;}
 }
 .pro_qu_ul li span.hover { background: url(/assets/li.png) no-repeat 0 -23px; color: #FFF;}
 
-.green_dui { color: #090; padding-left: 50px;}
-.red_cuo { color: #F00; padding-left: 50px;}
+.green_dui { color: #090; padding-left: 50px; margin-top: 10px;}
+.red_cuo { color: #F00; padding-left: 50px; margin-top: 10px;}
 
 .pro_btn { padding: 10px 0 0 50px;}
 .pro_btn button { margin: 0 10px;}
 .pro_btn a { margin: 0 10px;}
 
-.jiexi { background: #FFFCE9; border: 1px solid #EBDEBC; padding: 5px; margin: 10px 0;}
+.jiexi { background: #FFFCE9; border: 1px solid #EBDEBC; padding: 5px; margin: 10px 0; overflow: hidden;}
+
+.textarea_xz { width: 90%; height: 150px;}
+.input_xz { width: 90%; height: 20px;}
+.input_tk { height: 21px; line-height: 21px; border: 1px #e2e2e2 solid; float: left;}
+.button_tk {
+    width: 41px;
+	height: 23px;
+	text-align: center;
+	line-height: 23px;
+	text-indent: 0;
+	border: none;
+	background: url(/assets/button_tk.png) no-repeat;
+	float: left;
+	color: #ff6c00;
+}
+.span_tk { display: inline-block; width: 195px; height: 18px;}
+.select_tk { float: left; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid;}
+
+/*拖拽---*/
+.drag_tk_box {}
+.drag_tk {
+	width: 46%;
+    padding: 10px;
+	background: #d8d5ca;
+	overflow: hidden;
+    z-index: 100;
+	position: fixed;
+	bottom: 30px;
+}
+
+.drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #d1cab6; float: left; margin: 5px; cursor:move;}
+
+/*相关词汇---------------*/
+.xg_words { float: left;}
+.xg_words li { text-align: center; height: 24px; padding: 5px 10px; border-bottom: 1px #CCC dashed;}
+.xg_words li a { color: #333;}
+.xg_words li a:hover { color:#ff6c00;}
+.xg_words li a.hover { color:#ff6c00;}
+.xg_words_ny { float: left; border-left: 1px #CCC solid;}
+
 
 .textarea_xz { width: 520px; height: 150px;}
 .textarea_tk { width: 520px; height: 25px;}
-
 
 
 /*翻页-----------------------*/
@@ -226,12 +280,14 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .font_size_16 { font-size: 16px; font-family: Arial;}
 .words_ul_font14 { font-size: 14px; font-family: Arial; color: #666; list-style: inside disc;}
 
+.next_down { width: 19px; height: 18px; display: block; margin-left: 50px;}
 
 /*words_tishi---------------*/
-.words_tishi { width: 150px; height: 450px; border: 1px #000 solid; overflow-y: auto; background: url(/assets/black_bg.png) repeat; padding: 2px; position: absolute; top: 100px; left: -145px;}
+.words_tishi { width: 150px; height: 450px; border: 1px #000 solid; overflow-y: auto; background: url(/assets/black_bg.png) repeat; padding: 2px; position: absolute; top: 100px; left: 0px;}
 .words_ts_box { padding: 10px 0; height: 430px; background: url(/assets/black01_bg.png) repeat;}
 .words_ts_box p {
-    text-align: center;
+    text-align: left;
+	padding-left: 20px;
 	font-size: 12px;
 	font-family: Arial;
 	color: #FFF;
@@ -240,6 +296,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 	text-overflow:ellipsis;
 	white-space:nowrap;
 }
+.z_five { float: left; margin-right: 5px;}
 
 
 /*回想释义---------------------*/
@@ -269,3 +326,11 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 
 /*foot----------------*/
 .foot { height: 30px; line-height: 30px;}
+
+
+/*tab_box------------*/
+.tab_box { width: 300px; padding: 5px; min-height: 200px; border: 3px #CCC solid; background: #FFF;position: fixed;z-index: 900;}
+.tab_x { float: right;}
+.tab_con { padding: 60px 10px; text-align: center;}
+.icon_false { background: url(/assets/false.png) no-repeat #FFF center center;}
+.icon_true { background: url(/assets/true.png) no-repeat #FFF center center;}

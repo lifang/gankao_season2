@@ -5,7 +5,10 @@
       <li>暂无大学<%= @category.name %>真题</li>
     <% else %>
       <% @similarities.each do |similarity| %>
-        <li><a href="#"><span><img src="/assets/icon_wc.png" /></span><h2><%= similarity.title %></h2></a></li>
+        <li><a href="#">
+            <% if @exam_user_hash[similarity.id] %><span><img src="/assets/icon_wc.png" /></span><% end %>
+            <h2><%= similarity.title %></h2></a>
+        </li>
       <% end %>
     <% end %>
   </ul>
