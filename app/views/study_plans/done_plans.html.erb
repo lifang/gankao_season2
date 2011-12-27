@@ -182,12 +182,14 @@
         dataType: "json",
         data : {
           start :start,
-          end : end
+          end : end,
+          category : <%= params[:category] %>
         },
         beforeSend: function() {
         },
         success : function(data) {
           var flag = data.days
+          var status=data.status
           var done_plans=new Array();
           for(var i =0, len = divs.length; i < len; i++){
             if(flag[month]==undefined){
@@ -202,9 +204,20 @@
               }
               if (today.getDate()==parseInt(divs[i].innerHTML)&&month==(today.getMonth()+1)&&today.getFullYear()==year){
                 divs[i].className= "pt_day_new";
-                divs[i].innerHTML=$("today").innerHTML;
+                  if(status[parseInt(divs[i].innerHTML)]){
+                      divs[i].innerHTML=  divs[i].innerHTML+$("medal").innerHTML;
+                    }else{
+                       divs[i].innerHTML=$("today").innerHTML;
+                    }
               }else{
                 if(done_plans.indexOf(divs[i])>=0){
+                  if(parseInt(divs[i].innerHTML)<today.getDate()){
+                    if(status[parseInt(divs[i].innerHTML)]){
+                      divs[i].innerHTML=  divs[i].innerHTML+$("medal").innerHTML;
+                    }else{
+                      divs[i].innerHTML= divs[i].innerHTML+$("yellow_card").innerHTML;
+                    }
+                  }
                   divs[i].className= "pt_day";
                 }else{
                   divs[i].className= "gray";
