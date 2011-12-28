@@ -19,6 +19,7 @@ GankaoSeason2::Application.routes.draw do
       post :plan_status
     end
   end
+  resources :exam_users
   resources :logins do
     collection do
       get :friend_add_request,:renren_like,:sina_index,:add_user
@@ -36,6 +37,7 @@ GankaoSeason2::Application.routes.draw do
       get 'recollection', 'use', 'hand_man'
     end
   end
+  
   # Sample resource route with options:
   #   resources :products do
   #     member do
