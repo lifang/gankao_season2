@@ -51,24 +51,6 @@ $(function(){
     });
 })
 
-//点击显示隐藏小题
-$(function(){
-    $(".pro_qu_t").bind("click",function(){
-        var pro_qu_div = $(this).parent().find(".pro_qu_div");
-        if(pro_qu_div.is(":visible")){
-            pro_qu_div.hide();
-            $(this).parent().parent().addClass("p_q_line");
-            $(this).parent().addClass("p_q_line");
-            $(this).addClass("pro_qu_h");
-        }else{
-            pro_qu_div.show();
-            $(this).parent().parent().removeClass("p_q_line");
-            $(this).parent().removeClass("p_q_line");
-            $(this).removeClass("pro_qu_h");
-        }
-    })
-})
-
 
 
 //填空拖拽-------
@@ -164,55 +146,55 @@ function tishi_alert(str){
     var body = jQuery("body");
     body.append(div);
     show_flash_div();
-        }
+}
 
 
 //显示未完成的单词
-$(function(){
-    var d1=$(".words_tishi")[0];
-    d1.onmouseover = mouseover_x ;
-    d1.onmouseout = mouseout_x ;
-    function mouseover_x ( ae ){
-        var e = window.event || ae ;
-        var s = e.fromElement || e.relatedTarget ;
-        if( document.all ){
-            if(  !(s == this || this.contains(s))  ){
-                if(!$(e).is(":animated")){
-                    moveOut();
-                }
-            }
-        }else{
-            var res= this.compareDocumentPosition(s) ;
-            if(  !(s == this || res == 20 || res == 0 )  ){
-                if(!$(e).is(":animated")){
-                    moveOut();
-                }
-            }
-        }
-    }
-
-    function mouseout_x( ae ){
-        var e = window.event || ae;
-        var s = e.toElement || e.relatedTarget;
-        //var temp = document.getElementById('but_temp');
-        if(document.all){
-            if( !this.contains(s) ){
-                if(!$(e).is(":animated")){
-                    moveBack();
-                }
-                
-            }
-        }else{
-            var res= this.compareDocumentPosition(s) ;
-            if( ! ( res == 20 || res == 0) ){
-                //alert(!$(e).is(":animated"));
-                if(!$(e).is(":animated")){
-                    moveBack();
-                }
-            }
-        }
-    }
-})
+//$(function(){
+//    var d1=$(".words_tishi")[0];
+//    d1.onmouseover = mouseover_x ;
+//    d1.onmouseout = mouseout_x ;
+//    function mouseover_x ( ae ){
+//        var e = window.event || ae ;
+//        var s = e.fromElement || e.relatedTarget ;
+//        if( document.all ){
+//            if(  !(s == this || this.contains(s))  ){
+//                if(!$(e).is(":animated")){
+//                    moveOut();
+//                }
+//            }
+//        }else{
+//            var res= this.compareDocumentPosition(s) ;
+//            if(  !(s == this || res == 20 || res == 0 )  ){
+//                if(!$(e).is(":animated")){
+//                    moveOut();
+//                }
+//            }
+//        }
+//    }
+//
+//    function mouseout_x( ae ){
+//        var e = window.event || ae;
+//        var s = e.toElement || e.relatedTarget;
+//        //var temp = document.getElementById('but_temp');
+//        if(document.all){
+//            if( !this.contains(s) ){
+//                if(!$(e).is(":animated")){
+//                    moveBack();
+//                }
+//
+//            }
+//        }else{
+//            var res= this.compareDocumentPosition(s) ;
+//            if( ! ( res == 20 || res == 0) ){
+//                //alert(!$(e).is(":animated"));
+//                if(!$(e).is(":animated")){
+//                    moveBack();
+//                }
+//            }
+//        }
+//    }
+//})
 
 function moveOut() {
      $('.words_tishi').animate({

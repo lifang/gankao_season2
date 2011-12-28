@@ -65,7 +65,7 @@ button { cursor: pointer;}
 
 /*功能栏--------------------*/
 .ex_paper_h { float: left; margin-left: 20px; font-size: 14px; color: #FFF;}
-.icon_func { height: 25px; padding-top: 4px; margin-right: 20px;}
+.icon_func { height: 25px; padding-top: 4px; margin-right: 40px;}
 .icon_func span { padding: 0 5px; overflow: hidden;width: 25px; height: 25px; display: block; float: left; }
 .icon_func span a { width: 25px; height: 25px; display: block; text-indent: -999px; overflow: hidden;}
 
@@ -134,7 +134,6 @@ button { cursor: pointer;}
 .pro_qu_ul li { height: 24px; padding: 5px 0;}
 .pro_qu_ul li span {
     cursor: pointer;
-    background: url(/assets/li.png) no-repeat 0 0;
     width: 23px;
     height: 23px;
     line-height: 23px;
@@ -143,7 +142,16 @@ button { cursor: pointer;}
     text-align: center;
     margin-right: 10px;
 }
-.pro_qu_ul li span.hover { background: url(/assets/li.png) no-repeat 0 -23px; color: #FFF;}
+
+.single_choose_li {
+    background: url(/assets/li.png) no-repeat 0 0;
+}
+.single_choose_li.hover { background: url(/assets/li.png) no-repeat 0 -23px; color: #FFF;}
+
+.multi_choose_li {
+    background: url(/assets/li0.png) no-repeat 0 0;
+}
+.multi_choose_li.hover { background: url(/assets/li0.png) no-repeat 0 -23px; color: #FFF;}
 
 .green_dui { color: #090; padding-left: 50px; margin-top: 10px;}
 .red_cuo { color: #F00; padding-left: 50px; margin-top: 10px;}
@@ -154,8 +162,8 @@ button { cursor: pointer;}
 
 .jiexi { background: #FFFCE9; border: 1px solid #EBDEBC; padding: 5px; margin: 10px 0; overflow: hidden;}
 
-.textarea_xz { width: 90%; height: 150px;}
-.input_xz { width: 90%; height: 20px;}
+.textarea_xz1 { width: 90%; height: 150px;}
+.input_xz { width: 90%; height: 20px;margin-top:10px;}
 .input_tk { height: 21px; line-height: 21px; border: 1px #e2e2e2 solid; float: left;}
 .button_tk {
     width: 41px;
@@ -330,6 +338,10 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 /* 提示弹出层*/
 .tishi_tab {width: 288px; height: 82px; padding:30px 10px 10px 10px; background: url(/assets/tishi_tab_bg.png) no-repeat; position: fixed; display: none;z-index: 9999;}
 .tishi_tab p  { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; font-weight:bold; color: #ffffff;}
+
+/* 小题背景色 */
+.do_correct {color: #DBEAD5;}
+.do_wrong {color: #FEE6E6;}
 
 /*tab_box------------*/
 .tab_box { width: 300px; padding: 5px; min-height: 200px; border: 3px #CCC solid; background: #FFF;position: fixed;z-index: 900;}

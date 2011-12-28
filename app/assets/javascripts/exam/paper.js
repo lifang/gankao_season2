@@ -70,28 +70,27 @@ papers = {
                     "questionattrs":"A)  Its unique flavour. ;-;B)  Its bad taste.                 ;-;C) Its special cooking methods.;-;D) Its organic ingredients.",
                     "tags":"\u5feb\u901f\u9605\u8bfb"
                 },{
-                    "correct_type":"0",
+                    "correct_type":"1",
                     "id":"900",
                     "score":"0.0",
                     "description":"The Second World War led to________ in Britain.",
                     "questionattrs":"A) an inadequate supply of food  ;-;B) a decrease of grain production ;-;C) an increase in food import;-;D) a change in people's eating habits",
                     "tags":"\u5feb\u901f\u9605\u8bfb"
                 },{
-                    "correct_type":"0",
+                    "correct_type":"2",
                     "id":"901",
                     "score":"0.0",
                     "description":"Why couldn't Britain compete with some of its neighbouring countries in terms of food in the post-war decades?",
-                    "questionattrs":"A) Its food lacked variety.      ;-;B) Its people cared more for quantity.      ;-;C) It was short of well-trained chefs.;-;D) It didn't have flavourful food ingredients.",
                     "tags":"\u5feb\u901f\u9605\u8bfb"
                 },{
-                    "correct_type":"0",
+                    "correct_type":"3",
                     "id":"902",
                     "score":"0.0",
                     "description":"With culinary improvement in recent years, London's restaurants are now able to appeal to the tastes of  _______   .",
                     "questionattrs":"A)  most young people                     ;-;B)  elderly British diners;-;C) all kinds of overseas visitors;-;D) upper-class customers",
                     "tags":"\u5feb\u901f\u9605\u8bfb"
                 },{
-                    "correct_type":"0",
+                    "correct_type":"5",
                     "id":"903",
                     "score":"0.0",
                     "description":"What do Hong Kong diners welcome, according to Welsh executive chef David Tamlyn?",
