@@ -19,7 +19,6 @@ GankaoSeason2::Application.routes.draw do
       post :plan_status
     end
   end
-  resources :words
   resources :logins do
     collection do
       get :friend_add_request,:renren_like,:sina_index,:add_user

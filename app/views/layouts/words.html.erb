@@ -54,7 +54,14 @@
         </div>
       </div>
       <div class="foot"></div>
+      <div class="words_tishi border_radius" id="word_tishi"  >
+        <div class="words_ts_box" id="word_box">
+          <% @words.each do |word| %>
+          <span class="z_five" id="five_<%= word.id %>"></span>
+          <p><%= word.name %></p>
+          <% end unless @words.blank? %>
+        </div>
+      </div>
     </div>
   </body>
 </html>
-
