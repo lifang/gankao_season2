@@ -1,0 +1,111 @@
+<%= javascript_include_tag "/assets/exam/answer.js" %>
+<%= javascript_include_tag "/assets/exam/paper.js" %>
+
+<script type="text/javascript" >
+  //初始化题目号
+    if(!(getCookie("init_exam_user")!= null && getCookie("init_exam_user")=="<%= params[:id] %>")){
+    setCookie("init_exam_user","<%= params[:id] %>");
+    setCookie("init_problem","0");
+  }
+  
+  var init_problem = <%= cookies[:init_problem].nil? ? 0 : cookies[:init_problem].to_i %>;
+ 
+  //将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
+  function transform_array(object){
+    var result = [];
+    var resource = object;
+    if(resource){
+      if(resource.length){
+        result = resource;
+      }else{
+        result.push(resource);
+      }
+    }
+    return result;
+  }
+  //组合problems数组
+  problems=[];
+  var b = transform_array(papers.paper.blocks.block);
+  for(var i=0;i<b.length;i++){
+    var p=transform_array(b[i].problems.problem);
+    for(var j=0;j<p.length;j++){
+      p[j].questions.question = transform_array(p[j].questions.question);
+      problems.push(p[j]);
+    }
+  }
+  //组合标准答案和用户答案
+  answers=[];
+  storage=[];
+  var a = transform_array(answer.paper.problems.problem);
+  for(var i=0;i<a.length;i++){
+    var a2 = transform_array(a[i].question);
+      answers.push(a2);
+      var c=[];
+      for(var j=0;j<a2.length;j++){
+        c.push("");
+      }
+      storage.push(c);
+  }
+  
+</script>
+
+<div class="m_top">
+  <h1 class="ex_paper_h"><span id="global_paper_title">试卷标题</span></h1>
+  <div class="icon_func">
+    <div class="float_right">
+      <span class="icon_collection"><a href="javascript:void(0);" class="tooltip hover" name="收藏">收藏</a></span>
+      <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
+      <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();">下一题</a></span>
+      <span class="icon_big"><a href="javascript:void(0);" class="tooltip" name="缩小" onclick="javascript:ts('body',-1);">缩小</a></span>
+      <span class="icon_small"><a href="javascript:void(0);" class="tooltip" name="放大" onclick="javascript:ts('body',1);">放大</a></span>
+      <span class="icon_return"><a href="javascript:void(0);" class="tooltip" name="退出">退出</a></span>
+    </div>
+    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做">重做</a></span>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+
+  //字体放大、缩小
+  var tgs = new Array( 'div','td','tr');
+  var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
+  var startSz = 2;
+  function ts( trgt,inc ) {
+    if (!document.getElementById) return
+    var d = document,cEl = null,sz = startSz,i,j,cTags;
+    sz += inc;
+    if ( sz < 0 ) sz = 0;
+    if ( sz > 6 ) sz = 6;
+    startSz = sz;
+    if ( !( cEl = d.getElementById( trgt ) ) ) cEl = d.getElementsByTagName( trgt )[ 0 ];
+    cEl.style.fontSize = szs[ sz ];
+    for ( i = 0 ; i < tgs.length ; i++ ) {
+      cTags = cEl.getElementsByTagName( tgs[ i ] );
+      for ( j = 0 ; j < cTags.length ; j++ ) cTags[ j ].style.fontSize = szs[ sz ];
+    }
+  }
+</script>
+
+<div class="m_side m_problem_bg" id="problem_resource" >
+  <div class="problem_box">
+    <div class="problem_title">第<span id="global_problem_index" ></span>题/共<span id="global_problem_sum"></span>题</div>
+    <div class="problem_text" id="global_problem_title">
+      <p>problem_title</p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  //记录最后打开的小题
+  var last_open_question=null;
+  //预载页面信息
+  $(function(){
+    $("#global_paper_title").html(papers.paper.base_info.title);
+    $("#global_problem_sum").html(problems.length);
+    load_problem(init_problem);
+  })
+</script>
+
+<div class="m_side">
+  <div class="problem_box" id="questions_resource"></div>
+</div>
