@@ -1,10 +1,4 @@
 <%= javascript_include_tag "calender_done" %>
-<script type="text/javascript">
-  var today=new Date();
-  var arr = [];
-  var new_arr=[];
-</script>
-
 <div class="m_box">
   <h1>学习计划</h1>
   <div class="planTable">
@@ -32,6 +26,8 @@
 <input type="hidden" value="" id="all_days"/>
 <input type="hidden" value="<%= params[:category] %>" id="category"/>
 <script type="text/javascript">
+  var today=new Date();
+  var arr = [];
   new_calender();
   var $ = jQuery;
 </script>

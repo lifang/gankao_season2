@@ -17,7 +17,7 @@ Object.extend = function(destination, source) {
 var Calendar = Class.create();
 Calendar.prototype = {
     initialize: function(container, options) {
-        this.Container = $(container);//table结构容器
+        this.Container = jQuery(container);//table结构容器
         this.Days = [];//日期列表
         this.SetOptions(options);
         this.Year = this.options.Year;
@@ -65,9 +65,8 @@ Calendar.prototype = {
             arr.push(" ");
         }
         //用当月最后一天在一个月中的日期值作为当月的天数
-        for(var i = 1, monthDay = new Date(this.Year, this.Month, 0).getDate(); i <= monthDay; i++){
-            arr.push(i);
-            new_arr.push(i);
+        for(var k = 1, monthDay = new Date(this.Year, this.Month, 0).getDate(); k <= monthDay; k++){
+            arr.push(k);
         }
         var frag = document.createDocumentFragment();
         this.Days = [];
@@ -79,15 +78,6 @@ Calendar.prototype = {
             div.appendChild(strong)
             frag.appendChild(div);
         }
-
-        Array.prototype.remove = function() {
-            for(var i = 0; i <=this.length-1; i++){
-                if(isNaN(this[i]))  {
-                    this.splice(i, 1);
-                }
-            }
-            return this;
-        };
         while(arr.length > 0){
             var cell = document.createElement("div");
             cell.innerHTML = " ";
@@ -165,12 +155,18 @@ function new_calender(){
                         }else{
                             if (today.getDate()==parseInt(divs[i].innerHTML)&&month==(today.getMonth()+1)&&today.getFullYear()==year){
                                 divs[i].className= "pt_day_new";
-                                if(status[parseInt(divs[i].innerHTML)] || parseInt(divs[i].innerHTML)<today.getDate()){
+                                if(status[parseInt(divs[i].innerHTML)]){
                                     divs[i].innerHTML=  divs[i].innerHTML+document.getElementById("medal").innerHTML;
                                 }else{
                                     divs[i].innerHTML=document.getElementById("today").innerHTML;
                                 }
                             }else{
+                                Array.prototype.indexOf=function(el, index){
+                                    var n = this.length>>>0, i = ~~index;
+                                    if(i < 0) i += n;
+                                    for(; i < n; i++) if(i in this && this[i] === el) return i;
+                                    return -1;
+                                }
                                 if(done_plans.indexOf(divs[i])>=0){
                                     if(parseInt(divs[i].innerHTML)<today.getDate()&&month==(today.getMonth()+1)){
                                         if(status[parseInt(divs[i].innerHTML)]){

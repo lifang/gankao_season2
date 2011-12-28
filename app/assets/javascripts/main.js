@@ -59,6 +59,7 @@ $(function(){
     $(".drag_tk_box").css("height",drag_tk_height);
 })
 
+
 //鼠标经过邮件图标
 $(function(){
     $(".h_email")[0].onmouseover = show_email_info ;
@@ -148,70 +149,3 @@ function tishi_alert(str){
     show_flash_div();
 }
 
-
-//显示未完成的单词
-//$(function(){
-//    var d1=$(".words_tishi")[0];
-//    d1.onmouseover = mouseover_x ;
-//    d1.onmouseout = mouseout_x ;
-//    function mouseover_x ( ae ){
-//        var e = window.event || ae ;
-//        var s = e.fromElement || e.relatedTarget ;
-//        if( document.all ){
-//            if(  !(s == this || this.contains(s))  ){
-//                if(!$(e).is(":animated")){
-//                    moveOut();
-//                }
-//            }
-//        }else{
-//            var res= this.compareDocumentPosition(s) ;
-//            if(  !(s == this || res == 20 || res == 0 )  ){
-//                if(!$(e).is(":animated")){
-//                    moveOut();
-//                }
-//            }
-//        }
-//    }
-//
-//    function mouseout_x( ae ){
-//        var e = window.event || ae;
-//        var s = e.toElement || e.relatedTarget;
-//        //var temp = document.getElementById('but_temp');
-//        if(document.all){
-//            if( !this.contains(s) ){
-//                if(!$(e).is(":animated")){
-//                    moveBack();
-//                }
-//
-//            }
-//        }else{
-//            var res= this.compareDocumentPosition(s) ;
-//            if( ! ( res == 20 || res == 0) ){
-//                //alert(!$(e).is(":animated"));
-//                if(!$(e).is(":animated")){
-//                    moveBack();
-//                }
-//            }
-//        }
-//    }
-//})
-
-function moveOut() {
-     $('.words_tishi').animate({
-        'opacity': 0
-    }, {
-        queue: false,
-        duration: 1000
-    });
-    $('.words_tishi').stop().animate({
-        "left":"0",
-        "opacity":1
-    },500);
-}
-
-function moveBack() {
-    $('.words_tishi').stop().animate({
-        "left":"-145",
-        "opacity":0.5
-    },500);
-}
