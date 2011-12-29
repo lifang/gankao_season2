@@ -23,32 +23,14 @@ answer = {
                     "correct_type":"1",
                     "id":"900",
                     "score":"0.0",
-                    "answer":"A) an inadequate supply of food  ;|;C) an increase in food import",
+                    "answer":"A) abc      ",
                     "analysis":"\u7531\u9898\u5e72\u5173\u952e\u8bcdthe Second World War\u53ef\u4ee5\u5b9a\u4f4d\u5230\u539f\u6587\u7b2c\u56db\u6bb5\uff0c\u4e8c\u6218\u4e4b\u524d\uff0c\u82f1\u56fd\u7684\u98df\u54c1\u90fd\u662f\u8fdb\u53e3\u7684\uff0c\u4e8c\u6218\u4e4b\u540e\uff0c\u98df\u54c1\u4f9b\u5e94\u8239\u53ea\u906d\u5230\u653b\u51fb\uff0c\u53ea\u80fd\u4f9d\u9760\u914d\u7ed9\u3002\u6545\u9009A\uff0c\u98df\u54c1\u4f9b\u7ed9\u4e0d\u8db3\u3002"
-                },{
-                    "correct_type":"2",
-                    "id":"901",
-                    "score":"0.0",
-                    "answer":"1",
-                    "analysis":"\u7531compete with some of its neighbouring countries\u53ef\u4ee5\u5b9a\u4f4d\u5230\u539f\u6587\u7b2c6\u6bb5\uff0cthey weren\u2019t looking for\u2026, they were looking for\u2026, this prioritization of quantity over quality prevailed for decades. \u53ef\u89c1\u4ed6\u4eec\u5bf9\u6570\u91cf\u7684\u8ffd\u6c42\u9ad8\u4e8e\u8d28\u91cf\uff0c\u56e0\u6b64\u9009B\u3002"
                 },{
                     "correct_type":"3",
                     "id":"902",
                     "score":"0.0",
                     "answer":"hello",
                     "analysis":"\u7531\u9898\u5e72\u5173\u952e\u8bcdculinary\u5b9a\u4f4d\u5230\u539f\u6587\u7b2c7\u6bb5\uff0c\u6839\u636e\u6700\u540e\u4e00\u53e5\u2026its ability to please the tastes of any international visitor. \u800cany international visitor\u5c31\u7b49\u540c\u4e8e\u7b54\u6848all kinds of overseas visitors\u3002\u6545\u9009C\u3002"
-                },{
-                    "correct_type":"5",
-                    "id":"903",
-                    "score":"0.0",
-                    "answer":"good night",
-                    "analysis":"\u95ee\u9898\u662f\u6309\u7167David Tamlyn\u7684\u89c2\u70b9\uff0c\u9999\u6e2f\u7684\u996e\u98df\u8005\u559c\u6b22\u4ec0\u4e48\u3002\u5148\u6839\u636eDavid Tamlyn\u8fd9\u4e2a\u4eba\u540d\u5b9a\u4f4d\u5230\u539f\u6587\u7b2c\u516b\u6bb5\uff0c\u518d\u6839\u636e\u6700\u540e\u4e00\u53e5\u8bddHong Kong diners are extremely responsive to new ideas or presentations,\u2026\u8fd9\u91cc\u7684are extremely responsive to\u5728\u610f\u601d\u4e0a\u7b49\u4e8e\u9898\u5e72\u4e2d\u7684welcome\u3002"
-                },{
-                    "correct_type":"5",
-                    "id":"904",
-                    "score":"0.0",
-                    "answer":"D) maintain British traditional tastes",
-                    "analysis":"\u4e00\u4e9b\u996d\u5e97\u4fee\u6539\u83dc\u8c31\uff0c\u91c7\u7528\u65b0\u6837\u5f0f\uff0c\u800c\u53e6\u5916\u4e00\u4e9b\u5219\u4fdd\u7559\u82f1\u5f0f\u53e3\u5473\uff0c\u518d\u6839\u636eTamlyn is in the second camp\uff0c\u53ef\u77e5Tamlyn\u5c5e\u4e8e\u540e\u8005\uff0c\u5373\u4fdd\u7559\u539f\u6c41\u539f\u5473\u3002\u6545\u7b54\u6848\u9009D\u3002"
                 },{
                     "correct_type":"0",
                     "id":"905",

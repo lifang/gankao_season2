@@ -76,6 +76,10 @@ $(function(){
             last_opened_question = $(this);
         }
     })
+    //题面内大题取消click事件
+    for(var i=0;i<unbind_arr.length;i++){
+    	$(".pro_qu_t_"+unbind_arr[i]).unbind("click");	
+    }
 })
 
 function change_color(value,ele){
@@ -106,7 +110,6 @@ function do_single_choose(ele,attrs,problem_index,question_index){
         }
         n++;
     });
-
 }
 
 //多选题，做题
