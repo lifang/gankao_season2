@@ -6,10 +6,11 @@
     setCookie("init_problem","0");
   }
   unbind_arr=[]; //记录嵌入式大题的problem_index
+  init_problem = getCookie("init_problem");
 </script>
 
 <!-- 初始化jplayer播放器  -->
-<div id="jquery_jplayer_1" class='jp-jplayer'></div>
+<div id="jquery_jplayer_1"></div>
 <script type="text/javascript">
   $("#jquery_jplayer_1").jPlayer({
     ready: function (event) {
@@ -214,12 +215,6 @@
               <div class="drag_tk border_radius" id="drag_tk_<%= problem_index %>">
                 <ul id="draggable_list_<%= problem_index %>"></ul>
               </div>
-              <script type="text/javascript">
-                //设置拖选框的外层高度
-                $(function(){
-                  $("#drag_tk_box_<%= problem_index %>").css("height",$("#drag_tk_<%= problem_index %>").height());
-                })
-              </script>
             </div>
           </div>
         </div>
@@ -315,6 +310,13 @@
 
 
 <script type="text/javascript">
+  //拖选框预留高度
+  $(function(){
+    if($("#drag_tk_"+init_problem).height()){
+      $("#drag_tk_box_"+init_problem).css("height",$("#drag_tk_"+init_problem).height());
+    }
+  })
+
   //用户操作题目内小题
   function do_inner_question(correct_type,problem_index,question_index){
     var this_answer = $("#input_inner_answer_"+problem_index+"_"+question_index).val();
@@ -441,5 +443,10 @@
     }
     $("#about_word_sentences").html(sentences_html);
   }
+
+  function jplayer_html(){
+    str=""
+  }
+
 </script>
 

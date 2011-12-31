@@ -28,9 +28,13 @@ function click_next_problem(){
     }else{
         this_problem.hide();
         next_problem.show();
+        var problem_index = $(".problem_resource").index(next_problem);
         $("#report_error").hide();
         $("#jquery_jplayer_1").jPlayer("stop");
-        setCookie("init_problem",$(".problem_resource").index(next_problem));
+        if($("#drag_tk_"+problem_index).height()){
+            $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height());
+        }
+        setCookie("init_problem",problem_index);
     }
 }
 
@@ -44,8 +48,12 @@ function click_prev_problem(){
     }else{
         this_problem.hide();
         prev_problem.show();
+        var problem_index = $(".problem_resource").index(prev_problem);
         $("#report_error").hide();
         $("#jquery_jplayer_1").jPlayer("stop");
+        if($("#drag_tk_"+problem_index).height()){
+            $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height());
+        }
         setCookie("init_problem",$(".problem_resource").index(prev_problem));
     }
 }
@@ -82,7 +90,7 @@ $(function(){
     })
     //题面内大题取消此功能
     for(var i=0;i<unbind_arr.length;i++){
-    	$(".pro_qu_t_"+unbind_arr[i]).unbind("click");	
+        $(".pro_qu_t_"+unbind_arr[i]).unbind("click");
     }
 })
 
