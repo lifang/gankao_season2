@@ -146,7 +146,6 @@ button.green { color: #009900;}
     margin-right: 10px;
 }
 
-
 .pro_qu_ul li p { width: 90%; float: left;}
 
 .single_choose_li {
@@ -202,12 +201,12 @@ button.green { color: #009900;}
 .dragDrop_box {display: inline-block; float: left; min-width: 100px; height: 11px; line-height:11px; text-align:center; border: 1px #e2e2e2 solid; background: #FFF;cursor:move;}
 
 /*相关词汇---------------*/
-.xg_words { float: left;}
+.xg_words {width: 15%;overflow: hidden; float: left;}
 .xg_words li { text-align: center; height: 24px; padding: 5px 10px; border-bottom: 1px #CCC dashed;}
 .xg_words li a { color: #333;}
 .xg_words li a:hover { color:#ff6c00;}
 .xg_words li a.hover { color:#ff6c00;}
-.xg_words_ny { float: left; border-left: 1px #CCC solid;}
+.xg_words_ny { width: 80%;overflow: hidden; float: left; border-left: 1px #CCC solid;}
 
 .textarea_xz { width: 520px; height: 150px;}
 .textarea_tk { width: 520px; height: 25px;}
