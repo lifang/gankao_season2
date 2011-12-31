@@ -1,6 +1,7 @@
 <%= javascript_include_tag "/assets/exam/answer.js" %>
 <%= javascript_include_tag "/assets/exam/paper.js" %>
-
+<%= javascript_include_tag "cookie.js" %>
+<%= javascript_include_tag "exam_user.js" %>
 <script type="text/javascript" >
   //初始化题目号
     if(!(getCookie("init_exam_user")!= null && getCookie("init_exam_user")=="<%= params[:id] %>")){

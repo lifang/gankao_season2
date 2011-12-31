@@ -143,8 +143,7 @@ button { cursor: pointer;}
     margin-right: 10px;
 }
 
-.single_choose_li {
-    background: url(/assets/li.png) no-repeat 0 0;
+.single_choose_li {background: url(/assets/li.png) no-repeat 0 0;
 }
 .single_choose_li.hover { background: url(/assets/li.png) no-repeat 0 -23px; color: #FFF;}
 
@@ -195,12 +194,12 @@ button { cursor: pointer;}
 .drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #d1cab6; float: left; margin: 5px; cursor:move;}
 
 /*相关词汇---------------*/
-.xg_words { float: left;}
+.xg_words {width: 15%;overflow: hidden; float: left;}
 .xg_words li { text-align: center; height: 24px; padding: 5px 10px; border-bottom: 1px #CCC dashed;}
 .xg_words li a { color: #333;}
 .xg_words li a:hover { color:#ff6c00;}
 .xg_words li a.hover { color:#ff6c00;}
-.xg_words_ny { float: left; border-left: 1px #CCC solid;}
+.xg_words_ny { width: 80%;overflow: hidden; float: left; border-left: 1px #CCC solid;}
 
 .textarea_xz { width: 520px; height: 150px;}
 .textarea_tk { width: 520px; height: 25px;}
@@ -349,3 +348,9 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .tab_con { padding: 60px 10px; text-align: center;}
 .icon_false { background: url(/assets/false.png) no-repeat #FFF center center;}
 .icon_true { background: url(/assets/true.png) no-repeat #FFF center center;}
+
+/*提交错误弹出层-----*/
+.upErrorTo_tab { width: 300px; padding: 10px; background: #FFF; border: 5px #333 solid; display: none; position: absolute;}
+.upErrorTo_tab li { height: 24px; line-height: 24px; color: #333; display: block; text-decoration: none;}
+.upErrorTo_tab li input { margin-right: 5px;}
+.upErrorTo_tab textarea { width: 100%; margin: 5px 0;}

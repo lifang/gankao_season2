@@ -197,7 +197,7 @@ function tishi_alert(str){
 //})
 
 function moveOut() {
-     $('.words_tishi').animate({
+    $('.words_tishi').animate({
         'opacity': 0
     }, {
         queue: false,
@@ -215,3 +215,4 @@ function moveBack() {
         "opacity":0.5
     },500);
 }
+
