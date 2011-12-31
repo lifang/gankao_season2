@@ -553,6 +553,7 @@ function for_error(){
             }
         },
         success : function(data) {
+            
             tishi_alert(data["message"]);
         }
     });

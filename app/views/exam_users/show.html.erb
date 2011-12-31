@@ -1,16 +1,14 @@
 <%= javascript_include_tag "/assets/exam/answer.js" %>
 <%= javascript_include_tag "/assets/exam/paper.js" %>
-<%= javascript_include_tag "cookie.js" %>
-<%= javascript_include_tag "exam_user.js" %>
+
+<!-- 初始化页面 -->
 <script type="text/javascript" >
   //初始化题目号
-    if(!(getCookie("init_exam_user")!= null && getCookie("init_exam_user")=="<%= params[:id] %>")){
+  if(!(getCookie("init_exam_user")!= null && getCookie("init_exam_user")=="<%= params[:id] %>")){
     setCookie("init_exam_user","<%= params[:id] %>");
     setCookie("init_problem","0");
   }
   
-  var init_problem = <%= cookies[:init_problem].nil? ? 0 : cookies[:init_problem].to_i %>;
- 
   //将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
   function transform_array(object){
     var result = [];
@@ -24,89 +22,105 @@
     }
     return result;
   }
-  //组合problems数组
-  problems=[];
-  var b = transform_array(papers.paper.blocks.block);
-  for(var i=0;i<b.length;i++){
-    var p=transform_array(b[i].problems.problem);
-    for(var j=0;j<p.length;j++){
-      p[j].questions.question = transform_array(p[j].questions.question);
-      problems.push(p[j]);
-    }
-  }
-  //组合标准答案和用户答案
+
+  //整理标准答案
   answers=[];
-  storage=[];
   var a = transform_array(answer.paper.problems.problem);
   for(var i=0;i<a.length;i++){
     var a2 = transform_array(a[i].question);
-      answers.push(a2);
-      var c=[];
-      for(var j=0;j<a2.length;j++){
-        c.push("");
-      }
-      storage.push(c);
+    answers.push(a2);
   }
-  
 </script>
 
 <div class="m_top">
-  <h1 class="ex_paper_h"><span id="global_paper_title">试卷标题</span></h1>
+  <h1 class="ex_paper_h"><%= @paper["base_info"]["title"] %></h1>
   <div class="icon_func">
     <div class="float_right">
       <span class="icon_collection"><a href="javascript:void(0);" class="tooltip hover" name="收藏">收藏</a></span>
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
-      <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();">下一题</a></span>
-      <span class="icon_big"><a href="javascript:void(0);" class="tooltip" name="缩小" onclick="javascript:ts('body',-1);">缩小</a></span>
-      <span class="icon_small"><a href="javascript:void(0);" class="tooltip" name="放大" onclick="javascript:ts('body',1);">放大</a></span>
-      <span class="icon_return"><a href="javascript:void(0);" class="tooltip" name="退出">退出</a></span>
+      <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
+      <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1)" name="缩小">缩小</a></span>
+      <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1)" name="放大">放大</a></span>
+      <span class="icon_return"><a href="javascript:void(0);" class="tooltip" name="返回">返回</a></span>
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做">重做</a></span>
   </div>
 </div>
 
+<script type="text/javascript" >
 
-<script type="text/javascript">
-
-  //字体放大、缩小
-  var tgs = new Array( 'div','td','tr');
-  var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
-  var startSz = 2;
-  function ts( trgt,inc ) {
-    if (!document.getElementById) return
-    var d = document,cEl = null,sz = startSz,i,j,cTags;
-    sz += inc;
-    if ( sz < 0 ) sz = 0;
-    if ( sz > 6 ) sz = 6;
-    startSz = sz;
-    if ( !( cEl = d.getElementById( trgt ) ) ) cEl = d.getElementsByTagName( trgt )[ 0 ];
-    cEl.style.fontSize = szs[ sz ];
-    for ( i = 0 ; i < tgs.length ; i++ ) {
-      cTags = cEl.getElementsByTagName( tgs[ i ] );
-      for ( j = 0 ; j < cTags.length ; j++ ) cTags[ j ].style.fontSize = szs[ sz ];
-    }
-  }
 </script>
 
-<div class="m_side m_problem_bg" id="problem_resource" >
-  <div class="problem_box">
-    <div class="problem_title">第<span id="global_problem_index" ></span>题/共<span id="global_problem_sum"></span>题</div>
-    <div class="problem_text" id="global_problem_title">
-      <p>problem_title</p>
+<% blocks = (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : @paper["blocks"]["block"].nil? ? [] : [@paper["blocks"]["block"]] %>
+<% problem_index=-1 ; global_question_index=-1 ; blocks.each do |block| %>
+  <% problems = (block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : block["problems"]["problem"].nil? ? [] : [block["problems"]["problem"]] %>
+  <% problems.each do |problem| ; problem_index+=1; %>
+    <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=cookies["init_problem"].to_i) %> style="display:none;" <% end %> >
+      <div class="m_side m_problem_bg">
+        <div class="problem_box">
+          <div class="problem_title">第<%= problem_index+1 %>题/共<span class="global_problem_sum"></span>题</div>
+          <div class="problem_text">
+            <%= problem["title"].html_safe if problem["title"] %>
+          </div>
+        </div>
+      </div>
+      <div class="m_side">
+        <div class="problem_box">
+          <% questions = (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : problem["questions"]["question"].nil? ? [] : [problem["questions"]["question"]] %>
+          <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
+            <div class="pro_question_list p_q_line">
+              <div class="pql_left"><%= global_question_index+1 %>.</div>
+              <div class="pql_right p_q_line">
+                <div class="pro_qu_t pro_qu_k pro_qu_h" id="a"><%= question["description"] %></div>
+                <input type="hidden" id="exam_user_answer<%= "_#{problem_index}_#{question_index}" %>" class="exam_user_answer" />
+                <input type="hidden" id="pass_check<%= "_#{problem_index}_#{question_index}" %>" class="pass_check" />
+                <div class="red_cuo" id="red_cuo<%= "_#{problem_index}_#{question_index}" %>" style="display:none;"><img src="/assets/red_cuo.png"/></div>
+                <div class="green_dui" id="green_dui<%= "_#{problem_index}_#{question_index}" %>" style="display:none;"><img src="/assets/green_dui.png"/></div>
+                <div class="pro_qu_div" style="display: none; ">
+                  <div class="pro_qu_ul">
+                    <input type="hidden" id="questionattrs<%= "_#{problem_index}_#{question_index}" %>" value="<%= question["questionattrs"] %>"/>
+                    <% if question["correct_type"]=="0" # 单选题 %>
+                      <ul>
+                        <% question["questionattrs"].split(";-;").each do |attr| ; sign=attr.split(") ")[0] ; content=attr.split(") ")[1] %>
+                          <li><span class="single_choose_li single_choose_li<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:do_single_choose(this,$('#questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%=  question_index %>);" ><%= sign %></span><p><%= content %></p></li>
+                        <% end %>
+                      </ul>
+                    <% elsif question["correct_type"]=="1" # 多选题 %>
+                      <ul>
+                        <% question["questionattrs"].split(";-;").each do |attr| ; sign=attr.split(") ")[0] ; content=attr.split(") ")[1] %>
+                          <li><span class="multi_choose_li multi_choose_li<%= "_#{problem_index}_#{question_index}" %>"  onclick="javascript:do_multi_choose(this,$('#questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);"><%= sign %></span><p><%= content %></p></li>
+                        <% end %>
+                      </ul>
+                    <% elsif question["correct_type"]=="2" # 判断题 %>
+                      <ul>
+                        <li><span class="single_choose_li judge_li<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:do_judge(this,'1',<%= problem_index %>,<%=  question_index %>);" ></span><p>对/是</p></li>
+                        <li><span class="single_choose_li judge_li<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:do_judge(this,'0',<%= problem_index %>,<%=  question_index %>);" ></span><p>错/否</p></li>
+                      </ul>
+                    <% elsif question["correct_type"]=="3" # 填空题 %>
+                      <input type="text" class="input_xz" onchange="javascript:do_fill_blank(this,this.value,<%= problem_index %>,<%= question_index %>)" />
+                    <% elsif question["correct_type"]=="5" # 简答题 %>
+                      <textarea cols="" rows="" class="textarea_xz1" onchange="javascript:do_fill_blank(this,this.value,<%= problem_index %>,<%= question_index %>);"></textarea>
+                    <% end %>
+                  </div>
+                  <input id="resource_answer<%= "_#{problem_index}_#{question_index}" %>" type="hidden" value="<%= @answer[problem_index][question_index]["answer"] %>"></input>
+                  <input id="resource_analysis<%= "_#{problem_index}_#{question_index}" %>" type="hidden" value="<%= @answer[problem_index][question_index]["analysis"] %>"></input>
+                  <div class="pro_btn"><button class="t_btn"
+                                               onclick="javascript:check_question(<%= question["correct_type"] %>,$('#resource_answer<%= "_#{problem_index}_#{question_index}" %>').val(),$('#resource_analysis<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);">核对</button><a href="#">报告错误</a><a href="#">相关词汇</a></div>
+                  <div class="jiexi" style="display:none;" id="display_jiexi<%= "_#{problem_index}_#{question_index}" %>">
+                    <span class="xx_x" onclick="javascript:close_display_answer(<%= problem_index %>,<%= question_index %>);" ><img src="/assets/x.gif"/></span>
+                    <div>正确答案：<span class="red" id="display_answer<%= "_#{problem_index}_#{question_index}" %>">ABC</span></div>
+                    <div id="display_analysis<%= "_#{problem_index}_#{question_index}" %>">这是解析这是解析这是解析这是解析这是解析这是解析这是解析这是解析这是解析这是解析这是解析这是解析这是解析这是解析这是解析这是解析这是解析</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  <% end %>
+<% end %>
 <script type="text/javascript">
-  //记录最后打开的小题
-  var last_open_question=null;
-  //预载页面信息
-  $(function(){
-    $("#global_paper_title").html(papers.paper.base_info.title);
-    $("#global_problem_sum").html(problems.length);
-    load_problem(init_problem);
-  })
+  // 显示总题数
+  $(".global_problem_sum").html("<%= problem_index+1 %>");
 </script>
-
-<div class="m_side">
-  <div class="problem_box" id="questions_resource"></div>
-</div>

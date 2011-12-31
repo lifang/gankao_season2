@@ -131,7 +131,8 @@ button { cursor: pointer;}
 
 .pro_qu_div {}
 .pro_qu_ul { padding: 10px 0 0 50px;}
-.pro_qu_ul li { height: 24px; padding: 5px 0;}
+.pro_qu_ul li { line-height: 24px; padding: 5px 0; overflow: hidden;}
+.pro_qu_ul li p { width: 90%; float: left;}
 .pro_qu_ul li span {
     cursor: pointer;
     width: 23px;
