@@ -19,7 +19,11 @@ GankaoSeason2::Application.routes.draw do
       post :plan_status
     end
   end
-  resources :exam_users
+  resources :exam_users do
+    collection do
+      post :ajax_load_about_words,:ajax_report_error
+    end
+  end
   resources :logins do
     collection do
       get :friend_add_request,:renren_like,:sina_index,:add_user

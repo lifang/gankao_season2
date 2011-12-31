@@ -28,6 +28,8 @@ function click_next_problem(){
     }else{
         this_problem.hide();
         next_problem.show();
+        $("#report_error").hide();
+        $("#jquery_jplayer_1").jPlayer("stop");
         setCookie("init_problem",$(".problem_resource").index(next_problem));
     }
 }
@@ -42,12 +44,14 @@ function click_prev_problem(){
     }else{
         this_problem.hide();
         prev_problem.show();
+        $("#report_error").hide();
+        $("#jquery_jplayer_1").jPlayer("stop");
         setCookie("init_problem",$(".problem_resource").index(prev_problem));
     }
 }
 
 last_opened_question = null;
-//点击显示隐藏小题
+//初始化显示、隐藏小题功能
 $(function(){  
     $(".pro_qu_t").bind("click",function(){
         var pro_qu_div = $(this).parent().find(".pro_qu_div");
@@ -76,12 +80,13 @@ $(function(){
             last_opened_question = $(this);
         }
     })
-    //题面内大题取消click事件
+    //题面内大题取消此功能
     for(var i=0;i<unbind_arr.length;i++){
     	$(".pro_qu_t_"+unbind_arr[i]).unbind("click");	
     }
 })
 
+//题面后小题列表改变颜色
 function change_color(value,ele){
     if(value=="1"){
         $(ele).css("background","#DBEAD5");

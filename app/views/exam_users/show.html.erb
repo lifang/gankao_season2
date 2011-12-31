@@ -1,40 +1,25 @@
-<%= javascript_include_tag "/assets/exam/answer.js" %>
-<%= javascript_include_tag "/assets/exam/paper.js" %> 
-<%= javascript_include_tag "/assets/jquery.ui.core.js" %> 
-<%= javascript_include_tag "/assets/jquery.ui.widget.js" %> 
-<%= javascript_include_tag "/assets/jquery.ui.mouse.js" %> 
-<%= javascript_include_tag "/assets/jquery.ui.draggable.js" %> 
-<%= javascript_include_tag "/assets/jquery.ui.droppable.js" %> 
 
 <script type="text/javascript" >
-	//初始化题目号
-	if(!(getCookie("init_exam_user")!= null && getCookie("init_exam_user")=="<%= params[:id] %>")){
+//初始化题目号
+if(!(getCookie("init_exam_user")!= null && getCookie("init_exam_user")=="<%= params[:id] %>")){
 setCookie("init_exam_user","<%= params[:id] %>");
 setCookie("init_problem","0");
 }
-//将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
-function transform_array(object){
-var result = [];
-var resource = object;
-if(resource){
-if(resource.length){
-result = resource;
-}else{
-result.push(resource);
-}
-}
-return result;
-}
-//整理标准答案
-answers=[];
-var a = transform_array(answer.paper.problems.problem);
-for(var i=0;i<a.length;i++){
-var a2 = transform_array(a[i].question);
-answers.push(a2);
-}
+unbind_arr=[]; //记录嵌入式大题的problem_index
+</script>
 
-//记录即题面内大题的problem_index
-unbind_arr=[];
+<!-- 初始化jplayer播放器  -->
+<div id="jquery_jplayer_1" class='jp-jplayer'></div>
+<script type="text/javascript">
+  $("#jquery_jplayer_1").jPlayer({
+  	ready: function (event) {
+			$(this).jPlayer("setMedia", {
+				mp3:"/mp3/music.mp3"
+			});
+		},
+    swfPath: "/javascripts/jplayer",
+    supplied: "mp3,m4a,oga"
+  });
 </script>
 <% constant_question_type = {"0"=>"单选题","1"=>"多选题","2"=>"判断题","3"=>"填空题","5"=>"简答题"} %>
 <div class="m_top">
@@ -64,7 +49,11 @@ unbind_arr=[];
 				第<%= problem_index+1 %>题/共<span class="global_problem_sum"></span>题
 			</div>
 			<div class="problem_text">
-				<%= problem["title"].html_safe if problem["title"] %>
+				<!-- 题面后大题  初始化音频 -->
+				  <% audio_title_arr = problem["title"].nil? ? [] : problem["title"].split("((mp3))"); audio_src = audio_title_arr[1]; %>
+                  <% if audio_src != nil ; audio_title_arr[1]="<input type='button' value='播放' onclick='javascript:jplayer_play(\"#{audio_src}\");' />" ; end ; %>
+                  <% resource_problem_title = audio_title_arr.join("") %>
+				  <%= resource_problem_title.html_safe %>
 			</div>
 		</div>
 	</div>
@@ -92,7 +81,7 @@ unbind_arr=[];
 							<input type="hidden" id="questionattrs<%= "_#{problem_index}_#{question_index}" %>" value="<%= question["questionattrs"] %>"/>
 							<% if question["correct_type"]=="0" %>
 							<ul>
-								<% question["questionattrs"].split(";-;").each do |attr| ; attr=attr.split(") "); if attr.length>1 ; sign=attr[0] ; content=attr.split(") ")[1] ; else ; sign="" ; content=attr[0] ; end ; %>
+								<% question["questionattrs"].split(";-;").each do |attr| ; attr=attr.split(") "); if attr.length>1 ; sign=attr[0] ; content=attr[1] ; else ; sign="" ; content=attr[0] ; end ; %>
 								<li>
 									<span class="single_choose_li single_choose_li<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:do_single_choose(this,$('#questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);" ><%= sign %></span>
 									<p>
@@ -103,7 +92,7 @@ unbind_arr=[];
 							</ul>
 							<% elsif question["correct_type"]=="1" %>
 							<ul>
-								<% question["questionattrs"].split(";-;").each do |attr| ;attr=attr.split(") "); if attr.length>1 ; sign=attr[0] ; content=attr.split(") ")[1] ; else ; sign="" ; content=attr[0] ; end ; %>
+								<% question["questionattrs"].split(";-;").each do |attr| ;attr=attr.split(") "); if attr.length>1 ; sign=attr[0] ; content=attr[1] ; else ; sign="" ; content=attr[0] ; end ; %>
 								<li>
 									<span class="multi_choose_li multi_choose_li<%= "_#{problem_index}_#{question_index}" %>"  onclick="javascript:do_multi_choose(this,$('#questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);"><%= sign %></span>
 									<p>
@@ -141,13 +130,14 @@ unbind_arr=[];
 							<button class="t_btn"
 							onclick="javascript:check_question(<%= question["correct_type"] %>,$('#resource_answer<%= "_#{problem_index}_#{question_index}" %>').val(),$('#resource_analysis<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);">
 								核对
-							</button><a href="#">报告错误</a><a href="#">相关词汇</a>
+							</button><a href="javascript:void(0);" onclick="javascript:open_report_error('<%= question["id"] %>');">报告错误</a><% unless question["words"].nil?||question["words"]=="" %><a href="javascript:void(0);" onclick="javascript:ajax_load_about_words('<%= question["words"] %>',<%= problem_index %>,<%= question_index %>)">相关词汇</a><% end %>
 						</div>
 						<div class="jiexi" style="display:none;" id="display_jiexi<%= "_#{problem_index}_#{question_index}" %>">
 							<span class="xx_x" onclick="javascript:close_display_answer(<%= problem_index %>,<%= question_index %>);" ><img src="/assets/x.gif"/></span>
 							<div>正确答案：<span class="red" id="display_answer<%= "_#{problem_index}_#{question_index}" %>"></span></div>
 							<div id="display_analysis<%= "_#{problem_index}_#{question_index}" %>"></div>
 						</div>
+						<div id="about_words_position<%= "_#{problem_index}_#{question_index}" %>"></div>	
 					</div>
 				</div>
 			</div>
@@ -166,16 +156,13 @@ unbind_arr=[];
 				第<%= problem_index+1 %>题/共<span class="global_problem_sum"></span>题
 			</div>
 			<div class="problem_text">
+				<!-- 题面内大题  初始化小题 -->
 				<% source_title_arr = problem["title"].nil? ? [] : problem["title"].split("((sign))"); result_title_arr = [] ; result_title_arr << source_title_arr[0] %>
 				<% questions = (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : problem["questions"]["question"].nil? ? [] : [problem["questions"]["question"]] %>
 				<% sign_index=-1; questions.each do |question| ; sign_index+=1;element_str="<span class='span_tk'>";
 				    if question["correct_type"]=="0";
-					 element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}' onchange='javascript:do_inner_question(0,#{problem_index},#{sign_index});'>";
-					 element_str += "<option value=''></option>";
-				     question["questionattrs"].split(";-;").each do |attr|;
-                       element_str += "<option value='#{attr}'>#{attr}</option>";
-                     end;
-					 element_str += "</select>";
+					 element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}' onchange='javascript:do_inner_question(0,#{problem_index},#{sign_index});'>";element_str += "<option value=''></option>";
+				     question["questionattrs"].split(";-;").each do |attr|;element_str += "<option value='#{attr}'>#{attr}</option>";end;element_str += "</select>";
 				    elsif question["correct_type"]=="1";
 					 element_str += "<div class='dragDrop_box' id='droppable_#{problem_index}_#{sign_index}' ></div>";
 				    elsif question["correct_type"]=="3";
@@ -207,23 +194,34 @@ unbind_arr=[];
 				    	})
 				    </script>
 				<% end %>
+				<!-- 题面内大题 初始化音频  -->
+				  <% audio_title_arr = result_title_arr.join("").split("((mp3))"); audio_src = audio_title_arr[1]; %>
+                  <% audio_element = "" ;if audio_src != nil ; %>
+                  <% audio_element="<input type='button' id='jplayer_play_button_#{problem_index}' value='播放' /><div id='jplayer_location_#{problem_index}'></div>" ;%> 
+                  <% audio_title_arr[1]="" ; end ; %>
+				  <%= "#{audio_title_arr.join('')}#{audio_element}".html_safe %>
 				<script type='text/javascript'>
+				//设置可拖动元素，以及绑定音频播放事件
 					$(function(){
 					   $(".draggable_attr_<%= problem_index %>").draggable({revert: true});
+					   $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
+						  	jplayer_play("<%= audio_src %>");
+					   });
 					})
 				</script>
-				  <% problem_title = result_title_arr.join(""); %>
-				<%= problem_title.html_safe %>
 			</div>
-				<div class="drag_tk_box">
-                             <div class="drag_tk border_radius">
-                                 <ul id="draggable_list_<%= problem_index %>">
-                                 	
-                                 </ul>
-                            </div>
-              </div>
-   	
-		</div>
+		    <div class="drag_tk_box" id="drag_tk_box_<%= problem_index %>">
+               <div class="drag_tk border_radius" id="drag_tk_<%= problem_index %>">
+               <ul id="draggable_list_<%= problem_index %>"></ul>
+            </div>
+            <script type="text/javascript">
+               //设置拖选框的外层高度
+            	$(function(){
+	                $("#drag_tk_box_<%= problem_index %>").css("height",$("#drag_tk_<%= problem_index %>").height());
+                })
+            </script>           
+          </div>
+	   </div>
 	</div>
 	<div class="m_side">
 		<div class="problem_box">
@@ -248,13 +246,14 @@ unbind_arr=[];
 						<input id="resource_analysis<%= "_#{problem_index}_#{question_index}" %>" type="hidden" value="<%= @answer[problem_index][question_index]["analysis"] %>">
 						</input>
 						<div class="pro_btn">
-                            <a href="#">报告错误</a><a href="#">相关词汇</a>
+                            <a href="javascript:void(0);"  onclick="javascript:open_report_error('<%= question["id"] %>');">报告错误</a><% unless question["words"].nil?||question["words"]=="" %><a href="javascript:void(0);" onclick="javascript:ajax_load_about_words('<%= question["words"] %>',<%= problem_index %>,<%= question_index %>)">相关词汇</a><% end %>
 						</div>
 						<div class="jiexi" id="display_jiexi<%= "_#{problem_index}_#{question_index}" %>">
 							<span class="xx_x" onclick="javascript:close_display_answer(<%= problem_index %>,<%= question_index %>);" ><img src="/assets/x.gif"/></span>
 							<div>正确答案：<span class="red" id="display_answer<%= "_#{problem_index}_#{question_index}" %>"></span></div>
 							<div id="display_analysis<%= "_#{problem_index}_#{question_index}" %>"></div>
 						</div>
+						<div id="about_words_position<%= "_#{problem_index}_#{question_index}" %>"></div>	
 					</div>
 				</div>
 			</div>
@@ -269,6 +268,51 @@ unbind_arr=[];
 // 显示总题数
 $(".global_problem_sum").html("<%= problem_index+1 %>");</script>
 
+ <!-- 相关词汇框 -->
+<div id="about_words_loader"  >
+              <div class="jiexi" id="about_words">
+					<span class="xx_x" onclick="javascript:close_about_words();" ><img src="/assets/x.gif"></span>
+					<div class="xg_words">
+						<ul id="about_words_list"></ul>
+					</div>
+					<div class="xg_words_ny">
+						<div class="ch_text">
+							<div class="ch_words_line">
+								<span class="font_size_24" id='about_word_name'></span>
+								<span id='about_word_types'></span><span id='about_word_phonetic'></span>
+								<input type="hidden" id="about_word_enunciate_url" />
+								<a href="javascript:void(0);" onclick="javascript:jplayer_play($('#about_word_enunciate_url').val());"><img src="/assets/icon_fy.png"></a>
+							</div>
+							<div class="ch_words_line">
+								<p class="font_size_16" id='about_word_en_mean'></p>
+								<p id='about_word_ch_mean'></p>
+							</div>
+							<div class="ch_words_line">
+								<ul class="words_ul_font14" id="about_word_sentences"></ul>
+							</div>
+						</div>
+					</div>
+				</div>
+</div>
+
+<!-- 报告错误框  -->
+     <div class="upErrorTo_tab border_radius" id="report_error" style="top: 242px; left: 490px; display: none; ">
+         <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:close_report_error();"></span>
+         <input type="hidden" id="report_error_paper_id" value="<%= @paper["id"] %>" />
+         <input type="hidden" id="report_error_paper_title" value="<%= @paper["base_info"]["title"] %>" />
+         <input type="hidden" id="report_error_user_id" value="<%= cookies[:user_id] %>" />
+         <input type="hidden" id="report_error_user_name" value="<%= cookies[:user_name] %>" />
+         <input type="hidden" id="report_error_question_id" /> 
+         <ul>
+             <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:TOPOIC] %>">题目错误</li>
+             <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANSWER] %>">答案错误</li>
+             <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANALISIS] %>">解析错误</li>
+             <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:WORD] %>">词汇错误</li>
+         </ul>
+        <textarea name="" id='report_error_description' cols="" rows=""></textarea>
+        <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
+    </div>
+        
 
 <script type=text/javascript>
     //用户操作题目内小题
@@ -283,5 +327,119 @@ $(".global_problem_sum").html("<%= problem_index+1 %>");</script>
 		$(".pro_question_list_"+problem_index+":eq("+question_index+")").show();
 	}
 	
+	//播放音频
+    function jplayer_play(src){
+        $("#jquery_jplayer_1").jPlayer("setMedia", {
+            mp3: src
+        });
+        $("#jquery_jplayer_1").jPlayer("play");
+    }
+
+   //ajax载入相关词汇
+	function ajax_load_about_words(words,problem_index,question_index){
+	$.ajax({
+        type: "POST",
+        url: "/exam_users/ajax_load_about_words.json",
+        dataType: "json",
+        data : {
+            "words":words
+        },
+        success : function(data) {
+        	words_arr = words.split(";");
+        	$("#about_words_list").empty();
+        	html_str="";
+        	n=0;
+        	for(var i=0;i<words_arr.length;i++){
+        	  if(data[i]!=null){
+        	  html_str +="<li>";
+			  html_str +="<a class='single_word_li' href='javascript:void(0);' onclick='javascript:show_single_word(this,"+n+");'>"+data[n].name+"</a>";
+			  html_str +="<input type='hidden' id='about_word_name_"+n+"' value='"+data[n].name+"' />";
+			  html_str +="<input type='hidden' id='about_word_category_id_"+n+"' value='"+data[n].category_id+"' />";
+			  html_str +="<input type='hidden' id='about_word_en_mean_"+n+"' value='"+data[n].en_mean+"' />";
+			  html_str +="<input type='hidden' id='about_word_ch_mean_"+n+"' value='"+data[n].ch_mean+"' />";
+			  html_str +="<input type='hidden' id='about_word_types_"+n+"' value='"+data[n].types+"' />";
+			  html_str +="<input type='hidden' id='about_word_phonetic_"+n+"' value='"+data[n].phonetic+"' />";
+			  html_str +="<input type='hidden' id='about_word_enunciate_url_"+n+"' value='"+data[n].enunciate_url+"' />";
+			  html_str +="<input type='hidden' id='about_word_sentences_"+n+"' value='"+data[n].sentences+"' />";
+			  html_str +="</li>";
+			  n++;
+			  
+        	  }
+        	}
+        	$("#about_words_list").html(html_str);
+        	$(".single_word_li:eq(0)").trigger("click");
+        	if(data["error"]==null){
+        	   $("#about_words_position_"+problem_index+"_"+question_index).append($("#about_words"));
+        	}else{
+        	   tishi_alert(data["error"]);	
+        	}
+        	
+        }
+    });	
+	}
+	
+	//关闭相关词汇框
+	function close_about_words(){
+		$("#about_words_loader").append($("#about_words"));
+	}
+	
+	//打开报告错误框
+	function open_report_error(question_id){
+		$("#report_error").show();
+		$("#report_error_description").val("");
+		$(".report_error_radio").attr("checked",false);
+		$("#report_error_question_id").val(question_id);
+	}
+	
+	//ajax报告错误
+	function ajax_report_error(){
+		if(!$(".report_error_radio:checked").val()){
+			tishi_alert("请选择错误类型");
+			return false;
+		}
+		$.ajax({
+        type: "POST",
+        url: "/exam_users/ajax_report_error.json",
+        dataType: "json",
+        data : {
+        	"post":{
+                 "paper_id":$("#report_error_paper_id").val(),
+                 "paper_title":$("#report_error_paper_title").val(),
+                 "user_id":$("#report_error_user_id").val(),
+                 "user_name":$("#report_error_user_name").val(),
+                 "description":$("#report_error_description").val(),
+                 "error_type":$(".report_error_radio:checked").val(),
+                 "question_id":$("#report_error_question_id").val()
+            }
+        },
+        success : function(data) {
+        	tishi_alert(data["message"]);
+        }
+        });	
+	}
+	
+	//关闭报告错误框
+	function close_report_error(){
+		$("#report_error").hide();
+	}
+	
+	function show_single_word(ele,i){
+	    $(".single_word_li").removeClass("hover");
+		$(ele).addClass("hover");
+		$("#about_word_name").html($("#about_word_name_"+i).val());
+		$("#about_word_en_mean").html($("#about_word_en_mean_"+i).val());
+		$("#about_word_ch_mean").html($("#about_word_ch_mean_"+i).val());
+		$("#about_word_types").html($("#about_word_types_"+i).val());
+		$("#about_word_phonetic").html($("#about_word_phonetic_"+i).val());
+		$("#about_word_enunciate_url").val($("#about_word_enunciate_url_"+i).val());
+		var sentences = $("#about_word_sentences_"+i).val().split(";");
+		var sentences_html = "";
+		for(var i=0;i<sentences.length;i++){
+			if(sentences[i]!=""){
+			sentences_html += "<li>"+sentences[i]+"</li>";
+			}
+		}
+		$("#about_word_sentences").html(sentences_html);
+	}
 </script>
 
