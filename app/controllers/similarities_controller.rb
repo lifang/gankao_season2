@@ -18,5 +18,13 @@ class SimilaritiesController < ApplicationController
       and eu.examination_id in (?)", cookies[:user_id], examination_ids])
     @exam_users.each { |eu| @exam_user_hash[eu.examination_id] = eu.is_submited }
   end
-  
+
+  def join
+    puts "----------------------------------------"
+    puts params[:category]
+    puts params[:id]
+    puts cookies[:user_id]
+    
+  end
+
 end

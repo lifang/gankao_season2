@@ -17,7 +17,12 @@ GankaoSeason2::Application.routes.draw do
       post :load_words,:write_file
     end
   end
-  resources :similarities
+  resources :similarities do
+    member do
+      get :join
+    end
+  end
+
   resources :study_plans do
     collection do
       get :done_plans
