@@ -136,7 +136,6 @@ button.green { color: #009900;}
 .pro_qu_ul li { line-height: 24px; padding: 5px 0; overflow: hidden;}
 .pro_qu_ul li span {
     cursor: pointer;
-    background: url(/assets/li.png) no-repeat 0 0; 
     width: 23px;
     height: 23px;
     line-height: 23px;

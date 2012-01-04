@@ -28,6 +28,10 @@ GankaoSeason2::Application.routes.draw do
     collection do
       post :ajax_load_about_words,:ajax_report_error
     end
+    member do
+      post :ajax_save_question_answer
+      get :redo
+    end
   end
   resources :logins do
     collection do
