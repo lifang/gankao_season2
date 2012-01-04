@@ -6,7 +6,7 @@ class ExamUsersController < ApplicationController
     paper = File.open("#{Rails.root}/app/assets/javascripts/exam/paper.js")
     @paper = (JSON paper.read()[8..-1])["paper"]
     #生成考生答卷
-    url = create_sheet(sheet_outline,2)
+    url = create_sheet(sheet_outline,params[:id])
     @sheet = get_doc(url)
     
   end
