@@ -35,7 +35,7 @@ $(function(){
     var x = -20;
     var y = 15;
     $(".tooltip").mouseover(function(e){
-        var tooltip = "<div class='tooltip_box'><div class='tooltip_t'></div><div class='tooltip_next'>"+this.name+"</div></div>";
+        var tooltip = "<div class='tooltip_box'><div class='tooltip_next'>"+this.name+"</div></div>";
         $("body").append(tooltip);
         $(".tooltip_box").css({
             "top":(e.pageY+y)+"px",
@@ -64,9 +64,9 @@ $(function(){
 $(function(){
     if ($(".h_email")[0] != null && $(".h_email")[0] != undefined) {
         $(".h_email")[0].onmouseover = show_email_info ;
+    $(".email_tab")[0].onmouseout = close_email_info ;
+    $(".h_email")[0].onmouseout = close_email_info ;
     }
-    
-//    $(".email_tab")[0].onmouseout = close_email_info ;
 })
 
 function show_email_info ( ae ){

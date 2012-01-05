@@ -59,7 +59,7 @@ button.green { color: #009900;}
 
 .m_top { height: 34px; line-height: 34px; background: #595d63;}
 .m_side { width: 50%; _width: 49%; display: inline; float: left; overflow-y: scroll;}
-.m_problem_bg { background: #efede7;}
+.m_problem_bg { background: #fff;}
 
 
 
@@ -118,8 +118,7 @@ button.green { color: #009900;}
 }
 
 .pql_left { width: 5%; float: left; height: 32px; line-height: 32px;}
-.pql_right { width: 95%; float: left;}
-
+.pql_right { width: 95%; float: left; position: relative;}
 .p_q_line { overflow: hidden; height: 32px;}
 .false_red { background: #ffd2d2;}
 .ture_green { background: #d2fddd;}
@@ -363,7 +362,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .icon_true { background: url(/assets/true.png) no-repeat #FFF center center;}
 
 /*提交错误弹出层-----*/
-.upErrorTo_tab { width: 300px; padding: 10px; background: #FFF; border: 5px #333 solid; display: none; position: absolute;}
+.upErrorTo_tab { width: 300px; padding: 10px; background: #FFF; border: 5px #333 solid; display: none; position: absolute;z-index: 900;}
 .upErrorTo_tab li { height: 24px; line-height: 24px; color: #333; display: block; text-decoration: none;}
 .upErrorTo_tab li input { margin-right: 5px;}
 .upErrorTo_tab textarea { width: 100%; margin: 5px 0;}
