@@ -9,9 +9,6 @@
   if(!(getCookie("collection_problem_init")!= null)){
     setCookie("collection_problem_init","0");
   }
-<%#*if(!(getCookie("tag_types")!= null)){%>
-<%#*setCookie("tag_types","全部收藏")%>
-<%#*}%>
   
   //字体放大、缩小
   var tgs = new Array( 'div','td','tr');
@@ -27,7 +24,11 @@
     problem[i].questions.question=questions;
     for(var n=0;n<questions.length;n++){
       var answer_array=[]
-      "string"==(typeof problem[i].questions.question[n].user_answer)?answer_array.push(problem[i].questions.question[n].user_answer):answer_array=problem[i].questions.question[n].user_answer
+      if(problem[i].questions.question[n].user_answer==null){
+        problem[i].questions.question[n].user_answer=[];
+      }else{
+        "string"==(typeof problem[i].questions.question[n].user_answer)?answer_array.push(problem[i].questions.question[n].user_answer):answer_array=problem[i].questions.question[n].user_answer
+      }
       problem[i].questions.question[n].user_answer=answer_array;
       if(questions[n].tags!=null){
         var tags= questions[n].tags.split(",");
@@ -84,8 +85,13 @@
     <div class="problem_text" id="global_problem_title">
     </div>
   </div>
+  <div class="drag_tk_box" id="drag_tk_box">
+    <div class="drag_tk border_radius" id="drag_tk">
+      <ul id="draggable_list"></ul>
+    </div>
+  </div>
 </div>
-<div id="jplayer"></div>
+<div id="jplayer_one"></div>
 <script type="text/javascript">
   //记录最后打开的小题
   var last_open_question=null;
