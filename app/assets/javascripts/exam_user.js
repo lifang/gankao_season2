@@ -1,247 +1,176 @@
 
+//字体放大、缩小
+var tgs = new Array( 'div','td','tr');
+var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
+var startSz = 2;
+function ts( trgt,inc ) {
+    if (!document.getElementById) return
+    var d = document,cEl = null,sz = startSz,i,j,cTags;
+    sz += inc;
+    if ( sz < 0 ) sz = 0;
+    if ( sz > 6 ) sz = 6;
+    startSz = sz;
+    if ( !( cEl = d.getElementById( trgt ) ) ) cEl = d.getElementsByTagName( trgt )[ 0 ];
+    cEl.style.fontSize = szs[ sz ];
+    for ( i = 0 ; i < tgs.length ; i++ ) {
+        cTags = cEl.getElementsByTagName( tgs[ i ] );
+        for ( j = 0 ; j < cTags.length ; j++ ) cTags[ j ].style.fontSize = szs[ sz ];
+    }
+}
+
 //下一题
 function click_next_problem(){
-    if(init_problem==(problems.length-1)){
+    var this_problem = $(".problem_resource:visible");
+    var next_problem = this_problem.next(".problem_resource");
+    if(next_problem.length==0){
         tishi_alert("当前已是最后一题");
         return false;
+    }else{
+        this_problem.hide();
+        next_problem.show();
+        var problem_index = $(".problem_resource").index(next_problem);
+        $("#report_error").hide();
+        $("#jquery_jplayer_1").jPlayer("stop");
+        if($("#drag_tk_"+problem_index).height()){
+            $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height());
+        }
+        setCookie("init_problem",problem_index);
     }
-    init_problem = init_problem+1;
-    setCookie("init_problem",init_problem);
-    load_problem(init_problem);
 }
 
 //上一题
 function click_prev_problem(){
-    if(init_problem==0){
+    var this_problem = $(".problem_resource:visible");
+    var prev_problem = this_problem.prev(".problem_resource");
+    if(prev_problem.length==0){
         tishi_alert("当前已是第一题");
         return false;
-    }
-    init_problem = init_problem-1;
-    setCookie("init_problem",init_problem);
-    load_problem(init_problem);
-}
-
-
-//载入题目
-function load_problem(problem_index){
-    $("#global_problem_index").html(problem_index+1);
-    $("#global_problem_title").html(problems[problem_index].title);
-
-    //组合questions数组
-    load_questions(problems[problem_index].questions.question,problem_index);
-    var p_answer = answers[problem_index];
-    var u_answer = storage[problem_index];
-    for(var i=0;i<u_answer.length;i++){
-        if(u_answer[i]!=""){
-            $("#exam_user_answer_"+problem_index+"_"+i).val(u_answer[i]);
-            $(".hedui_t_btn:eq("+i+")").trigger("click");
+    }else{
+        this_problem.hide();
+        prev_problem.show();
+        var problem_index = $(".problem_resource").index(prev_problem);
+        $("#report_error").hide();
+        $("#jquery_jplayer_1").jPlayer("stop");
+        if($("#drag_tk_"+problem_index).height()){
+            $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height());
         }
+        setCookie("init_problem",$(".problem_resource").index(prev_problem));
     }
 }
 
-//循环载入小题
-function load_questions(questions,problem_index){
-    $("#questions_resource").empty();
-    for(var q_index=0;q_index<questions.length;q_index++){
-        var q_description = questions[q_index].description ;
-        var q_correct_type = questions[q_index].correct_type;
-        var q_answer =answers[problem_index][q_index].answer;
-        var q_analysis =answers[problem_index][q_index].analysis;
-        var u_answer = storage[problem_index][q_index];
-        var pro_question_list = $("#questions_resource")[0].appendChild(create_element("div", null, null, "pro_question_list p_q_line", null, "innerHTML"));
-        var pql_left = pro_question_list.appendChild(create_element("div", null, null, "pql_left", null, "innerHTML"));
-        pql_left.innerHTML=""+(q_index+1)+".";
-        var pql_right = pro_question_list.appendChild(create_element("div", null, null, "pql_right p_q_line", null, "innerHTML"));
-        var pro_qu_t = pql_right.appendChild(create_element("div", null, null, "pro_qu_t pro_qu_k pro_qu_h", null, "innerHTML"));
-        if(q_description!=null){
-            pro_qu_t.innerHTML=q_description;
-        }
-        var pass_radio = pql_right.appendChild(create_element("input",null,"pass_radio_"+problem_index+"_"+q_index,"pass_radio","radio",""));
-        pass_radio.style.display="none";
-        var green_dui = pql_right.appendChild(create_element("div", null, "green_dui_"+problem_index+"_"+q_index, "green_dui", null, "innerHTML"));
-        green_dui.innerHTML="<img src='/assets/green_dui.png' />";
-        green_dui.style.display="none";
-        var red_cuo = pql_right.appendChild(create_element("div", null, "red_cuo_"+problem_index+"_"+q_index, "green_dui", null, "innerHTML"));
-        red_cuo.innerHTML="<img src='/assets/red_cuo.png' />";
-        red_cuo.style.display="none";
-        var pro_qu_div = pql_right.appendChild(create_element("div", null, null, "pro_qu_div", null, "innerHTML"));
-        pro_qu_div.style.display="none";
-        var exam_user_answer = pro_qu_div.appendChild(create_element("input", null, "exam_user_answer_"+problem_index+"_"+q_index, "exam_user_answer", "hidden", ""));
-        //pro_qu_ul 小题答案div
-        var pro_qu_ul = pro_qu_div.appendChild(create_element("div", null, null, "pro_qu_ul", null, "innerHTML"));
-        generate_correct_type(q_correct_type,pro_qu_ul,problem_index,q_index,exam_user_answer);
-        var pro_btn = pro_qu_div.appendChild(create_element("div", null, null, "pro_btn", null, "innerHTML"));
-        pro_btn.innerHTML += "<button class='t_btn hedui_t_btn' onclick=\"javascript:check_question('"+q_correct_type+"','"+escape(q_answer)+"','"+escape(q_analysis)+"',"+problem_index+","+q_index+")\">核对</button>"
-        pro_btn.innerHTML += "<a href='javascript:void(0);'>报告错误</a>";
-        pro_btn.innerHTML += "<a href='javascript:void(0);'>相关词汇</a>";
-        var jiexi = pro_qu_div.appendChild(create_element("div", null, "display_jiexi_"+problem_index+"_"+q_index, "jiexi", null, "innerHTML"));
-        jiexi.style.display="none";
-        var xx_x = jiexi.appendChild(create_element("div", null, null, "xx_x", null, "innerHTML"));
-        xx_x.innerHTML="<img onclick=\"javascript:close_display_answer("+problem_index+","+q_index+");\" src='/assets/x.gif' />";
-        jiexi.innerHTML +="<div>正确答案：<span id='display_answer_"+problem_index+"_"+q_index+"' class='red'></span></div>";
-        jiexi.innerHTML +="<div id='display_analysis_"+problem_index+"_"+q_index+"'></div>";
-
-        //预载用户的答案
-        if(u_answer!=""){
-            if(u_answer==q_answer){
-                $(pro_qu_t).css("background","#DBEAD5");
-                $(pro_qu_t).closest(".pro_question_list").css("background","#DBEAD5");
-            }else{
-                $(pro_qu_t).css("background","#FEE6E6");
-                $(pro_qu_t).closest(".pro_question_list").css("background","#FEE6E6");
+last_opened_question = null;
+//初始化显示、隐藏小题功能
+$(function(){  
+    $(".pro_qu_t").bind("click",function(){
+        var pro_qu_div = $(this).parent().find(".pro_qu_div");
+        if(pro_qu_div.is(":visible")){
+            pro_qu_div.hide();
+            $(this).parent().parent().addClass("p_q_line");
+            $(this).addClass("pro_qu_h");
+            last_opened_question = null;
+            var pass = $(this).parent().find(".pass_check").val();
+            change_color(pass,this);
+        }else{
+            pro_qu_div.show();
+            $(this).parent().parent().removeClass("p_q_line");
+            $(this).parent().removeClass("p_q_line");
+            $(this).removeClass("pro_qu_h");
+            change_color(null,this);
+            if(last_opened_question!=null){
+                last_opened_question.parent().find(".pro_qu_div").hide();
+                last_opened_question.parent().parent().addClass("p_q_line");
+                last_opened_question.addClass("pro_qu_h");
+                var pass = last_opened_question.parent().find(".pass_check").val();
+                change_color(pass,last_opened_question);
             }
+            last_opened_question = $(this);
         }
-        
-        //绑定显示，隐藏事件
-        $(pro_qu_t).bind("click",function(){
-            var pro_qu_div = $(this).parent().find(".pro_qu_div");
-            var checked = $(this).parent().find(".pass_radio").is(":checked");
-            if(pro_qu_div.is(":visible")){
-                pro_qu_div.hide();
-                $(this).parent().parent().addClass("p_q_line");
-                $(this).parent().addClass("p_q_line");
-                $(this).addClass("pro_qu_h");
-                if(checked){
-                    $(this).css("background","#DBEAD5");
-                    $(this).closest(".pro_question_list").css("background","#DBEAD5");
-                }else{
-                    $(this).css("background","#FEE6E6");
-                    $(this).closest(".pro_question_list").css("background","#FEE6E6");
-                }
-                last_open_question=null;
-            }else{
-                if(last_open_question!=null){
-                    last_open_question.trigger("click");
-                }
-                pro_qu_div.show();
-                $(this).parent().parent().removeClass("p_q_line");
-                $(this).parent().removeClass("p_q_line");
-                $(this).removeClass("pro_qu_h");
-                $(this).css("background","");
-                $(this).closest(".pro_question_list").css("background","");
-                last_open_question=$(this);
-            }
-        })
+    })
+    //题面内大题取消此功能
+    for(var i=0;i<unbind_arr.length;i++){
+        $(".pro_qu_t_"+unbind_arr[i]).unbind("click");
     }
-}
+})
 
-//根据小题的类型，区别操作
-function generate_correct_type(correct_type,ele,problem_index,question_index,exam_user_answer){
-    //显示单选题
-    var question_detail = problems[problem_index].questions.question[question_index];
-    var q_answer = answers[problem_index][question_index];
-    var u_answer = storage[problem_index][question_index];
-    //单选题
-    if(correct_type=='0'){
-        var attrs =  question_detail.questionattrs.split(";-;");
-        var ul = ele.appendChild(create_element("ul", null, null, null, null, "innerHTML"));
-        for(var i=0;i<attrs.length;i++){
-            var li = ul.appendChild(create_element("li", null, null, null, null, "innerHTML"));
-            if(attrs[i].split(") ")[0]&&attrs[i].split(") ")[1]){
-                li.innerHTML="<span class='single_choose_li single_choose_"+problem_index+"_"+question_index+"' onclick='javascript:do_single_choose(this,\""+escape(attrs[i])+"\","+problem_index+","+question_index+");'>"+attrs[i].split(") ")[0]+"</span>"+attrs[i].split(") ")[1];
-            }else{
-                li.innerHTML="<span>X</span><font color='red'>该选项存在问题，请修正或联系管理员</font>";
-            }
+//题面后小题列表改变颜色
+function change_color(value,ele){
+    if(value=="1"){
+        $(ele).css("background","#DBEAD5");
+        $(ele).closest(".pro_question_list").css("background","#DBEAD5");
+    }else{
+        if(value=="0"){
+            $(ele).css("background","#FEE6E6");
+            $(ele).closest(".pro_question_list").css("background","#FEE6E6");
+        }else{
+            $(ele).css("background","");
+            $(ele).closest(".pro_question_list").css("background","");
         }
     }
-
-    //多选题
-    if(correct_type=='1'){
-        var attrs =  question_detail.questionattrs.split(";-;");
-        var ul = ele.appendChild(create_element("ul", null, null, null, null, "innerHTML"));
-        for(var i=0;i<attrs.length;i++){
-            var li = ul.appendChild(create_element("li", null, null, null, null, "innerHTML"));
-            if(attrs[i].split(") ")[0]&&attrs[i].split(") ")[1]){
-                li.innerHTML = "<span class='multi_choose_li multi_choose_"+problem_index+"_"+question_index+"' onclick='javascript:do_multi_choose(this,\""+escape(question_detail.questionattrs)+"\","+problem_index+","+question_index+");'>"+attrs[i].split(") ")[0]+"</span>"+attrs[i].split(") ")[1];
-            }else{
-                li.innerHTML="<span>X</span><font color='red'>该选项存在问题，请修正或联系管理员</font>";
-            }
-        }
-    }
-
-    //判断题
-    if(correct_type=='2'){
-        var ul = ele.appendChild(create_element("ul", null, null, null, null, "innerHTML"));
-        var li = ul.appendChild(create_element("li", null, null, null, null, "innerHTML"));
-        li.innerHTML="<span class='single_choose_li judge_"+problem_index+"_"+question_index+"' onclick='javascript:do_judge(this,\"1\","+problem_index+","+question_index+");'></span>对/是";
-        var li = ul.appendChild(create_element("li", null, null, null, null, "innerHTML"));
-        li.innerHTML="<span class='single_choose_li judge_"+problem_index+"_"+question_index+"' onclick='javascript:do_judge(this,\"0\","+problem_index+","+question_index+");'></span>错/否";
-    }
-
-    //填空题
-    if(correct_type=='3'){
-        ele.innerHTML="<input id='fill_blank_"+problem_index+"_"+question_index+"' type='text' class='input_xz' onchange='javascript:do_fill_blank(this,this.value,"+problem_index+","+question_index+");'>";
-    }
-
-    //简答题
-    if(correct_type=='5'){
-        ele.innerHTML="<textarea cols='' rows='' class='textarea_xz1' onchange='javascript:do_fill_blank(this,this.value,"+problem_index+","+question_index+");'></textarea>";
-    }
-
 }
 
 //单选题,做题
-function do_single_choose(ele,answer,problem_index,question_index){
-    answer=unescape(answer);
-    //hide_detail(problem_index,question_index);
-    $(".single_choose_"+problem_index+"_"+question_index).removeClass("hover");
+function do_single_choose(ele,attrs,problem_index,question_index){
+    attrs=attrs.split(";-;");
+    $(".single_choose_li_"+problem_index+"_"+question_index).removeClass("hover");
     $(ele).addClass("hover");
-    $("#exam_user_answer_"+problem_index+"_"+question_index).val(answer);
+    var n=0;
+    $(".single_choose_li_"+problem_index+"_"+question_index).each(function(){
+        if($(this).hasClass("hover")){
+            $("#exam_user_answer_"+problem_index+"_"+question_index).val(attrs[n]);
+            return false;
+        }
+        n++;
+    });
 }
 
 //多选题，做题
 function do_multi_choose(ele,attrs,problem_index,question_index){
-    attrs=unescape(attrs).split(";-;");
-    //hide_detail(problem_index,question_index);
+    attrs=attrs.split(";-;");
     $(ele).toggleClass("hover");
-    var ques_index = 0;
+    var n = 0;
     var user_answer = [];
-    $(".multi_choose_"+problem_index+"_"+question_index).each(function(){
+    $(".multi_choose_li_"+problem_index+"_"+question_index).each(function(){
         if($(this).hasClass("hover")){
-            user_answer.push(attrs[ques_index]);
+            user_answer.push(attrs[n]);
         }
-        ques_index++;
+        n++;
     });
     $("#exam_user_answer_"+problem_index+"_"+question_index).val(user_answer.join(";|;"));
 }
 
 //判断，做题
 function do_judge(ele,answer,problem_index,question_index){
-    //hide_detail(problem_index,question_index);
-    $(".judge_"+problem_index+"_"+question_index).removeClass("hover");
+    $(".judge_li_"+problem_index+"_"+question_index).removeClass("hover");
     $(ele).addClass("hover");
     $("#exam_user_answer_"+problem_index+"_"+question_index).val(answer);
 }
 
 function do_fill_blank(ele,answer,problem_index,question_index){
-    //hide_detail(problem_index,question_index);
     $("#exam_user_answer_"+problem_index+"_"+question_index).val(answer);
 }
 
-//做题时，清空之前的答案判断
-function hide_detail(problem_index,question_index){
-    $("#green_dui_"+problem_index+"_"+question_index).hide();
-    $("#red_cuo_"+problem_index+"_"+question_index).hide();
-    $("#display_jiexi_"+problem_index+"_"+question_index).hide();
-}
-
-//核对小题
-function check_question(correct_type,answer,analysis,problem_index,question_index){
-    answer=unescape(answer);
-    analysis=unescape(analysis);
-    $("#display_answer_"+problem_index+"_"+question_index).empty();
-    $("#display_analysis_"+problem_index+"_"+question_index).empty();
-    var user_answer = $("#exam_user_answer_"+problem_index+"_"+question_index).val();
-    storage[problem_index][question_index]=user_answer;
-    if(user_answer==answer){
-        $("#pass_radio_"+problem_index+"_"+question_index).attr("checked",true);
+//小题做对或者做错的效果显示
+function right_or_error_effect(user_answer,correct_answer,analysis,problem_index,question_index){
+    if(user_answer==correct_answer){
+        $("#pass_check_"+problem_index+"_"+question_index).val(1);
         $("#green_dui_"+problem_index+"_"+question_index).show();
         $("#red_cuo_"+problem_index+"_"+question_index).hide();
-    }else{  
-        $("#pass_radio_"+problem_index+"_"+question_index).attr("checked",false);
+        $("#hedui_btn_"+problem_index+"_"+question_index).css("color","green");
+    }else{
+        $("#pass_check_"+problem_index+"_"+question_index).val(0);
         $("#green_dui_"+problem_index+"_"+question_index).hide();
         $("#red_cuo_"+problem_index+"_"+question_index).show();
+        $("#hedui_btn_"+problem_index+"_"+question_index).css("color","red");
     }
+    $("#display_jiexi_"+problem_index+"_"+question_index).show();
+    $("#display_analysis_"+problem_index+"_"+question_index).html(analysis);
+    $("#check_question_btn_"+problem_index+"_"+question_index).hide();
+    $("#next_question_btn_"+problem_index+"_"+question_index).show();
+    $("#open_display_answer_"+problem_index+"_"+question_index).show();
+}
+
+//根据题目类型，设置最终显示的答案效果
+function change_display_answer(correct_type,answer){
     if(correct_type=="0"){
         answer=answer.split(") ")[0];
     }
@@ -260,12 +189,281 @@ function check_question(correct_type,answer,analysis,problem_index,question_inde
             answer="错/否";
         }
     }
-    $("#display_jiexi_"+problem_index+"_"+question_index).show();
-    $("#display_answer_"+problem_index+"_"+question_index).html(answer);
-    $("#display_analysis_"+problem_index+"_"+question_index).html(analysis);
+    return answer
 }
 
-//关闭答案，解析显示
+//核对小题
+function check_question(question_type,correct_type,attrs,problem_index,question_index){
+    $("#display_answer_"+problem_index+"_"+question_index).empty();
+    $("#display_analysis_"+problem_index+"_"+question_index).empty();
+    var answer = answers[problem_index][question_index].answer;
+    var analysis = answers[problem_index][question_index].analysis;
+    var user_answer = $("#exam_user_answer_"+problem_index+"_"+question_index).val();
+    //保存用户答案
+    $.ajax({
+        type: "POST",
+        url: "/exam_users/"+init_exam_user_id+"/ajax_save_question_answer.json",
+        dataType: "json",
+        data : {
+            "sheet_url":sheet_url,
+            "question_type":question_type,
+            "correct_type":correct_type,
+            "problem_index":problem_index,
+            "question_index":question_index,
+            "answer":user_answer
+        }
+    });
+    //改变答题正误的显示效果细节
+    right_or_error_effect(user_answer,answer,analysis,problem_index,question_index);
+    //改变最终显示答案的内容，如单选题可以只显示"A"
+    answer = change_display_answer(correct_type,answer);
+    $("#display_answer_"+problem_index+"_"+question_index).html(answer);
+}
+
+//根据保存的用户答案，改变小题状态
+function refer_question(question_type,correct_type,attrs,problem_index,question_index){
+    var answer = answers[problem_index][question_index].answer;
+    var analysis = answers[problem_index][question_index].analysis;
+    var user_answer = $("#exam_user_answer_"+problem_index+"_"+question_index).val();
+    //直接改变小题的背景颜色
+    if(user_answer==answer){
+        if(question_type=="0"){
+            change_color("1",$("#pro_qu_t_"+problem_index+"_"+question_index)[0]);
+        }
+    }else{
+        if(question_type=="0"){
+            change_color("0",$("#pro_qu_t_"+problem_index+"_"+question_index)[0]);
+        }
+    }
+    //改变答题正误的显示效果细节
+    right_or_error_effect(user_answer,answer,analysis,problem_index,question_index);
+    //改变最终显示答案的内容，如单选题可以只显示"A"
+    answer = change_display_answer(correct_type,answer);
+    $("#display_answer_"+problem_index+"_"+question_index).html(answer);
+    //模拟用户操作，如单选题选择了哪个，selector选中哪个
+    imitate_action(attrs,question_type,correct_type,user_answer,problem_index,question_index);
+}
+
+//模拟用户操作
+function imitate_action(attrs,question_type,correct_type,user_answer,problem_index,question_index){
+    var split_attrs = attrs.split(";-;");
+    if(question_type=="0"){
+        if(correct_type=="0"){
+            for(var i=0;i<split_attrs.length;i++){
+                if(user_answer==split_attrs[i]){
+                    $(".single_choose_li_"+problem_index+"_"+question_index+":eq("+i+")").addClass("hover");
+                }
+            }
+        }
+        if(correct_type=="1"){
+            var user_answer_arr = user_answer.split(";|;");
+            for(var i=0;i<user_answer_arr.length;i++){
+                for(var j=0;j<split_attrs.length;j++){
+                    if(user_answer_arr[i]==split_attrs[j]){
+                        $(".multi_choose_li_"+problem_index+"_"+question_index+":eq("+j+")").addClass("hover");
+                    }
+                }
+            }
+        }
+        if(correct_type=="2"){
+            if(user_answer=="1"){
+                $(".judge_li_"+problem_index+"_"+question_index+":eq(0)").addClass("hover");
+            }else{
+                if(user_answer=="0"){
+                    $(".judge_li_"+problem_index+"_"+question_index+":eq(1)").addClass("hover");
+                }
+            }
+        }
+        if(correct_type=="3"||correct_type=="5"){
+            $("#fill_input_"+problem_index+"_"+question_index).val(user_answer);
+        }
+    }else{
+        if(question_type=="1"){
+            if(correct_type=="0"){
+                setSel(user_answer,$("#input_inner_answer_"+problem_index+"_"+question_index)[0],1);
+            }
+            if(correct_type=="1"){
+                $("#droppable_"+problem_index+"_"+question_index).html(user_answer);
+            }
+            if(correct_type=="3"){
+                $("#input_inner_answer_"+problem_index+"_"+question_index).val(user_answer);
+            }
+        }
+    }
+}
+
+//关闭答案，解析
 function close_display_answer(problem_index,question_index){
     $("#display_jiexi_"+problem_index+"_"+question_index).hide();
+}
+
+//显示答案、解析
+function open_display_answer(problem_index,question_index){
+    $("#display_jiexi_"+problem_index+"_"+question_index).show();
+}
+
+
+//用户操作题目内小题
+function do_inner_question(correct_type,problem_index,question_index){
+    var this_answer = $("#input_inner_answer_"+problem_index+"_"+question_index).val();
+    $("#exam_user_answer_"+problem_index+"_"+question_index).val(this_answer);
+}
+
+//题面内小题，需要隐藏右边的小题框
+function choose_pro_question_list(problem_index,question_index){
+    $(".pro_question_list_"+problem_index).hide();
+    $(".pro_question_list_"+problem_index+":eq("+question_index+")").show();
+}
+
+//播放音频
+function jplayer_play(src){
+    $("#jquery_jplayer_1").jPlayer("setMedia", {
+        mp3: src
+    });
+    $("#jquery_jplayer_1").jPlayer("play");
+}
+
+//ajax载入相关词汇
+function ajax_load_about_words(words,problem_index,question_index){
+    $.ajax({
+        type: "POST",
+        url: "/exam_users/ajax_load_about_words.json",
+        dataType: "json",
+        data : {
+            "words":words
+        },
+        success : function(data) {
+            var words_arr = words.split(";");
+            $("#about_words_list").empty();
+            var html_str="";
+            n=0;
+            for(var i=0;i<words_arr.length;i++){
+                if(data[i]!=null){
+                    html_str +="<li>";
+                    html_str +="<a class='single_word_li' href='javascript:void(0);' onclick='javascript:show_single_word(this,"+n+");'>"+data[n].name+"</a>";
+                    html_str +="<input type='hidden' id='about_word_name_"+n+"' value='"+data[n].name+"' />";
+                    html_str +="<input type='hidden' id='about_word_category_id_"+n+"' value='"+data[n].category_id+"' />";
+                    html_str +="<input type='hidden' id='about_word_en_mean_"+n+"' value='"+data[n].en_mean+"' />";
+                    html_str +="<input type='hidden' id='about_word_ch_mean_"+n+"' value='"+data[n].ch_mean+"' />";
+                    html_str +="<input type='hidden' id='about_word_types_"+n+"' value='"+data[n].types+"' />";
+                    html_str +="<input type='hidden' id='about_word_phonetic_"+n+"' value='"+data[n].phonetic+"' />";
+                    html_str +="<input type='hidden' id='about_word_enunciate_url_"+n+"' value='"+data[n].enunciate_url+"' />";
+                    html_str +="<input type='hidden' id='about_word_sentences_"+n+"' value='"+data[n].sentences+"' />";
+                    html_str +="</li>";
+                    n++;
+
+                }
+            }
+            $("#about_words_list").html(html_str);
+            $(".single_word_li:eq(0)").trigger("click");
+            if(data["error"]==null){
+                $("#about_words_position_"+problem_index+"_"+question_index).append($("#about_words"));
+            }else{
+                tishi_alert(data["error"]);
+            }
+
+        }
+    });
+}
+
+//关闭相关词汇框
+function close_about_words(){
+    $("#about_words_loader").append($("#about_words"));
+}
+
+//打开报告错误框
+function open_report_error(question_id){
+    $("#report_error").show();
+    $("#report_error_description").val("");
+    $(".report_error_radio").attr("checked",false);
+    $("#report_error_question_id").val(question_id);
+}
+
+//ajax报告错误
+function ajax_report_error(){
+    if(!$(".report_error_radio:checked").val()){
+        tishi_alert("请选择错误类型");
+        return false;
+    }
+    $.ajax({
+        type: "POST",
+        url: "/exam_users/ajax_report_error.json",
+        dataType: "json",
+        data : {
+            "post":{
+                "paper_id":$("#report_error_paper_id").val(),
+                "paper_title":$("#report_error_paper_title").val(),
+                "user_id":$("#report_error_user_id").val(),
+                "user_name":$("#report_error_user_name").val(),
+                "description":$("#report_error_description").val(),
+                "error_type":$(".report_error_radio:checked").val(),
+                "question_id":$("#report_error_question_id").val()
+            }
+        },
+        success : function(data) {
+            tishi_alert(data["message"]);
+            close_report_error();
+        }
+    });
+}
+
+//关闭报告错误框
+function close_report_error(){
+    $("#report_error").hide();
+}
+
+function show_single_word(ele,i){
+    $(".single_word_li").removeClass("hover");
+    $(ele).addClass("hover");
+    $("#about_word_name").html($("#about_word_name_"+i).val());
+    $("#about_word_en_mean").html($("#about_word_en_mean_"+i).val());
+    $("#about_word_ch_mean").html($("#about_word_ch_mean_"+i).val());
+    $("#about_word_types").html($("#about_word_types_"+i).val());
+    $("#about_word_phonetic").html($("#about_word_phonetic_"+i).val());
+    $("#about_word_enunciate_url").val($("#about_word_enunciate_url_"+i).val());
+    var sentences = $("#about_word_sentences_"+i).val().split(";");
+    var sentences_html = "";
+    for(var i=0;i<sentences.length;i++){
+        if(sentences[i]!=""){
+            sentences_html += "<li>"+sentences[i]+"</li>";
+        }
+    }
+    $("#about_word_sentences").html(sentences_html);
+}
+
+//设置select的默认值
+function setSel(str,select,types){
+    var setinfo=false;
+    for(var i=0;i<select.options.length;i++){
+        if (types==0 && select.options[i].text==str){
+            setinfo=true;
+        }else if (types==1 && select.options[i].value==str){
+            setinfo=true;
+        }
+        if (setinfo==true){
+            select.selectedIndex=i;
+            break;
+        }
+    }
+}
+
+//确认是否重做试卷
+function confirm_redo(){
+    if(confirm("如果您选择重做此卷，所有已保存的答案都将被清空。\n您确认要重做么？")){
+        var category_id = category ? category : "2" ;
+        window.location.href="/exam_users/"+init_exam_user_id+"/redo?category="+category_id+"&sheet_url="+sheet_url;
+    }
+}
+
+//点击"下一题"按钮
+function do_next_question(problem_index,question_index){
+    if((question_index+1)>=answers[problem_index].length){
+        //定位到下一大题的第一小题
+        click_next_problem();
+        $("#pro_qu_t_"+(problem_index+1)+"_0").trigger("click");
+    }else{
+        //定位到当前大题的下一小题
+        $("#pro_qu_t_"+problem_index+"_"+(question_index+1)).trigger("click");
+    }
+
 }

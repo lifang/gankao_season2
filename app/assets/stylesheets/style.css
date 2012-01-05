@@ -7,11 +7,11 @@ img { border: none;}
 button { cursor: pointer;}
 .clear { clear: both;}
 .float_right { float: right;}
-
 .position_re { position: relative;}
 .red { color: #F00;}
 .orange { color: #ff6c00;}
 .gray { color: #999;}
+button.green { color: #009900;}
 .xx_x { cursor: pointer; float: right;}
 .t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none;}
 .btn_box { width: 81px; height: 27px; margin: 0 auto;}
@@ -22,6 +22,7 @@ button { cursor: pointer;}
     -o-border-radius: 5px;
     border-radius: 5px;
 }
+.border_rb { border-left: 1px #CCC solid; border-top: 1px #CCC solid; border-right: 2px #999 solid; border-bottom: 2px #999 solid;}
 
 
 .head {padding: 6px 0;}
@@ -43,22 +44,21 @@ button { cursor: pointer;}
 .email_tab { width: 83px; height: 60px; display: none; padding-top: 30px; background: url(/assets/email_tab_bg.png) no-repeat; top: 12px; left: 4px; position: absolute; z-index:-1;}
 .email_tab li { height: 24px; line-height: 24px;}
 .email_tab li a { color: #333; text-decoration: none;}
+.email_tab li a:hover { color: #CCC;}
 .email_tab li a span { padding-left: 5px;}
 
 .h_banner { float: left; margin: 0 20px;}
 
-.h_weibo { float: left; height: 46px; padding-top: 3px;}
-.h_weibo a { margin: 0 5px;}
 
 
-.main { background: url(/assets/main_bg.png) repeat  #FFF; overflow: hidden; width: 100%;}
+.main { background: #effaff; overflow: hidden; width: 100%;}
 .main_Div { background: #FFF; overflow: hidden; width: 100%; overflow-y: auto;}
 .m_box { width: 700px; margin: 0 auto;}
 .m_box h1 { height: 32px; line-height: 32px; margin: 20px 0 10px 0; font-size: 18px; text-align: center;}
 
 
 .m_top { height: 34px; line-height: 34px; background: #595d63;}
-.m_side { width: 50%; display: inline; float: left; overflow-y: scroll;}
+.m_side { width: 50%; _width: 49%; display: inline; float: left; overflow-y: scroll;}
 .m_problem_bg { background: #efede7;}
 
 
@@ -93,20 +93,18 @@ button { cursor: pointer;}
 .icon_return a:hover { background: url(/assets/icon_func.png) no-repeat -180px -30px;}
 
 .tooltip_box { position: absolute; width: 60px; height:42px;}
-.tooltip_t { width: 12px; height: 7px; font-size: 0; background: url(/assets/tooltip_t.png) no-repeat; margin: 0 auto;}
 .tooltip_next { background: #000; height: 25px; line-height: 25px; text-align: center; padding: 5px; color: #FFF;}
 
 
 /*题面-------------------*/
 .problem_box { padding: 10px; font-family:Arial;}
 .problem_title { height: 24px; line-height: 24px; padding-left: 20px; border-bottom: 1px #CCC solid;}
-.problem_text { line-height: 24px; text-indent: 24px; padding: 10px; text-align:justify;}
+.problem_text { line-height: 24px; padding: 10px; text-align:justify;}
 .problem_text div { padding: 5px 0;}
 
 /*选择题小题------------------*/
 
 .pro_question_list {
-
     overflow: hidden;
     margin: 5px 0;
     padding: 5px 10px;
@@ -116,22 +114,24 @@ button { cursor: pointer;}
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     border-radius: 5px;
-    background: #f9f9f9; border: 1px #666 solid;
+    background: #f9f9f9;;
 }
 
 .pql_left { width: 5%; float: left; height: 32px; line-height: 32px;}
 .pql_right { width: 95%; float: left;}
 
-.p_q_line { overflow: hidden; height: 32px; background: #EFEDE7;}
+.p_q_line { overflow: hidden; height: 32px;}
+.false_red { background: #ffd2d2;}
+.ture_green { background: #d2fddd;}
 
-.pro_qu_t { cursor: pointer;}
-.pro_qu_k { height: 32px;}
-.pro_qu_h { height: 32px; line-height: 32px;}
+.pro_qu_t { min-height: 32px; line-height: 32px; overflow: hidden; cursor: pointer;}
+.pro_t_con {}
 
+.question_tx { float: right; margin-left: 10px; height: 32px;  line-height: 32px; color: #ff6c00;}
 
 .pro_qu_div {}
-.pro_qu_ul { padding: 10px 0 0 50px;}
-.pro_qu_ul li { height: 24px; padding: 5px 0;}
+.pro_qu_ul { padding: 10px 0 0 0;}
+.pro_qu_ul li { line-height: 24px; padding: 5px 0; overflow: hidden;}
 .pro_qu_ul li span {
     cursor: pointer;
     width: 23px;
@@ -142,6 +142,7 @@ button { cursor: pointer;}
     text-align: center;
     margin-right: 10px;
 }
+.pro_qu_ul li p { width: 90%; float: left;}
 
 .single_choose_li {
     background: url(/assets/li.png) no-repeat 0 0;
@@ -153,8 +154,9 @@ button { cursor: pointer;}
 }
 .multi_choose_li.hover { background: url(/assets/li0.png) no-repeat 0 -23px; color: #FFF;}
 
-.green_dui { color: #090; padding-left: 50px; margin-top: 10px;}
-.red_cuo { color: #F00; padding-left: 50px; margin-top: 10px;}
+
+.green_dui { color: #090; margin-top: 10px;}
+.red_cuo { color: #F00;  margin-top: 10px;}
 
 .pro_btn { padding: 10px 0 0 50px;}
 .pro_btn button { margin: 0 10px;}
@@ -162,8 +164,10 @@ button { cursor: pointer;}
 
 .jiexi { background: #FFFCE9; border: 1px solid #EBDEBC; padding: 5px; margin: 10px 0; overflow: hidden;}
 
-.textarea_xz1 { width: 90%; height: 150px;}
-.input_xz { width: 90%; height: 20px;margin-top:10px;}
+.textarea_xz { width: 520px; height: 150px;}
+.textarea_tk { width: 520px; height: 25px;}
+.textarea_xz1 { width: 90%; height: 150px; padding: 5px;}
+.input_xz { width: 90%; height: 20px;}
 .input_tk { height: 21px; line-height: 21px; border: 1px #e2e2e2 solid; float: left;}
 .button_tk {
     width: 41px;
@@ -176,15 +180,13 @@ button { cursor: pointer;}
     float: left;
     color: #ff6c00;
 }
-.span_tk { display: inline-block; width: 195px; height: 18px;}
+.span_tk { display: inline-block; min-width: 50px; height: 18px;}
 .select_tk { float: left; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid;}
 
 /*拖拽---*/
 .drag_tk_box {}
 .drag_tk {
-
     width: 46%;
-    padding: 10px;
     background: #d8d5ca;
     overflow: hidden;
     z-index: 100;
@@ -194,16 +196,17 @@ button { cursor: pointer;}
 
 .drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #d1cab6; float: left; margin: 5px; cursor:move;}
 
+.dragDrop_box {display: inline-block; float: left; min-width: 100px; height: 11px; line-height:11px; text-align:center; border: 1px #e2e2e2 solid; background: #FFF;cursor:move;}
+
 /*相关词汇---------------*/
-.xg_words { float: left;}
+.xg_words { float: left; width: 15%; overflow: hidden;}
 .xg_words li { text-align: center; height: 24px; padding: 5px 10px; border-bottom: 1px #CCC dashed;}
 .xg_words li a { color: #333;}
 .xg_words li a:hover { color:#ff6c00;}
 .xg_words li a.hover { color:#ff6c00;}
-.xg_words_ny { float: left; border-left: 1px #CCC solid;}
+.xg_words_ny { width: 80%; overflow: hidden; float: left; border-left: 1px #CCC solid;}
 
-.textarea_xz { width: 520px; height: 150px;}
-.textarea_tk { width: 520px; height: 25px;}
+
 
 /*翻页-----------------------*/
 /*CSS sabrosus style pagination*/
@@ -245,6 +248,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .pt_lianxi { background: url(/assets/icon_bi.png) no-repeat left center;}
 .pt_beici { background: url(/assets/icon_ben.png) no-repeat left center;}
 .pt_ztai { width: 16px; height: 16px; margin: 0 auto;}
+
 
 /*词汇练习---------------*/
 .cihui_f { width: 370px; margin: 0 auto;}
@@ -290,6 +294,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 
 .next_down { width: 19px; height: 18px; display: block; margin-left: 50px;}
 
+
 /*words_tishi---------------*/
 .words_tishi { width: 150px; height: 450px; border: 1px #000 solid; overflow-y: auto; background: url(/assets/black_bg.png) repeat; padding: 2px; position: absolute; top: 100px; left: 0px;}
 .words_ts_box { padding: 10px 0; height: 430px; background: url(/assets/black01_bg.png) repeat;}
@@ -304,8 +309,8 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
     text-overflow:ellipsis;
     white-space:nowrap;
 }
-
 .z_five { float: left; margin-right: 5px;}
+
 
 /*回想释义---------------------*/
 .words_btn {margin: 10px 0; line-height: 24px; text-align: center;}
@@ -343,15 +348,11 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .xiaoren { width: 180px; height: 200px; margin: 0 auto;}
 
 /*foot----------------*/
-.foot { height: 30px; line-height: 30px;}
+.foot { height: 5px;}
 
 /* 提示弹出层*/
 .tishi_tab {width: 288px; height: 82px; padding:30px 10px 10px 10px; background: url(/assets/tishi_tab_bg.png) no-repeat; position: fixed; display: none;z-index: 9999;}
 .tishi_tab p  { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; font-weight:bold; color: #ffffff;}
-
-/* 小题背景色 */
-.do_correct {color: #DBEAD5;}
-.do_wrong {color: #FEE6E6;}
 
 /*tab_box------------*/
 .tab_box { width: 300px; padding: 5px; min-height: 200px; border: 3px #CCC solid; background: #FFF;position: fixed;z-index: 900;}
@@ -360,3 +361,20 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .tab_btn { width: 165px; margin: 0 auto;}
 .icon_false { background: url(/assets/false.png) no-repeat #FFF center center;}
 .icon_true { background: url(/assets/true.png) no-repeat #FFF center center;}
+
+/*提交错误弹出层-----*/
+.upErrorTo_tab { width: 300px; padding: 10px; background: #FFF; border: 5px #333 solid; display: none; position: absolute;}
+.upErrorTo_tab li { height: 24px; line-height: 24px; color: #333; display: block; text-decoration: none;}
+.upErrorTo_tab li input { margin-right: 5px;}
+.upErrorTo_tab textarea { width: 100%; margin: 5px 0;}
+
+
+/*阅卷---------------*/
+.marking_box { width: 400px; padding: 5px 0; margin: 10px auto; border-top: 1px #CCC solid;}
+.marking_box div { line-height: 24px; margin: 5px 0;}
+.marking_box div input { width: 50px; color: #F00;}
+.marking_box div textarea { width: 80%; font-size: 12px; line-height: 24px;}
+.marking_box div label { display: inline-block; width: 50px; float: left;}
+.marking_box div button { margin-left: 50px;}
+
+.marking_btn { width: 170px; margin: 10px auto;}

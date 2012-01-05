@@ -12,14 +12,32 @@ GankaoSeason2::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-  resources :similarities
+  resources :collections do
+    collection do
+      post :load_words,:write_file
+    end
+  end
+  resources :similarities do
+    member do
+      get :join
+    end
+  end
+
   resources :study_plans do
     collection do
       get :done_plans
       post :plan_status
     end
   end
-  resources :exam_users
+  resources :exam_users do
+    collection do
+      post :ajax_load_about_words,:ajax_report_error
+    end
+    member do
+      post :ajax_save_question_answer
+      get :redo
+    end
+  end
   resources :logins do
     collection do
       get :friend_add_request,:renren_like,:sina_index,:add_user

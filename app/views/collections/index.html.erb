@@ -1,0 +1,100 @@
+<%= javascript_include_tag "cookie.js" %>
+<%= javascript_include_tag "collection.js" %>
+<%= javascript_include_tag "/assets/collections/1.js" %>
+<%= javascript_include_tag "/assets/jplayer/jquery.jplayer.min.js" %>
+<div id="textDiv" >
+</div>
+<script type="text/javascript" >
+  //初始化题目号
+  if(!(getCookie("collection_problem_init")!= null)){
+    setCookie("collection_problem_init","0");
+  }
+<%#*if(!(getCookie("tag_types")!= null)){%>
+<%#*setCookie("tag_types","全部收藏")%>
+<%#*}%>
+  
+  //字体放大、缩小
+  var tgs = new Array( 'div','td','tr');
+  var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
+  var startSz = 2;
+  var init_problem = <%= cookies[:collection_problem_init].nil? ? 0 : cookies[:collection_problem_init].to_i%>;
+  var problem=get_array(collections.problems.problem);
+  var problems=new Array;
+  var tag_list=["全部收藏"];
+  var tag_problems={};
+  for(var i=0;i<problem.length;i++){
+    var questions=get_array(problem[i].questions.question);
+    problem[i].questions.question=questions;
+    for(var n=0;n<questions.length;n++){
+      var answer_array=[]
+      "string"==(typeof problem[i].questions.question[n].user_answer)?answer_array.push(problem[i].questions.question[n].user_answer):answer_array=problem[i].questions.question[n].user_answer
+      problem[i].questions.question[n].user_answer=answer_array;
+      if(questions[n].tags!=null){
+        var tags= questions[n].tags.split(",");
+        for(var k=0;k<tags.length;k++){
+          if(tag_problems[tags[k]]==null){
+            tag_problems[tags[k]]=[problem[i]]
+          }else{
+            if(tag_problems[tags[k]].indexOf(problem[i])==-1){
+              tag_problems[tags[k]].push(problem[i])
+            }
+          }
+          if(tag_list.indexOf(tags[k])==-1){
+            tag_list.push(tags[k]);
+          }
+        }
+      }
+    }
+    problems.push(problem[i]);
+  }
+  var tag_types=tag_list[0];
+  tag_problems["全部收藏"]=problems;
+</script>
+<div class="m_top">
+  <h1 class="ex_paper_h">查看范围：
+    <select name="scope" id="scope">
+    </select>
+  </h1>
+  <div class="icon_func">
+    <div class="float_right">
+      <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
+      <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();">下一题</a></span>
+      <span class="icon_big"><a href="javascript:void(0);" class="tooltip" name="缩小" onclick="javascript:ts('body',-1);">缩小</a></span>
+      <span class="icon_small"><a href="javascript:void(0);" class="tooltip" name="放大" onclick="javascript:ts('body',1);">放大</a></span>
+      <span class="icon_return"><a href="javascript:void(0);" class="tooltip" name="退出">退出</a></span>
+    </div>
+    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" onclick="javascript:test_again()" name="重做">重做</a></span>
+  </div>
+</div>
+<div class="upErrorTo_tab border_radius" id="upErrorTo_tab">
+  <input type="hidden" value="" id="question_id"/>
+  <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('.upErrorTo_tab').css('display','none');"/></span>
+  <ul>
+    <li><input name="error" type="radio" value="1" />题目错误</li>
+    <li><input name="error" type="radio" value="2" />答案错误</li>
+    <li><input name="error" type="radio" value="3" />解析错误</li>
+    <li><input name="error" type="radio" value="4" />词汇错误</li>
+  </ul>
+  <textarea name="" id="error_content" cols="" rows=""></textarea>
+  <div><button class="t_btn" id="report_error" onclick="javascript:for_error()">提交</button></div>
+</div>
+<div class="m_side m_problem_bg">
+  <div class="problem_box">
+    <div class="problem_title">第<span id="global_problem_index" ></span>题/共<span id="global_problem_sum"></span>题</div>
+    <div class="problem_text" id="global_problem_title">
+    </div>
+  </div>
+</div>
+<div id="jplayer"></div>
+<script type="text/javascript">
+  //记录最后打开的小题
+  var last_open_question=null;
+  //预载页面信息
+  $(function(){
+    $("#global_problem_sum").html(problems.length);
+    load_problem_collection(init_problem,tag_types);
+  })
+</script>
+<div class="m_side">
+  <div class="problem_box" id="questions_resource"></div>
+</div>

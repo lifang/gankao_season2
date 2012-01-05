@@ -1,5 +1,6 @@
 # encoding: utf-8
 class SimilaritiesController < ApplicationController
+  
   def index
     @category = Category.find_by_id(params[:category].to_i)
     sql = "select e.id, e.title, e.is_free from examinations e
@@ -18,5 +19,25 @@ class SimilaritiesController < ApplicationController
       and eu.examination_id in (?)", cookies[:user_id].to_i, examination_ids])
     @exam_users.each { |eu| @exam_user_hash[eu.examination_id] = eu.is_submited }
   end
-  
+
+  def join
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    #设置考试试卷
+    papers_arr=[]
+    Examination.find(params[:id]).papers.each do |paper|
+      papers_arr << paper
+    end
+    if papers_arr.length>0
+      @paper = papers_arr.sample
+      @exam_user = ExamUser.find_by_sql("select * from exam_users where user_id = #{cookies[:user_id]} and examination_id = #{params[:id]} and paper_id = #{@paper.id}")[0]
+      if @exam_user.nil?
+        @exam_user = ExamUser.create(:user_id=>cookies[:user_id],:examination_id=>params[:id],:paper_id=>@paper.id)
+      end
+      redirect_to "/exam_users/#{@exam_user.id}?category=#{category_id}"
+    else
+      flash[:notice]="当前考试未指定试卷"
+      redirect_to request.referer
+    end
+  end
+
 end
