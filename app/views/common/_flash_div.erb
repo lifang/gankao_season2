@@ -1,0 +1,39 @@
+<% if flash[:warn] %>
+  <div id='flash_notice' class="tishi_tab">
+    <p><%= flash[:warn] %></p>
+  </div>
+  <script type='text/javascript'>show_flash_div();</script>
+<% elsif flash[:error] %>
+  <div id='flash_notice' class="tishi_tab">
+    <p><%=  flash[:error] %></p>
+  </div>
+  <script type='text/javascript'>show_flash_div();</script>
+<% elsif flash[:notice] %>
+  <div id='flash_notice' class="tishi_tab">
+    <p><%= flash[:notice] %></p>
+  </div>
+  <script type='text/javascript'>show_flash_div();</script>
+<% elsif flash[:pic_warn] %>
+  <div id='flash_notice' class="tishi_tab">
+    <p><%= flash[:pic_warn] %></p>
+  </div>
+  <script type='text/javascript'>show_flash_div();</script>
+<% elsif flash[:success] %>
+  <div id='flash_notice' class="tishi_tab">
+    <p><%= flash[:success]%></p>
+  </div>
+  <script type='text/javascript'>show_flash_div();</script>
+<% elsif flash[:failure] %>
+  <div id='flash_notice' class="tishi_tab">
+    <p><%= flash[:failure]%></p>
+  </div>
+  <script type='text/javascript'>show_flash_div();</script>
+<% end %>
+<% flash[:warn] = nil %>
+<% flash[:error] = nil %>
+<% flash[:pic_warn] = nil %>
+<% flash[:success] = nil %>
+<% flash[:failure] = nil %>
+<% flash[:notice] = nil %>
+
+  

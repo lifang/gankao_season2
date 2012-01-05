@@ -28,13 +28,17 @@ GankaoSeason2::Application.routes.draw do
       get :renren_login
     end
   end
-  resources :study_plans
+  resources :specials
+  resources :simulations do
+    member do
+      get 'do_exam'
+      post 'get_exam_time', 'five_min_save', 'save_result', 'cancel_exam'
+    end
+  end
   resources :words do
     collection do
-      get 'recite_word'
-    end
-    member do
-      get 'recollection', 'use', 'hand_man'
+      get 'recite_word', 'recollection', 'use', 'hand_man'
+      post 'word_log'
     end
   end
   
