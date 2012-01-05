@@ -78,7 +78,7 @@
           <div class="problem_box">
             <% questions = (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : problem["questions"]["question"].nil? ? [] : [problem["questions"]["question"]] %>
             <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
-              <div class="pro_question_list pro_question_list_<%= problem_index %> p_q_line">
+              <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line">
                 <div class="pql_left">
                   <%= global_question_index+1 %>.
                 </div>
@@ -242,7 +242,7 @@
         <div class="m_side">
           <div class="problem_box">
             <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
-              <div class="pro_question_list pro_question_list_<%= problem_index %>" style='display:none;'>
+              <div class="pro_question_list border_rb pro_question_list_<%= problem_index %>" style='display:none;'>
                 <div class="pql_left">
                   <%= global_question_index+1 %>.
                 </div>
