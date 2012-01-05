@@ -1,11 +1,11 @@
-<h1>历年大学<%= @category.name %>真题</h1>
+<h1>历年<%= @category.name %>真题</h1>
 <div class="zhenti_list">
   <ul>
     <% if @similarities.blank? %>
-      <li>暂无大学<%= @category.name %>真题</li>
+      <li>暂无<%= @category.name %>真题</li>
     <% else %>
       <% @similarities.each do |similarity| %>
-        <li><a href="#">
+        <li><a href="/similarities/<%= similarity.id %>/join?category=<%= params[:category] %>">
             <% if @exam_user_hash[similarity.id] %><span><img src="/assets/icon_wc.png" /></span><% end %>
             <h2><%= similarity.title %></h2></a>
         </li>
