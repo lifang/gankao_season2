@@ -22,6 +22,7 @@ button.green { color: #009900;}
     -o-border-radius: 5px;
     border-radius: 5px;
 }
+.border_rb { border-left: 1px #CCC solid; border-top: 1px #CCC solid; border-right: 2px #999 solid; border-bottom: 2px #999 solid;}
 
 
 .head {padding: 6px 0;}
@@ -48,8 +49,6 @@ button.green { color: #009900;}
 
 .h_banner { float: left; margin: 0 20px;}
 
-.h_weibo { float: left; height: 46px; padding-top: 3px;}
-.h_weibo a { margin: 0 5px;}
 
 
 .main { background: #effaff; overflow: hidden; width: 100%;}
@@ -94,7 +93,6 @@ button.green { color: #009900;}
 .icon_return a:hover { background: url(/assets/icon_func.png) no-repeat -180px -30px;}
 
 .tooltip_box { position: absolute; width: 60px; height:42px;}
-.tooltip_t { width: 12px; height: 7px; font-size: 0; background: url(/assets/tooltip_t.png) no-repeat; margin: 0 auto;}
 .tooltip_next { background: #000; height: 25px; line-height: 25px; text-align: center; padding: 5px; color: #FFF;}
 
 
@@ -116,7 +114,7 @@ button.green { color: #009900;}
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     border-radius: 5px;
-    background: #f9f9f9; border: 1px #666 solid;
+    background: #f9f9f9;;
 }
 
 .pql_left { width: 5%; float: left; height: 32px; line-height: 32px;}
@@ -131,7 +129,7 @@ button.green { color: #009900;}
 .question_tx { float: right; margin-left: 10px; height: 32px;  line-height: 32px; color: #ff6c00;}
 
 .pro_qu_div {}
-.pro_qu_ul { padding: 10px 0 0 50px;}
+.pro_qu_ul { padding: 10px 0 0 0;}
 .pro_qu_ul li { line-height: 24px; padding: 5px 0; overflow: hidden;}
 .pro_qu_ul li span {
     cursor: pointer;
@@ -200,7 +198,7 @@ button.green { color: #009900;}
 .dragDrop_box {display: inline-block; float: left; min-width: 100px; height: 11px; line-height:11px; text-align:center; border: 1px #e2e2e2 solid; background: #FFF;cursor:move;}
 
 /*相关词汇---------------*/
-.xg_words { float: left; width: 15%; overflow: hidden; float: left;}
+.xg_words { float: left; width: 15%; overflow: hidden;}
 .xg_words li { text-align: center; height: 24px; padding: 5px 10px; border-bottom: 1px #CCC dashed;}
 .xg_words li a { color: #333;}
 .xg_words li a:hover { color:#ff6c00;}
@@ -312,6 +310,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 }
 .z_five { float: left; margin-right: 5px;}
 
+
 /*回想释义---------------------*/
 .words_btn {margin: 10px 0; line-height: 24px; text-align: center;}
 .words_btn a {
@@ -344,14 +343,11 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .tishi_tab {width: 288px; height: 82px; padding:30px 10px 10px 10px; background: url(/assets/tishi_tab_bg.png) no-repeat; position: fixed; display: none;z-index: 9999;}
 .tishi_tab p  { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; font-weight:bold; color: #ffffff;}
 
-/* 小题背景色 */
-.do_correct {color: #DBEAD5;}
-.do_wrong {color: #FEE6E6;}
-
 /*tab_box------------*/
 .tab_box { width: 300px; padding: 5px; min-height: 200px; border: 3px #CCC solid; background: #FFF;position: fixed;z-index: 900;}
 .tab_x { float: right;}
 .tab_con { padding: 60px 10px; text-align: center;}
+.tab_btn { width: 165px; margin: 0 auto;}
 .icon_false { background: url(/assets/false.png) no-repeat #FFF center center;}
 .icon_true { background: url(/assets/true.png) no-repeat #FFF center center;}
 
@@ -360,3 +356,14 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .upErrorTo_tab li { height: 24px; line-height: 24px; color: #333; display: block; text-decoration: none;}
 .upErrorTo_tab li input { margin-right: 5px;}
 .upErrorTo_tab textarea { width: 100%; margin: 5px 0;}
+
+
+/*阅卷---------------*/
+.marking_box { width: 400px; padding: 5px 0; margin: 10px auto; border-top: 1px #CCC solid;}
+.marking_box div { line-height: 24px; margin: 5px 0;}
+.marking_box div input { width: 50px; color: #F00;}
+.marking_box div textarea { width: 80%; font-size: 12px; line-height: 24px;}
+.marking_box div label { display: inline-block; width: 50px; float: left;}
+.marking_box div button { margin-left: 50px;}
+
+.marking_btn { width: 170px; margin: 10px auto;}
