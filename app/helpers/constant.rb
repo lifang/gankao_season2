@@ -5,5 +5,9 @@ module Constant
   
   #项目文件目录
   PUBLIC_PATH = "#{Rails.root}/public"
+
+  #后台项目文件目录
+  BACK_PUBLIC_PATH = "D:/exam_season2/public"
+
   
 end

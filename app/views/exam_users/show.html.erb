@@ -1,9 +1,10 @@
-<%= javascript_include_tag "/assets/exam/answer.js" %>
+<%= javascript_include_tag "#{@answer_js_url}" %>
 
 <script type="text/javascript" >
   category = '<%= params[:category] %>';
   init_problem = '<%= @sheet.attributes["init"] %>';
   init_exam_user_id ='<%= params[:id] %>';
+  sheet_url = '<%= @sheet_url %>';
   //将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
   function transform_array(object){
     var result = [];
@@ -25,8 +26,8 @@
     var a2 = transform_array(a[i].question);
     answers.push(a2);
   }
-
   unbind_arr=[]; //记录嵌入式大题的problem_index
+
 </script>
 
 <!-- 初始化jplayer播放器  -->
@@ -83,9 +84,9 @@
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
-                    <%= question["description"] %>
+                    <div class="question_tx"><%= constant_question_type[question["correct_type"]] %></div>
+                    <div class="pro_t_con"><%= question["description"] %></div>
                   </div>
-                  <div class="question_tx"><%= constant_question_type[question["correct_type"]] %></div>
                   <input type="hidden" id="exam_user_answer<%= "_#{problem_index}_#{question_index}" %>" class="exam_user_answer" value="<%= @sheet.elements["_#{problem_index}_#{question_index}"].text if @sheet.elements["_#{problem_index}_#{question_index}"] %>" />
                   <input type="hidden" id="pass_check<%= "_#{problem_index}_#{question_index}" %>" class="pass_check" />
                   <div class="red_cuo" id="red_cuo<%= "_#{problem_index}_#{question_index}" %>" style="display:none;"><img src="/assets/red_cuo.png"/>
@@ -138,19 +139,23 @@
                         <textarea cols="" rows="" id="fill_input<%= "_#{problem_index}_#{question_index}" %>" class="textarea_xz1" onchange="javascript:do_fill_blank(this,this.value,<%= problem_index %>,<%= question_index %>);"></textarea>
                       <% end %>
                     </div>
-                    <div class="pro_btn">
-                      <input type="hidden" id="resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>" value="<%= question["questionattrs"] %>" />
-                      <button style='display:none;' id='refer_btn<%= "_#{problem_index}_#{question_index}" %>' onclick="javascript:refer_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$('#resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);">更新</button>
-                      <button class="t_btn" onclick="javascript:check_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$('#resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);">核对</button>
-                      <a href="javascript:void(0);" onclick="javascript:open_report_error('<%= question["id"] %>');">报告错误</a><% unless question["words"].nil?||question["words"]=="" %>
-                      <a href="javascript:void(0);" onclick="javascript:ajax_load_about_words('<%= question["words"] %>',<%= problem_index %>,<%= question_index %>)">相关词汇</a><% end %>
-                    </div>
                     <div class="jiexi" style="display:none;" id="display_jiexi<%= "_#{problem_index}_#{question_index}" %>">
                       <span class="xx_x" onclick="javascript:close_display_answer(<%= problem_index %>,<%= question_index %>);" ><img src="/assets/x.gif"/></span>
                       <div>正确答案：<span class="red" id="display_answer<%= "_#{problem_index}_#{question_index}" %>"></span></div>
                       <div id="display_analysis<%= "_#{problem_index}_#{question_index}" %>"></div>
                     </div>
                     <div id="about_words_position<%= "_#{problem_index}_#{question_index}" %>"></div>
+                    <div class="pro_btn">
+                      <input type="hidden" id="resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>" value="<%= question["questionattrs"] %>" />
+                      <button style='display:none;' id='refer_btn<%= "_#{problem_index}_#{question_index}" %>' onclick="javascript:refer_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$('#resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);">更新</button>
+                      <button class="t_btn" id="check_question_btn<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:check_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$('#resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);">核对</button>
+                      <button class="t_btn" style="display:none;" id="next_question_btn<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:do_next_question(<%= problem_index %>,<%= question_index %>);">下一题</button>
+                      <a href="javascript:void(0);" onclick="javascript:open_report_error('<%= question["id"] %>');">报告错误</a>
+                      <% unless question["words"].nil?||question["words"]=="" %>
+                        <a href="javascript:void(0);" onclick="javascript:ajax_load_about_words('<%= question["words"] %>',<%= problem_index %>,<%= question_index %>)">相关词汇</a>
+                      <% end %>
+                      <a href="javascript:void(0);" style="display:none;" id="open_display_answer<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:open_display_answer(<%= problem_index %>,<%= question_index %>);">答案解析</a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -159,7 +164,7 @@
         </div>
       </div>
     <% else %>
-      <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=cookies["init_problem"].to_i) %> style="display:none;" <% end %> >
+      <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
         <script type="text/javascript">
           unbind_arr.push(<%= problem_index %>);
         </script>
@@ -217,9 +222,10 @@
                 <% audio_title_arr[1]="" ; end ; %>
               <%= "#{audio_title_arr.join('')}#{audio_element}".html_safe %>
               <script type='text/javascript'>
-                //设置可拖动元素，以及绑定音频播放事件
+                //设置可拖动元素，排序，以及绑定音频播放事件
                 $(function(){
-                  $(".draggable_attr_<%= problem_index %>").draggable({revert: true});
+                  
+                  $(".draggable_attr_<%= problem_index %>").draggable({helper: "clone"});
                   $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
                     jplayer_play("<%= audio_src %>");
                   });
@@ -252,15 +258,19 @@
                   </div>
                   <div class="pro_qu_div">
                     <input type="hidden" id="resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>" value="<%= question["questionattrs"] %>" />
-                    <div class="pro_btn">
-                      <a href="javascript:void(0);"  onclick="javascript:open_report_error('<%= question["id"] %>');">报告错误</a><% unless question["words"].nil?||question["words"]=="" %><a href="javascript:void(0);" onclick="javascript:ajax_load_about_words('<%= question["words"] %>',<%= problem_index %>,<%= question_index %>)">相关词汇</a><% end %>
-                    </div>
                     <div class="jiexi" id="display_jiexi<%= "_#{problem_index}_#{question_index}" %>">
                       <span class="xx_x" onclick="javascript:close_display_answer(<%= problem_index %>,<%= question_index %>);" ><img src="/assets/x.gif"/></span>
                       <div>正确答案：<span class="red" id="display_answer<%= "_#{problem_index}_#{question_index}" %>"></span></div>
                       <div id="display_analysis<%= "_#{problem_index}_#{question_index}" %>"></div>
                     </div>
                     <div id="about_words_position<%= "_#{problem_index}_#{question_index}" %>"></div>
+                    <div class="pro_btn">
+                      <a href="javascript:void(0);"  onclick="javascript:open_report_error('<%= question["id"] %>');">报告错误</a>
+                      <% unless question["words"].nil?||question["words"]=="" %>
+                        <a href="javascript:void(0);" onclick="javascript:ajax_load_about_words('<%= question["words"] %>',<%= problem_index %>,<%= question_index %>)">相关词汇</a>
+                      <% end %>
+                      <a href="javascript:void(0);"  style="display:none;" id="open_display_answer<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:open_display_answer(<%= problem_index %>,<%= question_index %>);">答案解析</a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -272,11 +282,12 @@
   <% end %>
 <% end %>
 <script type="text/javascript">
-  // 显示总题数
-  $(".global_problem_sum").html("<%= problem_index+1 %>");</script>
+  // 更新总题数
+  $(".global_problem_sum").html("<%= problem_index+1 %>");
+</script>
 
 <!-- 相关词汇框 -->
-<div id="about_words_loader"  >
+<div id="about_words_loader" style="display:none;">
   <div class="jiexi" id="about_words">
     <span class="xx_x" onclick="javascript:close_about_words();" ><img alt="gankao" src="/assets/x.gif"/></span>
     <div class="xg_words">
@@ -331,8 +342,8 @@
 
   //还原用户之前操作
   $(function(){
-    <% @sheet.each_element do |ele| %>
+<% @sheet.each_element do |ele| %>
       $("#refer_btn<%= ele.name %>").trigger("click");
-    <% end %>
+<% end %>
   })
 </script>

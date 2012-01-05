@@ -46,9 +46,6 @@
 					<div class="h_banner">
 						<a href="#"><img src="/assets/banner.png"/></a>
 					</div>
-					<div class="h_weibo">
-						<a href="#"><img src="/assets/icon_renren.png"/></a><a href="#"><img src="/assets/icon_sina.png"/></a>
-					</div>
 				</div>
 				<div class="logo">
 					<a href="#"><img src="/assets/logo.png" alt="专业英语在线训练" /></a>
@@ -56,7 +53,7 @@
 				<div class="nav">
 					<ul>
 						<li>
-							<a href="#" class="hover">真题</a>
+							<a href="/similarities?category=<%= params[:category].nil? ? 2 : params[:category] %>" class="hover">真题</a>
 						</li>
 						<li>
 							<a href="#">专题</a>

@@ -3,12 +3,14 @@ class ExamUsersController < ApplicationController
   layout "exam_user"
   def show
     #读取试题
-    paper = File.open("#{Rails.root}/app/assets/javascripts/exam/paper.js")
+    eu = ExamUser.find(params[:id])
+    p = Paper.find(eu.paper_id)
+    paper = File.open("#{BACK_PUBLIC_PATH}#{p.paper_js_url}")
+    @answer_js_url = "#{BACK_SERVER_PATH}#{p.paper_js_url}".gsub("/paperjs/","/answerjs/")
     @paper = (JSON paper.read()[8..-1])["paper"]
     #生成考生答卷
-    url = create_sheet(sheet_outline,params[:id])
-    @sheet = get_doc(url)
-    
+    @sheet_url = create_sheet(sheet_outline,params[:id])
+    @sheet = get_doc(@sheet_url)
   end
 
   #将变量转化为数组
@@ -97,13 +99,14 @@ class ExamUsersController < ApplicationController
 
   #考生保存答案
   def ajax_save_question_answer
-    url="#{Rails.root}/public/sheets/20120104/2.xml"
+    url=params[:sheet_url]
     doc = get_doc(url)
     ele_str = "_#{params[:problem_index]}_#{params[:question_index]}"
-    doc.root.attributes["init"].nil? ? doc.root.add_attribute("init", "#{params[:problem_index]}") : doc.root.attributes["init"] = "#{params[:problem_index]}"
-    question = doc.root.elements[ele_str].nil? ? doc.root.add_element(ele_str) : doc.root.elements[ele_str]
+    doc.attributes["init"].nil? ? doc.add_attribute("init", "#{params[:problem_index]}") : doc.attributes["init"] = "#{params[:problem_index]}"
+    question = doc.elements[ele_str].nil? ? doc.add_element(ele_str) : doc.elements[ele_str]
     question.text.nil? ? question.add_text(params[:answer]) : question.text=params[:answer]
     manage_element(question,{},{"question_type"=>params[:question_type], "correct_type"=>params[:correct_type]})
+    puts doc
     write_xml(doc, url)
     respond_to do |format|
       format.json {
@@ -114,7 +117,7 @@ class ExamUsersController < ApplicationController
 
   #重做卷子
   def redo
-    url="#{Rails.root}/public/sheets/20120104/2.xml"
+    url=params[:sheet_url]
     f=File.new(url,"w+")
     f.write("#{sheet_outline.force_encoding('UTF-8')}")
     f.close
