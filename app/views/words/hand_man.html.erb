@@ -1,3 +1,8 @@
+<%= javascript_include_tag "cookie" %>
+<script type="text/javascript">
+  var word_ids = null;
+</script>
+<%= javascript_include_tag "words" %>
 <h1>词汇练习</h1>
 <div class="cihui_lx">
   <div class="ch_lx_nav">
@@ -5,53 +10,56 @@
       <li><a href="javascript:void(0);">单词认读</a></li>
       <li><a href="javascript:void(0);">回想释义</a></li>
       <li><a href="javascript:void(0);">词汇运用</a></li>
-      <li class="hover"><a href="/words/<%= @word.id %>/hand_man?category=<%= params[:category] %>">拼写游戏</a></li>
+      <li class="hover"><a href="/words/hand_man?category=<%= params[:category] %>">拼写游戏</a></li>
     </ul>
   </div>
   <div class="ch_box">
-    <div class="ch_text">
-      <div class="ch_words_shu">(25)</div>
-      <div class="ch_words_line">
-        <p class="font_size_16">When the author says the creative mind and the critical mind "cannot work mind
-          <input name="" type="text" class="words_input" />
-          <input name="" type="text" class="words_input" />
-          <input name="" type="text" class="words_input" />
-          <input name="" type="text" class="words_input" />
-        </p>
+    <% all_words = @words.sort_by{ rand } %>
+    <input type="hidden" name="category_id" id="category_id" value="<%= params[:category] %>" />
+    <input type="hidden" name="all_words" id="all_words" value="<%= (all_words.collect { |word| word.id }).join(",") %>"/>
+    <input type="hidden" name="step_page" id="step_page" value="3" />
+    <% all_words.each_with_index do |word, index| %>
+      <% leving_word = word.name.gsub(" ", "") %>
+      <div class="ch_text" id="word_info_<%= index %>" style="display: none;">
+        <input type="hidden" name="<%= index %>" id="<%= word.id %>" value="<%= leving_word %>"/>
+        <input type="hidden" name="error_num" id="error_num" value="0"/>
+        <div class="ch_words_shu">(<%= (index + 1) %>)</div>
+        <div class="ch_words_line">
+          <p class="font_size_16">
+            <% @sentence_hash[word.id].each do |sentence| %>
+              <% if sentence =~ /#{word.name}/ or sentence =~ /#{word.name.capitalize}/
+                str = ""
+                (0..(leving_word.length-1)).each do |i|
+                  str += " <input id='letter_#{i}' readonly type='text' class='words_input' value=''/> "
+                end %>
+                <%= sentence.gsub("#{word.name}", str).gsub("#{word.name.capitalize}", str).html_safe %>
+              <% else %>
+                <% (0..(leving_word.length-1)).each do |i| %>
+                  <input id="letter_<%= i %>" readonly type="text" class="words_input" value="" />
+                <% end %>
+              <% end %>
+            <% end unless @sentence_hash[word.id].nil? %>
+          </p>
+        </div>
+        <div class="ch_words_line">
+          <div class="xiaoren" id="man_<%= index %>">请从如下字母列表中选择您觉得在这个词中的字母。</div>
+        </div>
       </div>
-      <div class="ch_words_line"><div class="xiaoren"><img src="images/xiaoren.png" /></div></div>
-      <div class="ch_words_line">
-        <ul class="words_letter">
-          <li class="hover">a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-          <li>a</li>
-        </ul>
-      </div>
-
+    <% end %>
+    <div class="ch_words_line">
+      <ul class="words_letter">
+        <% ("A".."Z").each do |letter| %>
+          <li style="display: block;" id="li_letter_<%= letter.downcase %>"
+              onclick="show_result('<%= letter.downcase %>', <%= params[:category] %>, 4);"><%= letter %></li>
+          <li style="display:none;" class="hover" id="hi_letter_<%= letter.downcase %>"><%= letter %></li>
+        <% end %>
+      </ul>
     </div>
+    <input type="hidden" name="letter_list" id="letter_list" value="<%= (("a".."z").collect{ |i| i }).join(",") %>" />
     <div class="box_bottom_bg"></div>
   </div>
+</div>
+<div id="tab_box" class="tab_box border_radius icon_false" style="display: none;">
+</div>
+<div class="tab_box border_radius" id="goon_tab" style="display: none;">
 </div>

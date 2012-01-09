@@ -15,5 +15,4 @@
 /tmp
 /nbproject/private/*.txt
 /config/database.yml
-/.git
-
+/public/result/

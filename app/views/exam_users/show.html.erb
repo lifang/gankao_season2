@@ -1,5 +1,4 @@
 <%= javascript_include_tag "#{@answer_js_url}" %>
-
 <script type="text/javascript" >
   category = '<%= params[:category] %>';
   init_problem = '<%= @sheet.attributes["init"] %>';
@@ -27,8 +26,8 @@
     answers.push(a2);
   }
   //unbind_arr=[]; //记录嵌入式大题的problem_index
-
 </script>
+<%= javascript_include_tag "/assets/exam_user.js" %>
 <!-- 初始化jplayer播放器  -->
 <div id="jquery_jplayer_1"></div>
 <div id="jp_hidden_position" style="display:none">
@@ -214,12 +213,12 @@
               <% source_title_arr = problem["title"].nil? ? [] : problem["title"].split("((sign))"); result_title_arr = [] ; result_title_arr << source_title_arr[0] %>
               <% questions = (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : problem["questions"]["question"].nil? ? [] : [problem["questions"]["question"]] %>
               <% sign_index=-1; questions.each do |question| ; sign_index+=1;
-                element_str="<span class='span_tk'>";
+                element_str="<span class='span_tk' id='inner_span_tk_#{problem_index}_#{sign_index}'>";
                 if question["correct_type"]=="0";
                   element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}' onchange='javascript:do_inner_question(0,#{problem_index},#{sign_index});'>";element_str += "<option value=''></option>";
                   question["questionattrs"].split(";-;").each do |attr|;element_str += "<option value='#{attr}'>#{attr}</option>";end;element_str += "</select>";
                 elsif question["correct_type"]=="1";
-                  element_str += "<div class='dragDrop_box' id='droppable_#{problem_index}_#{sign_index}'></div>";
+                  element_str += "<span class='dragDrop_box' id='droppable_#{problem_index}_#{sign_index}'></span>";
                 elsif question["correct_type"]=="3";
                   element_str += "<input class='input_tk' type='text' id='input_inner_answer_#{problem_index}_#{sign_index}' onchange='javascript:do_inner_question(3,#{problem_index},#{sign_index});'></input>";
                 end;
@@ -375,7 +374,7 @@
   //初始化大题
   $(function(){
     if($("#drag_tk_"+init_problem).height()){
-      $("#drag_tk_box_"+init_problem).css("height",$("#drag_tk_"+init_problem).height());
+      $("#drag_tk_box_"+init_problem).css("height",$("#drag_tk_"+init_problem).height()+20);
     }
     $("#jplayer_play_button_"+init_problem).trigger("click");
   })

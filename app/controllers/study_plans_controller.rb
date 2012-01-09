@@ -1,14 +1,23 @@
 # encoding: utf-8
 class StudyPlansController < ApplicationController
   def index
-    @study_plan = StudyPlan.find_by_sql(["select * from study_plans sp 
-      left join user_plan_relations upr on upr.study_plan_id = sp.id 
-      where sp.category_id = ? and upr.user_id = ? limit 1",
-        params[:category].to_i, cookies[:user_id].to_i])
+    @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", params[:category].to_i])
+    @user_plan = UserPlanRelation.find(:first,
+      :conditions => ["user_id = ? and study_plan_id = ? ", cookies[:user_id].to_i, @study_plan.id]) if @study_plan
+    unless @user_plan.nil?
+      redirect_to "/study_plans/done_plans?category=#{params[:category].to_i}"
+    end
+  end
+
+  def show
+    @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", params[:category].to_i])
+    UserPlanRelation.create(:user_id => cookies[:user_id].to_i, :study_plan_id => @study_plan.id,
+      :created_at => Time.now.to_date, :ended_at => Time.now.to_date + (@study_plan.study_date - 1).days )
+    redirect_to "/study_plans/done_plans?category=#{params[:category].to_i}"
   end
 
   def plan_status
-    days=UserPlanRelation.find_by_user_id(3)
+    days=UserPlanRelation.find_by_user_id(cookies[:user_id].to_i)
     day_all={}
     which_day=1
     practise=0

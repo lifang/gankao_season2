@@ -1,9 +1,9 @@
+<%= javascript_include_tag "/assets/jplayer/jquery.jplayer.min.js" %>
+<%= javascript_include_tag "cookie" %>
 <script type="text/javascript">
   var word_ids = "<%= @word_ids.join(",") %>".split(",");
-  setCookie("rem_word","0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
 </script>
 <%= javascript_include_tag "words" %>
-<%= javascript_include_tag "/assets/jplayer/jquery.jplayer.min.js" %>
 <h1>词汇练习</h1>
 <div class="cihui_lx">
   <div class="ch_lx_nav">
@@ -15,19 +15,19 @@
     </ul>
   </div>
   <div class="ch_box">
+    <div id="jquery_jplayer" class="jp-jplayer" style="width:0px;height:1px;"></div>
+    <input type="hidden" name="step_page" id="step_page" value="0" />
     <% @words.each_with_index do |word, index| %>
-      <div class="ch_text" id="word_info_<%= index %>" <% if index > 0 %>style="display: none;"<% end %>>
-        <input type="hidden" id="word_id_<%= index %>" value="<%= word.id %>"/>
-        <input type="hidden" id="is_rem_<%= index %>" value="0"/>
+      <div class="ch_text" id="word_info_<%= index %>" style="display: none;">
         <div class="ch_words_shu">(<%= (index + 1) %>)</div>
         <div class="ch_words_line">
           <span class="font_size_24"><%= word.name %></span>
           <span><%= Word::TYPES[word.types] %></span>
           <span><%= word.phonetic %></span>
-          <a href="javascript:void(0);" onclick="javascript:control_media();"><img src="/assets/icon_fy.png" /></a>
-          <input type="hidden" name="enunciate_url" id="enunciate_url"
-                 value="<%= Constant::BACK_SERVER_PATH + word.enunciate_url if word.enunciate_url %>" />
-          <div id="jquery_jplayer" class="jp-jplayer" style="width:0px;height:1px;"></div>
+          <a href="javascript:void(0);"
+             onclick="javascript:control_media('<%= Constant::BACK_SERVER_PATH + word.enunciate_url if word.enunciate_url %>');">
+            <img src="/assets/icon_fy.png" />
+          </a>
         </div>
         <div class="ch_words_line">
           <a href="javascript:void(0);" class="next_down" onclick="javascript:show_mean(<%= word.id %>);">
@@ -52,16 +52,16 @@
         </div>
         <div class="ch_words_line" id="btn_<%= word.id %>" style="display:none;">
           <button class="t_btn"
-                  onclick="javascript:remember_word(<%= index %>, <%= @words.length %>, <%= params[:category] %>);">
+                  onclick="javascript:remember_word(<%= word.id %>, <%= index %>, <%= params[:category] %>, 1);">
             熟悉了
           </button>
           <button class="t_btn"
-                  onclick="javascript:unre_word(<%= index %>, <%= @words.length %>, <%= params[:category] %>);" >
+                  onclick="javascript:remember_word(<%= word.id %>, <%= index %>, <%= params[:category] %>, 0);" >
             不熟悉
           </button>
         </div>
       </div>
-    <% end %>
+    <% end unless @words.blank? %>
     <div class="box_bottom_bg"></div>
   </div>
 </div>

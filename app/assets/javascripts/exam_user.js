@@ -32,7 +32,7 @@ function click_next_problem(){
         $("#report_error").hide();
         $("#jquery_jplayer_1").jPlayer("stop");
         if($("#drag_tk_"+problem_index).height()){
-            $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height());
+            $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
         }
         $("#jplayer_play_button_"+problem_index).trigger("click");
         setCookie("init_problem",problem_index);
@@ -53,7 +53,7 @@ function click_prev_problem(){
         $("#report_error").hide();
         $("#jquery_jplayer_1").jPlayer("stop");
         if($("#drag_tk_"+problem_index).height()){
-            $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height());
+            $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
         }
         $("#jplayer_play_button_"+problem_index).trigger("click");
         setCookie("init_problem",$(".problem_resource").index(prev_problem));
@@ -157,10 +157,16 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
         $("#pass_check_"+problem_index+"_"+question_index).val(1);
         $("#green_dui_"+problem_index+"_"+question_index).show();
         $("#red_cuo_"+problem_index+"_"+question_index).hide();
+        if(question_type=="1"){
+            $("#input_inner_answer_"+problem_index+"_"+question_index).css("background","#D2FDDD");
+        }
     }else{
         $("#pass_check_"+problem_index+"_"+question_index).val(0);
         $("#green_dui_"+problem_index+"_"+question_index).hide();
         $("#red_cuo_"+problem_index+"_"+question_index).show();
+        if(question_type=="1"){
+            $("#input_inner_answer_"+problem_index+"_"+question_index).css("background","#FFD2D2");
+        }
     }
     $("#display_jiexi_"+problem_index+"_"+question_index).show();
     $("#display_analysis_"+problem_index+"_"+question_index).html(analysis);
@@ -198,6 +204,11 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
         if(correct_type=="3"){
             $("#input_inner_answer_"+problem_index+"_"+question_index).attr("disabled",true);
         }
+        $("#inner_span_tk_"+problem_index+"_"+question_index).bind("click",function(){
+            if(!$("#pro_qu_t_"+problem_index+"_"+question_index).parent().find(".pro_qu_div").is(":visible")){
+                $("#pro_qu_t_"+problem_index+"_"+question_index).trigger("click");
+            }
+        })
     }
 }
 

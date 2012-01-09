@@ -17,6 +17,8 @@ class User < ActiveRecord::Base
   FROM = {"sina" => "新浪微博", "renren" => "人人网", "qq" => "腾讯网"}
   TIME_SORT = {:ASC => 0, :DESC => 1}   #用户列表按创建时间正序倒序排列
 
+  DEFAULT_PASSWORD = "123456"
+
 
   def has_password?(submitted_password)
 		encrypted_password == encrypt(submitted_password)
