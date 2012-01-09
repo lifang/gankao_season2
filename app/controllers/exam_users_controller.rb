@@ -8,19 +8,15 @@ class ExamUsersController < ApplicationController
     begin
       eu = ExamUser.find(params[:id])
       p = Paper.find(eu.paper_id)
-      paper = File.open("#{BACK_PUBLIC_PATH}#{p.paper_js_url}")
-      @answer_js_url = "#{BACK_SERVER_PATH}#{p.paper_js_url}".gsub("/paperjs/","/answerjs/")
+      paper = File.open("#{Constant::BACK_PUBLIC_PATH}#{p.paper_js_url}")
+      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("/paperjs/","/answerjs/")
       @paper = (JSON paper.read()[8..-1])["paper"]
       #生成考生答卷
-      @sheet_url = ExamUser.find(params[:id]).answer_sheet_url
-      if @sheet_url
-        unless File.exist?(@sheet_url)
-          @sheet_url = create_sheet(sheet_outline,params[:id])
-        end
-      else
-        @sheet_url = create_sheet(sheet_outline,params[:id])
-      end
-      @sheet = get_doc(@sheet_url)
+      s_url = ExamUser.find(params[:id]).answer_sheet_url
+      @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+      @sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(@sheet_url))
+      @sheet = get_doc("#{@sheet_url}")
+      close_file("#{@sheet_url}")
     rescue
       render :inline=>"抱歉，服务暂时无法使用。"
     end

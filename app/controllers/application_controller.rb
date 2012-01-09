@@ -16,8 +16,9 @@ class ApplicationController < ActionController::Base
 
   #将XML文件生成document对象
   def get_doc(url)
-    file = File.open(url)
+    file = File.new(url)
     doc = Document.new(file).root
+    file.close
     return doc
   end
 
@@ -44,4 +45,8 @@ class ApplicationController < ActionController::Base
     file.close
   end
 
+  def close_file(url)
+    file = File.open(url)
+    file.close
+  end
 end
