@@ -168,7 +168,7 @@ button.green { color: #009900;}
 .textarea_tk { width: 520px; height: 25px;}
 .textarea_xz1 { width: 90%; height: 150px; padding: 5px;}
 .input_xz { width: 90%; height: 20px;}
-.input_tk { height: 21px; line-height: 21px; border: 1px #e2e2e2 solid; float: left;}
+.input_tk { width: 148px; height: 21px; line-height: 21px; border: 1px #e2e2e2 solid; float: left;}
 .button_tk {
     width: 70px;
 	height: 25px;
@@ -180,7 +180,7 @@ button.green { color: #009900;}
 	margin: 4px 15px;
 }
 .span_tk { display: inline-block; min-width: 150px; height: 15px; position: relative;}
-.select_tk { float: left; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid;}
+.select_tk { width: 148px; float: left; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid;}
 
 .button_span {
     position: absolute;
@@ -206,7 +206,7 @@ button.green { color: #009900;}
 
 .drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #d1cab6; float: left; margin: 5px; cursor:move;}
 
-.dragDrop_box {display: inline-block; float: left; min-width: 100px; height: 22px; line-height:11px; text-align:center; border: 1px #e2e2e2 solid; background: #FFF;cursor:move;}
+.dragDrop_box {display: inline-block; float: left; min-width: 148px; height: 22px; line-height:22px; text-align:center; border: 1px #e2e2e2 solid; background: #FFF;cursor:move;}
 
 /*相关词汇---------------*/
 .xg_words { float: left; width: 15%; overflow: hidden;}

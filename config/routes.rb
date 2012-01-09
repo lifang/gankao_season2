@@ -34,7 +34,7 @@ GankaoSeason2::Application.routes.draw do
       post :ajax_load_about_words,:ajax_report_error
     end
     member do
-      post :ajax_save_question_answer
+      post :ajax_save_question_answer,:ajax_change_status
       get :redo
     end
   end

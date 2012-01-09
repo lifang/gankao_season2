@@ -212,13 +212,14 @@
               <!-- 题面内大题  初始化小题 -->
               <% source_title_arr = problem["title"].nil? ? [] : problem["title"].split("((sign))"); result_title_arr = [] ; result_title_arr << source_title_arr[0] %>
               <% questions = (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : problem["questions"]["question"].nil? ? [] : [problem["questions"]["question"]] %>
-              <% sign_index=-1; questions.each do |question| ; sign_index+=1;
+              <% sign_index=-1;has_drag = false; questions.each do |question| ; sign_index+=1;
                 element_str="<span class='span_tk' id='inner_span_tk_#{problem_index}_#{sign_index}'>";
                 if question["correct_type"]=="0";
                   element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}' onchange='javascript:do_inner_question(0,#{problem_index},#{sign_index});'>";element_str += "<option value=''></option>";
                   question["questionattrs"].split(";-;").each do |attr|;element_str += "<option value='#{attr}'>#{attr}</option>";end;element_str += "</select>";
                 elsif question["correct_type"]=="1";
                   element_str += "<span class='dragDrop_box' id='droppable_#{problem_index}_#{sign_index}'></span>";
+                  has_drag = true;
                 elsif question["correct_type"]=="3";
                   element_str += "<input class='input_tk' type='text' id='input_inner_answer_#{problem_index}_#{sign_index}' onchange='javascript:do_inner_question(3,#{problem_index},#{sign_index});'></input>";
                 end;
@@ -263,14 +264,15 @@
               <script type='text/javascript'>
                 //设置可拖动元素，排序，以及绑定音频播放事件
                 $(function(){
-                  $(".draggable_attr_<%= problem_index %>").draggable({helper: "clone"});
+                  $(".draggable_attr_<%= problem_index %>").draggable({
+                    helper: "clone"});
                   $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
                     clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
                   });
                 })
               </script>
             </div>
-            <div class="drag_tk_box" id="drag_tk_box_<%= problem_index %>">
+            <div class="drag_tk_box" id="drag_tk_box_<%= problem_index %>" <% unless has_drag %>style="display:none;"<% end %> >
               <div class="drag_tk border_radius" id="drag_tk_<%= problem_index %>">
                 <ul id="draggable_list_<%= problem_index %>"></ul>
               </div>
