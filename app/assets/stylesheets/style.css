@@ -176,7 +176,7 @@ input_tk { min-width: 148px; height: 23px; line-height: 23px; border: 1px #e2e2e
     text-align: center;
     line-height: 25px;
     border: none;
-    background: url(../images/button_tk.png) no-repeat;
+    background: url(/assets/button_tk.png) no-repeat;
     color: #ff6c00;
     margin: 4px 15px;
 }
@@ -191,7 +191,7 @@ input_tk { min-width: 148px; height: 23px; line-height: 23px; border: 1px #e2e2e
     display: inline-block;
     width: 150px;
     height: 35px;
-    background:  url(../images/btn_span_bg.png) 0 bottom no-repeat;
+    background:  url(/assets/btn_span_bg.png) 0 bottom no-repeat;
 }
 
 /*拖拽---*/
