@@ -48,7 +48,7 @@ class LoginsController < ApplicationController
       end
       cookies[:user_name] ={:value =>user_info[:name], :path => "/", :secure  => false}
       cookies[:user_id]={:value =>@user.id, :path => "/", :secure  => false}
-      render :inline => "<script>window.opener.location.href='/collections';window.close();</script>"
+      render :inline => "<script>window.opener.location.href='/';window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
     end
@@ -66,7 +66,7 @@ class LoginsController < ApplicationController
       end
       cookies[:user_name] ={:value =>@user.name, :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
-      render :inline => "<script>window.opener.location.href='/collections';window.close();</script>"
+      render :inline => "<script>window.opener.location.href='/';window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
     end
@@ -124,5 +124,11 @@ class LoginsController < ApplicationController
     redirect_to "http://widget.renren.com/dialog/friends?target_id=600942099&app_id=163813&redirect_uri=http%3A%2F%2Fwww.gankao.co"
   end
 
+   #退出
+  def logout
+    cookies.delete(:user_id)
+    cookies.delete(:user_name)
+    redirect_to root_path
+  end
 
 end

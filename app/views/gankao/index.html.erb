@@ -25,10 +25,14 @@
         <div class="head_box">
           <div class="login">
             <ul>
-              <li>登录</li>
-              <li><a href="#"><img src="/assets/qq.png" /></a></li>
-              <li><a href="#"><img src="/assets/renren.png" /></a></li>
-              <li><a href="#"><img src="/assets/sina.png" /></a></li>
+              <% if cookies[:user_id].nil? || cookies[:user_name].nil? %>
+                <li style="cursor:pointer;" onclick="javascript:window.location.href='/logins'">登录</li>
+                <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/login_from_qq', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/qq.png" /></a></li>
+                <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/renren_login', '_blank', 'height=500,width=600,left=300,top=100');"><img src="/assets/renren.png" /></a></li>
+                <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/sina_login', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/sina.png" /></a></li>
+              <% else %>
+                <li><span style="cursor:pointer;" onclick="javascript:void(0);"><%= cookies[:user_name] %></span> | <span style="cursor:pointer;" onclick="javascript:window.location.href='/users/delete_user'">退出</span></li>
+              <% end %>
             </ul>
           </div>
           <div class="logo"><a href="/"><img src="/assets/logo2.png" /></a></div>
@@ -78,7 +82,7 @@
           <div><a href="#"><img src="/assets/huafei.png" title="帮助我们推广，获取话费回报。" /></a></div>
           <div><a href="#"><img src="/assets/jihua.png" title="要成功，就要对自己狠一点。" /></a></div>
         </div>
-        <div class="gz_weibo"><a href="#"><img src="/assets/renren_zhuye.png" /></a><a href="#"><img src="/assets/sina_weibo.png" /></a></div>
+        <div class="gz_weibo"><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/renren_like');"><img src="/assets/renren_zhuye.png" /></a><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/friend_add_request', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/sina_weibo.png" /></a></div>
       </div>
       <div class="foot">
         <p><a href="http://www.comdosoft.com/" target="_blank">公司信息</a> |   <a href="#">官方微博</a>   |   <a href="http://www.comdosoft.com/pages/aboutcon.html" target="_blank">联系我们</a>    |   <a href="#">用户协议</a></p>
