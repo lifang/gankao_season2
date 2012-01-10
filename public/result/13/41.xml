@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>      <exam id='13'>
-        <paper id='9' score='0.0'>
-          <questions><question id='45' is_sure='1' score='0.0'><answer/></question><question id='46' is_sure='1' score='0.0'><answer/></question><question id='47' is_sure='1' score='0.0'><answer/></question></questions>
-          <auto_score>0.0</auto_score>
-          <rate_score/>
-          <blocks><block id='21' score='0.0'/><block id='22' score='0.0'/></blocks>
-        </paper>
-      </exam>

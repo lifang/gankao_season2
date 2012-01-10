@@ -17,6 +17,15 @@ class Examination < ActiveRecord::Base
 
   default_scope :order => "examinations.created_at desc"
 
+  #显示单个登录考生能看到的所有的考试
+  def Examination.return_examinations(user_id, examination_id = nil)
+    sql = "select e.*, eu.id exam_user_id, eu.paper_id, eu.started_at, eu.ended_at, eu.is_submited from examinations e
+          left join exam_users eu on e.id = eu.examination_id
+          where e.is_published = #{IS_PUBLISHED[:ALREADY]} and e.status != #{STATUS[:CLOSED]} "
+    sql += " and e.id = #{examination_id} " if !examination_id.nil? and examination_id != ""
+    sql += " and eu.user_id = #{user_id} "
+    Examination.find_by_sql(sql)
+  end
 
 
 

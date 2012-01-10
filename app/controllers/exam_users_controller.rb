@@ -1,16 +1,25 @@
 # encoding: utf-8
 class ExamUsersController < ApplicationController
   layout "exam_user"
+  
+
   def show
     #读取试题
-    eu = ExamUser.find(params[:id])
-    p = Paper.find(eu.paper_id)
-    paper = File.open("#{BACK_PUBLIC_PATH}#{p.paper_js_url}")
-    @answer_js_url = "#{BACK_SERVER_PATH}#{p.paper_js_url}".gsub("/paperjs/","/answerjs/")
-    @paper = (JSON paper.read()[8..-1])["paper"]
-    #生成考生答卷
-    @sheet_url = create_sheet(sheet_outline,params[:id])
-    @sheet = get_doc(@sheet_url)
+    begin
+      eu = ExamUser.find(params[:id])
+      p = Paper.find(eu.paper_id)
+      paper = File.open("#{Constant::BACK_PUBLIC_PATH}#{p.paper_js_url}")
+      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("/paperjs/","/answerjs/")
+      @paper = (JSON paper.read()[8..-1])["paper"]
+      #生成考生答卷
+      s_url = ExamUser.find(params[:id]).answer_sheet_url
+      @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+      @sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(@sheet_url))
+      @sheet = get_doc("#{@sheet_url}")
+      close_file("#{@sheet_url}")
+    rescue
+      render :inline=>"抱歉，服务暂时无法使用。"
+    end
   end
 
   #将变量转化为数组
@@ -76,7 +85,7 @@ class ExamUsersController < ApplicationController
   def sheet_outline
     outline = "<?xml version='1.0' encoding='UTF-8'?>"
     outline += <<-XML
-      <sheet init='0'></sheet>
+      <sheet init='0' status='0'></sheet>
     XML
     return outline
   end
@@ -90,6 +99,7 @@ class ExamUsersController < ApplicationController
     file_name = "/#{exam_user_id}.xml"
     url = dir + file_name
     unless File.exist?(url)
+      ExamUser.find(exam_user_id).update_attribute("answer_sheet_url","/sheets/#{Time.now.strftime("%Y%m%d")}#{file_name}")
       f=File.new(url,"w+")
       f.write("#{sheet_outline.force_encoding('UTF-8')}")
       f.close
@@ -106,8 +116,11 @@ class ExamUsersController < ApplicationController
     question = doc.elements[ele_str].nil? ? doc.add_element(ele_str) : doc.elements[ele_str]
     question.text.nil? ? question.add_text(params[:answer]) : question.text=params[:answer]
     manage_element(question,{},{"question_type"=>params[:question_type], "correct_type"=>params[:correct_type]})
-    puts doc
     write_xml(doc, url)
+    #更新action_logs , total_num+1
+    log = ActionLog.find_by_sql("select * from action_logs where user_id=#{cookies[:user_id]} and types=#{ActionLog::TYPES[:PRACTICE]} and category_id=#{params[:category_id]}")[0]
+    log = ActionLog.create(:user_id=>cookies[:user_id],:types=>ActionLog::TYPES[:PRACTICE],:category_id=>params[:category_id],:total_num=>0) unless log
+    log.update_attribute("total_num",log.total_num+1)
     respond_to do |format|
       format.json {
         render :json=>""
@@ -124,36 +137,16 @@ class ExamUsersController < ApplicationController
     redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}"
   end
 
-  # --------- START -------XML文件操作--------require 'rexml/document'----------include REXML----------
-
-  #将XML文件生成document对象
-  def get_doc(url)
-    file = File.open(url)
-    doc = Document.new(file).root
-    return doc
-  end
-
-  #处理XML节点
-  #参数解释： element为doc.elements[xpath]产生的对象，content为子内容，attributes为属性
-  def manage_element(element, content={}, attributes={})
-    content.each do |key, value|
-      arr, ele = "#{key}".split("/"), element
-      arr.each do |a|
-        ele = ele.elements[a].nil? ? ele.add_element(a) : ele.elements[a]
-      end
-      ele.text.nil? ? ele.add_text("#{value}") : ele.text="#{value}"
+  #改变答卷状态（即做完了最后一题）
+  def ajax_change_status
+    url=params[:sheet_url]
+    doc = get_doc(url)
+    doc.attributes["status"] = "1"
+    write_xml(doc, url)
+    respond_to do |format|
+      format.json {
+        render :json=>""
+      }
     end
-    attributes.each do |key, value|
-      element.attributes["#{key}"].nil? ? element.add_attribute("#{key}", "#{value}") : element.attributes["#{key}"] = "#{value}"
-    end
-    return element
   end
-
-  #将document对象生成xml文件
-  def write_xml(doc, url)
-    file = File.new(url, File::CREAT|File::TRUNC|File::RDWR, 0644)
-    file.write(doc)
-    file.close
-  end
-
 end

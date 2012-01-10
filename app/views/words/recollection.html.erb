@@ -1,37 +1,45 @@
+<%= javascript_include_tag "cookie" %>
+<script type="text/javascript">
+  var word_ids = null;
+</script>
 <%= javascript_include_tag "words" %>
 <h1>词汇练习</h1>
 <div class="cihui_lx">
   <div class="ch_lx_nav">
     <ul class="lx_ul">
       <li><a href="javascript:void(0);">单词认读</a></li>
-      <li class="hover"><a href="/words/<%= @word.id %>/recollection?category=<%= params[:category] %>">回想释义</a></li>
+      <li class="hover"><a href="/words/recollection?category=<%= params[:category] %>">回想释义</a></li>
       <li><a href="javascript:void(0);">词汇运用</a></li>
       <li><a href="javascript:void(0);">拼写游戏</a></li>
     </ul>
   </div>
   <div class="ch_box">
-    <div class="ch_text">
-      <div class="ch_words_shu">(<%= (@already_recited.total_num + 1) %>)</div>
-      <div class="ch_words_line">
-        <p>释义：</p>
-        <p class="font_size_16"><%= @word.en_mean %> <%= @word.ch_mean %></p>
-      </div>
-      <div class="ch_words_line">
-        <% discriminate = @word.discriminates[0] unless @word.discriminates.blank? or @word.discriminates[0].nil? %>
-        <%  unless discriminate.words.blank? %>
-          <% (discriminate.words.to_a.sort_by{ rand }).each do |word| %>
+    <% all_words = @words.sort_by{ rand } %>
+    <input type="hidden" name="all_words" id="all_words" value="<%= (all_words.collect { |word| word.id }).join(",") %>"/>
+    <input type="hidden" name="step_page" id="step_page" value="1" />
+    <% all_words.each_with_index do |word, index| %>
+      <div class="ch_text" id="word_info_<%= index %>" style="display: none;">
+        <div class="ch_words_shu">(<%= (index + 1) %>)</div>
+        <div class="ch_words_line">
+          <p>释义：</p>
+          <p class="font_size_16"><%= word.en_mean %> <%= word.ch_mean %></p>
+        </div>
+        <div class="ch_words_line">
+          <% (((@words.to_a - [word])[0,3] + [word]).sort_by{ rand }).each do |w| %>
             <div class="words_btn font_size_16">
               <a href="javascript:void(0);"
-                 onclick="javascript:recollection_word(<%= @word.id %>, <%= word.id %>, <%= params[:category] %>, null);">
-                   <%= word.name %>
+                 onclick="javascript:recollection_word(<%= word.id %>, <%= w.id %>, <%= params[:category] %>, <%= index %>, 2);">
+                   <%= w.name %>
               </a>
             </div>
           <% end %>
-        <% end %>
+        </div>
       </div>
-    </div>
+    <% end unless @words.blank? %>
     <div class="box_bottom_bg"></div>
   </div>
 </div>
 <div id="tab_box" class="tab_box border_radius icon_false" style="display: none;">
+</div>
+<div class="tab_box border_radius" id="goon_tab" style="display: none;">
 </div>

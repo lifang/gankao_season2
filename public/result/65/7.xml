@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>      <exam id='65'>
-        <paper id='27' score='16'>
-          <questions><question id='84' is_sure='1' score='0'><answer>等待</answer></question><question id='85' is_sure='1' score='16'><answer>1</answer></question><question id='108' is_sure='1' score='0'><answer>虚虚实实</answer></question><question id='86' is_sure='1' score='0'><answer>凤飞飞dddd</answer></question><question id='107' is_sure='1' score='0'><answer>休息休息</answer></question></questions>
-          <auto_score>16.0</auto_score>
-          <rate_score/>
-          <blocks><block id='33' score='16.0'/></blocks>
-        </paper>
-      </exam>

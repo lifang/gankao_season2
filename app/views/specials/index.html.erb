@@ -1,0 +1,17 @@
+<h1>专项训练</h1>
+<div class="zhenti_list">
+  <ul>
+    <% unless @specials.blank? %>
+      <% @specials.each do |special| %>
+        <li><a href="#">
+            <% if @exam_user_hash[special.examination_id] %><span><img src="/assets/icon_wc.png" /></span><% end %>
+            <h2><%= special.name %></h2>
+          </a>
+        </li>
+      <% end %>
+    <% else %>
+      <li>暂无专项练习</li>
+    <% end %>
+  </ul>
+  <%=  will_paginate @specials ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
+</div>

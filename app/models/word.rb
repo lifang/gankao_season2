@@ -20,4 +20,31 @@ class Word < ActiveRecord::Base
     return Word.count('id', :conditions => "level < #{WORD_LEVEL[:THIRD]}")
   end
 
+  def self.current_recite_words(user_id, category_id, start_column)
+    words = UserWordRelation.find_by_sql(["select * from user_word_relations uwr
+      inner join words w on w.id = uwr.word_id where w.category_id = ? 
+      and uwr.status = #{UserWordRelation::STATUS[:NOMAL]}
+      and uwr.user_id = ? limit 20", category_id, user_id])
+    if words.blank? or words.length < 20
+      other_length = 20 - words.length
+      other_words = Word.find(:all,
+        :conditions => ["id not in (select uwr.word_id from user_word_relations uwr where uwr.user_id = ?)
+         and category_id = ? and level < #{Word::WORD_LEVEL[:THIRD]} ",category_id, user_id],
+        :limit => other_length, :order => "id", :offset => start_column)
+    end
+    return other_words.nil? ? words : (words + other_words)
+  end
+
+  def self.all_sentences(sentence_hash, word_ids)
+    word_sentences = WordSentence.find(:all, :conditions => ["word_id in (?)", word_ids])
+    word_sentences.each { |sentence|
+      if sentence_hash[sentence.word_id].nil?
+        sentence_hash[sentence.word_id] = [sentence.description]
+      else
+        sentence_hash[sentence.word_id] << sentence.description
+      end
+    }
+    return sentence_hash
+  end
+
 end

@@ -59,6 +59,7 @@ button.green { color: #009900;}
 
 .m_top { height: 34px; line-height: 34px; background: #595d63;}
 .m_side { width: 50%; _width: 49%; display: inline; float: left; overflow-y: scroll;}
+
 .m_problem_bg { background: #fff;}
 
 
@@ -157,7 +158,7 @@ button.green { color: #009900;}
 .green_dui { color: #090; margin-top: 10px;}
 .red_cuo { color: #F00;  margin-top: 10px;}
 
-.pro_btn { padding: 10px 0 0 50px;}
+.pro_btn { padding: 20px 0 20px 0px;}
 .pro_btn button { margin: 0 10px;}
 .pro_btn a { margin: 0 10px;}
 
@@ -167,31 +168,32 @@ button.green { color: #009900;}
 .textarea_tk { width: 520px; height: 25px;}
 .textarea_xz1 { width: 90%; height: 150px; padding: 5px;}
 .input_xz { width: 90%; height: 20px;}
-.input_tk { width: 148px; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid; float: left;}
+
+input_tk { min-width: 148px; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid; float: left;}
 .button_tk {
     width: 70px;
     height: 25px;
     text-align: center;
     line-height: 25px;
     border: none;
-    background: url(/assets/button_tk.png) no-repeat;
+    background: url(../images/button_tk.png) no-repeat;
     color: #ff6c00;
     margin: 4px 15px;
 }
-.span_tk {display: inline-block; height: 18px; position: relative;}
-.select_tk { width: 148px; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid;}
 
+.select_tk { min-width: 148px; height: 22px; line-height: 22px; border: 1px #e2e2e2 solid;}
 
 .button_span {
     position: absolute;
-    left: 0px;
+    left: 0px; 
     top: 25px;
     z-index:100;
     display: inline-block;
     width: 150px;
     height: 35px;
-    background:  url(/assets/btn_span_bg.png) 0 bottom no-repeat;
+    background:  url(../images/btn_span_bg.png) 0 bottom no-repeat;
 }
+
 /*拖拽---*/
 .drag_tk_box {}
 .drag_tk {
@@ -206,7 +208,7 @@ button.green { color: #009900;}
 
 .drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #d1cab6; float: left; margin: 5px; cursor:move;}
 
-.dragDrop_box {display: inline-block; float: left; min-width: 100px; height: 11px; line-height:11px; text-align:center; border: 1px #e2e2e2 solid; background: #FFF;cursor:move;}
+.dragDrop_box {display: inline-block; float: left; min-width: 148px; height: 22px; line-height:22px; text-align:center; border: 1px #e2e2e2 solid; background: #FFF;cursor:move;}
 
 /*相关词汇---------------*/
 .xg_words { float: left; width: 15%; overflow: hidden;}
@@ -343,7 +345,17 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 /*拼写游戏-----------*/
 .words_input { width: 20px; font-size: 16px; font-family: Arial;}
 .words_letter { overflow: hidden;}
-.words_letter li { width: 24px; height: 24px; border: 1px #c8c3b5 solid; margin:5px; line-height: 24px; text-align: center; float: left; background: #e7e3d7; color: #333;}
+.words_letter li {width: 24px;
+                  height: 24px;
+                  border: 1px #c8c3b5 solid;
+                  margin:5px;
+                  line-height: 24px;
+                  text-align: center;
+                  float: left;
+                  background: #e7e3d7;
+                  color: #333;
+                  cursor: pointer;
+                  font-size: 14px;}
 .words_letter li.hover { color: #c8c3b5;}
 .xiaoren { width: 180px; height: 200px; margin: 0 auto;}
 
