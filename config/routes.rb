@@ -79,6 +79,9 @@ GankaoSeason2::Application.routes.draw do
     collection do
       get :delete_user
     end
+    member do
+      get :info,:record
+    end
   end
   # Sample resource route with options:
   #   resources :products do
