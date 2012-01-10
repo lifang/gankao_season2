@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>      <exam id='17'>
+        <paper id='4' score='35.0'>
+          <questions><question id='56' is_sure='1' score='7'><answer>地方</answer></question><question id='57' is_sure='1' score='7'><answer>4545</answer></question><question id='58' is_sure='1' score='7'><answer>32424</answer></question><question id='59' is_sure='1' score='7'><answer>2323</answer></question><question id='60' is_sure='1' score='7'><answer>454</answer></question><question id='17' is_sure='1' score='0.0'><answer/></question><question id='61' is_sure='1' score='0.0'><answer/></question><question id='63' is_sure='1' score='0.0'><answer/></question></questions>
+          <auto_score>35.0</auto_score>
+          <rate_score/>
+          <blocks><block id='8' score='35.0'/><block id='9' score='0.0'/></blocks>
+        </paper>
+      </exam>

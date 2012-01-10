@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>      <exam id='21'>
+        <paper id='11' score='16'>
+          <questions><question id='93' is_sure='1' score='7'><answer>ewrwr</answer></question><question id='94' is_sure='1' score='4.0'><answer>5646;|;456788</answer></question><question id='95' is_sure='1' score='5'><answer>1</answer></question><question id='97' is_sure='1' score='0'><answer>dsfsdfsfsf</answer></question><question id='98' is_sure='1' score='0.0'><answer/></question><question id='100' is_sure='1' score='0'><answer/></question><question id='101' is_sure='1' score='0'><answer/></question></questions>
+          <auto_score>16.0</auto_score>
+          <rate_score/>
+          <blocks><block id='29' score='16.0'/><block id='30' score='0.0'/></blocks>
+        </paper>
+      </exam>

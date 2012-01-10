@@ -1,0 +1,65 @@
+<exam id='81'>
+    <paper id='27' score='16'>
+        <questions>
+            <question id='112' is_sure='1' score='0'>
+                <answer>等待</answer>
+            </question>
+            <question id='113' is_sure='1' score='16'>
+                <answer>1</answer>
+            </question>
+            <question id='114' is_sure='1' score='1' score_reason=''>
+                <answer>休息休息</answer>
+            </question>
+            <question id='115' is_sure='1' score='1' score_reason=''>
+                <answer>共发放日</answer>
+            </question>
+            <question id='116' is_sure='1' score='1' score_reason=''>
+                <answer>得得得得</answer>
+            </question>
+            <question id='117' is_sure='1' score='0'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='118' is_sure='1' score='0'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='119' is_sure='1' score='0'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='128' is_sure='1' score='1' score_reason=''>
+                <answer>得得得得</answer>
+            </question>
+            <question id='94' is_sure='1' score='0'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='106' is_sure='1' score='0'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='129' is_sure='1' score='1' score_reason='gggddd'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='132' is_sure='1' score='2' score_reason='ggddd'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='133' is_sure='1' score='1' score_reason=''>
+                <answer>得得得得</answer>
+            </question>
+            <question id='134' is_sure='1' score='1' score_reason=''>
+                <answer>得得得得</answer>
+            </question>
+            <question id='135' is_sure='1' score='1' score_reason=''>
+                <answer>得得得得</answer>
+            </question>
+             <question id='131' is_sure='1' score='1' score_reason=''>
+                <answer>得得得得</answer>
+            </question>
+        </questions>
+        <auto_score>16.0</auto_score>
+        <rate_score>10.0</rate_score>
+        <blocks>
+            <block id='33' score='26.0'/>
+            <block id='34' score='1.0'/>
+            <block id='35' score='0.0'/>
+            <block id='36' score='0.0'/>
+        </blocks>
+    </paper>
+</exam>

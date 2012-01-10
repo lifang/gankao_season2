@@ -1,0 +1,8 @@
+<exam id='20'>
+        <paper id='10' score='0'>
+          <questions><question id='89' is_sure='1' score='0'><answer>34535</answer></question><question id='90' is_sure='1' score='3.0' score_reason='hao ,和很好'><answer>csdfsfsfsfsdf</answer></question><question id='92' is_sure='1' score='0'><answer>ert</answer></question></questions>
+          <auto_score/>
+          <rate_score>3.0</rate_score>
+          <blocks><block id='27' score='3.0'/></blocks>
+        </paper>
+      </exam>

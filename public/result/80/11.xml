@@ -1,0 +1,8 @@
+<exam id='80'>
+        <paper id='35' score='84.0'>
+          <questions><question id='98' is_sure='1' score='10'><answer>1</answer></question><question id='99' is_sure='1' score='5.0'><answer>a;|;b;|;c</answer></question><question id='100' is_sure='1' score='10'><answer>1</answer></question><question id='101' is_sure='1' score='2.0' score_reason='fffff'><answer>wolf</answer></question><question id='102' is_sure='1' score='10'><answer>沉默</answer></question><question id='103' is_sure='1' score='12.0' score_reason='qqqw'><answer>wolf</answer></question><question id='104' is_sure='1' score='10.0' score_reason='wwwww'><answer>wolf</answer></question><question id='105' is_sure='1' score='12'><answer>是</answer></question><question id='106' is_sure='1' score='13.0' score_reason='sss'><answer>wolf</answer></question></questions>
+          <auto_score>47.0</auto_score>
+          <rate_score>37.0</rate_score>
+          <blocks><block id='38' score='84.0'/></blocks>
+        </paper>
+      </exam>

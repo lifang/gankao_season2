@@ -12,6 +12,19 @@ GankaoSeason2::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+  resources :exam_raters do
+    collection do
+      get :session,:check_paper,:log_out
+      post :over_answer
+    end
+    member do
+      post "edit_value"
+      get "rater_session","get_score"
+      post "rater_login"
+      get "reader_papers","answer_paper"
+    end
+  end
+  
   resources :collections do
     collection do
       post :load_words,:write_file
@@ -55,7 +68,11 @@ GankaoSeason2::Application.routes.draw do
       get 'recollection', 'use', 'hand_man'
     end
   end
-  
+  resources :users do
+    collection do
+      get :delete_user
+    end
+  end
   # Sample resource route with options:
   #   resources :products do
   #     member do

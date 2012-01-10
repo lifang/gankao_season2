@@ -1,0 +1,13 @@
+<paper id='25' total_num='1' total_score='19'>
+        <base_info>
+          <title>大都督府飞</title>
+          <category>1</category>
+          <creater>1</creater>
+          <created_at>2011-08-25 17:15</created_at>
+          <updated_at>2011-08-25 17:17</updated_at>
+          <description>得得得</description>
+<category_name>history</category_name>      </base_info>
+      <blocks>
+      <block id='31' time='' total_num='1' total_score='19'><base_info><title>得得得</title><description>铲草除根</description></base_info><problems><problem id='64' score='19' types='3'><title>&lt;object&gt;&lt;embed src=&quot;http://zhangmenshiting.baidu.com/data/music/8281174/%E9%A3%8E%E5%84%BF%E9%98%B5%E9%98%B5%E5%90%B9.mp3?xcode=fc38ee5368ff01d10d7b4b9a27aa30f1&quot; wmode=&quot;opaque&quot;&gt;&lt;/object&gt;得得得</title><category>1</category><questions><question correct_type='3' id='77' score='19'><answer>人凤飞飞</answer><analysis>得得得</analysis><questionattrs/><tags/></question></questions></problem></problems></block></blocks>
+       <problem_ids/>
+      </paper>

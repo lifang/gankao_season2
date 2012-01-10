@@ -1,0 +1,13 @@
+<exam id='15'>
+    <paper id='2' score='6'>
+        <questions>
+            
+            
+        <question id='6' is_sure='1' score='0'><answer></answer></question><question id='7' is_sure='1' score='0'><answer></answer></question></questions>
+        <auto_score>3</auto_score>
+        <rate_score/>
+        <blocks>
+            
+        <block id='5' score='0'/><block id='23' score='0'/></blocks>
+    </paper>
+</exam>

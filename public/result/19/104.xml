@@ -1,0 +1,65 @@
+
+<exam id='19'>
+    <paper id='3' score='137.5'>
+        <questions>
+            <question id='15' is_sure='1' score='0'>
+                <answer>23</answer>
+            </question>
+            <question id='14' is_sure='1' score='5'>
+                <answer>sfs</answer>
+            </question>
+            <question id='33' is_sure='1' score='0.0' score_reason='dfgsdg' user_score='0.0'>
+                <answer>上发上发生法萨芬萨菲</answer>
+            </question>
+            <question id='36' is_sure='1' score='44.0' score_reason='dgfdgds' user_score='44.0'>
+                <answer>上的法是否萨芬</answer>
+            </question>
+            <question id='37' is_sure='1' score='3.5' score_reason='sfsdf' user_score='3.5'>
+                <answer>沙发沙发是否</answer>
+            </question>
+            <question id='38' is_sure='1' score='5'>
+                <answer>wer</answer>
+            </question>
+            <question id='39' is_sure='1' score='6.0'>
+                <answer>sdfa;|;qq2</answer>
+            </question>
+            <question id='40' is_sure='1' score='54'>
+                <answer>1</answer>
+            </question>
+            <question id='41' is_sure='1' score='0.0' score_reason='sfsdf' user_score='0.0'>
+                <answer>宋德福是否</answer>
+            </question>
+            <question id='48' is_sure='1' score='5.0' score_reason='sfsfsdf' user_score='5.0'>
+                <answer>手动阀第三方分得分</answer>
+            </question>
+            <question id='65' is_sure='1' score='0'>
+                <answer>sdfwer</answer>
+            </question>
+            <question id='66' is_sure='1' score='0'>
+                <answer>wwew</answer>
+            </question>
+            <question id='67' is_sure='1' score='0'>
+                <answer>43534</answer>
+            </question>
+            <question id='64' is_sure='1' score='5'>
+                <answer>sdsf</answer>
+            </question>
+            <question id='68' is_sure='1' score='5'>
+                <answer>额外人</answer>
+            </question>
+            <question id='69' is_sure='1' score='5'>
+                <answer>2313</answer>
+            </question>
+        </questions>
+        <auto_score>85.0</auto_score>
+        <rate_score>52.5</rate_score>
+        <blocks>
+            <block id='6' score='5.0'/>
+            <block id='7' score='0.0'/>
+            <block id='19' score='117.5'/>
+            <block id='24' score='5.6'/>
+            <block id='25' score='5.8'/>
+            <block id='26' score='5.6'/>
+        </blocks>
+    </paper>
+</exam>

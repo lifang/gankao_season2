@@ -1,6 +1,7 @@
 #encoding: utf-8
 class CollectionsController < ApplicationController
   layout 'exam_user'
+  before_filter :sign?
   def load_words
     load_words={}
     unless params[:words].length==0

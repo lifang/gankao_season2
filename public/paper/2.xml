@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<paper id='2' total_num='2' total_score='8'>
+    <base_info>
+        <title>测试新卷子</title>
+        <category>3</category>
+        <creater>1</creater>
+        <created_at>2011-08-19 15:26</created_at>
+        <updated_at>2011-09-28 13:01</updated_at>
+        <description>测试新卷子</description>
+        <category_name>英语六级</category_name>
+    </base_info>
+    <blocks>
+        <block id='5' start_time='2:0' time='120' total_num='2' total_score='8'>
+            <base_info>
+                <title>第一块</title>
+                <description></description>
+            </base_info>
+            <problems>
+                
+                
+                
+                <problem id='5' score='8' types='4'>
+                    <title>______ ______ your name?</title>
+                    <category>3</category>
+                    <complete_title>[[what|where;when;why||名词]] [[is|are;were;was||助词]] your name?[{解析1,|解析2}][(5,|5)]</complete_title>
+                    <questions>
+                        <question correct_type='0' id='6' score='3'>
+                            <answer>what</answer>
+                            <analysis>解析1</analysis>
+                            <questionattrs>what;-;where;-;when;-;why</questionattrs>
+                            <tags>名词</tags>
+                        </question>
+                        <question correct_type='0' id='7' score='5'>
+                            <answer>is</answer>
+                            <analysis>解析2</analysis>
+                            <questionattrs>is;-;are;-;were;-;was</questionattrs>
+                            <tags>助词</tags>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+    <block id='23' start_time='0:10' time='30' total_num='0' total_score='0'><base_info><title>萨芬的萨法萨芬</title><description>宋德福是否</description></base_info><problems/></block></blocks>
+    <problem_ids/>
+</paper>

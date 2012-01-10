@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>      <exam id='3'>
+        <paper id='19' score='11'>
+          <questions><question id='170' is_sure='1' score='0'><answer>fwefewfwe</answer></question><question id='171' is_sure='1' score='0'><answer>0</answer></question><question id='172' is_sure='1' score='4'><answer>1</answer></question><question id='176' is_sure='1' score='2.0'><answer>reg</answer></question><question id='174' is_sure='1' score='0'><answer>2222</answer></question><question id='177' is_sure='1' score='1'><answer>1111</answer></question><question id='178' is_sure='1' score='0.5'><answer>222;|;2</answer></question><question id='179' is_sure='1' score='3'><answer>1</answer></question><question id='180' is_sure='1' score='0'><answer>fwefgerfwef</answer></question><question id='181' is_sure='1' score='0'><answer>5555</answer></question><question id='182' is_sure='1' score='0'><answer>66;|;666</answer></question><question id='183' is_sure='1' score='0'><answer>0</answer></question><question id='184' is_sure='1' score='0'><answer>fewgeerfefwe</answer></question><question id='185' is_sure='1' score='0'><answer>fwgerfwefreger</answer></question><question id='189' is_sure='1' score='0'><answer>0</answer></question><question id='186' is_sure='1' score='0'><answer>gerfwefgregerfwefwegr</answer></question></questions>
+          <auto_score>10.5</auto_score>
+          <rate_score/>
+          <blocks><block id='29' score='10.5'/></blocks>
+        </paper>
+      </exam>

@@ -1,0 +1,8 @@
+<exam id='21'>
+        <paper id='11' score='10.0'>
+          <questions><question id='93' is_sure='1' score='0'><answer>werw</answer></question><question id='94' is_sure='1' score='0.0'><answer/></question><question id='95' is_sure='1' score='5'><answer>1</answer></question><question id='97' is_sure='1' score='0.0' score_reason='不对'><answer>sfdsafsafsafsfsfsfsfsafsfsfdsdf</answer></question><question id='98' is_sure='1' score='5'><answer>ertertetr</answer></question><question id='100' is_sure='1' score='0.0' score_reason='不对2'><answer>sfsafsafsaf</answer></question><question id='101' is_sure='1' score='0.0' score_reason='不对3'><answer>asfasfsadfasfsafd</answer></question></questions>
+          <auto_score>10.0</auto_score>
+          <rate_score>0.0</rate_score>
+          <blocks><block id='29' score='5.0'/><block id='30' score='5.0'/></blocks>
+        </paper>
+      </exam>

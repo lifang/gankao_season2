@@ -1,0 +1,26 @@
+<exam id='81'>
+    <paper id='27' score='16.0'>
+        <questions>
+            <question id='84' is_sure='1' score='0'>
+                <answer>凤飞飞</answer>
+            </question>
+            <question id='85' is_sure='1' score='16'>
+                <answer>1</answer>
+            </question>
+            <question id='108' is_sure='1' score='0.0' score_reason='0'>
+                <answer>hhhhhhhh</answer>
+            </question>
+            <question id='86' is_sure='1' score='0'>
+                <answer>凤飞飞dddd;|;凤飞飞</answer>
+            </question>
+            <question id='107' is_sure='1' score='0.0' score_reason='0'>
+                <answer>kkkjgggggg</answer>
+            </question>
+        </questions>
+        <auto_score>16.0</auto_score>
+        <rate_score>0.0</rate_score>
+        <blocks>
+            <block id='33' score='16.0'/>
+        </blocks>
+    </paper>
+</exam>

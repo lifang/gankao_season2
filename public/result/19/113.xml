@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>      <exam id='19'>
+        <paper id='3' score='15'>
+          <questions><question id='15' is_sure='1' score='0'><answer>23</answer></question><question id='14' is_sure='1' score='0'><answer>sfss</answer></question><question id='33' is_sure='1' score='0'><answer/></question><question id='36' is_sure='1' score='0'><answer/></question><question id='37' is_sure='1' score='0'><answer/></question><question id='38' is_sure='1' score='0.0'><answer/></question><question id='39' is_sure='1' score='0.0'><answer/></question><question id='40' is_sure='1' score='0.0'><answer/></question><question id='41' is_sure='1' score='0'><answer/></question><question id='48' is_sure='1' score='0'><answer/></question><question id='65' is_sure='1' score='0'><answer>sdfwer</answer></question><question id='66' is_sure='1' score='0'><answer>223</answer></question><question id='67' is_sure='1' score='0'><answer>45</answer></question><question id='64' is_sure='1' score='5'><answer>sdsf</answer></question><question id='68' is_sure='1' score='5'><answer>额外人</answer></question><question id='69' is_sure='1' score='5'><answer>2313</answer></question></questions>
+          <auto_score>15.0</auto_score>
+          <rate_score/>
+          <blocks><block id='6' score='0.0'/><block id='7' score='0.0'/><block id='19' score='0.0'/><block id='24' score='5.0'/><block id='25' score='5.0'/><block id='26' score='5.0'/></blocks>
+        </paper>
+      </exam>

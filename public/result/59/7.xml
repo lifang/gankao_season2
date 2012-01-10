@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>      <exam id='59'>
+        <paper id='13' score='9.0'>
+          <questions><question id='70' is_sure='1' score='0'><answer>测试简答题</answer></question><question id='71' is_sure='1' score='0'><answer>测试填空题</answer></question><question id='72' is_sure='1' score='0'><answer>111</answer></question><question id='73' is_sure='1' score='0'><answer>综合题--简答题小题</answer></question><question id='74' is_sure='1' score='0'><answer>综合题--填空题小题</answer></question><question id='75' is_sure='1' score='4.0'><answer>111;|;222;|;333</answer></question><question id='76' is_sure='1' score='5'><answer>1</answer></question></questions>
+          <auto_score>9.0</auto_score>
+          <rate_score/>
+          <blocks><block id='22' score='9.0'/></blocks>
+        </paper>
+      </exam>

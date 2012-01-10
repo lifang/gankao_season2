@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>      <exam id='51'>
+        <paper id='9' score='0'>
+          <questions><question id='29' is_sure='1' score='0'><answer></answer></question><question id='30' is_sure='1' score='0'><answer></answer></question><question id='31' is_sure='1' score='0'><answer></answer></question><question id='32' is_sure='1' score='0'><answer></answer></question><question id='46' is_sure='1' score='0'><answer></answer></question><question id='34' is_sure='1' score='0'><answer></answer></question><question id='47' is_sure='1' score='0'><answer></answer></question><question id='45' is_sure='1' score='0'><answer></answer></question><question id='48' is_sure='1' score='0'><answer></answer></question><question id='61' is_sure='1' score='0'><answer></answer></question></questions>
+          <auto_score/>
+          <rate_score/>
+          <blocks><block id='14' score='0'/><block id='15' score='0'/><block id='16' score='0'/><block id='17' score='0'/><block id='18' score='0'/></blocks>
+        </paper>
+      </exam>

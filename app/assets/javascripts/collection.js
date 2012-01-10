@@ -178,7 +178,6 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             collection_correct_type(q_correct_type,pro_qu_ul,problem_index,q_index,question_type);
             var pro_btn = pro_qu_div.appendChild(create_element("div", null, "pro_btn_"+q_index, "pro_btn", null, "innerHTML"));
             pro_btn.innerHTML +="<button class='t_btn hedui_t_btn' style='display:none'id='check' onclick=\"javascript:check_question("+q_index+",'"+problem_index+"_"+q_index+"','"+escape(q_answer) +"',"+problem_index+",'','"+question_type +"')\">核对</button>"
-            //            pro_btn.innerHTML +="<button class='t_btn hedui_t_btn' style='display:none' id='next'>继续</button>"
             pro_btn.innerHTML += "<a href='#' class='upErrorTo_btn' onclick=javascript:$('#question_id').val("+questions[q_index].id +");show_div('.upErrorTo_tab');>报告错误</a>";
             pro_btn.innerHTML += "<a href='javascript:void(0);' onclick=javascript:$('.word_"+problem_index+"_"+q_index+"').css('display','');>相关词汇</a>";
             var jiexi = pro_qu_div.appendChild(create_element("div", null, "display_jiexi_"+problem_index+"_"+q_index, "jiexi", null, "innerHTML"));
@@ -491,7 +490,7 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         $("#pro_question_list_"+problem_question_index).removeClass("pro_qu_h");
         $("#pro_question_list_"+problem_question_index).css("display","");
         $("#pro_qu_div_"+question_index).css("display","");
-        $("#check_button_"+question_index).css("display","none");
+        $("#check_"+question_index).css("display","none");
         close_question= $("#pro_question_list_"+problem_question_index);
     }
    
@@ -594,14 +593,15 @@ function test_again(){
             var element_str="<span class='span_tk'>";
             if (inner_correct_type=="0"){
                 $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                element_str += "<select class='select_tk' id='select_tk_"+sign_index +"' onchange=javascript:inner_value("+inner_correct_type+","+sign_index +");>";
+                element_str += "<select class='select_tk' id='select_tk_"+sign_index +"' onfocus=javascript:$('#check_"+sign_index +"').css('display',''); onblur=javascript:$('#check_"+sign_index +"').css('display','none'); onchange=javascript:inner_value("+inner_correct_type+","+sign_index +");>";
                 element_str += "<option></option>"
                 var question_attrs=questions[sign_index].questionattrs.split(";-;");
                 for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
                     element_str += "<option>"+question_attrs[attr_index]+"</option>";
                 }
                 element_str +="</select>"
-                element_str += "<button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+init_problem +"_"+sign_index +"','"+ escape(answer)+"',"+init_problem +",'',"+question_type +") >核对</button></span>";
+
+                element_str += " <span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+init_problem +"_"+sign_index +"','"+ escape(answer)+"',"+init_problem +",'',"+question_type +") >核对</button></span></span>";
             }
             if(inner_correct_type=="1"){
                 drag_index++;
@@ -613,12 +613,12 @@ function test_again(){
                     new_attrs += "<li name='"+attrs[i]+"' class='drag_li_"+sign_index +"'>"+attrs[i]+"</li>"
                 }
                 $("#draggable_list").html($("#draggable_list").html()+new_attrs);
-                element_str += "<button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+init_problem+"_"+ sign_index +"','"+ escape(answer)+"',"+init_problem +",'"+drag_index +"') >核对</button></span>";
+                element_str += "<span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+init_problem+"_"+ sign_index +"','"+ escape(answer)+"',"+init_problem +",'"+drag_index +"') >核对</button></span></span>";
             }
             if(inner_correct_type=="3"){
                 $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                element_str = "<input class='input_tk' type='text' id='input_tk_"+ sign_index+"' onchange=javascript:inner_value("+inner_correct_type+","+sign_index +"); />";
-                element_str += "<button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+init_problem +"_"+sign_index +"','"+ escape(answer)+"',"+init_problem +",'') >核对</button></span>";
+                element_str += "<input class='input_tk' id='input_tk_"+ sign_index+"' onfocus=javascript:$('#check_"+sign_index +"').css('display',''); onblur=javascript:$('#check_"+sign_index +"').css('display','none');  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +"); />";
+                element_str += "<span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+init_problem +"_"+sign_index +"','"+ escape(answer)+"',"+init_problem +",'') >核对</button></span></span>";
             }
            
             result_title.push(element_str);
@@ -630,6 +630,8 @@ function test_again(){
             drop: function( event, ui ) {
                 $(this).html(ui.draggable.attr("name"));
                 var index=$("div[id*='dragDrop_box_']").index($(this));
+                drag_index=this.id.split("_");
+                $("#check_"+drag_index[2]).css('display','');
                 $("#drag_answer_"+(index+1)).val(ui.draggable.attr("name"));
             }
         })
