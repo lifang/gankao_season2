@@ -22,34 +22,7 @@
   <body>
     <div class="wrap">
       <%= render :partial => "/common/flash_div"  %>
-      <div class="head">
-        <div class="head_info">
-
-          <div class="h_user"><a href="#" class="h_email email_u">邮件</a><a href="#">yesen(试用剩10天)</a>|<a href="#">退出</a>
-            <div class="email_tab" style="display: none; ">
-              <ul>
-                <li><a href="#">收件箱:<span class="orange">10</span></a></li>
-                <li><a href="#">通&nbsp;&nbsp;知:<span class="orange">10</span></a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="h_user" style="display: none;"><a href="#">登录</a></div>
-          <div class="h_banner"><a href="#"><img src="/assets/banner.png" /></a></div>
-
-        </div>
-        <div class="logo"><a href="/"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
-        <div class="nav">
-          <ul>
-            <li><a href="/similarities?category=<%= params[:category].nil? ? 2 : params[:category] %>" class="hover">真题</a></li>
-            <li><a href="#">专题</a></li>
-            <li><a href="#">词汇</a></li>
-            <li><a href="#">模考</a></li>
-            <li><a href="#">计划</a></li>
-            <li><a href="#">收藏</a></li>
-          </ul>
-        </div>
-        <div class="clear"></div>
-      </div>
+      <%= render :partial => "/common/head_div"  %>
       <div class="clear"></div>
       <div class="main_Div">
         <div class="m_box">

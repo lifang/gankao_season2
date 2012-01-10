@@ -1,4 +1,13 @@
+<%= stylesheet_link_tag "/assets/jplayer.blue.monday.css" %>
+<%= javascript_include_tag "/assets/cookie.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.core.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.widget.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.mouse.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.draggable.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.droppable.js" %>
+<%= javascript_include_tag '/assets/jplayer/jquery.jplayer.min.js' %>
 <%= javascript_include_tag "#{@answer_js_url}" %>
+
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 <script type="text/javascript" >
   category = '<%= category_id %>';

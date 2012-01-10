@@ -5,8 +5,10 @@ class LoginsController < ApplicationController
   require 'oauth/oauth'
   include QqHelper
   include RenrenHelper
-  layout 'login'
   
+  def index
+    layout false
+  end
 
   def sina_login
     oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
