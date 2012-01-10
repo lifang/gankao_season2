@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>      <exam id='9'>
+        <paper id='3' score='0.0'>
+          <questions><question id='64' is_sure='1' score='0'><answer>sdsf</answer></question></questions>
+          <auto_score>0.0</auto_score>
+          <rate_score/>
+          <blocks><block id='6' score='0'/><block id='7' score='0'/><block id='19' score='0'/><block id='24' score='0'/></blocks>
+        </paper>
+      </exam>

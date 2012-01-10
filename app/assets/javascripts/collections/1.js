@@ -28,9 +28,9 @@ collections = {
                     "tags":"\u5feb\u901f\u9605\u8bfb",
                     "words":"jeffrey",
                     "answer":"A) abc      ",
-                    "user_answer":["A) abc      ","","","","","","","C) an increase in food import","B) a decrease of grain production ","B) a decrease of grain production "]
+                    "user_answer":["A) abc      ","","","","","","","C) an increase in food import","B) a decrease of grain production ","B) a decrease of grain production ","C) an increase in food import","C) an increase in food import"]
                     },{
-                    "correct_type":"3",
+                    "correct_type":"1",
                     "id":"902",
                     "score":"0.0",
                     "description":"With culinary improvement in recent years, London's restaurants are now able to appeal to the tastes of  _______   .",
@@ -169,7 +169,7 @@ collections = {
             "questionattrs":"A) He is careless about his appearance.;-;B) He is ashamed of his present condition.;-;C) He changes jobs frequently.;-;D) He shaves every other day.",
             "tags":"\u542c\u529b",
             "answer":"A) He is careless about his appearance.",
-            "user_answer":["A) He is careless about his appearance.","C) He changes jobs frequently.","B) He is ashamed of his present condition.","C) He changes jobs frequently.","B) He is ashamed of his present condition.","B) He is ashamed of his present condition."]
+            "user_answer":["A) He is careless about his appearance.","C) He changes jobs frequently.","B) He is ashamed of his present condition.","C) He changes jobs frequently.","B) He is ashamed of his present condition.","B) He is ashamed of his present condition.","B) He is ashamed of his present condition.","C) He changes jobs frequently."]
             }]
         }
     },{
@@ -189,7 +189,7 @@ collections = {
             "questionattrs":"A)  Conflicts between students of different races are unavoidable.;-;B)  Students of different races are prejudiced against each other.;-;C)  Interracial lodging does more harm than good.;-;D)  Interracial lodging may have diverse outcomes.",
             "tags":"\u9605\u8bfb",
             "answer":"B)  Students of different races are prejudiced against each other.",
-            "user_answer":["B)  Students of different races are prejudiced against each other."],
+            "user_answer":["B)  Students of different races are prejudiced against each other.","C)  Interracial lodging does more harm than good.","C)  Interracial lodging does more harm than good."],
             "words":"and so on;hand"
         },{
             "correct_type":"0",
@@ -199,35 +199,34 @@ collections = {
             "questionattrs":"A) It is unscientific to make generalizations about it without further study.;-;B) Schools should be cautious when making decisions about student lodging.;-;C) Students' racial background should be considered before lodging is assigned.;-;D)  Experienced resident advisors should be assigned to handle the problems.",
             "tags":"\u9605\u8bfb",
             "answer":"A) It is unscientific to make generalizations about it without further study.",
-            "user_answer":["B) Schools should be cautious when making decisions about student lodging."]
-            },{
-            "id":"618",
-            "question_type":"0",
+            "user_answer":["B) Schools should be cautious when making decisions about student lodging.","C) Students' racial background should be considered before lodging is assigned.","C) Students' racial background should be considered before lodging is assigned.","B) Schools should be cautious when making decisions about student lodging."]
+            }]
+        }
+    },{
+    "id":"618",
+    "question_type":"0",
+    "score":"0.0",
+    "types":"4",
+    "title":"<div>The popular notion that older people need less sleep than younger adults is a myth, scientists said yesterday.&nbsp;</div><div>While elderly people __47__ to sleep for fewer hours than they did when they were younger, this has a(n) __48__ effect on their brain's performance and they would benefit from getting more, according to research.&nbsp;</div><div>Sean Drummond, a psychiatrist (\u5fc3\u7406\u533b\u751f) at the University of California, San Diego, said older people are more likely to suffer from broken sleep, while younger people are better at sleeping __49__ straight through the night.</div><div>&nbsp;More sleep in old age, however, is __50__ with better health, and most older people would feel better and more __51__ if they slept for longer periods, he said.&nbsp;</div><div>\u201cThe ability to sleep in one chunk (\u6574\u5757\u65f6\u95f4) overnight goes down as we age but the amount of sleep we need to __52__ well does not change,\u201d Dr Drummond told the American Association for the Advancement of Science conference in San Diego.&nbsp;</div><div>\u201cIt's __53__ a myth that older people need less sleep. The more healthy an older adult is, the more they sleep like they did when they were __54__. Our data suggests that older adults would benefit from __55__ to get as much sleep as they did in their 30s. That's __56__ from person to person, but the amount of sleep we had at 35 is probably the same amount as we need at 75.\u201d&nbsp;</div>",
+    "category":"2",
+    "questions":{
+        "question":[{
+            "correct_type":"6",
+            "id":"1957",
             "score":"0.0",
-            "types":"4",
-            "title":"<div>The popular notion that older people need less sleep than younger adults is a myth, scientists said yesterday.&nbsp;</div><div>While elderly people __47__ to sleep for fewer hours than they did when they were younger, this has a(n) __48__ effect on their brain's performance and they would benefit from getting more, according to research.&nbsp;</div><div>Sean Drummond, a psychiatrist (\u5fc3\u7406\u533b\u751f) at the University of California, San Diego, said older people are more likely to suffer from broken sleep, while younger people are better at sleeping __49__ straight through the night.</div><div>&nbsp;More sleep in old age, however, is __50__ with better health, and most older people would feel better and more __51__ if they slept for longer periods, he said.&nbsp;</div><div>\u201cThe ability to sleep in one chunk (\u6574\u5757\u65f6\u95f4) overnight goes down as we age but the amount of sleep we need to __52__ well does not change,\u201d Dr Drummond told the American Association for the Advancement of Science conference in San Diego.&nbsp;</div><div>\u201cIt's __53__ a myth that older people need less sleep. The more healthy an older adult is, the more they sleep like they did when they were __54__. Our data suggests that older adults would benefit from __55__ to get as much sleep as they did in their 30s. That's __56__ from person to person, but the amount of sleep we had at 35 is probably the same amount as we need at 75.\u201d&nbsp;</div>",
-            "category":"2",
-            "questions":{
-                "question":[{
-                    "correct_type":"6",
-                    "id":"1957",
-                    "score":"0.0",
-                    "questionattrs":"tend;-;attracting",
-                    "tags":null,
-                    "answer":"tend",
-                    "user_answer":"tend"
-                },{
-                    "correct_type":"6",
-                    "id":"1958",
-                    "score":"0.0",
-                    "questionattrs":"negative;-;cling",
-                    "tags":null,
-                    "answer":"negative",
-                    "user_answer":"ffff"
-                }]
-                },
-            "user_answer":[]
-        }]
+            "questionattrs":"tend;-;attracting",
+            "tags":null,
+            "answer":"tend",
+            "user_answer":["tend"]
+            },{
+            "correct_type":"6",
+            "id":"1958",
+            "score":"0.0",
+            "questionattrs":"negative;-;cling",
+            "tags":null,
+            "answer":"negative",
+            "user_answer":["ffff"]
+            }]
         }
     }]
 }

@@ -81,7 +81,6 @@
 <% problem_index=-1 ; global_question_index=-1 ; blocks.each do |block| %>
   <% problems = (block["problems"].nil? || block["problems"]["problem"].nil?) ? [] : (block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]] %>
   <% problems.each do |problem| ; problem_index+=1; %>
-
     <% if problem["question_type"]=="0" %>
       <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
         <div class="m_side m_problem_bg">

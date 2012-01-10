@@ -1,0 +1,41 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>登录</title>
+    <link href="/assets/login.css" rel="stylesheet" type="text/css" />
+    <!--[if IE 6]>
+    <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>
+      /* EXAMPLE */
+      DD_belatedPNG.fix('*');
+
+      /* string argument can be any CSS selector */
+      /* .png_bg example is unnecessary */
+      /* change it to what suits you! */
+    </script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="logo"><a href="#"><img src="/assets/logins/logo1.png" /></a></div>
+      <div class="login_pic"></div>
+      <div class="login_area">
+        <ul>
+          <li><a href="#" onclick ="javascript:window.open('/logins/sina_login', '_blank', 'height=400,width=600,left=300,top=150');" class="login_sina">sina</a></li>
+          <li><a href="#" onclick ="javascript:window.open('/logins/renren_login', '_blank', 'height=500,width=600,left=300,top=100');" class="login_renren">renren</a></li>
+          <li><a href="#" onclick ="javascript:window.open('/logins/login_from_qq', '_blank', 'height=500,width=569,left=300,top=100');" class="login_qq">qq</a></li>
+        </ul>
+      </div>
+      <%= yield %>
+      <div class="clear"></div>
+      <div class="foot">
+        <p><a href="http://www.comdosoft.com/" target="_blank">公司信息</a> |   <a href="#">官方微博</a>   |   <a href="http://www.comdosoft.com/pages/aboutcon.html" target="_blank">联系我们</a>    |   <a href="#">用户协议</a></p>
+        <p>Copyright © 2011-2012 &nbsp;&nbsp;苏州协创软件有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>
+        <p>建议使用IE6以上版本、firefox、Chrome等浏览器</p>
+      </div>
+    </div>
+  </body>
+</html>

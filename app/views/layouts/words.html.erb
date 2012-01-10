@@ -6,6 +6,7 @@
     <%= stylesheet_link_tag    "style" %>
     <%= stylesheet_link_tag    "public" %>
     <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "/assets/main.js" %>
     <%= csrf_meta_tags %>
     <!--[if IE 6]>
     <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
@@ -24,7 +25,7 @@
 
       <div class="head">
         <div class="head_info">
-          <div class="h_user"><a href="#" class="h_email email_u">邮件</a><a href="#">yesen(试用剩10天)</a>|<a href="#">退出</a>
+          <div class="h_user"><a href="#" class="h_email email_u">邮件</a> <a href="#">yesen(试用剩10天)</a>|<a href="/users/delete_user">退出</a>
             <div class="email_tab" style="display: none; ">
               <ul>
                 <li><a href="#">收件箱:<span class="orange">10</span></a></li>
@@ -33,8 +34,15 @@
             </div>
           </div>
           <div class="h_user" style="display: none;"><a href="#">登录</a></div>
-          <div class="h_banner"><a href="#"><img src="/assets/banner.png" /></a></div>
-
+          <div class="h_banner"><a href="#" ><img src="/assets/banner.png" /></a></div>
+          <div class="h_weibo"> <a href="/logins/renren_like" target="_blank" ><img src="/assets/icon_renren.png" /></a><a href="#" onclick ="javascript:window.open('/logins/sina_login', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/icon_sina.png" /></a></div>
+          <a href="#" onclick ="javascript:window.open('/logins/login_from_qq', '_blank', 'height=500,width=569,left=300,top=100');"><img src="/images/paper/qq.png" /></a>
+          <a href="#" onclick ="javascript:window.open('/logins/renren_login', '_blank', 'height=500,width=800,left=200,top=100');">
+            <img src="/images/paper/renren.png" />
+          </a>
+          <a href="#" onclick ="javascript:window.open('/logins/sina_login', '_blank', 'height=500,width=800,left=200,top=100');">
+            <img src="/images/paper/sina.png" />
+          </a>
         </div>
         <div class="logo"><a href="/"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
         <div class="nav">

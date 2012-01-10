@@ -4,7 +4,7 @@ module RenrenHelper
   require 'net/http'
   TOTAL_GRAPH_URL = "https://graph.renren.com"
   GRAPH_RENREN_URL = "graph.renren.com"
-  CALL_BACK_URL = Constant::SERVER_PATH + "/pages/renren_index"
+  CALL_BACK_URL = Constant::SERVER_PATH + "/logins/renren_index"
   ACCESS_TOKEN_URL = "/oauth/token"
   API_RENREN_URL = "http://api.renren.com/restserver.do"
   SESSION_KEY_URL = "/renren_api/session_key"

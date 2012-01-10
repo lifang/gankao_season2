@@ -150,5 +150,3 @@ function tishi_alert(str){
     body.append(div);
     show_flash_div();
 }
-
-

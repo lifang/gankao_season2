@@ -1,0 +1,105 @@
+<paper id='28' total_num='9' total_score='169.0'>
+    <base_info>
+        <title>听力吧</title>
+        <category>2</category>
+        <creater>1</creater>
+        <created_at>2011-09-21 13:10</created_at>
+        <updated_at>2011-10-27 15:43</updated_at>
+        <description>挺好了，别忘记</description>
+        <category_name>forth_level</category_name>
+    </base_info>
+    <blocks>
+        <block id='4' start_time='' time='' total_num='2' total_score='145'>
+            <base_info>
+                <title>reading comprehension</title>
+                <description>欢迎大家来赵亮的微记录咖啡屋</description>
+            </base_info>
+            <problems>
+                <problem id='76' score='145' types='6'>
+                    <title>The motivation for  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_1&quot;&gt;____________&lt;/font&gt; starting Project Euler, and its continuation, is to provide a platform for  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_2&quot;&gt;____________&lt;/font&gt;  the inquiring mind  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_3&quot;&gt;____________&lt;/font&gt;  to delve into unfamiliar areas and  &lt;font color=&quot;blue&quot;  id=&quot;problem_x_dropplace_4&quot;&gt;____________&lt;/font&gt;   learn new concepts in a fun and recreational context.</title>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='6' id='88' score='145'>
+                            <description>出cccxxxx</description>
+                            <answer>得得得得的是;|;风风光光;|;gggg;|;9999iii</answer>
+                            <analysis>得得得得仿佛腹股沟管呵呵</analysis>
+                            <questionattrs>得得得得的是;-;风风光光;-;gggg;-;vvvhhy;-;9999iii;-;呵呵健健康康;-;卡卡卡卡卡</questionattrs>
+                            <tags> 阅读</tags>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='80' score='0' types='0'>
+                    <title>休息休息</title>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='0' id='92' score='0'>
+                            <answer>ddddd</answer>
+                            <analysis/>
+                            <questionattrs>草草草;-;ddddd;-;凤飞飞;-;vvvv</questionattrs>
+                            <tags> 阅读</tags>
+                        </question>
+                    </questions>
+                </problem>
+                <problem>
+                    <part_description part_id='7'>        凤飞飞得得得得v1111111111111111111tttttttttttttttttttttttttttttttttttttttttttttttt</part_description>
+                </problem>
+            </problems>
+        </block>
+        <block id='35' start_time='' time='' total_num='0' total_score='0'>
+            <base_info>
+                <title>111111writing</title>
+                <description/>
+            </base_info>
+            <problems>
+                <problem>
+                    <part_description part_id='1'>        事实上撒啊sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssdfsfsfsfsssssssss</part_description>
+                </problem>
+            </problems>
+        </block>
+        <block id='2' start_time='' time='' total_num='7' total_score='24.0'>
+            <base_info>
+                <title>1234343reading comprehension</title>
+                <description/>
+            </base_info>
+            <problems>
+                <problem id='83' score='13.0' types='0'><title>得得失失</title><category>2</category><questions><question correct_type='0' id='93' score='13.0'><answer>ddddd的</answer><analysis/><questionattrs>第十三;-;ddddd;-;ddddd的;-;大大方方</questionattrs><tags/></question></questions></problem><problem id='77' score='0' types='6'>
+                    <title>The motivation for  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_1&quot;&gt;____________&lt;/font&gt; starting Project Euler, and its continuation, is to provide a platform for  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_2&quot;&gt;____________&lt;/font&gt;  the inquiring mind  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_3&quot;&gt;____________&lt;/font&gt;  to delve into unfamiliar areas and  &lt;font color=&quot;blue&quot;  id=&quot;problem_x_dropplace_4&quot;&gt;____________&lt;/font&gt;   learn new concepts in a fun and recreational context.</title>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='1' id='89' score='0'>
+                            <answer>gfhf;|;hhj;|;kkkkk;|;hhh</answer>
+                            <analysis/>
+                            <questionattrs>gfhf;-;hhj;-;kkkkk;-;hhh</questionattrs>
+                            <tags> 快速阅读</tags>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='78' score='0' types='6'>
+                    <title>The motivation for  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_1&quot;&gt;____________&lt;/font&gt; starting Project Euler, and its continuation, is to provide a platform for  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_2&quot;&gt;____________&lt;/font&gt;  the inquiring mind  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_3&quot;&gt;____________&lt;/font&gt;  to delve into unfamiliar areas and  &lt;font color=&quot;blue&quot;  id=&quot;problem_x_dropplace_4&quot;&gt;____________&lt;/font&gt;   learn new concepts in a fun and recreational context.</title>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='6' id='90' score='0'>
+                            <answer>我;|;你;|;他;|;它</answer>
+                            <analysis/>
+                            <questionattrs>我;-;你;-;他;-;它;-;忘记;-;是谁</questionattrs>
+                            <tags> 快速阅读</tags>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='79' score='0' types='6'>
+                    <title>经济将及时The motivation for  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_1&quot;&gt;____________&lt;/font&gt; starting Project Euler, and its continuation, is to provide a platform for  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_2&quot;&gt;____________&lt;/font&gt;  the inquiring mind  &lt;font color=&quot;blue&quot; id=&quot;problem_x_dropplace_3&quot;&gt;____________&lt;/font&gt;  to delve into unfamiliar areas and  &lt;font color=&quot;blue&quot;  id=&quot;problem_x_dropplace_4&quot;&gt;____________&lt;/font&gt;   learn new concepts in a fun and recreational context.</title>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='6' id='91' score='0'>
+                            <answer>得到的是实施;|;反反复复;|;丰富嘎嘎嘎;|;古古怪怪规划和</answer>
+                            <analysis/>
+                            <questionattrs>得到的是实施;-;反反复复;-;丰富嘎嘎嘎;-;古古怪怪规划和;-;空间看看;-;卡卡卡卡就</questionattrs>
+                            <tags> 快速阅读</tags>
+                        </question>
+                    </questions>
+                </problem>
+            <problem id='84' score='11.0' types='4'><title>r凤飞飞读的吧</title><category>2</category><questions><question correct_type='1' id='95' score='1.0'><description>反反复复</description><answer>风光凤飞飞</answer><questionattrs>风光凤飞飞;-;发反反复复;-;丰富丰富更;-;反反复复的</questionattrs><tags/></question><question correct_type='1' id='94' score='10.0'><description>试试撒</description><answer>斤斤计较;|;将卡卡卡</answer><questionattrs>发的方法;-;呵呵呵;-;斤斤计较;-;将卡卡卡</questionattrs><tags/></question><question correct_type='2' id='96' score='0.0'><description>得得得得试试</description><answer>1</answer><questionattrs/><tags/></question></questions></problem></problems>
+        </block>
+    </blocks>
+    <problem_ids/>
+</paper>

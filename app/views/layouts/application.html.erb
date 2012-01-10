@@ -5,7 +5,12 @@
     <title>赶考-英语真题练习网站</title>
     <%= stylesheet_link_tag    "style" %>
     <%= stylesheet_link_tag    "public" %>
+<<<<<<< HEAD
     <%= javascript_include_tag "application.js" %>
+=======
+    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "/assets/main.js" %>
+>>>>>>> aded16ad4f00a184759178c2a275e18c4f368799
     <%= csrf_meta_tags %>
     <!--[if IE 6]>
     <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
@@ -24,6 +29,7 @@
       <%= render :partial => "/common/flash_div"  %>
       <div class="head">
         <div class="head_info">
+
           <div class="h_user"><a href="#" class="h_email email_u">邮件</a><a href="#">yesen(试用剩10天)</a>|<a href="#">退出</a>
             <div class="email_tab" style="display: none; ">
               <ul>
