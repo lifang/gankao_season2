@@ -60,6 +60,7 @@ function click_prev_problem(){
     }
 }
 
+
 last_opened_question = null;
 //初始化显示、隐藏小题功能
 $(function(){  
@@ -88,10 +89,6 @@ $(function(){
             last_opened_question = $(this);
         }
     })
-//    //题面内大题取消此功能
-//    for(var i=0;i<unbind_arr.length;i++){
-//        $(".pro_qu_t_"+unbind_arr[i]).unbind("click");
-//    }
 })
 
 //题面后小题列表改变颜色
@@ -251,22 +248,22 @@ function change_display_answer(correct_type,answer){
     return answer
 }
 
-////取消默认事件
-//function cancel_event(){
+//防止冒泡
+//function stop_bubble(){
 //    $(function(){
 //        var e = getEvent();
 //        if (window.event) {
-//            e.returnValue=false;
+//            //e.returnValue=false;
 //            e.cancelBubble=true;
 //        }else{
-//            e.preventDefault();
+//            //e.preventDefault();
 //            e.stopPropagation();
 //        }
 //    }
 //    );
 //}
-//
-////在火狐和Ie下取event事件
+
+//在火狐和Ie下取event事件
 //function getEvent(){
 //    if(window.event){
 //        return window.event;
@@ -289,6 +286,10 @@ function change_display_answer(correct_type,answer){
 
 //核对小题
 function check_question(question_type,correct_type,attrs,problem_index,question_index){
+    if($("#exam_user_answer_"+problem_index+"_"+question_index).val()==""){
+        tishi_alert("请做题后再核对");
+        return false;
+    }
     $("#display_answer_"+problem_index+"_"+question_index).empty();
     $("#display_analysis_"+problem_index+"_"+question_index).empty();
     var answer = answers[problem_index][question_index].answer;

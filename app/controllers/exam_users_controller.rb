@@ -2,7 +2,6 @@
 class ExamUsersController < ApplicationController
   layout "exam_user"
   
-
   def show
     #读取试题
     begin
@@ -118,7 +117,7 @@ class ExamUsersController < ApplicationController
     manage_element(question,{},{"question_type"=>params[:question_type], "correct_type"=>params[:correct_type]})
     write_xml(doc, url)
     #更新action_logs , total_num+1
-    log = ActionLog.find_by_sql("select * from action_logs where user_id=#{cookies[:user_id]} and types=#{ActionLog::TYPES[:PRACTICE]} and category_id=#{params[:category_id]}")[0]
+    log = ActionLog.find_by_sql("select * from action_logs where user_id=#{cookies[:user_id]} and types=#{ActionLog::TYPES[:PRACTICE]} and category_id=#{params[:category_id]} and TO_DAYS(NOW())=TO_DAYS(created_at)")[0]
     log = ActionLog.create(:user_id=>cookies[:user_id],:types=>ActionLog::TYPES[:PRACTICE],:category_id=>params[:category_id],:total_num=>0) unless log
     log.update_attribute("total_num",log.total_num+1)
     respond_to do |format|
@@ -134,11 +133,13 @@ class ExamUsersController < ApplicationController
     f=File.new(url,"w+")
     f.write("#{sheet_outline.force_encoding('UTF-8')}")
     f.close
+    ExamUser.find(params[:id]).update_attribute("is_submited",false)
     redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}"
   end
 
   #改变答卷状态（即做完了最后一题）
   def ajax_change_status
+    ExamUser.find(params[:id]).update_attribute("is_submited",true)
     url=params[:sheet_url]
     doc = get_doc(url)
     doc.attributes["status"] = "1"

@@ -1,6 +1,7 @@
 <%= javascript_include_tag "#{@answer_js_url}" %>
+<% category_id = params[:category].nil? ? '2' : params[:category] %>
 <script type="text/javascript" >
-  category = '<%= params[:category] %>';
+  category = '<%= category_id %>';
   init_problem = '<%= @sheet.attributes["init"] %>';
   init_exam_user_id ='<%= params[:id] %>';
   sheet_url = '<%= @sheet_url %>';
@@ -57,7 +58,8 @@
 <script type="text/javascript">
   $("#jquery_jplayer_1").jPlayer({
     swfPath: "/javascripts/jplayer",
-    supplied: "mp3,m4a,oga"
+    supplied: "mp3",
+    preload: "none"
   });
 </script>
 <% constant_question_type = {"0"=>"单选题","1"=>"多选题","2"=>"判断题","3"=>"填空题","5"=>"简答题"} %>
@@ -70,7 +72,7 @@
       <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
       <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1)" name="缩小">缩小</a></span>
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1)" name="放大">放大</a></span>
-      <span class="icon_return"><a href="javascript:void(0);" class="tooltip" name="返回">返回</a></span>
+      <span class="icon_return"><a href="/similarities?category=<%= category_id %>" class="tooltip" name="返回">返回</a></span>
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo();">重做</a></span>
   </div>
@@ -93,14 +95,14 @@
               <% audio_title_arr = problem["title"].nil? ? [] : problem["title"].split("((mp3))"); audio_src = audio_title_arr[1]; %>
               <% if audio_src != nil %>
                 <% audio_title_arr[1]="<input type='button' style='display:none;' id='jplayer_play_button_#{problem_index}' value='更新音频' />" %>
-               <script type='text/javascript'>
-                //设置可拖动元素，排序，以及绑定音频播放事件
-                $(function(){
-                  $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
-                    clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
-                  });
-                })
-              </script>
+                <script type='text/javascript'>
+                  //设置可拖动元素，排序，以及绑定音频播放事件
+                  $(function(){
+                    $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
+                      clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
+                    });
+                  })
+                </script>
               <% end %>
               <% resource_problem_title = audio_title_arr.join("") %>
               <%= resource_problem_title.html_safe %>
@@ -223,9 +225,9 @@
                 elsif question["correct_type"]=="3";
                   element_str += "<input class='input_tk' type='text' id='input_inner_answer_#{problem_index}_#{sign_index}' onchange='javascript:do_inner_question(3,#{problem_index},#{sign_index});'></input>";
                 end;
-                element_str += "<button style='display:none;' id='refer_btn_#{problem_index}_#{sign_index}' >更新</button>"
                 element_str += "<span class='button_span' id='hedui_btn_#{problem_index}_#{sign_index}' style='display:none;' ><button class='button_tk'>核对</button></span>";
                 element_str += "</span>";
+                element_str += "<button style='display:none;' id='refer_btn_#{problem_index}_#{sign_index}' >更新</button>"
                 result_title_arr << element_str << source_title_arr[sign_index+1]; %>
                 <script type="text/javascript" >
                   $(function(){
@@ -373,19 +375,19 @@
 
 
 <script type="text/javascript">
+  //还原用户之前操作
+  $(function(){
+<% @sheet.each_element do |ele| %>
+      $("#refer_btn<%= ele.name %>").trigger("click");
+<% end %>
+  })
+
   //初始化大题
   $(function(){
     if($("#drag_tk_"+init_problem).height()){
       $("#drag_tk_box_"+init_problem).css("height",$("#drag_tk_"+init_problem).height()+20);
     }
     $("#jplayer_play_button_"+init_problem).trigger("click");
-  })
-
-  //还原用户之前操作
-  $(function(){
-<% @sheet.each_element do |ele| %>
-      $("#refer_btn<%= ele.name %>").trigger("click");
-<% end %>
   })
 </script>
 

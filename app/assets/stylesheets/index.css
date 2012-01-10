@@ -1,0 +1,85 @@
+@charset "utf-8";
+* { padding: 0; margin: 0;}
+body { font-family: "宋体", "微软雅黑", Arial; font-size: 12px; color: #333; background: #FFF;}
+a { text-decoration: none; color: #333;}
+button { cursor: pointer;}
+ul { list-style: none;}
+img { border:none;}
+.clear { clear: both;}
+.red { color: #F00;}
+.border_radius {
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	-ms-border-radius: 5px; 
+	-o-border-radius: 5px; 
+	border-radius: 5px;
+}
+.xx_x { cursor: pointer; float: right;}
+.t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none;}
+.wrap {}
+
+.head { height: 50px; background: url(/assets/_bg.png) repeat;}
+.head_box { width: 960px; height: 50px; margin: 0 auto; overflow: hidden;}
+.logo { width: 110px; height: 50px; margin-left: 10px;}
+.login { float: right; height: 22px; color: #FFF; margin: 14px 10px 0 0;}
+.login li { padding: 0 5px; height: 22px; line-height: 22px; float: left; display: inline;}
+
+.main { width: 960px; padding: 20px 0; margin: 0 auto; overflow: hidden;}
+
+.js_banner { height: 280px; font-family: "微软雅黑";}
+.nav_btn {
+	z-index: 4;
+	padding: 160px 0 0 15px;
+	width: 400px;
+	overflow: hidden;
+	position: absolute;
+}
+.nav_btn a { margin: 0 20px;}
+.scroll_play { width: 960px; height: 280px;}
+.scroll_text {
+	z-index: 5;
+	padding: 30px 0 0 30px;
+	width: 360px;
+	font-size: 14px;
+	font-weight: bold;
+	color:#fff;
+	overflow: hidden;
+	position: absolute;
+}
+.scroll_num {
+	width: 145px; 
+	height: 30px;
+	display: block;
+	margin: 0 auto;
+}
+.scroll_num a {
+	width: 17px;
+	height: 17px;
+	float: left;
+	overflow: hidden;
+	line-height: 999px;
+	cursor: pointer;
+	background: url(/assets/scroll_num_a.png) no-repeat;
+	margin: 6px;
+}
+.scroll_show { width: 960px; height: 250px; overflow: hidden;}
+.scroll_show img { width: 960px; height: 250px;}
+
+.m_con { border-top:1px #ebebeb solid; border-bottom:1px #ebebeb solid; overflow: hidden; margin: 10px 0; height: 135px;}
+.m_con div { width: 210px; _width: 208px; float: left; padding: 10px; margin: 0 5px;}
+.m_con div p { line-height: 24px;}
+.m_con div h1 { height: 30px; line-height: 30px; font-size: 14px; text-align: center;}
+.h_pic1 { background: url(/assets/h_pic1.png) no-repeat 20px 0;}
+.h_pic2 { background: url(/assets/h_pic2.png) no-repeat 20px 0;}
+.h_pic3 { background: url(/assets/h_pic3.png) no-repeat 20px 0;}
+.h_pic4 { background: url(/assets/h_pic4.png) no-repeat 20px 0;}
+
+.tuiguang { margin: 15px 0; overflow: hidden; float: left; _display: inline;}
+.tuiguang div { width: 249px; height: 84px; float: left; margin: 0 4px;}
+
+.gz_weibo { float: left; margin: 15px 0;}
+.gz_weibo a { width: 176px; height: 36px; display: block; margin: 5px 0;}
+
+.foot { border-top: 1px #CCC solid; padding: 10px 0; margin-top: 10px;}
+.foot p { text-align: center; line-height: 24px; color: #999;}
+.foot p a { color: #999;}

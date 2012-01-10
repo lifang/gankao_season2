@@ -5,7 +5,7 @@
     <title>赶考-英语真题练习网站</title>
     <%= stylesheet_link_tag    "style" %>
     <%= stylesheet_link_tag    "public" %>
-    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "application.js" %>
     <%= csrf_meta_tags %>
     <!--[if IE 6]>
     <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
@@ -24,21 +24,22 @@
       <%= render :partial => "/common/flash_div"  %>
       <div class="head">
         <div class="head_info">
-          <div class="h_user"><a href="#" class="h_email email_u">邮件</a> <a href="#">yesen</a>|<a href="#">退出</a></div>
-          <div class="h_banner"><a href="#" ><img src="/assets/banner.png" /></a></div>
- <!--         <div class="h_weibo"> <a href="/logins/renren_like" target="_blank" ><img src="/assets/icon_renren.png" /></a><a href="#" onclick ="javascript:window.open('/logins/sina_login', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/icon_sina.png" /></a></div>
-          <a href="#" onclick ="javascript:window.open('/logins/login_from_qq', '_blank', 'height=500,width=569,left=300,top=100');"><img src="/assets/qq.png" /></a>
-          <a href="#" onclick ="javascript:window.open('/logins/renren_login', '_blank', 'height=500,width=800,left=200,top=100');">
-            <img src="/assets/renren.png" />
-          </a>
-          <a href="#" onclick ="javascript:window.open('/logins/sina_login', '_blank', 'height=500,width=800,left=200,top=100');">
-            <img src="/assets/sina.png" />
-          </a>   -->
+          <div class="h_user"><a href="#" class="h_email email_u">邮件</a><a href="#">yesen(试用剩10天)</a>|<a href="#">退出</a>
+            <div class="email_tab" style="display: none; ">
+              <ul>
+                <li><a href="#">收件箱:<span class="orange">10</span></a></li>
+                <li><a href="#">通&nbsp;&nbsp;知:<span class="orange">10</span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="h_user" style="display: none;"><a href="#">登录</a></div>
+          <div class="h_banner"><a href="#"><img src="/assets/banner.png" /></a></div>
+
         </div>
-        <div class="logo"><a href="#"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
+        <div class="logo"><a href="/"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
         <div class="nav">
           <ul>
-            <li><a href="#" class="hover">真题</a></li>
+            <li><a href="/similarities?category=<%= params[:category].nil? ? 2 : params[:category] %>" class="hover">真题</a></li>
             <li><a href="#">专题</a></li>
             <li><a href="#">词汇</a></li>
             <li><a href="#">模考</a></li>
@@ -46,6 +47,7 @@
             <li><a href="#">收藏</a></li>
           </ul>
         </div>
+        <div class="clear"></div>
       </div>
       <div class="clear"></div>
       <div class="main_Div">

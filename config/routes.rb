@@ -12,6 +12,9 @@ GankaoSeason2::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+
+  get "/gankao/index"
+
   resources :collections do
     collection do
       post :load_words,:write_file
@@ -95,7 +98,7 @@ GankaoSeason2::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+   root :to => 'gankao#index'
 
   # See how all your routes lay out with "rake routes"
 
