@@ -1,12 +1,19 @@
 # encoding: utf-8
 class SimulationsController < ApplicationController
-  layout "application", :except => 'show'
+  layout "application", :except => ['show', 'show_result']
   def index
     sql = "select e.* from examinations e
           where e.is_published = #{Examination::IS_PUBLISHED[:ALREADY]}
           and e.types = #{Examination::TYPES[:SIMULATION]} and e.status != #{Examination::STATUS[:CLOSED]}
           and e.category_id = ? "
     @simulations = Examination.find_by_sql([sql, params[:category].to_i])
+    examination_ids = []
+    @exam_user_hash = {}
+    @simulations.each { |sim| examination_ids << sim.id }
+    exam_users = ExamUser.find_by_sql(
+      ["select eu.id, eu.examination_id, eu.is_submited, eu.total_score from exam_users eu where eu.user_id = ?
+      and eu.examination_id in (?)", cookies[:user_id].to_i, examination_ids])
+    exam_users.each { |eu| @exam_user_hash[eu.examination_id] = eu }
   end
 
   def do_exam
@@ -41,6 +48,24 @@ class SimulationsController < ApplicationController
     end
   end
 
+  def show_result
+    @exam_user = ExamUser.find_by_id(params[:id].to_i)
+    if @exam_user
+      @examination = Examination.find_by_id(@exam_user.examination_id)
+      if @exam_user.paper_id
+        @paper_url = "#{Constant::BACK_SERVER_PATH}#{@exam_user.paper.paper_js_url}"
+        @answer_url = @paper_url.gsub("paperjs", "answerjs")
+        render :layout => "result"
+      else
+        flash[:warn] = "试卷加载错误，请您重新尝试。"
+        redirect_to "/simulations?category=#{@examination.category_id}"
+      end
+    else
+      flash[:warn] = "试卷加载错误，请您重新尝试。"
+      redirect_to "/simulations?category=#{@examination.category_id}"
+    end
+  end
+
   def get_exam_time
     text = return_exam_time(params[:id].to_i, cookies[:user_id].to_i)
     render :text => text
@@ -64,7 +89,6 @@ class SimulationsController < ApplicationController
   end
 
   def five_min_save
-    puts "five_min_save===============five_min_save===================five_min_save"
     unless params[:arr].nil? or params[:arr] == ""
       @exam_user = ExamUser.find_by_examination_id_and_user_id(params[:id].to_i, cookies[:user_id].to_i)
       questions = params[:arr].split(",")
@@ -75,9 +99,7 @@ class SimulationsController < ApplicationController
       str=@exam_user.update_answer_url(@exam_user.open_xml, question_hash)
       @exam_user.generate_answer_sheet_url(str, "result")
     end
-    render :update do |page|
-      page.replace_html "remote_div" , :text => ""
-    end
+    render :text => ""
   end
 
   def save_result
@@ -91,6 +113,15 @@ class SimulationsController < ApplicationController
       @exam_user.generate_answer_sheet_url(
         @exam_user.update_answer_url(@exam_user.open_xml, question_hash, params[:block_ids]), "result")
       @exam_user.submited!
+      action_log = ActionLog.find(:first, 
+        :conditions => ["category_id = ? and types = ? and TO_DAYS(NOW())-TO_DAYS(created_at)=0 and user_id = ?",
+          params[:category_id].to_i, ActionLog::TYPES[:EXAM], cookies[:user_id].to_i])
+      if action_log
+        action_log.increment!(:total_num, 1)
+      else
+        ActionLog.create(:user_id => cookies[:user_id].to_i, :types => ActionLog::TYPES[:EXAM],
+          :category_id => params[:category_id].to_i, :created_at => Time.now.to_date, :total_num => 1)
+      end
       flash[:notice] = "您的试卷已经成功提交。"
       render :layout => "simulations"
     else

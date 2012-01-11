@@ -3,9 +3,19 @@
   <ul>
     <% unless @simulations.blank? %>
       <% @simulations.each do |simulation| %>
-        <li><a href="/simulations/<%= simulation.id %>/do_exam" target="_blank" >
-            <h2><%= simulation.title %></h2>
-          </a>
+        <li>
+          <h2><%= simulation.title %>
+            <% if @exam_user_hash[simulation.id].nil? or @exam_user_hash[simulation.id].is_submited == false %>
+              <a href="/simulations/<%= simulation.id %>/do_exam" target="_blank" >(开始考试)</a>
+            <% elsif @exam_user_hash[simulation.id].total_score.nil?  %>
+              (阅卷中)
+            <% elsif %>
+              <a href="/simulations/<%= @exam_user_hash[simulation.id].id %>/show_result" target="_blank" >
+                (<%= @exam_user_hash[simulation.id].total_score %>)
+              </a>
+            <% end %>
+          </h2>
+
         </li>
       <% end %>
     <% else %>

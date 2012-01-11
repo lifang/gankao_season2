@@ -49,7 +49,7 @@ GankaoSeason2::Application.routes.draw do
   resources :specials
   resources :simulations do
     member do
-      get 'do_exam'
+      get 'do_exam', 'show_result'
       post 'get_exam_time', 'five_min_save', 'save_result', 'cancel_exam'
     end
   end
