@@ -80,7 +80,7 @@ $(function(){
             $(this).parent().parent().removeClass("p_q_line");
             $(this).parent().removeClass("p_q_line");
             $(this).removeClass("pro_qu_h");
-            change_color(null,this);
+           // change_color(null,this);
             if(last_opened_question!=null){
                 last_opened_question.parent().find(".pro_qu_div").hide();
                 last_opened_question.parent().parent().addClass("p_q_line");
@@ -96,12 +96,12 @@ $(function(){
 //题面后小题列表改变颜色
 function change_color(value,ele){
     if(value=="1"){
-        $(ele).css("background","#d2fddd");
-        $(ele).closest(".pro_question_list").css("background","#d2fddd");
+        $(ele).css("background","#EEFFEE");
+        $(ele).closest(".pro_question_list").css("background","#EEFFEE");
     }else{
         if(value=="0"){
-            $(ele).css("background","#ffd2d2");
-            $(ele).closest(".pro_question_list").css("background","#ffd2d2");
+            $(ele).css("background","#FFEAEA");
+            $(ele).closest(".pro_question_list").css("background","#FFEAEA");
         }else{
             $(ele).css("background","");
             $(ele).closest(".pro_question_list").css("background","");
@@ -158,9 +158,9 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
         $("#red_cuo_"+problem_index+"_"+question_index).hide();
         if(question_type=="1"){
             if(correct_type=="1"){
-                $("#droppable_"+problem_index+"_"+question_index).css("background","#D2FDDD");
+                $("#droppable_"+problem_index+"_"+question_index).css("background","#EEFFEE");
             }else{
-                $("#input_inner_answer_"+problem_index+"_"+question_index).css("background","#D2FDDD");
+                $("#input_inner_answer_"+problem_index+"_"+question_index).css("background","#EEFFEE");
             }
         }
     }else{
@@ -169,9 +169,9 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
         $("#red_cuo_"+problem_index+"_"+question_index).show();
         if(question_type=="1"){
             if(correct_type=="1"){
-                $("#droppable_"+problem_index+"_"+question_index).css("background","#FFD2D2");
+                $("#droppable_"+problem_index+"_"+question_index).css("background","#FFEAEA");
             }else{
-                $("#input_inner_answer_"+problem_index+"_"+question_index).css("background","#FFD2D2");
+                $("#input_inner_answer_"+problem_index+"_"+question_index).css("background","#FFEAEA");
             }
         }
     }
