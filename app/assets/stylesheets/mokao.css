@@ -9,16 +9,16 @@ button { cursor: pointer;}
 .red { color: #F00;}
 .border_radius {
 	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
+	-webkit-border-radius: 5px; 
 	-ms-border-radius: 5px;
 	-o-border-radius: 5px;
 	border-radius: 5px;
 }
-.xx_x { cursor: pointer; float: right;}
+.xx_x { cursor: pointer; position: absolute; top: 5px; right: 5px;}
 .clear { clear: both;}
-.correctRight_bg { background: #dbead5;}
+span.correctRight_bg, div.correctRight_bg, .correctRight_bg { background: #dbead5;}
+span.correctWrong_bg, div.correctWrong_bg, .correctWrong_bg { background: #FFE8E7;}
 .t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none;}
-
 
 
 /*testPaper-----top*/
@@ -38,6 +38,7 @@ button { cursor: pointer;}
 .tp_top_box div { float: left; width: 320px;}
 .paper_name { display: inline;}
 .timer { text-align: center; font-size: 16px; background: url(/assets/timerIcon.png) no-repeat 70px center;}
+.fraction { text-align: center; font-size: 16px;}
 .paper_info { text-align: right;}
 
 .paper_info strong { padding: 0 5px;}
@@ -54,7 +55,7 @@ button { cursor: pointer;}
 
 /*tp_left-------------*/
 .tp_left { float: left; width: 690px; display: inline;}
-.part_box { font-size: 13px; overflow: hidden; padding: 5px;}
+.part_box { font-size: 13px; padding: 5px;}
 
 /*大部分*/
 .part_head {padding: 10px; border: 1px #666666 solid; margin: 10px 5px; background: #f4f4f4;}
@@ -75,11 +76,11 @@ button { cursor: pointer;}
 .area_left { width: 5%; float: left; padding-top: 5px; text-align: center;}
 .area_right { width: 95%; float: right;}
 
-.answer_textarea { padding: 5px; width: 95%; height: 180px;}
-.answer_input { padding: 5px;}
+.answer_textarea { padding: 5px; width: 95%; height: 180px; border: 1px solid #E2E2E2;}
+.answer_input { padding: 5px; border: 1px solid #E2E2E2;}
 
-.q_yes { border: 2px #090 solid;}
-.q_no { border: 2px #FF6C00 solid;}
+div.q_yes, span.q_yes, select.q_yes, textarea.q_yes { border: 2px #090 solid;}
+div.q_no, span.q_no, select.q_no, textarea.q_no { border: 2px #FF6C00 solid;}
 
 /*保存答案按钮-----*/
 .p_question_btn { margin-top: 5px; padding-left: 10px;}
@@ -98,11 +99,23 @@ button { cursor: pointer;}
 
 
 /*拖拽题*/
-.span_tk {display: inline-block; height: 18px;}
-.input_tk { height: 23px; line-height: 23px; border: 1px #e2e2e2 solid; float: left;}
-.button_tk { float: left;}
+.span_tk { min-width: 150px; display: inline-block; height: 15px; position: relative;}
+.input_tk { min-width: 148px; height: 22px; line-height: 22px; border: 1px #e2e2e2 solid; float: left;}
+.button_tk { margin: 3px 6px 0 6px;}
+.button_span {
+    position: absolute;
+	left: 0px;
+	top: 25px;
+	z-index:100;
+	display: inline-block;
+	width: 150px;
+	height: 35px;
+    background:  url(/assets/button_span_bg.png) 0 bottom no-repeat;
+}
+.select_tk { min-width: 148px; height: 22px; line-height: 22px; border: 1px #e2e2e2 solid;}
 
-.drag_tk_box {}
+
+.drag_tk_box { z-index:999; position: relative; width: 660px; background: #f7f7f7;}
 .drag_tk {
     padding: 10px;
 	overflow: hidden;
@@ -110,6 +123,17 @@ button { cursor: pointer;}
 
 .drag_tk li { padding: 5px; border: 1px #B9B9B9 solid; background: #F4F4F4; float: left; margin: 5px; cursor:move;}
 .dropOver { color: #999;}
+
+.dragDrop_box {
+	display: inline-block;
+	float: left;
+	min-width: 148px;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	border: 1px #e2e2e2 solid;
+	background: #FFF;
+}
 
 /*审查-----*/
 .review_btn {font-family: "微软雅黑"; text-align: right;}
@@ -129,16 +153,19 @@ button { cursor: pointer;}
 .first_title ul { padding: 5px 0 0 0; overflow: hidden;}
 
 /*解析*/
-.jiexi { background: #FFFCE9; border: 1px solid #EBDEBC; padding: 5px; margin: 10px 0; line-height: 24px; overflow: hidden;}
+.jiexi { background: #FFFCE9; border: 1px solid #EBDEBC; padding: 5px; margin: 10px 0; line-height: 24px; overflow: hidden; position: relative;}
 
 
 /*操作提示弹出层---*/
-.tishi_tab { width: 288px; padding: 20px; background: #FFF; border: 5px #666 solid; position: absolute; display: none;}
+.tishi_tab { width: 288px; padding: 20px; background: #FFF; border: 5px #666 solid; position: absolute; display: none; z-index: 9999;}
 .tishi_tab p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #333;}
+
+/*操作提示弹出层---*/
+.tishi_tab0 { width: 288px; padding: 20px; background: #FFF; border: 5px #666 solid; position: absolute; display: none; z-index: 9999;}
+.tishi_tab0 p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #333;}
 
 /*提交错误弹出层-----*/
 .upErrorTo_tab { width: 300px; padding: 10px; background: #FFF; border: 5px #333 solid; display: none; position: absolute;}
 .upErrorTo_tab li { height: 24px; line-height: 24px; color: #333; display: block; text-decoration: none;}
 .upErrorTo_tab li input { margin-right: 5px;}
 .upErrorTo_tab textarea { width: 100%; margin: 5px 0;}
-

@@ -41,7 +41,16 @@ function checkspace(checkstr){
 
 //弹出不自动关闭的提示框
 function show_flash_not_close() {
-    (function(){
-        generate_flash_div(".white_tab_box");
-    })(jQuery)
+    generate_flash_div(".tishi_tab0");
+}
+
+//弹出错误提示框
+function tishi_alert(str){
+    var div = create_element("div",null,"flash_notice","tishi_tab",null,null);
+    var p = create_element("p","","","","innerHTML");
+    p.innerHTML = str;
+    div.appendChild(p);
+    var body = jQuery("body");
+    body.append(div);
+    show_flash_div();
 }

@@ -9,6 +9,7 @@
       <input type="hidden" name="paper_id" id="paper_id" value="<%= @exam_user.paper_id %>"/>
       <input type="hidden" name="all_quesiton_ids" id="all_question_ids" value=""/>
       <input type="hidden" name="problem_ids" id="problem_ids" value=""/>
+      <input type="hidden" name="category_id" id="category_id" value="<%= @examination.category_id %>"/>
       <input type="hidden" name="examination_id" id="examination_id" value="<%= @examination.id %>"/>
       <input type="hidden" name="user_id" id="user_id" value="<%= cookies[:user_id].to_i %>"/>
       <div class="paper_name">
