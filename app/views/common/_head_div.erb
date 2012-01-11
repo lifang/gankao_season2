@@ -12,7 +12,7 @@
           </ul>
         </div>
       <% else %>
-        <a href="/logins">登录</a>
+        <a href="/logins?last_url=<%= request.url %>">登录</a>
       <% end %>
 
     </div>
