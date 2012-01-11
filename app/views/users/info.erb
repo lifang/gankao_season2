@@ -20,22 +20,36 @@
           <% end  %>
         </div>
       <% else %>
-        <div class="record_none">暂时没有消费记录</div>
+        <div class="record_none">暂时没有邮件</div>
       <% end %>
-
-
       <div class="sabrosus"><span class="disabled"> < </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2"> > </a></div>
-
     </div>
   </div>
   <div style="display:none;">
-    2222222222222
+    <div class="mess_top">
+      <span><input name="" type="checkbox" value="" /> 全选</span>
+      <span><input name="" type="checkbox" value="" /> 反选</span>
+      <span><button class="shanchu">删除</button></span>
+    </div>
+    <div class="mess_con">
+      <% unless @mess.blank? %>
+        <div class="mess_list">
+          <% @mess.each do |mess| %>
+            <div class="mess_title"><input name="email" type="checkbox" value="" /> <a href="#" onclick="javascript:$('.mess_tab_con').html($(this).html());show_div('.mess_tab')"><%= mess.description %></a></div>
+            <div class="mess_time"><%= mess.created_at.strftime("%Y-%m-%d") %></div>
+          <% end  %>
+        </div>
+      <% else %>
+        <div class="record_none">暂时没有消息</div>
+      <% end %>
+      <div class="sabrosus"><span class="disabled"> < </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2"> > </a></div>
+    </div>
   </div>
 </div>
 
 <div class="mess_tab border_radius" style="display:none">
   <div class="mt_title"><span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('.mess_tab').css('display','none')"/></span></div>
   <div class="mess_tab_con">
-   
+
   </div>
 </div>
