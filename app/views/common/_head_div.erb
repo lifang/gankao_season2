@@ -16,7 +16,7 @@
   <div class="nav">
     <ul>
       <li><a href="/similarities?category=<%= category_id %>" <% if controller.controller_name=="similarities" || controller.controller_name=="exam_users" %> class="hover" <% end %> >真题</a></li>
-      <li><a href="specials?category=<%= category_id %>" <% if controller.controller_name=="specials" %> class="hover" <% end %> >专题</a></li>
+      <li><a href="/specials?category=<%= category_id %>" <% if controller.controller_name=="specials" %> class="hover" <% end %> >专题</a></li>
       <li><a href="/words?category=<%= category_id %>"       <% if controller.controller_name=="words" %> class="hover" <% end %> >词汇</a></li>
       <li><a href="/simulations?category=<%= category_id %>" <% if controller.controller_name=="simulations" %> class="hover" <% end %> >模考</a></li>
       <li><a href="/study_plans?category=<%= category_id %>" <% if controller.controller_name=="study_plans" %> class="hover" <% end %> >计划</a></li>
