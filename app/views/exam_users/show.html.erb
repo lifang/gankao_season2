@@ -1,3 +1,6 @@
+<% category_id = params[:category].nil? ? '2' : params[:category] %>
+<%= javascript_include_tag "/assets/main.js" %>
+
 <%= stylesheet_link_tag "/assets/jplayer.blue.monday.css" %>
 <%= javascript_include_tag "/assets/cookie.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.core.js" %>
@@ -7,13 +10,13 @@
 <%= javascript_include_tag "/assets/jquery.ui.droppable.js" %>
 <%= javascript_include_tag '/assets/jplayer/jquery.jplayer.min.js' %>
 <%= javascript_include_tag "#{@answer_js_url}" %>
-
-<% category_id = params[:category].nil? ? '2' : params[:category] %>
 <script type="text/javascript" >
   category = '<%= category_id %>';
   init_problem = '<%= @sheet.attributes["init"] %>';
   init_exam_user_id ='<%= params[:id] %>';
+  init_paper_id = '<%= @paper_id %>';
   sheet_url = '<%= @sheet_url %>';
+  
   //将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
   function transform_array(object){
     var result = [];
@@ -76,22 +79,23 @@
   <h1 class="ex_paper_h"><%= @paper["base_info"]["title"] %></h1>
   <div class="icon_func">
     <div class="float_right">
-      <span class="icon_collection"><a href="javascript:void(0);" class="tooltip hover" name="收藏">收藏</a></span>
+      <span class="icon_collection"><a href="javascript:void(0);" class="tooltip hover" name="收藏" onclick="javascript:$(function(){add_collect(init_problem)});">收藏</a></span>
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
       <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
       <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1)" name="缩小">缩小</a></span>
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1)" name="放大">放大</a></span>
-      <span class="icon_return"><a href="/similarities?category=<%= category_id %>" class="tooltip" name="返回">返回</a></span>
+      <span class="icon_return"><a href="/<%= (params["type"].nil?||(params["type"]!="similarities"&&params["type"]!="specials")) ? "similarities" : params["type"]  %>?category=<%= category_id %>" class="tooltip" name="返回">返回</a></span>
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo();">重做</a></span>
   </div>
 </div>
-<% blocks = (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : @paper["blocks"]["block"].nil? ? [] : [@paper["blocks"]["block"]] %>
+<% blocks = @paper["blocks"]["block"] %>
 <% problem_index=-1 ; global_question_index=-1 ; blocks.each do |block| %>
-  <% problems = (block["problems"].nil? || block["problems"]["problem"].nil?) ? [] : (block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]] %>
+  <% problems = block["problems"]["problem"] %>
   <% problems.each do |problem| ; problem_index+=1; %>
     <% if problem["question_type"]=="0" %>
       <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
+        <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem %>" />
         <div class="m_side m_problem_bg">
           <div class="problem_box">
             <div class="problem_title">
@@ -120,7 +124,7 @@
         </div>
         <div class="m_side">
           <div class="problem_box">
-            <% questions = (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : problem["questions"]["question"].nil? ? [] : [problem["questions"]["question"]] %>
+            <% questions = problem["questions"]["question"] %>
             <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line">
                 <div class="pql_left">
@@ -131,7 +135,7 @@
                     <div class="question_tx"><%= constant_question_type[question["correct_type"]] %></div>
                     <div class="pro_t_con"><%= question["description"] %></div>
                   </div>
-                  <input type="hidden" id="exam_user_answer<%= "_#{problem_index}_#{question_index}" %>" class="exam_user_answer" value="<%= @sheet.elements["_#{problem_index}_#{question_index}"].text if @sheet.elements["_#{problem_index}_#{question_index}"] %>" />
+                  <input type="hidden" id="exam_user_answer<%= "_#{problem_index}_#{question_index}" %>" class="exam_user_answer exam_user_answer<%= "_#{problem_index}" %>" value="<%= @sheet.elements["_#{problem_index}_#{question_index}"].text if @sheet.elements["_#{problem_index}_#{question_index}"] %>" />
                   <input type="hidden" id="pass_check<%= "_#{problem_index}_#{question_index}" %>" class="pass_check" />
                   <div class="red_cuo" id="red_cuo<%= "_#{problem_index}_#{question_index}" %>" style="display:none;"><img src="/assets/red_cuo.png"/>
                   </div>
@@ -209,9 +213,7 @@
       </div>
     <% else %>
       <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
-        <script type="text/javascript">
-          //unbind_arr.push(<%= problem_index %>);
-        </script>
+        <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem %>" />
         <div class="m_side m_problem_bg">
           <div class="problem_box">
             <div class="problem_title">
@@ -404,6 +406,19 @@
     $(selector).append($("#jp_container_1"));
     $("#jquery_jplayer_1").jPlayer("setMedia", {
       mp3: audio_src
+    });
+  }
+  
+  function add_collect(problem_index){
+    $.ajax({
+      type: "POST",
+      url: "/exam_users/ajax_add_collect.json",
+      dataType: "json",
+      data : {
+        "paper_id" : init_paper_id,
+        "problem" : $("#problem_json_"+problem_index).val(),
+        "addition" : answers[problem_index]
+      }
     });
   }
 </script>

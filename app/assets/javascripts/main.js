@@ -51,15 +51,6 @@ $(function(){
     });
 })
 
-
-
-//填空拖拽-------
-$(function(){
-    var drag_tk_height = $(".drag_tk").height();
-    $(".drag_tk_box").css("height",drag_tk_height);
-})
-
-
 //鼠标经过邮件图标
 $(function(){
     if ($(".h_email")[0] != null && $(".h_email")[0] != undefined) {
@@ -142,7 +133,8 @@ function create_element(element, name, id, class_name, type, ele_flag) {
 
 //弹出错误提示框
 function tishi_alert(str){
-    var div = create_element("div",null,"flash_notice","tishi_tab",null,null);
+    var div = create_element("div",null,"flash_notice","tishi_tab border_radius",null,null);
+    div.innerHTML+="<span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/x.gif' /></span>";
     var p = create_element("p","","","","innerHTML");
     p.innerHTML = str;
     div.appendChild(p);
@@ -151,4 +143,8 @@ function tishi_alert(str){
     show_flash_div();
 }
 
+//关闭提示框
+function close_tishi_tab(){
+    $(".tishi_tab").remove();
+}
 

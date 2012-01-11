@@ -6,10 +6,19 @@ class ExamUsersController < ApplicationController
     #读取试题
     begin
       eu = ExamUser.find(params[:id])
-      p = Paper.find(eu.paper_id)
+      @paper_id = eu.paper_id
+      p = Paper.find(@paper_id)
       paper = File.open("#{Constant::BACK_PUBLIC_PATH}#{p.paper_js_url}")
-      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("/paperjs/","/answerjs/")
+      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("paperjs/","answerjs/")
       @paper = (JSON paper.read()[8..-1])["paper"]
+      #组织 @paper
+      @paper["blocks"]["block"] = @paper["blocks"]["block"].nil? ? [] : (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : [@paper["blocks"]["block"]]
+      @paper["blocks"]["block"].each do |block|
+        block["problems"]["problem"] = (block["problems"].nil? || block["problems"]["problem"].nil?) ? [] : (block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]]
+        block["problems"]["problem"].each do |problem|
+          problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]]
+        end
+      end
       #生成考生答卷
       s_url = ExamUser.find(params[:id]).answer_sheet_url
       @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
@@ -89,7 +98,7 @@ class ExamUsersController < ApplicationController
     return outline
   end
   
-  #写文件
+  #创建答卷
   def create_sheet(sheet_outline,exam_user_id)
     dir = "#{Rails.root}/public/sheets"
     Dir.mkdir(dir) unless File.directory?(dir)
@@ -150,4 +159,48 @@ class ExamUsersController < ApplicationController
       }
     end
   end
+
+  
+  def ajax_add_collect
+    #添加收藏
+    f=File.new(create_collection(cookies[:user_id]))
+    
+    
+    puts "paper_id = #{params["paper_id"]}"
+    puts "problem = #{params["problem"]}"
+    #    paper_id = ExamUser.find(params[:exam_user_id]).paper_id
+    #    paper_js_url = Paper.find(paper_id).paper_js_url
+    #    puts "paper_js_url = #{paper_js_url}"
+    #    file = File.open("#{Constant::BACK_PUBLIC_PATH}#{paper_js_url}")
+    #    @paper = (JSON file.read()[8..-1])["paper"]
+    
+    #    puts @paper
+    
+    
+    puts "addition = #{params["addition"]}"
+    
+
+
+    respond_to do |format|
+      format.json {
+        render :json=>""
+      }
+    end
+  end
+
+  #创建收藏文件
+  def create_collection(user_id)
+    dir = "#{Rails.root}/public/collections"
+    Dir.mkdir(dir) unless File.directory?(dir)
+    file_name = "/#{user_id}.js"
+    url = dir + file_name
+    unless File.exist?(url)
+      Collection.find(user_id).update_attribute("collection_url","/collections#{file_name}")
+      f=File.new(url,"w+")
+      f.write("")
+      f.close
+    end
+    return url
+  end
+
 end

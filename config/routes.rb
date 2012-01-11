@@ -47,7 +47,7 @@ GankaoSeason2::Application.routes.draw do
   end
   resources :exam_users do
     collection do
-      post :ajax_load_about_words,:ajax_report_error
+      post :ajax_load_about_words,:ajax_report_error,:ajax_add_collect
     end
     member do
       post :ajax_save_question_answer,:ajax_change_status
@@ -62,7 +62,11 @@ GankaoSeason2::Application.routes.draw do
       get :renren_login,:logout
     end
   end
-  resources :specials
+  resources :specials do
+    member do
+      get :join
+    end
+  end
   resources :simulations do
     member do
       get 'do_exam', 'show_result'
@@ -118,7 +122,7 @@ GankaoSeason2::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-   root :to => 'gankao#index'
+  root :to => 'gankao#index'
 
   # See how all your routes lay out with "rake routes"
 
