@@ -1,6 +1,8 @@
 # encoding: utf-8
 class SimulationsController < ApplicationController
   layout "application", :except => ['show', 'show_result']
+#  before_filter :sign?, :except => "index"
+  
   def index
     sql = "select e.* from examinations e
           where e.is_published = #{Examination::IS_PUBLISHED[:ALREADY]}
