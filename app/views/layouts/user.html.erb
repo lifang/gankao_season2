@@ -24,7 +24,7 @@
     <div class="wrap">
       <div class="head">
         <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>'"
-                                     class="red"><%= User.find(cookies[:user_id]).name %></a>|<a href="/">首页</a>|<a href="#">退出</a></div>
+                                     class="red"><%= User.find(cookies[:user_id]).name %></a>|<a href="/">首页</a>|<a href="/users/delete_user">退出</a></div>
         <div class="logo"><a href="/"><img src="/assets/users/logo.png" /></a></div>
       </div>
       <div class="main">
@@ -37,9 +37,9 @@
           <div class="right">
             <div class="tab_project">
               <ul>
-                <li><a href="#" <% if request.parameters["action"]=="show" %> class="hover" <% end %>><img src="/assets/users/icon_1.png" />个人信息</a></li>
-                <li><a href="#" <% if request.parameters["action"]=="info" %> class="hover" <% end %>><img src="/assets/users/icon_2.png" />消 息</a></li>
-                <li><a href="#" <% if request.parameters["action"]=="record" %> class="hover" <% end %>><img src="/assets/users/icon_3.png" />消费记录</a></li>
+                <li><a href="/users/<%=cookies[:user_id] %>" <% if request.parameters["action"]=="show" %> class="hover" <% end %>><img src="/assets/users/icon_1.png" />个人信息</a></li>
+                <li><a href="/users/<%=cookies[:user_id] %>/info" <% if request.parameters["action"]=="info" %> class="hover" <% end %>><img src="/assets/users/icon_2.png" />消 息</a></li>
+                <li><a href="/users/<%=cookies[:user_id] %>/record" <% if request.parameters["action"]=="record" %> class="hover" <% end %>><img src="/assets/users/icon_3.png" />消费记录</a></li>
               </ul>
             </div>
           </div>

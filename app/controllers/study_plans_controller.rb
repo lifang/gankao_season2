@@ -40,7 +40,7 @@ class StudyPlansController < ApplicationController
           day_all[end_at.month].nil??day_all[end_at.month]=[one_day] :day_all[end_at.month]<<one_day
         end
       end
-      actions=ActionLog.find_by_sql("select total_num,created_at,types from action_logs where user_id=3 and types in
+      actions=ActionLog.find_by_sql("select total_num,created_at,types from action_logs where user_id=#{cookies[:user_id].to_i} and types in
                        (#{ActionLog::TYPES[:PRACTICE]},#{ActionLog::TYPES[:RECITE]}) and category_id=#{params[:category]} and created_at>='#{days.created_at}'")
       actions.each do |action|
         month_action["#{action.types}_#{action.created_at.to_datetime.day}"]=action.total_num
@@ -57,7 +57,7 @@ class StudyPlansController < ApplicationController
       day_status={}
 #      puts day_all[params[:end].to_datetime.month]
       unless day_all[params[:end].to_datetime.month].blank?
-        which_day=(day_all[params[:end].to_datetime.month].index(Time.now.day))+1
+        which_day=day_all[params[:end].to_datetime.month].index(Time.now.day).nil? ? 0 :day_all[params[:end].to_datetime.month].index(Time.now.day)+1
         day_all[params[:end].to_datetime.month].each do |day_task|
           status=false
           [PlanTask::TASK_TYPES[:PRACTICE],PlanTask::TASK_TYPES[:RECITE]].each do |types|
