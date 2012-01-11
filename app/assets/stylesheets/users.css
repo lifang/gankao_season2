@@ -75,8 +75,8 @@ img { border:none;}
 .mess_title a:hover { color: #F00; text-decoration: underline;}
 .mess_time { float: left; color: #999; margin-left: 20px;}
 
-.mess_tab { width: 520px; height: 320px; border: 5px #333 solid;}
-.mt_title { width: 500px; height: 28px; padding: 5px 10px; background: url(/assets/users/mt_title.png) repeat-x;}
+.mess_tab { width: 420px; border: 5px #333 solid;background: #fff;position: fixed;}
+.mt_title { width: 400px; height: 28px; padding: 5px 10px; background: url(/assets/users/mt_title.png) repeat-x;}
 .mess_tab_con { line-height: 24px; padding: 10px; overflow: auto;}
 
 .tishi_vip { height: 21px; line-height: 21px; background: #FFFCE9; border: 1px solid #EBDEBC; padding: 5px 10px; margin: 5px 0; overflow: hidden;}

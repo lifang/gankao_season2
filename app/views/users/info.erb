@@ -1,7 +1,7 @@
 <div class="tab_ul">
   <ul>
-    <li class="hover">收 件</li>
-    <li>通 知</li>
+    <li <%  if params[:target].nil? or params[:target].to_i==0  %> class="hover" <% end %>>收 件</li>
+    <li <%  if  params[:target].to_i==1  %> class="hover" <% end %>>通 知</li>
   </ul>
 </div>
 <div class="tab_box">
@@ -12,30 +12,16 @@
       <span><button class="shanchu">删除</button></span>
     </div>
     <div class="mess_con">
-      <div class="mess_list">
-        <div class="mess_title"><input name="" type="checkbox" value="" /> <a href="#">2012新年快乐2012新年快乐2012新年快乐2012新年快乐2012新年快乐2012新年快乐2012新年快乐2012新年快乐2012新年快乐2012新年快乐2012新年快乐2012新年快乐 </a></div>
-        <div class="mess_time">2012-01-01</div>
-      </div>
-      <div class="mess_list">
-        <div class="mess_title"><input name="" type="checkbox" value="" /> <a href="#">2012新年快乐...... </a></div>
-        <div class="mess_time">2012-01-01</div>
-      </div>
-      <div class="mess_list">
-        <div class="mess_title"><input name="" type="checkbox" value="" /> <a href="#">2012新年快乐...... </a></div>
-        <div class="mess_time">2012-01-01</div>
-      </div>
-      <div class="mess_list">
-        <div class="mess_title"><input name="" type="checkbox" value="" /> <a href="#">2012新年快乐...... </a></div>
-        <div class="mess_time">2012-01-01</div>
-      </div>
-      <div class="mess_list">
-        <div class="mess_title"><input name="" type="checkbox" value="" /> <a href="#">2012新年快乐...... </a></div>
-        <div class="mess_time">2012-01-01</div>
-      </div>
-      <div class="mess_list">
-        <div class="mess_title"><input name="" type="checkbox" value="" /> <a href="#">2012新年快乐...... </a></div>
-        <div class="mess_time">2012-01-01</div>
-      </div>
+      <% unless @email.blank? %>
+        <div class="mess_list">
+          <% @email.each do |email| %>
+            <div class="mess_title"><input name="email" type="checkbox" value="" /> <a href="#" onclick="javascript:$('.mess_tab_con').html($(this).html());show_div('.mess_tab')"><%= email.description %></a></div>
+            <div class="mess_time"><%= email.created_at.strftime("%Y-%m-%d") %></div>
+          <% end  %>
+        </div>
+      <% else %>
+        <div class="record_none">暂时没有消费记录</div>
+      <% end %>
 
 
       <div class="sabrosus"><span class="disabled"> < </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2"> > </a></div>
@@ -47,10 +33,9 @@
   </div>
 </div>
 
-<div class="mess_tab border_radius">
-  <div class="mt_title"><span class="xx_x"><img src="images/x.gif" /></span></div>
+<div class="mess_tab border_radius" style="display:none">
+  <div class="mt_title"><span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('.mess_tab').css('display','none')"/></span></div>
   <div class="mess_tab_con">
-    <p>新年快新年快乐新年快乐新年快乐新年快乐新年快乐新年快乐新年快乐乐</p>
-    <p>新年快新年快乐新年快乐新年快乐新年快乐新年快乐新年快乐新年快乐乐</p>
+   
   </div>
 </div>
