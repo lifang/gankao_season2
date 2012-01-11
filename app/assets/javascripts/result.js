@@ -327,7 +327,7 @@ function drag_problem(title_div, problem, block_nav_div, drag_li_arr, question_i
                     new_title = new_title.replace(/\(\(sign\)\)/, rep_str);
                     title_div.innerHTML = new_title;
                     create_question_navigation(block_nav_div, questions[j], problem.id);
-                    create_drag_question(problem.id, question_id_input, questions[j], drag_li_arr);
+                    create_drag_question(problem, question_id_input, questions[j], drag_li_arr);
                     question_num ++ ;
                     new_title = title_div.innerHTML;
                 }
@@ -338,7 +338,7 @@ function drag_problem(title_div, problem, block_nav_div, drag_li_arr, question_i
                 new_title = new_title.replace(/\(\(sign\)\)/, rep_str);
                 title_div.innerHTML = new_title;
                 create_question_navigation(block_nav_div, questions, problem.id);
-                create_drag_question(problem.id, question_id_input, questions, drag_li_arr);
+                create_drag_question(problem, question_id_input, questions, drag_li_arr);
                 question_num ++ ;
                 new_title = title_div.innerHTML;
             }
@@ -349,7 +349,7 @@ function drag_problem(title_div, problem, block_nav_div, drag_li_arr, question_i
 }
 
 //创建可拖动的div
-function create_drag_question(problem_id, question_id_input, question, drag_li_arr) {
+function create_drag_question(problem, question_id_input, question, drag_li_arr) {
     question_id_input.value += "" + question.id + ",";
     var question_str = "";
     var bk_color = "correctWrong_bg";
@@ -362,7 +362,7 @@ function create_drag_question(problem_id, question_id_input, question, drag_li_a
             
             question_str += "<select class='select_tk "+ bk_color +"' name='question_attr_"+ question.id +"' id='question_attr_"
             + question.id +"' onclick=\"javascript:show_question_review("
-            + problem_id +", '"+ question.id +"', '"+ question.correct_type +"')\"><option value='-1'></option>";
+            + problem.id +", '"+ question.id +"', '"+ question.correct_type +"')\"><option value='-1'></option>";
             var que_attrs = question.questionattrs.split(";-;");
             for (var i=0; i<que_attrs.length; i++) {
                 if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != ""
@@ -379,12 +379,12 @@ function create_drag_question(problem_id, question_id_input, question, drag_li_a
         if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "") {
             question_str += "<textarea cols='' readonly rows='' class='input_tk "+ bk_color +"'"
             + " id='question_answer_"+ question.id +"' onclick=\"javascript:show_question_review("
-            + problem_id +", '"+ question.id +"', '"+ question.correct_type +"')\" name='question_answer_"
+            + problem.id +", '"+ question.id +"', '"+ question.correct_type +"')\" name='question_answer_"
             + question.id +"' style='width:" + erea_with(answer_hash.get(question.id)[0]) +";height:22px;' >"
             + answer_hash.get(question.id)[0] +"</textarea>";
         } else {
             question_str += "<textarea cols='' readonly rows='' onclick=\"javascript:show_question_review("
-            + problem_id +", '"+ question.id +"', '"+ question.correct_type
+            + problem.id +", '"+ question.id +"', '"+ question.correct_type
             +"')\" class='input_tk "+ bk_color +"' id='question_answer_"+ question.id
             +"' name='question_answer_" + question.id +"'></textarea>";
         }
@@ -399,11 +399,11 @@ function create_drag_question(problem_id, question_id_input, question, drag_li_a
         }        
         if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "") {
             question_str += "<span id='question_answer_"+question.id+"' onclick=\"javascript:show_question_review("
-            + problem_id +", '"+ question.id +"', '"+ question.correct_type +"')\" class='dragDrop_box "+bk_color+"'>"
+            + problem.id +", '"+ question.id +"', '"+ question.correct_type +"')\" class='dragDrop_box "+bk_color+"'>"
             + answer_hash.get(question.id)[0]+"</span>";
         } else {
             question_str += "<span id='question_answer_"+question.id+"' onclick=\"javascript:show_question_review("
-            + problem_id +", '"+ question.id +"', '"+ question.correct_type +"')\" class='dragDrop_box "+bk_color+"'></span>";
+            + problem.id +", '"+ question.id +"', '"+ question.correct_type +"')\" class='dragDrop_box "+bk_color+"'></span>";
         }
         $("#que_out_" + question.id).html(question_str);
     }
@@ -745,7 +745,8 @@ function generate_jplayer(mp3_url, block_id) {
             },
             swfPath: "/javascripts/jplayer",
             supplied: "mp3",
-            wmode: "window"
+            wmode: "window",
+            preload: "none"
         });
     })(jQuery)
 }

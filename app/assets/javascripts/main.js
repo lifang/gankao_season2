@@ -53,7 +53,8 @@ $(function(){
 
 //鼠标经过邮件图标
 $(function(){
-    if ($(".h_email")[0] != null && $(".h_email")[0] != undefined) {
+    if ($(".h_email")[0] != null && $(".h_email")[0] != undefined
+        && $(".email_tab")[0] != null && $(".email_tab")[0] != undefined) {
         $(".h_email")[0].onmouseover = show_email_info ;
         $(".email_tab")[0].onmouseout = close_email_info ;
         //$(".h_email")[0].onmouseout = close_email_info;
