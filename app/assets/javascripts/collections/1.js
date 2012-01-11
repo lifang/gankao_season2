@@ -21,16 +21,6 @@ collections = {
                     "user_answer":["A)  Its unique flavour. ",null,null,null,"B)  Its bad taste.                 ","B)  Its bad taste.                 ","B)  Its bad taste.                 ","","","","B)  Its bad taste.                 ","B)  Its bad taste.                 ","","","","","","","C) Its special cooking methods.","","B)  Its bad taste.                 ","C) Its special cooking methods.","","","D) Its organic ingredients.","B)  Its bad taste.                 ","B)  Its bad taste.                 ","B)  Its bad taste.                 ","","","C) Its special cooking methods.","B)  Its bad taste.                 ","","B)  Its bad taste.                 ","B)  Its bad taste.                 ","C) Its special cooking methods.","C) Its special cooking methods.","C) Its special cooking methods.","B)  Its bad taste.                 ",""]
                     },{
                     "correct_type":"1",
-                    "id":"900",
-                    "score":"0.0",
-                    "description":"The Second World War led to________ in Britain.",
-                    "questionattrs":"A) abc      ;-;B) a decrease of grain production ;-;C) an increase in food import;-;D) a change in people's eating habits",
-                    "tags":"\u5feb\u901f\u9605\u8bfb",
-                    "words":"jeffrey",
-                    "answer":"A) abc      ",
-                    "user_answer":["A) abc      ","","","","","","","C) an increase in food import","B) a decrease of grain production ","B) a decrease of grain production ","C) an increase in food import","C) an increase in food import"]
-                    },{
-                    "correct_type":"1",
                     "id":"902",
                     "score":"0.0",
                     "description":"With culinary improvement in recent years, London's restaurants are now able to appeal to the tastes of  _______   .",
@@ -123,8 +113,8 @@ collections = {
                 "description":"The Second World War led to________ in Britain.",
                 "questionattrs":"A) an inadequate supply of food  ;-;B) a decrease of grain production ;-;C) an increase in food import;-;D) a change in people's eating habits",
                 "tags":"\u5feb\u901f\u9605\u8bfb",
-                "answer":"A) an inadequate supply of food  ;-;B) a decrease of grain production",
-                "user_answer":["A) an inadequate supply of food  ;-;B) a decrease of grain production ;-;C) an increase in food import",";|;C) an increase in food import"]
+                "answer":"A) an inadequate supply of food  ;|;B) a decrease of grain production",
+                "user_answer":["A) an inadequate supply of food  ;|;B) a decrease of grain production ;|;C) an increase in food import",";|;C) an increase in food import"]
                 },{
                 "correct_type":"2",
                 "id":"901",

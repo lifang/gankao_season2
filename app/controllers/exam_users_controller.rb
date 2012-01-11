@@ -8,7 +8,7 @@ class ExamUsersController < ApplicationController
       eu = ExamUser.find(params[:id])
       p = Paper.find(eu.paper_id)
       paper = File.open("#{Constant::BACK_PUBLIC_PATH}#{p.paper_js_url}")
-      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("/paperjs/","/answerjs/")
+      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("paperjs/","answerjs/")
       @paper = (JSON paper.read()[8..-1])["paper"]
       #生成考生答卷
       s_url = ExamUser.find(params[:id]).answer_sheet_url
@@ -150,4 +150,22 @@ class ExamUsersController < ApplicationController
       }
     end
   end
+
+  
+  def ajax_add_collect
+    puts "exam_user_id = #{params["exam_user_id"]}"
+    puts "problem_index = #{params["problem_index"]}"
+    
+
+    puts "addition = #{params["addition"]}"
+    
+
+
+    respond_to do |format|
+      format.json {
+        render :json=>""
+      }
+    end
+  end
+  
 end

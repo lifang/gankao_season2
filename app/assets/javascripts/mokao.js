@@ -18,7 +18,7 @@ function generate_flash_div(style) {
     jQuery(style).css('display','block');
 }
 
-//提示框弹出层
+//提示框弹出层 
 function show_flash_div() {
     $('.tishi_tab').stop();
     generate_flash_div(".tishi_tab");

@@ -36,6 +36,7 @@ function click_next_problem(){
         }
         $("#jplayer_play_button_"+problem_index).trigger("click");
         setCookie("init_problem",problem_index);
+        init_problem = problem_index;
     }
 }
 
@@ -56,7 +57,8 @@ function click_prev_problem(){
             $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
         }
         $("#jplayer_play_button_"+problem_index).trigger("click");
-        setCookie("init_problem",$(".problem_resource").index(prev_problem));
+        setCookie("init_problem",problem_index);
+        init_problem = problem_index;
     }
 }
 
