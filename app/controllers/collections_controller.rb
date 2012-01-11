@@ -2,6 +2,12 @@
 class CollectionsController < ApplicationController
   layout 'exam_user'
   before_filter :sign?
+
+  def index
+      user = User.find(cookies[:user_id])
+      @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+  end
+
   def load_words
     load_words={}
     unless params[:words].length==0

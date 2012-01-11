@@ -118,14 +118,23 @@ button.green { color:#009900;}
 .pql_left { width: 5%; float: left; height: 32px; line-height: 32px;}
 .pql_right { width: 95%; float: left;}
 
+/* 小题收藏  */
+
+.pql_left span { margin: 7px 0 0 0;overflow: hidden; width: 18px; height: 18px; display: block;}
+.pql_left span a { width: 18px; height: 18px; display: block; text-indent: -999px; overflow: hidden;}
+.icon_shoucang a { background: url(/assets/icon_sc.png) no-repeat 0 0;}
+.icon_shoucang a:hover { background: url(/assets/icon_sc.png) no-repeat 0 -19px;}
+.icon_shoucang a.hover { background: url(/assets/icon_sc.png) no-repeat 0 bottom;}
+
+
 .p_q_line { overflow: hidden; height: 32px;}
-.false_red { background: #ffd2d2;}
-.ture_green { background: #d2fddd;}
+.false_red { background: #ffeaea;}
+.ture_green { background: #eeffee;}
 
 .pro_qu_t { min-height: 32px; line-height: 32px; overflow: hidden; cursor: pointer;}
 .pro_t_con {}
 
-.question_tx { float: right; margin-left: 10px; height: 32px;  line-height: 32px; color: #ff6c00;}
+.question_tx { float: right; margin-left: 10px; height: 32px; line-height: 32px; color: #ff6c00;}
 
 .pro_qu_div {}
 .pro_qu_ul { padding: 10px 0 0 0;}
@@ -156,8 +165,8 @@ button.green { color:#009900;}
 .green_dui { color: #090; margin-top: 10px;}
 .red_cuo { color: #F00;  margin-top: 10px;}
 
-.pro_btn { padding: 20px 0 20px 0px;}
-.pro_btn button { margin: 0 10px;}
+.pro_btn { padding: 10px 0 0px 0px;}
+.pro_btn button { margin: 0 10px 0 0;}
 .pro_btn a { margin: 0 10px;}
 
 .jiexi { background: #FFFCE9; border: 1px solid #EBDEBC; padding: 5px; margin: 10px 0; overflow: hidden; position: relative;}
@@ -168,7 +177,7 @@ button.green { color:#009900;}
 .input_xz { width: 90%; height: 20px;}
 
 .span_tk {min-width: 150px; display: inline-block; height: 15px; position: relative;}
-.input_tk { min-width: 148px; height: 21px; line-height: 21px; border: 1px #e2e2e2 solid; float: left;}
+.input_tk { min-width: 148px; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid; float: left;}
 .button_tk {
     width: 70px;
     height: 25px;
@@ -180,7 +189,7 @@ button.green { color:#009900;}
     margin: 4px 15px;
 }
 
-.select_tk { min-width: 148px; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid;}
+.select_tk { min-width: 148px; height: 22px; line-height: 22px; border: 1px #e2e2e2 solid;}
 
 .button_span {
     position: absolute;

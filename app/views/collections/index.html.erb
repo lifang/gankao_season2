@@ -1,8 +1,7 @@
-<% category_id = params[:category].nil? ? '2' : params[:category] %>
 <%= javascript_include_tag "/assets/main.js" %>
 <%= javascript_include_tag "cookie.js" %>
 <%= javascript_include_tag "collection.js" %>
-<%= javascript_include_tag "/assets/collections/1.js" %>
+<%= javascript_include_tag "#{@collection_js_url}" %>
 <%= javascript_include_tag "/assets/jplayer/jquery.jplayer.min.js" %>
 <div id="textDiv" >
 </div>

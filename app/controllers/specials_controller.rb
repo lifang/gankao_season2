@@ -19,6 +19,11 @@ class SpecialsController < ApplicationController
 
   def join
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    if cookies[:user_id].nil?
+      redirect_to "/logins?last_url=#{Constant::SERVER_PATH}/specials?category=#{category_id}"
+      return false
+    end
+
     #设置考试试卷
     papers_arr=[]
     Examination.find(params[:id]).papers.each do |paper|

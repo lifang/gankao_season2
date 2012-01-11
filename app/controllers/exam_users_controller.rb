@@ -1,7 +1,7 @@
 # encoding: utf-8
 class ExamUsersController < ApplicationController
   layout "exam_user"
-  
+  before_filter :sign?
   def show
     #读取试题
     begin
@@ -90,11 +90,13 @@ class ExamUsersController < ApplicationController
     end
   end
 
-  def sheet_outline
+  def sheet_outline(collection_str = "")
     outline = "<?xml version='1.0' encoding='UTF-8'?>"
-    outline += <<-XML
-      <sheet init='0' status='0'></sheet>
-    XML
+    outline += "<sheet init='0' status='0'>"
+    outline += "<collection>"
+    outline += "#{collection_str}"
+    outline += "</collection>"
+    outline += "</sheet>"
     return outline
   end
   
@@ -139,8 +141,11 @@ class ExamUsersController < ApplicationController
   #重做卷子
   def redo
     url=params[:sheet_url]
+    doc = get_doc(url)
+    collection = ""
+    collection = doc.root.elements["collection"].text if doc.root.elements["collection"]
     f=File.new(url,"w+")
-    f.write("#{sheet_outline.force_encoding('UTF-8')}")
+    f.write("#{sheet_outline(collection).force_encoding('UTF-8')}")
     f.close
     ExamUser.find(params[:id]).update_attribute("is_submited",false)
     redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}"
@@ -160,27 +165,64 @@ class ExamUsersController < ApplicationController
     end
   end
 
-  
+  #添加收藏
   def ajax_add_collect
-    #添加收藏
-    f=File.new(create_collection(cookies[:user_id]))
-    
-    
-    puts "paper_id = #{params["paper_id"]}"
-    puts "problem = #{params["problem"]}"
-    #    paper_id = ExamUser.find(params[:exam_user_id]).paper_id
-    #    paper_js_url = Paper.find(paper_id).paper_js_url
-    #    puts "paper_js_url = #{paper_js_url}"
-    #    file = File.open("#{Constant::BACK_PUBLIC_PATH}#{paper_js_url}")
-    #    @paper = (JSON file.read()[8..-1])["paper"]
-    
-    #    puts @paper
-    
-    
-    puts "addition = #{params["addition"]}"
-    
+    #解析参数
+    this_problem = JSON params["problem"]
+    problem_id = this_problem["id"]
+    this_question = this_problem["questions"]["question"][params["question_index"].to_i]
+    question_id = this_question["id"]
 
+    #读取collection.js文件
+    url=create_collection(cookies[:user_id]) 
+    f = File.open(url)
+    resource = JSON (f.read()[13..-1])
+    problems = resource["problems"]["problem"]
+    f.close
+    
+    #判断是否已经收藏
+    problem_exist=false
+    question_exist = false
+    p_index = -1
+    problems.each do |problem|
+      p_index += 1
+      if problem["id"] == problem_id
+        problem_exist = true
+        problem["questions"]["question"].each do |question|
+          puts question
+          if question["id"] == question_id
+            question_exist = true
+            break
+          end
+        end if problem["questions"] && problem["questions"]["question"]
+        break
+      end
+    end
 
+    #收藏新题
+    if problem_exist
+      unless question_exist
+        this_question["answer"]=params["addition"]["answer"]
+        this_question["analysis"]=params["addition"]["analysis"]
+        problems[p_index]["questions"]["question"] << this_question
+      end
+    else
+      this_problem["paper_id"] = params["paper_id"]
+      this_problem["questions"]["question"]=[this_question]
+      problems << this_problem
+    end
+
+    #更新collection.js内容
+    content = "collections = #{resource.to_json}"
+    write_xml(content, url)
+    
+    #在sheet中记录小题的收藏状态
+    doc = get_doc(params[:sheet_url])
+    new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+    collection =doc.root.elements["collection"]
+    collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+    write_xml(doc, params[:sheet_url])
+    
     respond_to do |format|
       format.json {
         render :json=>""
@@ -195,9 +237,9 @@ class ExamUsersController < ApplicationController
     file_name = "/#{user_id}.js"
     url = dir + file_name
     unless File.exist?(url)
-      Collection.find(user_id).update_attribute("collection_url","/collections#{file_name}")
+      Collection.create(:user_id=>user_id,:collection_url=>"/collections"+file_name)
       f=File.new(url,"w+")
-      f.write("")
+      f.write("collections = "+(JSON({:problems=>{:problem=>[]}})))
       f.close
     end
     return url
