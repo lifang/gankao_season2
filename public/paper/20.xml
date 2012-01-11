@@ -1,0 +1,13 @@
+<paper id='20' total_num='3' total_score='5'>
+        <base_info>
+          <title>lkkl</title>
+          <category>1</category>
+          <creater>1</creater>
+          <created_at>2011-08-03 09:30</created_at>
+          <updated_at>2011-08-03 09:54</updated_at>
+          <description>第一部分为听力题，请大家把答题添在答题卡上，第二部分为选择题，第三部分为综合题，第四部分为......。</description>
+<category_name>history</category_name>      </base_info>
+      <blocks>
+      <block id='26' total_num='3' total_score='5'><base_info><title>和恢复</title><description>咯咯咯</description></base_info><problems><problem id='5' score='0' types='0'><title>世界有多大？&lt;br /&gt;</title><category>1</category><questions><question correct_type='0' id='5' score='0'><description>question boring</description><answer>small</answer><analysis>此题没有答案？</analysis><questionattrs>small;-;big;-;small;-;biggest</questionattrs><tags>多大 上市 知道</tags></question></questions></problem><problem id='5' score='0' types='0'><title>世界有多大？&lt;br /&gt;</title><category>1</category><questions><question correct_type='0' id='5' score='0'><description>question boring</description><answer>small</answer><analysis>此题没有答案？</analysis><questionattrs>small;-;big;-;small;-;biggest</questionattrs><tags>多大 上市 知道</tags></question></questions></problem><problem id='6' score='5' types='1'><title>点点滴滴</title><category>1</category><questions><question correct_type='1' id='6' score='5'><description>question boring</description><answer>think;|;某侧</answer><analysis>让人</analysis><questionattrs>;-;think;-;某侧;-;得分达到</questionattrs><tags>广告歌</tags></question></questions></problem></problems></block></blocks>
+       <problem_ids>5,6</problem_ids>
+      </paper>

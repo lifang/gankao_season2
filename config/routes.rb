@@ -12,6 +12,22 @@ GankaoSeason2::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+
+  get "/gankao/index"
+
+  resources :exam_raters do
+    collection do
+      get :session,:check_paper,:log_out
+      post :over_answer
+    end
+    member do
+      post "edit_value"
+      get "rater_session","get_score"
+      post "rater_login"
+      get "reader_papers","answer_paper"
+    end
+  end
+  
   resources :collections do
     collection do
       post :load_words,:write_file
@@ -34,7 +50,7 @@ GankaoSeason2::Application.routes.draw do
       post :ajax_load_about_words,:ajax_report_error
     end
     member do
-      post :ajax_save_question_answer
+      post :ajax_save_question_answer,:ajax_change_status
       get :redo
     end
   end
@@ -43,7 +59,7 @@ GankaoSeason2::Application.routes.draw do
       get :friend_add_request,:renren_like,:sina_index,:add_user
       get :renren_index,:follow_me,:login_from_qq,:qq_index,:get_code,:user_code
       get :sina_login,:friend_add
-      get :renren_login
+      get :renren_login,:logout
     end
   end
   resources :specials
@@ -59,7 +75,14 @@ GankaoSeason2::Application.routes.draw do
       post 'word_log'
     end
   end
-  
+  resources :users do
+    collection do
+      get :delete_user
+    end
+    member do
+      get :info,:record
+    end
+  end
   # Sample resource route with options:
   #   resources :products do
   #     member do
@@ -95,7 +118,7 @@ GankaoSeason2::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+   root :to => 'gankao#index'
 
   # See how all your routes lay out with "rake routes"
 

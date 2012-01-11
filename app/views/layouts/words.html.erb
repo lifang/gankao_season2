@@ -6,6 +6,7 @@
     <%= stylesheet_link_tag    "style" %>
     <%= stylesheet_link_tag    "public" %>
     <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "/assets/main.js" %>
     <%= csrf_meta_tags %>
     <!--[if IE 6]>
     <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
@@ -21,24 +22,8 @@
   </head>
   <body>
     <div class="wrap">
-
-      <div class="head">
-        <div class="head_info">
-          <div class="h_user"><a href="#" class="h_email email_u">邮件</a> <a href="#">yesen</a>|<a href="#">退出</a></div>
-          <div class="h_banner"><a href="#" ><img src="/assets/banner.png" /></a></div>
-        </div>
-        <div class="logo"><a href="#"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
-        <div class="nav">
-          <ul>
-            <li><a href="#" class="hover">真题</a></li>
-            <li><a href="#">专题</a></li>
-            <li><a href="#">词汇</a></li>
-            <li><a href="#">模考</a></li>
-            <li><a href="#">计划</a></li>
-            <li><a href="#">收藏</a></li>
-          </ul>
-        </div>
-      </div>
+      <%= render :partial => "/common/flash_div"  %>
+      <%= render :partial => "/common/head_div"  %>
       <div class="clear"></div>
       <div class="main_Div">
         <div class="m_box">
@@ -49,8 +34,8 @@
       <div class="words_tishi border_radius" id="word_tishi">
         <div class="words_ts_box" id="word_box">
           <% @words.each do |word| %>
-          <span class="z_five" id="five_<%= word.id %>"></span>
-          <p><%= word.name %></p>
+            <span class="z_five" id="five_<%= word.id %>"></span>
+            <p><%= word.name %></p>
           <% end unless @words.blank? %>
         </div>
       </div>

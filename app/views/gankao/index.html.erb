@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>首页</title>
+    <%= javascript_include_tag "/assets/application.js" %>
+    <link href="/assets/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/assets/index.js"></script>
+    <!--[if IE 6]>
+    <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>
+      /* EXAMPLE */
+      DD_belatedPNG.fix('*');
+
+      /* string argument can be any CSS selector */
+      /* .png_bg example is unnecessary */
+      /* change it to what suits you! */
+    </script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="head">
+        <div class="head_box">
+          <div class="login">
+            <ul>
+              <% if cookies[:user_id].nil? || cookies[:user_name].nil? %>
+                <li style="cursor:pointer;" onclick="javascript:window.location.href='/logins'">登录</li>
+                <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/login_from_qq', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/qq.png" /></a></li>
+                <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/renren_login', '_blank', 'height=500,width=600,left=300,top=100');"><img src="/assets/renren.png" /></a></li>
+                <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/sina_login', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/sina.png" /></a></li>
+              <% else %>
+                <li><span style="cursor:pointer;" onclick="javascript:void(0);"><%= cookies[:user_name] %></span> | <span style="cursor:pointer;" onclick="javascript:window.location.href='/users/delete_user'">退出</span></li>
+              <% end %>
+            </ul>
+          </div>
+          <div class="logo"><a href="/"><img src="/assets/logo2.png" /></a></div>
+        </div>
+      </div>
+      <div class="main">
+
+        <div class="js_banner">
+          <div class="scroll_play">
+            <div class="scroll_text"></div>
+            <div class="nav_btn"><a href="/similarities?category=2"><img src="/assets/cet4_btn.png" /></a><a href="/similarities?category=3"><img src="/assets/cet6_btn.png" /></a></div>
+            <div class="scroll_show">
+              <a href="#" target="_blank"><img src="/assets/banner1.png" alt="<h1>网上练习</h1>全部新四六级真题，在线方式练习，边做边对答案，超高效率。" /></a>
+              <a href="#" target="_blank"><img src="/assets/banner2.png" alt="<h1>在线听力</h1>听力题包含在线收听的MP3，按题切分，无需到处寻找听力资料，省心省力更省时间。
+                                               " /></a>
+              <a href="#" target="_blank"><img src="/assets/banner3.png" alt="<h1>模拟考试</h1>考前模拟考试，完全按照考试难度出题，限时答题，帮助你掌握备考状况。" /></a>
+              <a href="#" target="_blank"><img src="/assets/banner4.png" alt="<h1>在线背词</h1>精选1500常考词汇，汇集中英释义和例句，4种记忆挑战游戏，提升你的词汇量。" /></a>
+              <a href="#" target="_blank"><img src="/assets/banner5.png" alt="<h1>学习计划</h1>为期30天的学习计划，透过微博或者人人广而告之，不仅让复习循序渐进，更通过公开的方式督促自己。" /></a>
+            </div>
+
+            <div class="scroll_num"><a>1</a><a>2</a><a>3</a><a>4</a><a>5</a></div>
+
+          </div>
+        </div>
+
+
+        <div class="m_con">
+          <div>
+            <h1 class="h_pic1">真题+背单词</h1>
+            <p>集合英语备考的两大应用，更可以将真题做题时遇到的词直接加入自己的单词本，让背词有的放矢。</p>
+          </div>
+          <div>
+            <h1 class="h_pic2">准确无误</h1>
+            <p>真题内容反复校对，并请用户共同抓虫，极大保证了试题内容的准确无误，让你用得放心。</p>
+          </div>
+          <div>
+            <h1 class="h_pic3">便捷省时</h1>
+            <p>网上练习，在线听力，即时核对，节省你到处寻找下载，翻页核对答案的时间，让你的复习更有效率。</p>
+          </div>
+          <div>
+            <h1 class="h_pic4">错题收藏</h1>
+            <p>错题自动收藏，在完成第一遍真题之后，可以复习收藏的错题，迅速查漏补缺。</p>
+          </div>
+        </div>
+        <div class="tuiguang">
+          <div><a href="#"><img src="/assets/xianshi.png" title="限时推广，仅需48元。" /></a></div>
+          <div><a href="#"><img src="/assets/huafei.png" title="帮助我们推广，获取话费回报。" /></a></div>
+          <div><a href="#"><img src="/assets/jihua.png" title="要成功，就要对自己狠一点。" /></a></div>
+        </div>
+        <div class="gz_weibo"><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/renren_like');"><img src="/assets/renren_zhuye.png" /></a><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/friend_add_request', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/sina_weibo.png" /></a></div>
+      </div>
+      <div class="foot">
+        <p><a href="http://www.comdosoft.com/" target="_blank">公司信息</a> |   <a href="#">官方微博</a>   |   <a href="http://www.comdosoft.com/pages/aboutcon.html" target="_blank">联系我们</a>    |   <a href="#">用户协议</a></p>
+        <p>Copyright © 2011-2012 &nbsp;&nbsp;苏州协创软件有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>
+        <p>建议使用IE6以上版本、firefox、Chrome等浏览器</p>
+      </div>
+    </div>
+
+  </body>
+</html>

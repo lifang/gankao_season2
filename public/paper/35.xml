@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>      <paper id='35' total_num='9' total_score='100.0'>
+        <base_info>
+          <title>test file</title>
+          <category>2</category>
+          <creater>1</creater>
+          <created_at>2011-11-02 13:57</created_at>
+          <updated_at>2011-11-02 15:09</updated_at>
+          <description>这是针对文件权限的测试</description>
+<category_name>forth_level</category_name>      </base_info>
+      <blocks>
+      <block id='38' start_time='' time='' total_num='9' total_score='100.0'><base_info><title>第一个题目</title><description>天下王者</description></base_info><problems><problem id='86' score='10.0' types='0'><title>试试单选题</title><category>2</category><questions><question correct_type='0' id='98' score='10.0'><answer>1</answer><analysis/><questionattrs>1;-;2;-;3;-;4</questionattrs><tags/></question></questions></problem><problem id='87' score='10.0' types='1'><title>多选题</title><category>2</category><questions><question correct_type='1' id='99' score='10.0'><answer>a;|;b;|;c;|;d</answer><analysis/><questionattrs>a;-;b;-;c;-;d</questionattrs><tags/></question></questions></problem><problem id='88' score='10.0' types='2'><title>判断</title><category>2</category><questions><question correct_type='2' id='100' score='10.0'><answer>1</answer><analysis/><questionattrs/><tags/></question></questions></problem><problem id='89' score='10.0' types='5'><title>呵呵，这是简单题</title><category>2</category><questions><question correct_type='5' id='101' score='10.0'><answer>wolf</answer><analysis/><questionattrs/><tags/></question></questions></problem><problem id='90' score='46.0' types='4'><title>最强大的军队</title><category>2</category><questions><question correct_type='0' id='102' score='10.0'><description>素质</description><answer>沉默</answer><questionattrs>沉默;-;高低;-;天下;-;王朝</questionattrs><tags/></question><question correct_type='5' id='103' score='12.0'><description>不同地方，不同喜好</description><answer>沉默的真意</answer><questionattrs/><tags/></question><question correct_type='3' id='104' score='12.0'><description>填空题</description><answer>试卷</answer><questionattrs/><tags/></question><question correct_type='1' id='105' score='12.0'><description>茫茫大漠</description><answer>是</answer><analysis/><questionattrs>是;-;的;-;地方;-;个</questionattrs><tags/></question></questions></problem><problem id='91' score='14.0' types='5'><title>军户不能出人命啊</title><category>2</category><questions><question correct_type='5' id='106' score='14.0'><answer>wolf</answer><analysis></analysis><questionattrs/><tags/></question></questions></problem></problems></block></blocks>
+       <problem_ids/>
+      </paper>

@@ -64,8 +64,8 @@ $(function(){
 $(function(){
     if ($(".h_email")[0] != null && $(".h_email")[0] != undefined) {
         $(".h_email")[0].onmouseover = show_email_info ;
-    $(".email_tab")[0].onmouseout = close_email_info ;
-    $(".h_email")[0].onmouseout = close_email_info ;
+        $(".email_tab")[0].onmouseout = close_email_info ;
+        //$(".h_email")[0].onmouseout = close_email_info;
     }
 })
 
@@ -87,14 +87,13 @@ function show_email_info ( ae ){
 function close_email_info( ae ){
     var e = window.event || ae;
     var s = e.toElement || e.relatedTarget;
-    var temp = document.getElementById('but_temp');
-    if(document.all){
-        if( !this.contains(s) ){
+    if(document.all){  
+        if( (!this.contains(s))){
             $('.email_tab').css("display","none");
         }
     }else{
         var res= this.compareDocumentPosition(s) ;
-        if( ! ( res == 20 || res == 0) ){
+        if((!( res == 20 || res == 0))){
             $('.email_tab').css("display","none");
         }
     }

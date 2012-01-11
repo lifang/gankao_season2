@@ -1,0 +1,141 @@
+<paper id='13' total_num='9' total_score='99'>
+    <base_info>
+        <title>天下情不断</title>
+        <category>1</category>
+        <creater>1</creater>
+        <created_at>2011-07-15 11:26</created_at>
+        <updated_at>2011-07-15 16:23</updated_at>
+        <description>总听风声忘雨声，与尔共度此余生</description>
+        <category_name>history</category_name>
+    </base_info>
+    <blocks>
+        <block id='13' total_num='9' total_score='99'>
+            <base_info>
+                <title>遥想当年</title>
+                <description>在那细水长流的湖畔，共枕眠！</description>
+            </base_info>
+            <problems>
+                <problem id='50' score='10' types='0'>
+                    <title>是情愿迷漫了我的双眼，是空中飞的风筝系住了你的相思。</title>
+                    <category>1</category>
+                    <questions>
+                        <question correct_type='0' id='61' score='10'>
+                            <answer>东方</answer>
+                            <analysis/>
+                            <questionattrs>东方;-;无语;-;在天下;-;蓝高中</questionattrs>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='51' score='10' types='1'>
+                    <title>把这段感情故事拍成电影</title>
+                    <category>1</category>
+                    <questions>
+                        <question correct_type='1' id='62' score='10'>
+                            <answer>白;|;黑</answer>
+                            <analysis/>
+                            <questionattrs>白;-;不白;-;黑;-;真黑</questionattrs>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='52' score='10' types='2'>
+                    <title>上演的苦与痛，悲与累都能让旁观的人暗自落泪</title>
+                    <category>1</category>
+                    <questions>
+                        <question correct_type='2' id='63' score='10'>
+                            <answer>1</answer>
+                            <analysis/>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='53' score='10' types='3'>
+                    <title>如果人生就像一出折子戏，把嘴璀璨的部分留给__?</title>
+                    <category>1</category>
+                    <questions>
+                        <question correct_type='3' id='64' score='10'>
+                            <answer>你</answer>
+                            <analysis/>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='54' score='5' types='4'>
+                    <title>忘记吧，我们的昨天，泪水已经将那段记忆淹没，再也拾不起</title>
+                    <category>1</category>
+                    <questions>
+                        <question correct_type='3' id='65' score='5'>
+                            <description>是昨天我们包头痛苦吗？</description>
+                            <answer>在那生与死的边缘，我们忘记了</answer>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='55' score='10' types='5'>
+                    <title>风儿告诉我，在走的时候你哭了，我知道你为什么哭泣，可我不知道为什么哭泣也要选择放弃？</title>
+                    <category>1</category>
+                    <questions>
+                        <question correct_type='5' id='66' score='10'>
+                            <answer>是物质的生死还是情感的共鸣，一生难道不重要/</answer>
+                            <analysis/>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='56' score='20' types='4'>
+                    <title>不要忘记那个清晨</title>
+                    <category>1</category>
+                    <questions>
+                        <question correct_type='1' id='67' score='20'>
+                            <description>我曾陪你日出到黄昏，可泪水流下的却是创伤的妩媚？</description>
+                            <answer>得到;|;忘记</answer>
+                            <questionattrs>得到;-;还是;-;忘记;-;我同意</questionattrs>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='57' score='20' types='4'>
+                    <title>1111111111111</title>
+                    <category>1</category>
+                    <questions>
+                        <question correct_type='0' id='68' score='11'>
+                            <description>11111</description>
+                            <answer>111</answer>
+                            <questionattrs>1;-;11;-;111;-;1111</questionattrs>
+                            <tags/>
+                        </question>
+                        <question correct_type='1' id='69' score='3'>
+                            <description>11</description>
+                            <answer>11;|;111111</answer>
+                            <questionattrs>1;-;11;-;1111;-;111111;-;11111111</questionattrs>
+                            <tags/>
+                        </question>
+                        <question correct_type='2' id='70' score='6'>
+                            <description>1111111</description>
+                            <answer>1</answer>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='58' score='4' types='4'>
+                    <title>BVDFGEGERGERGER</title>
+                    <category>1</category>
+                    <questions>
+                        <question correct_type='5' id='71' score='4'>
+                            <description>个人GFRGERGER</description>
+                            <answer>EWFEWGERGER</answer>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+    </blocks>
+</paper>

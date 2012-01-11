@@ -1,0 +1,258 @@
+
+<paper id='3' total_num='16' total_score='143.0'>
+    <base_info>
+        <title>测试真题</title>
+        <category>3</category>
+        <creater>1</creater>
+        <created_at>2011-08-26 10:25</created_at>
+        <updated_at>2011-10-13 16:38</updated_at>
+        <description/>
+        <category_name>英语六级</category_name>
+    </base_info>
+    <blocks>
+        <block id='6' start_time='2:0' time='3' total_num='2' total_score='10.0'>
+            <base_info>
+                <title>writing</title>
+                <description>&lt;mp3&gt;/media/music.mp3&lt;mp3&gt;</description>
+            </base_info>
+            <problems>
+                
+                <problem id='10' score='5' types='0'>
+                    <title>fsdafafsfsaf</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='0' id='15' score='5'>
+                            <answer>789</answer>
+                            <analysis>sdfsfasf</analysis>
+                            <questionattrs>23;-;wer;-;65;-;789</questionattrs>
+                            <tags>ew</tags>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='9' score='5.0' types='0'>
+                    <title>我撒的飞洒</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='0' id='14' score='5.0'>
+                            <answer>sfs</answer>
+                            <analysis>sfafwerwr2r2</analysis>
+                            <questionattrs>sfs;-;sfss;-;sdds;-;sd</questionattrs>
+                            <tags>wrwr</tags>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+        <block id='7' start_time='1:57' time='3' total_num='1' total_score='0'>
+            <base_info>
+                <title>reading comprehension</title>
+                <description>撒发生法</description>
+            </base_info>
+            <problems>
+                <problem id='30' score='0' types='5'>
+                    <title>回答问题：&lt;div&gt;&amp;nbsp; &amp;nbsp; 1、你好&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; 2、你后&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; 3、你好&lt;/div&gt;</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='5' id='33' score='0'>
+                            <answer> &lt;p&gt;     afsfsfdsfdsf&lt;/p&gt;
+ &lt;p&gt;     afsfsfdsfdsf&lt;/p&gt;
+ &lt;p&gt;     afsfsfdsfdsf&lt;/p&gt;
+                            </answer>
+                            <analysis/>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+        <block id='19' start_time='1:54' time='30' total_num='7' total_score='118'>
+            <base_info>
+                <title>listening comprehension</title>
+                <description>sfasfasfda</description>
+            </base_info>
+            <problems>
+                <problem id='33' score='44' types='3'>
+                    <title>sdfasfasfasfasfsafdsaf&lt;div&gt;sdfafsafsf&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;sfdasfsaf&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;sfd&lt;/div&gt;&lt;div&gt;asfd&lt;/div&gt;&lt;div&gt;asf&lt;/div&gt;&lt;div&gt;saf&lt;/div&gt;&lt;div&gt;asf&lt;/div&gt;&lt;div&gt;asfasf&lt;/div&gt;</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='3' id='36' score='44'>
+                            <answer>fsafdasfsaf
+&lt;p&gt;safd&lt;/p&gt;
+&lt;p&gt;asf&lt;/p&gt;
+asf
+asf
+saf
+asf
+                            </answer>
+                            <analysis>444ererte</analysis>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='34' score='4' types='5'>
+                    <title>测试简答题&lt;div&gt;测试简答题&lt;/div&gt;&lt;div&gt;测试简答题&lt;/div&gt;&lt;div&gt;测试简答题&lt;/div&gt;&lt;div&gt;测试简答题&lt;/div&gt;&lt;div&gt;测试简答题测试简答题测试简答题&lt;/div&gt;&lt;div&gt;测试简答题&lt;/div&gt;&lt;div&gt;测试简答题测试简答题测试简答题&lt;/div&gt;</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='5' id='37' score='4'>
+                            <answer>测试简答题&lt;div&gt;测试简答题&lt;/div&gt;&lt;div&gt;测试简答题&lt;/div&gt;&lt;div&gt;测试简答题&lt;/div&gt;&lt;div&gt;测试简答题&lt;/div&gt;&lt;div&gt;测试简答题测试简答题测试简答题&lt;/div&gt;&lt;div&gt;测试简答题&lt;/div&gt;&lt;div&gt;测试简答题测试简答题测试简答题&lt;/div&gt;</answer>
+                            <analysis>gdsfgdsgdsg</analysis>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='35' score='65' types='4'>
+                    <title>测试测测试测测试测测试测测试测测试测&lt;div&gt;测试测测试测测试测&lt;/div&gt;&lt;div&gt;测试测&lt;/div&gt;&lt;div&gt;测试测测试测&lt;/div&gt;&lt;div&gt;测试测&lt;/div&gt;&lt;div&gt;测试测&lt;/div&gt;&lt;div&gt;测试测&lt;/div&gt;&lt;div&gt;测试测&lt;/div&gt;&lt;div&gt;测试测测试测&lt;/div&gt;</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='0' id='38' score='5'>
+                            <description>单复数测试测测试测测试测测试测v</description>
+                            <answer>wer</answer>
+                            <analysis>sdfafsafsafsfsafaffasfsfasfsfsafsf</analysis>
+                            <questionattrs>wer;-;awre;-;sf;-;4t34</questionattrs>
+                            <tags>3</tags>
+                        </question>
+                        <question correct_type='1' id='39' score='6'>
+                            <description>sadfasssssssssssssssssss4t344555</description>
+                            <answer>sdfa;|;qq2</answer>
+                            <analysis>sdfasdfsafsafdsafa</analysis>
+                            <questionattrs>sdfa;-;qq2;-;zxc;-;tgrt</questionattrs>
+                            <tags>4</tags>
+                        </question>
+                        <question correct_type='2' id='40' score='54'>
+                            <description>safwerwetewrtewrt</description>
+                            <answer>1</answer>
+                            <analysis>erqetqqqtewt4333333333333</analysis>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                        <question correct_type='3' id='41' score='0'>
+                            <description>asdffffffffffffffffffffffffffffffffffffffff</description>
+                            <answer>fffffwrrrrrrrrrrrrrrrrrrrrr</answer>
+                            <analysis>wetrwqtrwqerqtwqtwqetwqtwqt</analysis>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='45' score='5' types='3'>
+                    <title>sdfasfsafdsfsafasfasfsafsfsfsdfsaf</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='3' id='48' score='5'>
+                            <answer>asfasfasfasfasfasfsafsfdsafsfsfd</answer>
+                            <analysis>sfafsafasfasfsfdsafdasfsf</analysis>
+                            <questionattrs/>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+        <block id='24' start_time='' time='' total_num='4' total_score='5.0'>
+            <base_info>
+                <title>reading comprehension</title>
+                <description/>
+            </base_info>
+            <problems>
+                <problem id='58' score='0.0' types='0'>
+                    <title>&lt;time&gt;sdfdsf&lt;time&gt;sdfsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='0' id='65' score='0.0'>
+                            <answer>sdfwer</answer>
+                            <analysis/>
+                            <questionattrs>sdfwer;-;4535;-;34;-;6557</questionattrs>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='59' score='0.0' types='0'>
+                    <title>dfasfsdafaaaaaaaaaaaaaaaaaa&lt;time&gt;sdfsfsfsfdsf&lt;time&gt;</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='0' id='66' score='0.0'>
+                            <answer>wwew</answer>
+                            <analysis/>
+                            <questionattrs>wwew;-;223;-;efsd;-;w234</questionattrs>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='60' score='0.0' types='0'>
+                    <title>afsafsfasf&lt;time&gt;sdfsf&lt;time&gt;sdfsdfsfsf</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='0' id='67' score='0.0'>
+                            <answer>43534</answer>
+                            <analysis/>
+                            <questionattrs>43534;-;45;-;36456;-;232</questionattrs>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+                <problem>
+                    <part_description part_id='1'>上的发发算法发送方</part_description>
+                </problem>
+                <problem>
+                    <part_description part_id='2'>u头疼哟iyyuyiyiuyiiuyuiyyuyi</part_description>
+                </problem>
+                <problem id='57' score='5.0' types='0'>
+                    <title>&lt;time&gt;dsfsf&lt;time&gt;</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='0' id='64' score='5.0'>
+                            <answer>sdsf</answer>
+                            <analysis>fsfsdfsf</analysis>
+                            <questionattrs>sdsf;-;wr;-;e4t55;-;dfsf</questionattrs>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+        <block id='25' start_time='' time='' total_num='1' total_score='5.0'>
+            <base_info>
+                <title>translation</title>
+                <description/>
+            </base_info>
+            <problems>
+                <problem id='61' score='5.0' types='0'>
+                    <title>上的飞洒的法萨芬</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='0' id='68' score='5.0'>
+                            <answer>额外人</answer>
+                            <analysis>而温柔</analysis>
+                            <questionattrs>额外人;-;45;-;657;-;242</questionattrs>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+        <block id='26' start_time='' time='' total_num='1' total_score='5.0'>
+            <base_info>
+                <title>cloze</title>
+                <description/>
+            </base_info>
+            <problems>
+                <problem id='62' score='5.0' types='0'>
+                    <title>的发sgsgas广东省郭德纲</title>
+                    <category>3</category>
+                    <questions>
+                        <question correct_type='0' id='69' score='5.0'>
+                            <answer>2313</answer>
+                            <analysis></analysis>
+                            <questionattrs>2313;-;546;-;67868;-;454</questionattrs>
+                            <tags/>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+    </blocks>
+    <problem_ids/>
+</paper>
