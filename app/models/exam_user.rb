@@ -78,6 +78,7 @@ class ExamUser < ActiveRecord::Base
           <auto_score></auto_score>
           <rate_score></rate_score>
           <blocks></blocks>
+          <collections></collections>
         </paper>
       </exam>
     XML

@@ -1,7 +1,10 @@
 #encoding: utf-8
 class CollectionsController < ApplicationController
   layout 'exam_user'
-  before_filter :sign?
+  before_filter :sign?, :except => "add_collection"
+  require 'rexml/document'
+  include REXML
+  
   def load_words
     load_words={}
     unless params[:words].length==0
@@ -28,6 +31,51 @@ class CollectionsController < ApplicationController
     doc="collections = "+(JSON params[:collecton]).to_json
     write_xml(url,doc)
     render :text=>""
+  end
+
+  def add_collection
+    collection = Collection.find_or_create_by_user_id(cookies[:user_id].to_i)
+    path = Collection::COLLECTION_PATH + "/" + Time.now.to_date.to_s
+    url = path + "/#{collection.id}.js"
+    collection.set_collection_url(path, url)
+    already_hash = {}
+    last_problems = ""
+    file = File.open(Constant::PUBLIC_PATH + collection.collection_url)
+    last_problems = file.readlines.join
+    unless last_problems == "" or last_problems.nil?
+      already_hash = ActiveSupport::JSON.decode((JSON(last_problems.gsub("collections = ", ""))).to_json)
+    else
+      already_hash = {"problems" => {"problem" => []}}
+    end
+    is_problem_in = collection.update_question_in_collection(already_hash,
+      params[:problem_id].to_i, params[:question_id].to_i,
+      params[:question_answer], params[:question_analysis], params[:user_answer])
+    if is_problem_in == false
+      new_col_problem = collection.update_problem_hash(params[:problem_json], params[:paper_id], 
+        params[:question_answer], params[:question_analysis], params[:user_answer], params[:question_id].to_i)
+      already_hash["problems"]["problem"] << new_col_problem      
+    end
+    collection_js = "collections = " + already_hash.to_json.to_s
+    path_url = collection.collection_url.split("/")
+    collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
+
+#    exam_user = ExamUser.find(params[:exam_user_id])
+#    doc = exam_user.open_xml
+#    collection_ids = doc.root.elements["paper/collections"].text
+#    unless collection_ids.nil? or collection_ids.empty?
+#      ids = collection_ids.split(",")
+#      ids << params[:question_id] unless ids.include(params[:question_id])
+#      doc.root.elements["paper/collections"].text = ids.join(",")
+#    else
+#      doc.root.elements["paper/collections"].add_text(params[:question_id])
+#    end
+#    exam_user.generate_answer_sheet_url(doc, "result")
+
+    respond_to do |format|
+      format.json {
+        render :json => {:message => "收藏成功！"}
+      }
+    end
   end
 
 end

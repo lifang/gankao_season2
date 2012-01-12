@@ -30,7 +30,7 @@ GankaoSeason2::Application.routes.draw do
   
   resources :collections do
     collection do
-      post :load_words,:write_file
+      post :load_words,:write_file, :add_collection
     end
   end
   resources :similarities do

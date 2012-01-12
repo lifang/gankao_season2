@@ -5,6 +5,7 @@
 <div id="show_flash"></div>
 <div class="testPaper_top" id="paper_show_info">
   <div class="tp_top_box" id="float_test">
+    <input type="hidden" name="exam_user_id" id="exam_user_id" value="<%= @exam_user.id %>"/>
     <input type="hidden" name="paper_id" id="paper_id" value="<%= @exam_user.paper_id %>"/>
     <input type="hidden" name="problem_ids" id="problem_ids" value=""/>
     <input type="hidden" name="category_id" id="category_id" value="<%= @examination.category_id %>"/>
