@@ -56,7 +56,7 @@ function click_prev_problem(){
             $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
         }
         $("#jplayer_play_button_"+problem_index).trigger("click");
-        setCookie("init_problem",$(".problem_resource").index(prev_problem));
+        setCookie("init_problem",problem_index);
     }
 }
 
@@ -71,20 +71,18 @@ $(function(){
             $(this).parent().parent().addClass("p_q_line");
             $(this).addClass("pro_qu_h");
             last_opened_question = null;
-            var pass = $(this).parent().find(".pass_check").val();
-            change_color(pass,this);
         }else{
             pro_qu_div.show();
             $(this).parent().parent().removeClass("p_q_line");
             $(this).parent().removeClass("p_q_line");
             $(this).removeClass("pro_qu_h");
-            change_color(null,this);
+            // change_color(null,this);
             if(last_opened_question!=null){
                 last_opened_question.parent().find(".pro_qu_div").hide();
                 last_opened_question.parent().parent().addClass("p_q_line");
                 last_opened_question.addClass("pro_qu_h");
-                var pass = last_opened_question.parent().find(".pass_check").val();
-                change_color(pass,last_opened_question);
+                //var pass = last_opened_question.parent().find(".pass_check").val();
+                //change_color(pass,last_opened_question);
             }
             last_opened_question = $(this);
         }
@@ -94,12 +92,12 @@ $(function(){
 //题面后小题列表改变颜色
 function change_color(value,ele){
     if(value=="1"){
-        $(ele).css("background","#d2fddd");
-        $(ele).closest(".pro_question_list").css("background","#d2fddd");
+        $(ele).css("background","#EEFFEE");
+        $(ele).closest(".pro_question_list").css("background","#EEFFEE");
     }else{
         if(value=="0"){
-            $(ele).css("background","#ffd2d2");
-            $(ele).closest(".pro_question_list").css("background","#ffd2d2");
+            $(ele).css("background","#FFEAEA");
+            $(ele).closest(".pro_question_list").css("background","#FFEAEA");
         }else{
             $(ele).css("background","");
             $(ele).closest(".pro_question_list").css("background","");
@@ -154,22 +152,24 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
         $("#pass_check_"+problem_index+"_"+question_index).val(1);
         $("#green_dui_"+problem_index+"_"+question_index).show();
         $("#red_cuo_"+problem_index+"_"+question_index).hide();
+        change_color("1",$("#pro_qu_t_"+problem_index+"_"+question_index));
         if(question_type=="1"){
             if(correct_type=="1"){
-                $("#droppable_"+problem_index+"_"+question_index).css("background","#D2FDDD");
+                $("#droppable_"+problem_index+"_"+question_index).css("background","#EEFFEE");
             }else{
-                $("#input_inner_answer_"+problem_index+"_"+question_index).css("background","#D2FDDD");
+                $("#input_inner_answer_"+problem_index+"_"+question_index).css("background","#EEFFEE");
             }
         }
     }else{
         $("#pass_check_"+problem_index+"_"+question_index).val(0);
         $("#green_dui_"+problem_index+"_"+question_index).hide();
         $("#red_cuo_"+problem_index+"_"+question_index).show();
+        change_color("0",$("#pro_qu_t_"+problem_index+"_"+question_index));
         if(question_type=="1"){
             if(correct_type=="1"){
-                $("#droppable_"+problem_index+"_"+question_index).css("background","#FFD2D2");
+                $("#droppable_"+problem_index+"_"+question_index).css("background","#FFEAEA");
             }else{
-                $("#input_inner_answer_"+problem_index+"_"+question_index).css("background","#FFD2D2");
+                $("#input_inner_answer_"+problem_index+"_"+question_index).css("background","#FFEAEA");
             }
         }
     }
@@ -195,10 +195,11 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
         }
     }
     if(question_type=="1"){
-        $("#hedui_btn_"+problem_index+"_"+question_index).hide();
+        $("#hedui_btn_"+problem_index+"_"+question_index).parent().hide();
         if(correct_type=="0"){
             if(!$("#input_inner_answer_"+problem_index+"_"+question_index).attr("name")){
                 $("#input_inner_answer_"+problem_index+"_"+question_index).attr("name",user_answer);
+                //$("#input_inner_answer_"+problem_index+"_"+question_index).attr("onfocus","");
                 $("#input_inner_answer_"+problem_index+"_"+question_index).attr("onchange","");
                 $("#input_inner_answer_"+problem_index+"_"+question_index).bind("change",function(){
                     setSel($("#input_inner_answer_"+problem_index+"_"+question_index).attr("name"),$("#input_inner_answer_"+problem_index+"_"+question_index)[0],1);
@@ -289,6 +290,9 @@ function check_question(question_type,correct_type,attrs,problem_index,question_
     if($("#exam_user_answer_"+problem_index+"_"+question_index).val()==""){
         tishi_alert("请做题后再核对");
         return false;
+    }else{
+        $(".pro_question_list_"+problem_index+":eq("+question_index+")").show();
+        $("#pro_qu_t_"+problem_index+"_"+question_index).trigger("click");
     }
     $("#display_answer_"+problem_index+"_"+question_index).empty();
     $("#display_analysis_"+problem_index+"_"+question_index).empty();
@@ -418,7 +422,11 @@ function open_display_answer(problem_index,question_index){
 function do_inner_question(correct_type,problem_index,question_index){
     var this_answer = $("#input_inner_answer_"+problem_index+"_"+question_index).val();
     $("#exam_user_answer_"+problem_index+"_"+question_index).val(this_answer);
-    $("#hedui_btn_"+problem_index+"_"+question_index).show();
+    show_hedui(problem_index,question_index);
+}
+
+function show_hedui(problem_index,question_index){
+    $("#hedui_btn_"+problem_index+"_"+question_index).parent().show();
 }
 
 //播放音频

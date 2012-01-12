@@ -1,7 +1,16 @@
 #encoding: utf-8
 class CollectionsController < ApplicationController
   layout 'exam_user'
-  before_filter :sign?
+
+  before_filter :sign?, :except => ["add_collection", "update_collection"]
+  require 'rexml/document'
+  include REXML
+
+  def index
+    user = User.find(cookies[:user_id])
+    @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+  end
+
   def load_words
     load_words={}
     unless params[:words].length==0
@@ -29,5 +38,82 @@ class CollectionsController < ApplicationController
     write_xml(url,doc)
     render :text=>""
   end
+
+  def add_collection
+    collection = Collection.find_or_create_by_user_id(cookies[:user_id].to_i)
+    path = Collection::COLLECTION_PATH + "/" + Time.now.to_date.to_s
+    url = path + "/#{collection.id}.js"
+    collection.set_collection_url(path, url)
+    already_hash = {}
+    last_problems = ""
+    file = File.open(Constant::PUBLIC_PATH + collection.collection_url)
+    last_problems = file.read
+    unless last_problems.nil? or last_problems.strip == ""
+      already_hash = JSON(last_problems.gsub("collections = ", ""))#ActiveSupport::JSON.decode(().to_json)
+    else
+      already_hash = {"problems" => {"problem" => []}}
+    end
+    is_problem_in = collection.update_question_in_collection(already_hash,
+      params[:problem_id].to_i, params[:question_id].to_i,
+      params[:question_answer], params[:question_analysis], params[:user_answer])
+    if is_problem_in == false
+      new_col_problem = collection.update_problem_hash(params[:problem_json], params[:paper_id], 
+        params[:question_answer], params[:question_analysis], params[:user_answer], params[:question_id].to_i)
+      already_hash["problems"]["problem"] << new_col_problem      
+    end
+    collection_js = "collections = " + already_hash.to_json.to_s
+    path_url = collection.collection_url.split("/")
+    collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
+
+    if params[:exam_user_id]
+    exam_user = ExamUser.find(params[:exam_user_id])
+    exam_user.update_user_collection(params[:question_id]) if exam_user
+    end
+
+    respond_to do |format|
+      format.json {
+        render :json => {:message => "收藏成功！"}
+      }
+    end
+  end
+
+  def update_collection
+    this_problem = JSON params[:problem_json]
+    this_question = nil
+    unless this_problem["questions"]["question"].nil?
+      new_col_questions = this_problem["questions"]["question"]
+      if new_col_questions.class.to_s == "Hash"
+        this_question = new_col_questions
+      else
+        new_col_questions.each do |question|
+          if question["id"].to_i == params[:question_id].to_i
+            this_question = question
+            break
+          end
+        end unless new_col_questions.blank?
+      end
+    end
+    
+    Collection.update_collection(cookies[:user_id].to_i, this_problem, 
+      params[:problem_id], this_question, params[:question_id],
+      params[:paper_id], params[:question_answer], params[:question_analysis], params[:user_answer])
+    exam_user = ExamUser.find(params[:exam_user_id])
+    exam_user.update_user_collection(params[:question_id]) if exam_user
+
+    if params[:sheet_url]
+      doc = get_doc(params[:sheet_url])
+      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+      collection =doc.root.elements["collection"]
+      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+      write_xml(doc, params[:sheet_url])
+    end
+    
+    respond_to do |format|
+      format.json {
+        render :json => {:message => "收藏成功！"}
+      }
+    end
+  end
+
 
 end

@@ -78,6 +78,7 @@ class ExamUser < ActiveRecord::Base
           <auto_score></auto_score>
           <rate_score></rate_score>
           <blocks></blocks>
+          <collections></collections>
         </paper>
       </exam>
     XML
@@ -125,6 +126,20 @@ class ExamUser < ActiveRecord::Base
   def submited!
     self.is_submited=1
     self.save
+  end
+
+  #更新用户文件中的收藏
+  def update_user_collection(question_id)
+    doc = self.open_xml
+    collection_ids = doc.root.elements["paper/collections"].text
+    unless collection_ids.nil? or collection_ids.empty?
+      ids = collection_ids.split(",")
+      ids << question_id unless ids.include?(question_id)
+      doc.root.elements["paper/collections"].text = ids.join(",")
+    else
+      doc.root.elements["paper/collections"].add_text(question_id)
+    end
+    self.generate_answer_sheet_url(doc.to_s, "result")
   end
 
 end

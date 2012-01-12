@@ -16,3 +16,5 @@
 /nbproject/private/*.txt
 /config/database.yml
 /public/result/
+/public/collections/
+/public/sheets

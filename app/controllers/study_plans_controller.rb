@@ -55,6 +55,7 @@ class StudyPlansController < ApplicationController
         exercise=task_num["#{PlanTask::TASK_TYPES[:RECITE]}"]
       end
       day_status={}
+#      puts day_all[params[:end].to_datetime.month]
       unless day_all[params[:end].to_datetime.month].blank?
         which_day=day_all[params[:end].to_datetime.month].index(Time.now.day).nil? ? 0 :day_all[params[:end].to_datetime.month].index(Time.now.day)+1
         day_all[params[:end].to_datetime.month].each do |day_task|

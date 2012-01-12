@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" manifest="/assets/local_save/answer.manifest">
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>模考</title>
@@ -9,16 +9,11 @@
     <%= javascript_include_tag "jquery" %>
     <%= javascript_include_tag "jquery_ujs" %>
     <%= javascript_include_tag "mokao" %>
-    <%= javascript_include_tag 'cookie' %>
     <%= javascript_include_tag 'jshashtable-2.1' %>
     <%= javascript_include_tag "/assets/jplayer/jquery.jplayer.min.js" %>
-    <%= javascript_include_tag 'jquery.ui.core.js' %>
-    <%= javascript_include_tag 'jquery.ui.widget.js' %>
-    <%= javascript_include_tag 'jquery.ui.mouse.js' %>
-    <%= javascript_include_tag 'jquery.ui.droppable.js' %>
-    <%= javascript_include_tag 'jquery.ui.draggable.js' %>
     <script language="javascript" type="text/javascript">
       var papers = new Object();
+      var answer = new Object();
     </script>
     <!--[if IE 6]>
     <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
@@ -37,6 +32,6 @@
     <%= render :partial => "/common/flash_div"  %>
     <div class="wrap">
       <%= yield %>
-    </div>    
+    </div>
   </body>
 </html>

@@ -21,7 +21,11 @@ class SimilaritiesController < ApplicationController
   end
 
   def join
-    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    category_id = params[:category].nil? ? 2 : params[:category]
+    if cookies[:user_id].nil?
+      redirect_to "/logins?last_url=#{Constant::SERVER_PATH}/similarities?category=#{category_id}"
+      return false
+    end
     #设置考试试卷
     papers_arr=[]
     Examination.find(params[:id]).papers.each do |paper|
@@ -33,7 +37,7 @@ class SimilaritiesController < ApplicationController
       if @exam_user.nil?
         @exam_user = ExamUser.create(:user_id=>cookies[:user_id],:examination_id=>params[:id],:paper_id=>@paper.id)
       end
-      redirect_to "/exam_users/#{@exam_user.id}?category=#{category_id}"
+      redirect_to "/exam_users/#{@exam_user.id}?category=#{category_id}&type=similarities"
     else
       flash[:notice]="当前考试未指定试卷"
       redirect_to request.referer

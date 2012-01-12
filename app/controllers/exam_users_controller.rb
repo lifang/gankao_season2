@@ -1,15 +1,24 @@
 # encoding: utf-8
 class ExamUsersController < ApplicationController
   layout "exam_user"
-  
+  before_filter :sign?
   def show
     #读取试题
     begin
       eu = ExamUser.find(params[:id])
-      p = Paper.find(eu.paper_id)
+      @paper_id = eu.paper_id
+      p = Paper.find(@paper_id)
       paper = File.open("#{Constant::BACK_PUBLIC_PATH}#{p.paper_js_url}")
-      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("/paperjs/","/answerjs/")
+      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("paperjs/","answerjs/")
       @paper = (JSON paper.read()[8..-1])["paper"]
+      #组织 @paper
+      @paper["blocks"]["block"] = @paper["blocks"]["block"].nil? ? [] : (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : [@paper["blocks"]["block"]]
+      @paper["blocks"]["block"].each do |block|
+        block["problems"]["problem"] = (block["problems"].nil? || block["problems"]["problem"].nil?) ? [] : (block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]]
+        block["problems"]["problem"].each do |problem|
+          problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]]
+        end
+      end
       #生成考生答卷
       s_url = ExamUser.find(params[:id]).answer_sheet_url
       @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
@@ -81,15 +90,17 @@ class ExamUsersController < ApplicationController
     end
   end
 
-  def sheet_outline
+  def sheet_outline(collection_str = "")
     outline = "<?xml version='1.0' encoding='UTF-8'?>"
-    outline += <<-XML
-      <sheet init='0' status='0'></sheet>
-    XML
+    outline += "<sheet init='0' status='0'>"
+    outline += "<collection>"
+    outline += "#{collection_str}"
+    outline += "</collection>"
+    outline += "</sheet>"
     return outline
   end
   
-  #写文件
+  #创建答卷
   def create_sheet(sheet_outline,exam_user_id)
     dir = "#{Rails.root}/public/sheets"
     Dir.mkdir(dir) unless File.directory?(dir)
@@ -130,8 +141,11 @@ class ExamUsersController < ApplicationController
   #重做卷子
   def redo
     url=params[:sheet_url]
+    doc = get_doc(url)
+    collection = ""
+    collection = doc.root.elements["collection"].text if doc.root.elements["collection"]
     f=File.new(url,"w+")
-    f.write("#{sheet_outline.force_encoding('UTF-8')}")
+    f.write("#{sheet_outline(collection).force_encoding('UTF-8')}")
     f.close
     ExamUser.find(params[:id]).update_attribute("is_submited",false)
     redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}"
@@ -150,4 +164,29 @@ class ExamUsersController < ApplicationController
       }
     end
   end
+
+  #添加收藏(题面后小题)
+  def ajax_add_collect
+    #解析参数
+    this_problem = JSON params["problem"]
+    problem_id = this_problem["id"]
+    this_question = this_problem["questions"]["question"][params["question_index"].to_i]
+    question_id = this_question["id"]
+    Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id,
+      params["paper_id"], params["addition"]["answer"], params["addition"]["analysis"], params["user_answer"])
+    
+    #在sheet中记录小题的收藏状态
+    doc = get_doc(params[:sheet_url])
+    new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+    collection =doc.root.elements["collection"]
+    collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+    write_xml(doc, params[:sheet_url])
+    
+    respond_to do |format|
+      format.json {
+        render :json=>""
+      }
+    end
+  end
+
 end

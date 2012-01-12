@@ -5,10 +5,7 @@ class LoginsController < ApplicationController
   require 'oauth/oauth'
   include QqHelper
   include RenrenHelper
-  
-  def index
-    layout false
-  end
+  layout "application", :except => "index"
 
   def sina_login
     oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
@@ -50,7 +47,7 @@ class LoginsController < ApplicationController
       end
       cookies[:user_name] ={:value =>user_info[:name], :path => "/", :secure  => false}
       cookies[:user_id]={:value =>@user.id, :path => "/", :secure  => false}
-      render :inline => "<script>window.opener.location.href='/';window.close();</script>"
+      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
     end

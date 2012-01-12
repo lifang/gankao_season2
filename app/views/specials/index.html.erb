@@ -1,9 +1,11 @@
+<% category_id = params[:category].nil? ? '2' : params[:category] %>
+<%= javascript_include_tag "main.js" %>
 <h1>专项训练</h1>
 <div class="zhenti_list">
   <ul>
     <% unless @specials.blank? %>
       <% @specials.each do |special| %>
-        <li><a href="#">
+        <li><a href="/specials/<%= special.examination_id %>/join?category=<%= category_id %>">
             <% if @exam_user_hash[special.examination_id] %><span><img src="/assets/icon_wc.png" /></span><% end %>
             <h2><%= special.name %></h2>
           </a>
