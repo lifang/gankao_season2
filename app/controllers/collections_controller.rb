@@ -9,8 +9,8 @@ class CollectionsController < ApplicationController
   before_filter :sign?
 
   def index
-      user = User.find(cookies[:user_id])
-      @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+    user = User.find(cookies[:user_id])
+    @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
   end
 
   def load_words
@@ -49,7 +49,7 @@ class CollectionsController < ApplicationController
     already_hash = {}
     last_problems = ""
     file = File.open(Constant::PUBLIC_PATH + collection.collection_url)
-    last_problems = file.readlines.join
+    last_problems = file.read
     unless last_problems == "" or last_problems.nil?
       already_hash = ActiveSupport::JSON.decode((JSON(last_problems.gsub("collections = ", ""))).to_json)
     else
@@ -67,23 +67,34 @@ class CollectionsController < ApplicationController
     path_url = collection.collection_url.split("/")
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
 
-#    exam_user = ExamUser.find(params[:exam_user_id])
-#    doc = exam_user.open_xml
-#    collection_ids = doc.root.elements["paper/collections"].text
-#    unless collection_ids.nil? or collection_ids.empty?
-#      ids = collection_ids.split(",")
-#      ids << params[:question_id] unless ids.include(params[:question_id])
-#      doc.root.elements["paper/collections"].text = ids.join(",")
-#    else
-#      doc.root.elements["paper/collections"].add_text(params[:question_id])
-#    end
-#    exam_user.generate_answer_sheet_url(doc, "result")
+    if params[:exam_user_id]
+      exam_user = ExamUser.find(params[:exam_user_id])
+      doc = exam_user.open_xml
+      collection_ids = doc.root.elements["paper/collections"].text
+      unless collection_ids.nil? or collection_ids.empty?
+        ids = collection_ids.split(",")
+        ids << params[:question_id] unless ids.include(params[:question_id])
+        doc.root.elements["paper/collections"].text = ids.join(",")
+      else
+        doc.root.elements["paper/collections"].add_text(params[:question_id])
+      end
+      exam_user.generate_answer_sheet_url(doc, "result")
+    end
 
+    if params[:sheet_url]
+      doc = get_doc(params[:sheet_url])
+      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+      collection =doc.root.elements["collection"]
+      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+      write_xml(doc, params[:sheet_url])
+    end
+    
     respond_to do |format|
       format.json {
         render :json => {:message => "收藏成功！"}
       }
     end
   end
+
 
 end

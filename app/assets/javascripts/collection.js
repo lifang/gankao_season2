@@ -17,13 +17,14 @@ $(function(){
         });
         tag_types=str;
         setCookie("collection_problem_init","0");
-        init_problem=0;
-        load_problem_collection(init_problem,tag_types);
+        problem_init=0;
+        load_problem_collection(problem_init,tag_types);
     })
     $("#jplayer_one").jPlayer({
         swfPath: "/javascripts/jplayer",
         supplied: "mp3",
-        wmode: "window"
+        wmode: "window",
+        preload: "none"
     });
 })
 
@@ -389,30 +390,30 @@ function collection_correct_type(correct_type,ele,problem_index,question_index,q
 
 //下一题
 function click_next_problem(){
-    if(init_problem==(tag_problems[tag_types].length-1)){
+    if(problem_init==(tag_problems[tag_types].length-1)){
         tishi_alert("当前已是最后一题");
         return false;
     }
-    init_problem = init_problem+1;
-    setCookie("collection_problem_init",init_problem);
+    problem_init = problem_init+1;
+    setCookie("collection_problem_init",problem_init);
     $("#draggable_list").html("");
     $("#upErrorTo_tab").hide();
     $("#jplayer_one").jPlayer("stop");
-    load_problem_collection(init_problem,tag_types);
+    load_problem_collection(problem_init,tag_types);
 }
 
 //上一题
 function click_prev_problem(){
-    if(init_problem==0){
+    if(problem_init==0){
         tishi_alert("当前已是第一题");
         return false;
     }
-    init_problem = init_problem-1;
-    setCookie("collection_problem_init",init_problem);
+    problem_init = problem_init-1;
+    setCookie("collection_problem_init",problem_init);
     $("#draggable_list").html("");
     $("#upErrorTo_tab").hide();
     $("#jplayer_one").jPlayer("stop");
-    load_problem_collection(init_problem,tag_types);
+    load_problem_collection(problem_init,tag_types);
 }
 
 function get_array(value){
@@ -558,21 +559,21 @@ function show_div(id){
 
 function test_again(){
     var problems_tags=tag_problems[tag_types];
-    var question_type=problems_tags[init_problem].question_type;
-    var questions=problems_tags[init_problem].questions.question;
+    var question_type=problems_tags[problem_init].question_type;
+    var questions=problems_tags[problem_init].questions.question;
     if(question_type=='0'){
         for(var q_index=0;q_index<questions.length;q_index++){
             var correct_type=questions[q_index].correct_type;
             var tags= questions[q_index].tags==undefined?[]:questions[q_index].tags.split(",");
             if(tag_types=="全部收藏"||tags.indexOf(tag_types)!=-1){
-                $("#green_dui_"+init_problem+"_"+q_index).hide();
-                $("#red_cuo_"+init_problem+"_"+q_index).hide();
+                $("#green_dui_"+problem_init+"_"+q_index).hide();
+                $("#red_cuo_"+problem_init+"_"+q_index).hide();
                 $(".pro_btn a").css("display","none");
                 //                $(".pro_btn button").css("display","");
                 $(".jiexi").css("display","none");
                 var ele=$("#pro_qu_ul_"+q_index);
                 ele.html("");
-                next_correct_type(correct_type,ele,init_problem,q_index,questions[q_index]);
+                next_correct_type(correct_type,ele,problem_init,q_index,questions[q_index]);
                 $(".pro_question_list,.pro_qu_t").attr("style","");
                 $("#pro_qu_ul_"+q_index).html($("#pro_qu_ul_"+q_index).html()+"<input id='user_answer_"+q_index+"' value='' type='hidden' />");
             }
@@ -580,7 +581,7 @@ function test_again(){
     }else{
         $(".pro_question_list").css('display','none');
         $("#draggable_list").html("");
-        var audio_title = problems_tags[init_problem].title==null ? [] : problems_tags[init_problem].title.split("((mp3))");
+        var audio_title = problems_tags[problem_init].title==null ? [] : problems_tags[problem_init].title.split("((mp3))");
         audio_title[1]= audio_title[1] == null? "": "<input type='button' value='播放' onclick=javascript:jplayer_play_title('"+ audio_title[1]+"'); />";
         var title=audio_title.join("");
         var title_arr = title==null ? [] : title.split("((sign))");
@@ -601,7 +602,7 @@ function test_again(){
                 }
                 element_str +="</select>"
 
-                element_str += " <span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+init_problem +"_"+sign_index +"','"+ escape(answer)+"',"+init_problem +",'',"+question_type +") >核对</button></span></span>";
+                element_str += " <span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+problem_init +"_"+sign_index +"','"+ escape(answer)+"',"+problem_init +",'',"+question_type +") >核对</button></span></span>";
             }
             if(inner_correct_type=="1"){
                 drag_index++;
@@ -613,12 +614,12 @@ function test_again(){
                     new_attrs += "<li name='"+attrs[i]+"' class='drag_li_"+sign_index +"'>"+attrs[i]+"</li>"
                 }
                 $("#draggable_list").html($("#draggable_list").html()+new_attrs);
-                element_str += "<span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+init_problem+"_"+ sign_index +"','"+ escape(answer)+"',"+init_problem +",'"+drag_index +"') >核对</button></span></span>";
+                element_str += "<span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+problem_init+"_"+ sign_index +"','"+ escape(answer)+"',"+problem_init +",'"+drag_index +"') >核对</button></span></span>";
             }
             if(inner_correct_type=="3"){
                 $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
                 element_str += "<input class='input_tk' id='input_tk_"+ sign_index+"' onfocus=javascript:$('#check_"+sign_index +"').css('display',''); onblur=javascript:$('#check_"+sign_index +"').css('display','none');  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +"); />";
-                element_str += "<span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+init_problem +"_"+sign_index +"','"+ escape(answer)+"',"+init_problem +",'') >核对</button></span></span>";
+                element_str += "<span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+problem_init +"_"+sign_index +"','"+ escape(answer)+"',"+problem_init +",'') >核对</button></span></span>";
             }
            
             result_title.push(element_str);
@@ -739,7 +740,7 @@ function do_answer(e,single_answer,question,correct_type){
 
 function for_error(){
     var question_id=$("#question_id").val();
-    var paper_id=tag_problems[tag_types][init_problem].paper_id;
+    var paper_id=tag_problems[tag_types][problem_init].paper_id;
     var error_type=$("#upErrorTo_tab :radio:checked").val();
     if(paper_id==null){
         tishi_alert("试题有问题");

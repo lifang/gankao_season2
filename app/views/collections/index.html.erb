@@ -15,8 +15,8 @@
   var tgs = new Array( 'div','td','tr');
   var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
   var startSz = 2;
-  var init_problem = <%= cookies[:collection_problem_init].nil? ? 0 : cookies[:collection_problem_init].to_i%>;
-  var problem=get_array(collections.problems.problem);
+  var problem_init = <%= cookies[:collection_problem_init].nil? ? 0 : cookies[:collection_problem_init].to_i%>;
+ var problem=get_array(collections.problems.problem);
   var problems=new Array;
   var tag_list=["全部收藏"];
   var tag_problems={};
@@ -99,7 +99,7 @@
   //预载页面信息
   $(function(){
     $("#global_problem_sum").html(problems.length);
-    load_problem_collection(init_problem,tag_types);
+    load_problem_collection(problem_init,tag_types);
   })
 </script>
 <div class="m_side">

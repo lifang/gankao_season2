@@ -127,7 +127,7 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line">
                 <div class="pql_left">
-                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="未收藏" onclick="javascript:$(function(){add_collect(<%= "#{problem_index},#{question_index}" %>)});">收藏</a></span>
+                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="未收藏" onclick="javascript:$(function(){normal_add_collect(<%= "'#{problem_index}','#{question_index}'" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
@@ -295,7 +295,7 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line" style='display:none;'>
                 <div class="pql_left">
-                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="未收藏" onclick="javascript:$(function(){add_collect(<%= "#{problem_index},#{question_index}" %>)});">收藏</a></span>
+                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="未收藏" onclick="javascript:$(function(){special_add_collect(<%= "'#{problem_index}','#{question_index}','#{problem["id"]}','#{question["id"]}'" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
@@ -412,8 +412,9 @@
       mp3: audio_src
     });
   }
-  
-  function add_collect(problem_index,question_index){
+
+  //题面后小题加入收藏夹
+  function normal_add_collect(problem_index,question_index){
     $.ajax({
       type: "POST",
       url: "/exam_users/ajax_add_collect.json",
@@ -435,4 +436,36 @@
       }
     });
   }
+
+  //题面中小题加入收藏夹
+  function special_add_collect(problem_index,question_index,problem_id,question_id){
+    $.ajax({
+      type: "POST",
+      url: "/collections/add_collection.json",
+      dataType: "json",
+      data : {
+        "sheet_url" : sheet_url,
+        "problem_index" : problem_index,
+        "question_index" : question_index,
+        "paper_id" : init_paper_id,
+        "problem_json" : $("#problem_json_"+problem_index).val(),
+        "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
+        "question_answer" : answers[problem_index][question_index]["answer"],
+        "question_analysis" : answers[problem_index][question_index]["analysis"],
+        "problem_id" : problem_id,
+        "question_id" : question_id
+      },
+      success : function(data){
+        $("#shoucang_"+problem_index+"_"+question_index).addClass("hover");
+        $("#shoucang_"+problem_index+"_"+question_index).attr("name","已收藏");
+        $("#shoucang_"+problem_index+"_"+question_index).attr("onclick","");
+        tishi_alert("小题收藏成功");
+      }
+    });
+  }
+
+//  params[:problem_json], params[:paper_id],
+//  params[:question_answer], params[:question_analysis],
+//  params[:user_answer], params[:question_id].to_i
+
 </script>

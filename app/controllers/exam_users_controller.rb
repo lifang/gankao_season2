@@ -165,7 +165,7 @@ class ExamUsersController < ApplicationController
     end
   end
 
-  #添加收藏
+  #添加收藏(题面后小题)
   def ajax_add_collect
     #解析参数
     this_problem = JSON params["problem"]
@@ -186,21 +186,6 @@ class ExamUsersController < ApplicationController
         render :json=>""
       }
     end
-  end
-
-  #创建收藏文件
-  def create_collection(user_id)
-    dir = "#{Rails.root}/public/collections"
-    Dir.mkdir(dir) unless File.directory?(dir)
-    file_name = "/#{user_id}.js"
-    url = dir + file_name
-    unless File.exist?(url)
-      Collection.create(:user_id=>user_id,:collection_url=>"/collections"+file_name)
-      f=File.new(url,"w+")
-      f.write("collections = "+(JSON({:problems=>{:problem=>[]}})))
-      f.close
-    end
-    return url
   end
 
   def update_collection(this_problem,problem_id,this_question,question_id)
