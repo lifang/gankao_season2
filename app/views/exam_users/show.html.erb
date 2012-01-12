@@ -1,5 +1,4 @@
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
-<%= javascript_include_tag "/assets/main.js" %>
 
 <%= stylesheet_link_tag "/assets/jplayer.blue.monday.css" %>
 <%= javascript_include_tag "/assets/cookie.js" %>
@@ -8,6 +7,7 @@
 <%= javascript_include_tag "/assets/jquery.ui.mouse.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.draggable.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.droppable.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.position.js" %>
 <%= javascript_include_tag '/assets/jplayer/jquery.jplayer.min.js' %>
 <%= javascript_include_tag "#{@answer_js_url}" %>
 <script type="text/javascript" >
@@ -127,7 +127,7 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line">
                 <div class="pql_left">
-                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="未收藏" onclick="javascript:$(function(){normal_add_collect(<%= "'#{problem_index}','#{question_index}'" %>)});">收藏</a></span>
+                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){normal_add_collect(<%= "'#{problem_index}','#{question_index}'" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
@@ -293,7 +293,7 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line" style='display:none;'>
                 <div class="pql_left">
-                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="未收藏" onclick="javascript:$(function(){special_add_collect(<%= "'#{problem_index}','#{question_index}','#{problem["id"]}','#{question["id"]}'" %>)});">收藏</a></span>
+                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){special_add_collect(<%= "'#{problem_index}','#{question_index}','#{problem["id"]}','#{question["id"]}'" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
@@ -363,19 +363,21 @@
 </div>
 
 <!-- 报告错误框  -->
-<div class="upErrorTo_tab border_radius" id="report_error" style="top: 242px; left: 490px; display: none; ">
-  <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:close_report_error();"/></span>
+<div class="upErrorTo_tab border_radius" id="report_error" style="top: 242px; left: 450px; display: none; ">
+  <span class="xx_x"><img src="/assets/xx.png" onclick="javascript:close_report_error();"/></span>
   <input type="hidden" id="report_error_paper_id" value="<%= @paper["id"] %>" />
   <input type="hidden" id="report_error_paper_title" value="<%= @paper["base_info"]["title"] %>" />
   <input type="hidden" id="report_error_user_id" value="<%= cookies[:user_id] %>" />
   <input type="hidden" id="report_error_user_name" value="<%= cookies[:user_name] %>" />
   <input type="hidden" id="report_error_question_id" />
+  <h3>错误类型:</h3>
   <ul>
     <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:TOPOIC] %>"/>题目错误</li>
     <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANSWER] %>"/>答案错误</li>
     <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANALISIS] %>"/>解析错误</li>
     <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:WORD] %>"/>词汇错误</li>
   </ul>
+  <h3>错误说明:</h3>
   <textarea name="" id='report_error_description' cols="" rows=""></textarea>
   <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
 </div>

@@ -4,7 +4,7 @@ development:
   adapter: mysql2
   database: exam_app
   username: root
-  password: lifang
+  password: qianjun
   encoding: utf8
   pool: 5
   timeout: 5000

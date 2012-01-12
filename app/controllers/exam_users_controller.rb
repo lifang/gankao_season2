@@ -26,7 +26,8 @@ class ExamUsersController < ApplicationController
       @sheet = get_doc("#{@sheet_url}")
       close_file("#{@sheet_url}")
     rescue
-      render :inline=>"抱歉，服务暂时无法使用。"
+      flash[:warn] = "试卷加载错误，请您重新尝试。"
+      redirect_to "/similarities?category=#{params[:category]}"
     end
   end
 
@@ -74,7 +75,7 @@ class ExamUsersController < ApplicationController
   def ajax_report_error
     find_arr = ReportError.find_by_sql("select id from report_errors where user_id=#{params["post"]["user_id"]} and question_id=#{params["post"]["question_id"]} and error_type=#{params["post"]["error_type"]}")
     if find_arr.length>0
-      data={:message=>"请不要重复提交"}
+      data={:message=>"您已经提交过此错误，感谢您的支持。"}
     else
       reporterror = ReportError.new(params["post"])
       if reporterror.save
@@ -148,7 +149,7 @@ class ExamUsersController < ApplicationController
     f.write("#{sheet_outline(collection).force_encoding('UTF-8')}")
     f.close
     ExamUser.find(params[:id]).update_attribute("is_submited",false)
-    redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}"
+    redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}&type=#{params[:type]}"
   end
 
   #改变答卷状态（即做完了最后一题）
@@ -157,6 +158,7 @@ class ExamUsersController < ApplicationController
     url=params[:sheet_url]
     doc = get_doc(url)
     doc.attributes["status"] = "1"
+    doc.attributes["init"] = "0"
     write_xml(doc, url)
     respond_to do |format|
       format.json {

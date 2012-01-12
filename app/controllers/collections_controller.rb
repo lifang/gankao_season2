@@ -2,13 +2,22 @@
 class CollectionsController < ApplicationController
   layout 'exam_user'
 
-  before_filter :sign?, :except => ["add_collection", "update_collection"]
   require 'rexml/document'
   include REXML
 
   def index
-    user = User.find(cookies[:user_id])
-    @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+    if cookies[:user_id]
+      user = User.find(cookies[:user_id])
+      if user.collection
+        @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+      else
+        redirect_to "/collections/error"
+        return false
+      end
+    else
+      redirect_to "/collections/error"
+      return false
+    end
   end
 
   def load_words
@@ -66,8 +75,8 @@ class CollectionsController < ApplicationController
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
 
     if params[:exam_user_id]
-    exam_user = ExamUser.find(params[:exam_user_id])
-    exam_user.update_user_collection(params[:question_id]) if exam_user
+      exam_user = ExamUser.find(params[:exam_user_id])
+      exam_user.update_user_collection(params[:question_id]) if exam_user
     end
 
     respond_to do |format|
@@ -113,6 +122,10 @@ class CollectionsController < ApplicationController
         render :json => {:message => "收藏成功！"}
       }
     end
+  end
+
+  def error
+    
   end
 
 

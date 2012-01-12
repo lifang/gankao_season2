@@ -81,8 +81,8 @@ $(function(){
                 last_opened_question.parent().find(".pro_qu_div").hide();
                 last_opened_question.parent().parent().addClass("p_q_line");
                 last_opened_question.addClass("pro_qu_h");
-                //var pass = last_opened_question.parent().find(".pass_check").val();
-                //change_color(pass,last_opened_question);
+            //var pass = last_opened_question.parent().find(".pass_check").val();
+            //change_color(pass,last_opened_question);
             }
             last_opened_question = $(this);
         }
@@ -291,8 +291,10 @@ function check_question(question_type,correct_type,attrs,problem_index,question_
         tishi_alert("请做题后再核对");
         return false;
     }else{
-        $(".pro_question_list_"+problem_index+":eq("+question_index+")").show();
-        $("#pro_qu_t_"+problem_index+"_"+question_index).trigger("click");
+        if(question_type=="1"){
+            $(".pro_question_list_"+problem_index+":eq("+question_index+")").show();
+            $("#pro_qu_t_"+problem_index+"_"+question_index).trigger("click");
+        }
     }
     $("#display_answer_"+problem_index+"_"+question_index).empty();
     $("#display_analysis_"+problem_index+"_"+question_index).empty();
@@ -487,7 +489,7 @@ function close_about_words(){
 
 //打开报告错误框
 function open_report_error(question_id){
-    $("#report_error").show();
+    generate_flash_div($("#report_error"));
     $("#report_error_description").val("");
     $(".report_error_radio").attr("checked",false);
     $("#report_error_question_id").val(question_id);

@@ -90,8 +90,8 @@ button.green { color:#009900;}
 .icon_return a { background: url(/assets/icon_func.png) no-repeat -180px 0;}
 .icon_return a:hover { background: url(/assets/icon_func.png) no-repeat -180px -30px;}
 
-.tooltip_box { position: absolute; width: 60px;}
-.tooltip_next { background: #000; height: 25px; line-height: 25px; text-align: center; padding: 5px; color: #FFF;}
+.tooltip_box { position: absolute;}
+.tooltip_next { background: #000; height: 25px; line-height: 25px; text-align: center; padding: 5px 10px; color: #FFF;}
 
 
 /*题面-------------------*/
@@ -112,7 +112,7 @@ button.green { color:#009900;}
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     border-radius: 5px;
-    background: #f9f9f9;;
+    background: #fff;;
 }
 
 .pql_left { width: 5%; float: left; height: 32px; line-height: 32px;}
@@ -125,6 +125,8 @@ button.green { color:#009900;}
 .icon_shoucang a { background: url(/assets/icon_sc.png) no-repeat 0 0;}
 .icon_shoucang a:hover { background: url(/assets/icon_sc.png) no-repeat 0 -19px;}
 .icon_shoucang a.hover { background: url(/assets/icon_sc.png) no-repeat 0 bottom;}
+
+.no_sc { width: 200px; margin: 100px auto; padding-left: 70px; height: 64px; line-height: 64px; background: url(/assets/no_sc.png) no-repeat 0 center;}
 
 
 .p_q_line { overflow: hidden; height: 32px;}
@@ -165,7 +167,7 @@ button.green { color:#009900;}
 .green_dui { color: #090; margin-top: 10px;}
 .red_cuo { color: #F00;  margin-top: 10px;}
 
-.pro_btn { padding: 10px 0 0px 0px;}
+.pro_btn { padding: 10px 0 0 0;}
 .pro_btn button { margin: 0 10px 0 0;}
 .pro_btn a { margin: 0 10px;}
 
@@ -173,23 +175,22 @@ button.green { color:#009900;}
 
 .textarea_xz { width: 520px; height: 150px;}
 .textarea_tk { width: 520px; height: 25px;}
-.textarea_xz1 { width: 90%; height: 150px; padding: 5px;}
+.textarea_xz1 { width: 90%; height: 150px;}
 .input_xz { width: 90%; height: 20px;}
 
 .span_tk {min-width: 150px; display: inline-block; height: 15px; position: relative;}
 .input_tk { min-width: 148px; height: 23px; line-height: 23px; border: 1px #e2e2e2 solid; float: left;}
 .button_tk {
-    width: 70px;
-    height: 25px;
+    width: 81px;
+    height: 27px;
     text-align: center;
-    line-height: 25px;
+    line-height: 27px;
     border: none;
-    background: url(/assets/button_tk.png) no-repeat;
-    color: #ff6c00;
-    margin: 4px 15px;
+    background: url(/assets/t_btn.png) no-repeat;
+    color: #333;
 }
 
-.select_tk { min-width: 148px; height: 22px; line-height: 22px; border: 1px #e2e2e2 solid;}
+.select_tk { min-width: 148px; height: 25px; line-height: 25px; border: 1px #e2e2e2 solid;}
 
 .button_span {
     position: absolute;
@@ -199,7 +200,6 @@ button.green { color:#009900;}
     display: inline-block;
     width: 150px;
     height: 35px;
-    background:  url(/assets/btn_span_bg.png) 0 bottom no-repeat;
 }
 
 /*拖拽---*/
@@ -383,7 +383,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 
 
 /*tab_box------------*/
-.tab_box { width: 300px; padding: 5px; min-height: 200px; border: 3px #CCC solid; background: #FFF;position: fixed;z-index: 900;}
+.tab_box { width: 300px; padding: 5px; min-height: 200px; background: #FFF; border: 5px #333 solid; position: fixed;z-index: 900;}
 .tab_x { float: right;}
 .tab_con { padding: 60px 10px; text-align: center;}
 .tab_btn { width: 165px; margin: 0 auto;}
@@ -391,14 +391,15 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .icon_true { background: url(/assets/true.png) no-repeat #FFF center center;}
 
 /* 提示弹出层*/
-.tishi_tab { width: 288px; padding: 20px; background: #FFF; border: 5px #333 solid; position: absolute; display: none;}
-.tishi_tab p { text-align: center; line-height: 24px; font-size: 14px; font-family:"寰蒋闆呴粦"; color: #333;}
+.tishi_tab { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none;}
+.tishi_tab p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #fff;}
 
 /*提交错误弹出层-----*/
-.upErrorTo_tab { width: 300px; padding: 10px; background: #FFF; border: 5px #333 solid; display: none; position: absolute;z-index: 900;}
-.upErrorTo_tab li { height: 24px; line-height: 24px; color: #333; display: block; text-decoration: none;}
+.upErrorTo_tab { width: 300px; padding: 10px; background: url(/assets/black01_bg.png) repeat; display: none; position: absolute;z-index: 900;}
+.upErrorTo_tab h3 { font-size: 14px; color: #FFF; margin: 5px 0;}
+.upErrorTo_tab li { height: 24px; line-height: 24px; color: #fff; display: block; text-decoration: none;}
 .upErrorTo_tab li input { margin-right: 5px;}
-.upErrorTo_tab textarea { width: 100%; margin: 5px 0;}
+.upErrorTo_tab textarea { width: 100%; margin: 5px 0; background: none; border: 1px #666 solid; color: #FFF; font-size: 12px;}
 
 
 /*阅卷---------------*/
