@@ -2,13 +2,13 @@
 class CollectionsController < ApplicationController
   layout 'exam_user'
 
-  before_filter :sign?, :except => "add_collection"
+  before_filter :sign?, :except => ["add_collection", "update_collection"]
   require 'rexml/document'
   include REXML
 
   def index
-      user = User.find(cookies[:user_id])
-      @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+    user = User.find(cookies[:user_id])
+    @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
   end
 
   def load_words
@@ -48,8 +48,8 @@ class CollectionsController < ApplicationController
     last_problems = ""
     file = File.open(Constant::PUBLIC_PATH + collection.collection_url)
     last_problems = file.readlines.join
-    unless last_problems == "" or last_problems.nil?
-      already_hash = ActiveSupport::JSON.decode((JSON(last_problems.gsub("collections = ", ""))).to_json)
+    unless last_problems.nil? or last_problems.strip == ""
+      already_hash = JSON(last_problems.gsub("collections = ", ""))#ActiveSupport::JSON.decode(().to_json)
     else
       already_hash = {"problems" => {"problem" => []}}
     end
@@ -65,6 +65,36 @@ class CollectionsController < ApplicationController
     path_url = collection.collection_url.split("/")
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
 
+    exam_user = ExamUser.find(params[:exam_user_id])
+    exam_user.update_user_collection(params[:question_id]) if exam_user
+
+    respond_to do |format|
+      format.json {
+        render :json => {:message => "收藏成功！"}
+      }
+    end
+  end
+
+  def update_collection
+    this_problem = JSON params[:problem_json]
+    this_question = nil
+    unless this_problem["questions"]["question"].nil?
+      new_col_questions = this_problem["questions"]["question"]
+      if new_col_questions.class.to_s == "Hash"
+        this_question = new_col_questions
+      else
+        new_col_questions.each do |question|
+          if question["id"].to_i == params[:question_id].to_i
+            this_question = question
+            break
+          end
+        end unless new_col_questions.blank?
+      end
+    end
+    
+    Collection.update_collection(cookies[:user_id].to_i, this_problem, 
+      params[:problem_id], this_question, params[:question_id],
+      params[:paper_id], params[:question_answer], params[:question_analysis], params[:user_answer])
     exam_user = ExamUser.find(params[:exam_user_id])
     exam_user.update_user_collection(params[:question_id]) if exam_user
 

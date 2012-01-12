@@ -172,7 +172,8 @@ class ExamUsersController < ApplicationController
     problem_id = this_problem["id"]
     this_question = this_problem["questions"]["question"][params["question_index"].to_i]
     question_id = this_question["id"]
-    update_collection(this_problem,problem_id,this_question,question_id)
+    Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id,
+      params["paper_id"], params["addition"]["answer"], params["addition"]["analysis"], params["user_answer"])
     
     #在sheet中记录小题的收藏状态
     doc = get_doc(params[:sheet_url])
@@ -203,54 +204,5 @@ class ExamUsersController < ApplicationController
     return url
   end
 
-  def update_collection(this_problem,problem_id,this_question,question_id)
-    #读取collection.js文件
-    collection = Collection.find_or_create_by_user_id(cookies[:user_id].to_i)
-    path = Collection::COLLECTION_PATH + "/" + Time.now.to_date.to_s
-    url = path + "/#{collection.id}.js"
-    collection.set_collection_url(path, url)
-    result_url = Constant::PUBLIC_PATH + collection.collection_url
-    f = File.open(result_url)
-    content = f.read
-    resource = (content.strip=="") ? {"problems" => {"problem" => []}} : (JSON (content[13..-1]))
-    problems = resource["problems"]["problem"]
-    f.close
-
-    #判断是否已经收藏
-    problem_exist=false
-    question_exist = false
-    p_index = -1
-    problems.each do |problem|
-      p_index += 1
-      if problem["id"] == problem_id
-        problem_exist = true
-        problem["questions"]["question"].each do |question|
-          if question["id"] == question_id
-            question_exist = true
-            break
-          end
-        end if problem["questions"] && problem["questions"]["question"]
-        break
-      end
-    end
-
-    #收藏新题
-    if problem_exist
-      unless question_exist
-        this_question["answer"]=params["addition"]["answer"]
-        this_question["analysis"]=params["addition"]["analysis"]
-        problems[p_index]["questions"]["question"] << this_question
-      end
-    else
-      this_problem["paper_id"] = params["paper_id"]
-      this_problem["questions"]["question"]=[this_question]
-      problems << this_problem
-    end
-
-    #更新collection.js内容
-    content = "collections = #{resource.to_json}"
-    write_xml(content, result_url)
-    
-  end
 
 end

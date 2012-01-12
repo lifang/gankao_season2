@@ -7,7 +7,7 @@ class Collection < ActiveRecord::Base
   COLLECTION_PATH = "/collections"
 
   def set_collection_url(path, url)
-    if self.collection_url.nil? || !File.exist?(Constant::PUBLIC_PATH + url)
+    if self.collection_url.nil? || !File.exist?(Constant::PUBLIC_PATH + self.collection_url)
       self.collection_url = self.generate_collection_url("", path, url)
       self.save
     end
@@ -76,6 +76,63 @@ class Collection < ActiveRecord::Base
       end
     end
     return  new_col_problem
+  end
+  
+  def self.update_collection(user_id, this_problem,problem_id,
+      this_question,question_id, paper_id, answer, analysis, user_answer)
+    #读取collection.js文件
+    collection = Collection.find_or_create_by_user_id(user_id)
+    path = Collection::COLLECTION_PATH + "/" + Time.now.to_date.to_s
+    url = path + "/#{collection.id}.js"
+    collection.set_collection_url(path, url)
+    result_url = Constant::PUBLIC_PATH + collection.collection_url
+    f = File.open(result_url)
+    content = f.read
+    resource = (content.nil? or content.strip=="") ? {"problems" => {"problem" => []}} : (JSON (content[13..-1]))
+    problems = resource["problems"]["problem"]
+    f.close
+
+    #判断是否已经收藏
+    problem_exist=false
+    question_exist = false
+    p_index = -1
+    problems.each do |problem|
+      p_index += 1
+      if problem["id"] == problem_id
+        problem_exist = true
+        problem["questions"]["question"].each do |question|
+          if question["id"] == question_id
+            question_exist = true
+            break
+          end
+        end if problem["questions"] && problem["questions"]["question"]
+        break
+      end
+    end
+
+    this_question["answer"]=answer
+    this_question["analysis"]=analysis
+    this_question["user_answer"]=user_answer
+    #收藏新题
+    if problem_exist
+      unless question_exist        
+        if problems[p_index]["questions"]["question"].class.to_s == "Hash"
+          problems[p_index]["questions"]["question"] = [problems[p_index]["questions"]["question"], this_question]
+        else
+          problems[p_index]["questions"]["question"] << this_question
+        end        
+      end
+    else
+      this_problem["paper_id"] = paper_id
+      this_problem["questions"]["question"]=[this_question]
+      problems << this_problem
+    end
+
+    #更新collection.js内容
+    content = "collections = #{resource.to_json}"
+    path_url = collection.collection_url.split("/")
+    collection.generate_collection_url(content, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
+
   end
 
 end
