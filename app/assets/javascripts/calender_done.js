@@ -168,7 +168,14 @@ function new_calender(){
                                     return -1;
                                 }
                                 if(done_plans.indexOf(divs[i])>=0){
-                                    if(parseInt(divs[i].innerHTML)<today.getDate()&&month==(today.getMonth()+1)){
+                                    if(parseInt(divs[i].innerHTML)<today.getDate()&&month==(today.getMonth()+1)&&year<=today.getFullYear()){
+                                        if(status[parseInt(divs[i].innerHTML)]){
+                                            divs[i].innerHTML=  divs[i].innerHTML+document.getElementById("medal").innerHTML;
+                                        }else{
+                                            divs[i].innerHTML= divs[i].innerHTML+document.getElementById("yellow_card").innerHTML;
+                                        }
+                                    }
+                                    if(year<today.getFullYear()){
                                         if(status[parseInt(divs[i].innerHTML)]){
                                             divs[i].innerHTML=  divs[i].innerHTML+document.getElementById("medal").innerHTML;
                                         }else{
