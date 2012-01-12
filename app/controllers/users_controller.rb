@@ -76,7 +76,7 @@ class UsersController < ApplicationController
         data="邀请码已被使用"
       else
         code.update_attributes(:use_time=>Time.now,:is_used=>InviteCode::IS_USED[:YES])
-        Order.create(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:ACCREDIT],:out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
+        Order.create(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:ACCREDIT],:out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].days)
         data="升级成功"
       end
     end
