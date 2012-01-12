@@ -232,9 +232,9 @@
                   element_str += "<span class='dragDrop_box' id='droppable_#{problem_index}_#{sign_index}'></span>";
                   has_drag = true;
                 elsif question["correct_type"]=="3";
-                  element_str += "<input class='input_tk' type='text' id='input_inner_answer_#{problem_index}_#{sign_index}' onchange='javascript:do_inner_question(3,#{problem_index},#{sign_index});'></input>";
+                  element_str += "<input class='input_tk' type='text' id='input_inner_answer_#{problem_index}_#{sign_index}' onfocus='javascript:show_hedui(#{problem_index},#{sign_index});' onchange='javascript:do_inner_question(3,#{problem_index},#{sign_index});'></input>";
                 end;
-                element_str += "<span class='button_span' id='hedui_btn_#{problem_index}_#{sign_index}' style='display:none;' ><button class='button_tk'>核对</button></span>";
+                element_str += "<span class='button_span' style='display:none;' ><button id='hedui_btn_#{problem_index}_#{sign_index}' class='button_tk'>核对</button></span>";
                 element_str += "</span>";
                 element_str += "<button style='display:none;' id='refer_btn_#{problem_index}_#{sign_index}' >更新</button>"
                 result_title_arr << element_str << source_title_arr[sign_index+1]; %>
@@ -242,8 +242,6 @@
                   $(function(){
                     $("#hedui_btn<%= "_#{problem_index}_#{sign_index}" %>").bind("click",function(){
                       check_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$("#resource_questionattrs<%= "_#{problem_index}_#{sign_index}" %>").val(),<%= problem_index %>,<%= sign_index %>);
-                      $(".pro_question_list_"+<%= problem_index %>+":eq("+<%= sign_index %>+")").show();
-                      $("#pro_qu_t<%= "_#{problem_index}_#{sign_index}" %>").trigger("click");
                     })
                     $("#refer_btn<%= "_#{problem_index}_#{sign_index}" %>").bind("click",function(){
                       refer_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$("#resource_questionattrs<%= "_#{problem_index}_#{sign_index}" %>").val(),<%= problem_index %>,<%= sign_index %>);
@@ -253,7 +251,7 @@
                         drop: function( event, ui ) {
                           $(this).html(ui.draggable.attr("name"));
                           $("#exam_user_answer<%= "_#{problem_index}_#{sign_index}" %>").val(ui.draggable.attr("name"));
-                          $("#hedui_btn<%= "_#{problem_index}_#{sign_index}" %>").show();
+                          $("#hedui_btn<%= "_#{problem_index}_#{sign_index}" %>").parent().show();
                         }
                       });
                       attrs = "<%= question["questionattrs"] %>".split(";-;");

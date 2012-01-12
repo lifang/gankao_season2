@@ -13,7 +13,7 @@ $(function(){
 
     var main_height = win_height-(head_height+mainTop_height+foot_height);
     $(".m_side").css('height',main_height-12);//12为head的padding的12px
-    $(".main").css('height',main_height-12+34);//34是m_top的高度，
+    $(".main").css('height',main_height-12+30);//34是m_top的高度，
 })
 
 //控制其他页面主体高度
