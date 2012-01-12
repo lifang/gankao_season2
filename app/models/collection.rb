@@ -7,7 +7,7 @@ class Collection < ActiveRecord::Base
   COLLECTION_PATH = "/collections"
 
   def set_collection_url(path, url)
-    if self.collection_url.nil?
+    if self.collection_url.nil? || !File.exist?(Constant::PUBLIC_PATH + url)
       self.collection_url = self.generate_collection_url("", path, url)
       self.save
     end
@@ -15,6 +15,9 @@ class Collection < ActiveRecord::Base
 
   #创建收藏文件
   def generate_collection_url(str, path, url)
+    unless File.directory?(Constant::PUBLIC_PATH + "/collections")
+      Dir.mkdir(Constant::PUBLIC_PATH + "/collections")
+    end
     unless File.directory?(Constant::PUBLIC_PATH + path)
       Dir.mkdir(Constant::PUBLIC_PATH + path)
     end
