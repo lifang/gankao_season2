@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Collection < ActiveRecord::Base
+  belongs_to :user
 
   require 'rexml/document'
   include REXML

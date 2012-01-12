@@ -79,11 +79,10 @@
   <h1 class="ex_paper_h"><%= @paper["base_info"]["title"] %></h1>
   <div class="icon_func">
     <div class="float_right">
-      <span class="icon_collection"><a href="javascript:void(0);" class="tooltip hover" name="收藏" onclick="javascript:$(function(){add_collect(init_problem)});">收藏</a></span>
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
       <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
-      <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1)" name="缩小">缩小</a></span>
-      <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1)" name="放大">放大</a></span>
+      <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1);" name="缩小">缩小</a></span>
+      <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
       <span class="icon_return"><a href="/<%= (params["type"].nil?||(params["type"]!="similarities"&&params["type"]!="specials")) ? "similarities" : params["type"]  %>?category=<%= category_id %>" class="tooltip" name="返回">返回</a></span>
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo();">重做</a></span>
@@ -95,7 +94,7 @@
   <% problems.each do |problem| ; problem_index+=1; %>
     <% if problem["question_type"]=="0" %>
       <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
-        <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem %>" />
+        <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem.to_json %>" />
         <div class="m_side m_problem_bg">
           <div class="problem_box">
             <div class="problem_title">
@@ -128,7 +127,7 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line">
                 <div class="pql_left">
-                  <%= global_question_index+1 %>.
+                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="未收藏" onclick="javascript:$(function(){add_collect(<%= "#{problem_index},#{question_index}" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
@@ -213,7 +212,7 @@
       </div>
     <% else %>
       <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
-        <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem %>" />
+        <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem.to_json %>" />
         <div class="m_side m_problem_bg">
           <div class="problem_box">
             <div class="problem_title">
@@ -296,7 +295,7 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line" style='display:none;'>
                 <div class="pql_left">
-                  <%= global_question_index+1 %>.
+                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="未收藏" onclick="javascript:$(function(){add_collect(<%= "#{problem_index},#{question_index}" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
@@ -385,11 +384,16 @@
 
 
 <script type="text/javascript">
-  //还原用户之前操作
+  //还原用户之前操作,以及标注收藏过的题
   $(function(){
 <% @sheet.each_element do |ele| %>
       $("#refer_btn<%= ele.name %>").trigger("click");
 <% end %>
+<% @sheet.elements["collection"].text.split(",").each do |str| %>
+      $("#shoucang<%= str %>").addClass("hover");
+      $("#shoucang<%= str %>").attr("name","已收藏");
+      $("#shoucang<%= str %>").attr("onclick","");
+<% end if @sheet.elements["collection"] && @sheet.elements["collection"].text %>
   })
 
   //初始化大题
@@ -409,15 +413,25 @@
     });
   }
   
-  function add_collect(problem_index){
+  function add_collect(problem_index,question_index){
     $.ajax({
       type: "POST",
       url: "/exam_users/ajax_add_collect.json",
       dataType: "json",
       data : {
+        "sheet_url" : sheet_url,
         "paper_id" : init_paper_id,
+        "problem_index" : problem_index,
+        "question_index" : question_index,
         "problem" : $("#problem_json_"+problem_index).val(),
-        "addition" : answers[problem_index]
+        "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
+        "addition" : answers[problem_index][question_index]
+      },
+      success : function(data){
+        $("#shoucang_"+problem_index+"_"+question_index).addClass("hover");
+        $("#shoucang_"+problem_index+"_"+question_index).attr("name","已收藏");
+        $("#shoucang_"+problem_index+"_"+question_index).attr("onclick","");
+        tishi_alert("小题收藏成功");
       }
     });
   }

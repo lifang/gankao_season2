@@ -36,7 +36,6 @@ function click_next_problem(){
         }
         $("#jplayer_play_button_"+problem_index).trigger("click");
         setCookie("init_problem",problem_index);
-        init_problem = problem_index;
     }
 }
 
@@ -58,7 +57,6 @@ function click_prev_problem(){
         }
         $("#jplayer_play_button_"+problem_index).trigger("click");
         setCookie("init_problem",problem_index);
-        init_problem = problem_index;
     }
 }
 
@@ -92,17 +90,17 @@ $(function(){
 })
 
 //题面后小题列表改变颜色
-function change_color(value,jquery_ele){
+function change_color(value,ele){
     if(value=="1"){
-        jquery_ele.css("background","#EEFFEE");
-        jquery_ele.closest(".pro_question_list").css("background","#EEFFEE");
+        $(ele).css("background","#EEFFEE");
+        $(ele).closest(".pro_question_list").css("background","#EEFFEE");
     }else{
         if(value=="0"){
-            jquery_ele.css("background","#FFEAEA");
-            jquery_ele.closest(".pro_question_list").css("background","#FFEAEA");
+            $(ele).css("background","#FFEAEA");
+            $(ele).closest(".pro_question_list").css("background","#FFEAEA");
         }else{
-            jquery_ele.css("background","");
-            jquery_ele.closest(".pro_question_list").css("background","");
+            $(ele).css("background","");
+            $(ele).closest(".pro_question_list").css("background","");
         }
     }
 }
@@ -154,7 +152,7 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
         $("#pass_check_"+problem_index+"_"+question_index).val(1);
         $("#green_dui_"+problem_index+"_"+question_index).show();
         $("#red_cuo_"+problem_index+"_"+question_index).hide();
-        change_color("0",this);
+        change_color("1",$("#pro_qu_t_"+problem_index+"_"+question_index));
         if(question_type=="1"){
             if(correct_type=="1"){
                 $("#droppable_"+problem_index+"_"+question_index).css("background","#EEFFEE");
