@@ -6,8 +6,6 @@ class CollectionsController < ApplicationController
   require 'rexml/document'
   include REXML
 
-  before_filter :sign?
-
   def index
       user = User.find(cookies[:user_id])
       @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
@@ -67,17 +65,8 @@ class CollectionsController < ApplicationController
     path_url = collection.collection_url.split("/")
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
 
-#    exam_user = ExamUser.find(params[:exam_user_id])
-#    doc = exam_user.open_xml
-#    collection_ids = doc.root.elements["paper/collections"].text
-#    unless collection_ids.nil? or collection_ids.empty?
-#      ids = collection_ids.split(",")
-#      ids << params[:question_id] unless ids.include(params[:question_id])
-#      doc.root.elements["paper/collections"].text = ids.join(",")
-#    else
-#      doc.root.elements["paper/collections"].add_text(params[:question_id])
-#    end
-#    exam_user.generate_answer_sheet_url(doc, "result")
+    exam_user = ExamUser.find(params[:exam_user_id])
+    exam_user.update_user_collection(params[:question_id]) if exam_user
 
     respond_to do |format|
       format.json {

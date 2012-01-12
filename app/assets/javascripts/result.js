@@ -750,6 +750,10 @@ function answer_xml() {
                 answer_hash.put(questions[i].getAttribute("id"), [answer, questions[i].getAttribute("score")]);
             }
         }
+        var collections = xmlDom.getElementsByTagName("collections");
+        if (collections.length > 0 && collections[0].firstChild != undefined) {
+            user_collection = collections[0].firstChild.data.split(",");
+        }
     }
 }
 

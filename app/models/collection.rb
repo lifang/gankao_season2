@@ -33,7 +33,7 @@ class Collection < ActiveRecord::Base
         questions = problem["questions"]["question"]
         if questions.class.to_s == "Hash"
           if questions["id"].to_i == question_id
-            questions.merge!({"c_flag" => "1"})
+            questions.merge!({"c_flag" => "1", "answer" => answer, "analysis" => analysis, "user_answer" => user_answer})
             break
           end
         else
