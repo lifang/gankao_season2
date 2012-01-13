@@ -1,10 +1,11 @@
 #encoding: utf-8
 class CollectionsController < ApplicationController
-  layout 'exam_user'
-
+  #layout 'exam_user'
+  layout 'collection'
   require 'rexml/document'
   include REXML
-
+  before_filter :sign?, :except => ["index","index1"]
+  
   def index
     if cookies[:user_id]
       user = User.find(cookies[:user_id])
@@ -125,7 +126,48 @@ class CollectionsController < ApplicationController
   end
 
   def error
-    
+  end
+
+
+  #收藏主页
+  def index1
+    begin
+      if cookies[:user_id]
+        user = User.find(cookies[:user_id])
+        if user.collection
+          @collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
+          f = File.open(@collection_url)
+          @problems = (JSON (f.read)[13..-1])["problems"]["problem"]
+          @problems_sum = @problems.length #总大题数
+          @group_sum = 2 #设置每组大题数
+          @group_index = params[:init_problem].nil? ? 0 : ((params[:init_problem].to_i)/@group_sum)  #设置载入第几组
+          @problems = @problems[(@group_index*@group_sum),@group_sum]
+          f.close
+        else
+          redirect_to "/collections/error"
+          return false
+        end
+      else
+        redirect_to "/collections/error"
+        return false
+      end
+    rescue
+      redirect_to "/collections/error"
+      return false
+    end
+  end
+
+  #读取题目资源
+  def ajax_load_problems
+    user = User.find(cookies[:user_id])
+    collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
+    f = File.open(collection_url)
+    @problems = (JSON (f.read)[13..-1])["problems"]["problem"]
+    @problems_sum = @problems.length #总大题数
+    @problems = @problems[params[:group_index].to_i*params[:group_sum].to_i,params[:group_sum].to_i]
+    f.close
+    object={:group_index=>params[:group_index].to_i,:group_sum=>params[:group_sum].to_i,:problems=>@problems,:problems_sum=>@problems_sum,:init_problem=>params[:init_problem].to_i}
+    render :partial=>"/collections/problems",:object=>object
   end
 
 

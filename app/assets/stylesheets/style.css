@@ -208,7 +208,6 @@ button.green { color:#009900;}
     width: 46%;
     padding: 10px;
     background: #d8d5ca;
-    overflow: hidden;
     z-index: 100;
     position: fixed;
     bottom: 10px;
