@@ -248,3 +248,18 @@ function accredit(){
 }
 
 
+function check_vip(){
+    $.ajax({
+        async:true,
+        dataType:'json',
+        url:"/users/check_vip",
+        type:'post',
+        success : function(data) {
+            if(data.message){
+                window.open("/users/alipay_exercise")
+            }else{
+                tishi_alert("您已是vip用户，截止日期是"+data.time)
+            }
+        }
+    });
+}

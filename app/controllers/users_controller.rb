@@ -12,11 +12,7 @@ class UsersController < ApplicationController
 
   def show
     @user=User.find(cookies[:user_id])
-    orders=Order.find_by_sql("select * from orders where user_id=#{cookies[:user_id]} and TO_DAYS(end_time)>TO_DAYS('#{Time.now}')")
-    @order=[]
-    orders.each do |order|
-      @order << order.types
-    end unless orders.blank?
+    @order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and TO_DAYS(end_time)>TO_DAYS('#{Time.now}') and status=#{Order::STATUS[:NOMAL]}")
   end
 
   def update_users
@@ -47,8 +43,7 @@ class UsersController < ApplicationController
 
 
   def record_info
-    sql = "(select o.created_at created_at, c.name name, o.remark remark, o.total_price total_price,o.out_trade_no from orders o
-           left join categories c on c.id = o.category_id
+    sql = "(select o.created_at created_at, c.name name, o.remark remark, o.total_price total_price,o.out_trade_no from orders o join categories c on c.id = o.category_id
            where o.user_id =#{cookies[:user_id]})"
     @orders=Order.paginate_by_sql(sql,:per_page =>5, :page => params[:page])
     respond_with (@orders) do |format|
@@ -76,13 +71,45 @@ class UsersController < ApplicationController
         data="邀请码已被使用"
       else
         code.update_attributes(:use_time=>Time.now,:is_used=>InviteCode::IS_USED[:YES])
-        Order.create(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:ACCREDIT],:out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].days)
+        order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{Constant::EXAM_TYPES[:forth_level]}")
+        if order.nil? || order.types==Order::TYPES[:COMPETE] || order.types==Order::TYPES[:TRIAL_SEVEN]
+          Order.create(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:ACCREDIT],
+            :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].days)
+        else
+          if order.status
+            data="您已是vip用户，截止日期是#{order.end_time.strftime("%Y-%m-%d")}"
+          else
+            Order.update_attributes(:types=>Order::TYPES[:ACCREDIT],:out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",
+              :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].days)
+          end         
+        end
         data="升级成功"
       end
     end
     respond_to do |format|
       format.json {
         render :json=>{:message=>data}
+      }
+    end
+  end
+
+
+  def check_vip
+    order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{Constant::EXAM_TYPES[:forth_level]}")
+    end_time=""
+    if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
+      data=true
+    else
+      if order.status
+        end_time=order.end_time.strftime("%Y-%m-%d")
+        data=false
+      else
+        data=true
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:message=>data,:time=>end_time}
       }
     end
   end
@@ -133,8 +160,16 @@ class UsersController < ApplicationController
           @@m.synchronize {
             begin
               Order.transaction do
-                Order.create(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:CHARGE],
-                  :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
+                order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{Constant::EXAM_TYPES[:forth_level]}")
+                if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
+                  Order.create(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:CHARGE],
+                    :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
+                else
+                  unless order.status
+                    Order.update_attributes(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:CHARGE],
+                      :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
+                  end
+                end
               end
               render :text=>"success"
             rescue

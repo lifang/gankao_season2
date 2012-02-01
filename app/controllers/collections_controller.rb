@@ -8,7 +8,7 @@ class CollectionsController < ApplicationController
 
   def index
     user = User.find(cookies[:user_id])
-    @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+    @collection_js_url = "#{user.collection.collection_url}"
   end
 
   def load_words

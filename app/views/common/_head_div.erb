@@ -1,7 +1,7 @@
 <% category_id = params[:category].nil? ? 2 : params[:category] %>
 <div class="head">
   <div class="head_info">
-    <% order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]}") %>
+    <% order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]}") %>
     <div class="h_user"><a href="#" class="h_email email_u">邮件</a><a href="/users/<%= cookies[:user_id] %>"><%= if order.nil?
           cookies[:user_name]
         else

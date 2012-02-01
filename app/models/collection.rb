@@ -135,4 +135,181 @@ class Collection < ActiveRecord::Base
 
   end
 
+
+  def open_xml
+    dir = "#{Rails.root}/public"
+    file=File.open(dir + self.collection_url)
+    doc=Document.new(file)
+    file.close
+    return doc
+  end
+
+  #添加题目xml
+  def add_problem(doc, problem_xml)
+    str = doc.to_s.split("<problems/>")
+    if doc.elements["collection"].elements["problems"].children.blank?
+      doc = str[0] + "<problems>" + problem_xml + "</problems>" + str[1]
+    else
+      str = doc.to_s.split("</problems>")
+      doc = str[0] + problem_xml + "</problems>" + str[1] if str[1]
+    end
+    return doc
+  end
+
+  #删除试题
+  def delete_problem(problem_id, doc)
+    doc.delete_element("/collection/problems/problem[@id='#{problem_id}']") if doc.elements["/collection/problems/problem[@id='#{problem_id}']"]
+    return doc
+  end
+
+  #查询试题
+  def search(doc, tag, category)
+    doc.root.elements["problems"].each_element do |problem|
+      if problem.elements["category"].text.to_i != category.to_i
+        doc.delete_element(problem.xpath)
+      end
+    end unless category.nil? or category == ""
+    unless tag.nil? or tag == ""
+      tags = tag.strip.split(" ")
+      doc.root.elements["problems"].each_element do |problem|
+        is_include = false
+        problem.elements["questions"].each_element do |question|
+          if !question.elements["tags"].nil? and !question.elements["tags"].text.nil? and question.elements["tags"].text != ""
+            question_tag = question.elements["tags"].text.split(" ")
+            tags.each { |t| is_include = true  if question_tag.include?(t) }
+          end
+          break if is_include
+        end
+        if is_include == false
+          doc.delete_element(problem.xpath)
+        end
+      end
+    end
+    return doc
+  end
+
+  
+
+  #如果当前题目有题点已经收藏过，就只收藏题点
+  def add_question(question_id, answer_text, collection_xml)
+    question.add_element("user_answer").add_text("#{answer_text}")
+    question.add_attribute("repeat_num", "1")
+    question.add_attribute("error_percent", "0")
+    questions = collection_xml.elements["#{collection_problem.xpath}/questions"]
+    questions.elements.add(question)
+    return collection_xml
+  end
+
+  #如果当前题目没有做过笔记，则将题目加入到笔记
+  def auto_add_problem(paper_xml, question_id, problem_path, answer_text, collection_xml)
+    paper_problem = paper_xml.elements["#{problem_path}"]
+    paper_problem.elements["questions"].each_element do |question|
+      if question.attributes["id"].to_i != question_id.to_i
+        paper_xml.delete_element(question.xpath)
+      end
+    end if paper_problem
+    add_audio_to_title(paper_xml, paper_problem)
+    last_question = paper_problem.elements["questions"].elements["question[@id='#{question_id.to_i}']"]
+    last_question.add_element("user_answer").add_text("#{answer_text}")
+    last_question.add_attribute("repeat_num", "1")
+    last_question.add_attribute("error_percent", "0")
+    collection_xml.elements["/collection/problems"].elements.add(paper_problem)
+    return collection_xml
+  end
+
+  #根据问题的路径取出block中的音频文件
+  def add_audio_to_title(paper_xml, problem)
+    block_audio = ""
+    block_path = problem.xpath.split("/problems")[0]
+    block = paper_xml.elements["#{block_path}"]
+    if !block.nil? and !block.elements["base_info"].elements["description"].nil? and
+        block.elements["base_info"].elements["description"].text.to_s.html_safe =~ /<mp3>/
+      block_audio = block.elements["base_info"].elements["description"].text.to_s.html_safe.split("<mp3>")[1]
+      unless problem.elements["title"].nil?
+        problem.elements["title"].text = problem.elements["title"].text + "<mp3>" + block_audio + "<mp3>"
+      else
+        problem.add_element("title").add_text("<mp3>#{block_audio}<mp3>")
+      end
+    end
+  end
+
+  #自动阅卷保存错题
+  def self.auto_add_collection(answer, problem,question,already_hash)
+    problems=already_hash["problems"]["problem"]
+    if problems.class.to_s == "Hash"
+      problems=[problems]
+    end
+    collection_problem =problem_in_collection(problem.attributes["id"],problems,answer,question)
+    if collection_problem[0]
+      already_hash["problems"]["problem"]=collection_problem[1]
+    else
+      problem.delete_element problem.elements["questions"]
+      question =update_question(answer,question)
+      problem.add_element("questions").add_element(question)
+      if already_hash["problems"]["problem"].class.to_s == "Hash"
+        already_hash["problems"]["problem"]=[already_hash["problems"]["problem"],Hash.from_xml(problem.to_s)["problem"]]
+      else
+        already_hash["problems"]["problem"] << Hash.from_xml(problem.to_s)["problem"]
+      end
+    end
+    return already_hash
+   
+  end
+
+  #当前题目是否已经收藏到错题集
+  def self.problem_in_collection(problem_id, collections,answer,question_one)
+    has_none=false
+    collections.each do |problem|
+      if  problem["id"]==problem_id
+        has_none=true
+        questions=problem["questions"]["question"]
+        if questions.class.to_s == "Hash"
+          questions=[questions]
+        end
+        question_none=true
+        questions.each do |question|
+          if question_one.attributes["id"]==question["id"]
+            question_none=false
+            if question["user_answer"].nil?
+              question["repeat_num"]= "1"
+              question["error_percent"]= "0"
+              question["user_answer"]=[question["user_answer"],answer]
+            else
+              true_num = (((question["error_percent"].to_i.to_f)/100) * (question["repeat_num"].to_i)).round
+              question["repeat_num"] = question["repeat_num"].to_i + 1
+              question["error_percent"] = ((true_num.to_f/(question["repeat_num"].to_i))*100).round
+              question["user_answer"] << answer
+            end
+          end
+        end
+        if question_none
+          question =update_question(answer,question_one)
+          if problem["questions"]["question"].class.to_s == "Hash"
+            problem["questions"]["question"]=[problem["questions"]["question"],Hash.from_xml(question.to_s)["question"]]
+          else
+            problem["questions"]["question"] << Hash.from_xml(question.to_s)["question"]
+          end
+        end
+        break
+      end
+    end
+    return [has_none,collections]
+  end
+
+
+  #更新当前提点的答案
+  def self.update_question(answer_text,que)
+    if que.elements["user_answer"].nil?
+      true_num = (((que.attributes["error_percent"].to_i.to_f)/100) * (que.attributes["repeat_num"].to_i)).round
+      que.attributes["repeat_num"] = que.attributes["repeat_num"].to_i + 1
+      que.attributes["error_percent"] = ((true_num.to_f/(que.attributes["repeat_num"].to_i))*100).round
+      que.add_element("user_answer").add_text("#{answer_text}")
+    else
+      que.add_attribute("repeat_num", "1")
+      que.add_attribute("error_percent", "0")
+    end
+
+    return que
+  end
+
 end
