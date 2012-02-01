@@ -123,9 +123,16 @@ class Collection < ActiveRecord::Base
         end        
       end
     else
-      this_problem["paper_id"] = paper_id
-      this_problem["questions"]["question"]=[this_question]
-      problems << this_problem
+      problem={}
+      problem["id"]=this_problem["id"]
+      problem["question_type"]=this_problem["question_type"]
+      problem["description"]=this_problem["description"]
+      problem["title"]=this_problem["title"]
+      problem["category"]=this_problem["category"]
+      problem["paper_id"] = paper_id
+      problem["questions"]={}
+      problem["questions"]["question"]=[this_question]
+      problems << problem
     end
 
     #更新collection.js内容

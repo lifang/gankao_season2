@@ -93,7 +93,7 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line">
                 <div class="pql_left">
-                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){normal_add_collect(<%= "'#{problem_index}','#{question_index}'" %>)});">收藏</a></span>
+                  <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){normal_add_collect(<%= "'#{problem_index}','#{question_index}'" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
@@ -266,7 +266,7 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1;%>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line" style='display:none;'>
                 <div class="pql_left">
-                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){special_add_collect(<%= "'#{problem_index}','#{question_index}','#{problem["id"]}','#{question["id"]}'" %>)});">收藏</a></span>
+                  <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){special_add_collect(<%= "'#{problem_index}','#{question_index}','#{problem["id"]}','#{question["id"]}'" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">

@@ -1,10 +1,10 @@
 #encoding: utf-8
 class CollectionsController < ApplicationController
-  #layout 'exam_user'
-  layout 'collection'
+  layout 'exam_user'
+  #layout 'collection'
   require 'rexml/document'
   include REXML
-  before_filter :sign?, :except => ["index","index1"]
+  before_filter :sign?, :except => ["index","error"]
   
   def index
     if cookies[:user_id]
@@ -13,11 +13,9 @@ class CollectionsController < ApplicationController
         @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
       else
         redirect_to "/collections/error"
-        return false
       end
     else
       redirect_to "/collections/error"
-      return false
     end
   end
 
