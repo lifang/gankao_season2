@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   include Constant
   include ApplicationHelper
+  include RemotePaginateHelper
   require 'rexml/document'
   include REXML
 

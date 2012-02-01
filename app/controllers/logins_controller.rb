@@ -43,7 +43,7 @@ class LoginsController < ApplicationController
       @user=User.where("code_id='#{user_info[:id]}' and code_type='sina'").first
       if @user.nil?
         @user=User.create(:code_id=>"#{user_info[:id]}",:code_type=>'sina',:name=>user_info[:name],:username=>user_info[:name])
-        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:status=>Order::STATUS[:NOMAL],:start_time=>Time.now,:end_time=>Time.now+1.weeks)
+        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:status=>Order::STATUS[:NOMAL],:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:trail].days)
       end
       cookies[:user_name] ={:value =>user_info[:name], :path => "/", :secure  => false}
       cookies[:user_id]={:value =>@user.id, :path => "/", :secure  => false}
@@ -61,7 +61,7 @@ class LoginsController < ApplicationController
       @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
       if @user.nil?
         @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
-        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:status=>Order::STATUS[:NOMAL],:start_time=>Time.now,:end_time=>Time.now+1.weeks)
+        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:status=>Order::STATUS[:NOMAL],:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:trail].days)
       end
       cookies[:user_name] ={:value =>@user.name, :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
@@ -90,7 +90,7 @@ class LoginsController < ApplicationController
       if @user.nil?
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>session[:qqopen_id])
-        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:status=>Order::STATUS[:NOMAL],:start_time=>Time.now,:end_time=>Time.now+1.weeks)
+        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:status=>Order::STATUS[:NOMAL],:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:trail].days)
       end
       session[:qqtoken]=nil
       session[:qqsecret]=nil

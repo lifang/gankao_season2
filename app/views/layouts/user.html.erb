@@ -23,15 +23,20 @@
   <body>
     <div class="wrap">
       <div class="head">
-        <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>'"
-                                     class="red"><%= User.find(cookies[:user_id]).name %></a>|<a href="/">首页</a>|<a href="/users/delete_user">退出</a></div>
+        <% order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]}") %>
+        <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>'" class="red">
+<%= if order.nil?
+                                        cookies[:user_name]
+                                       else
+                                         "#{cookies[:user_name]}(试用剩#{((order.end_time-Time.now.to_datetime)/1.day).to_i}天)"
+            end %></a>|<a href="/">首页</a>|<a href="/users/delete_user">退出</a></div>
         <div class="logo"><a href="/"><img src="/assets/users/logo.png" /></a></div>
       </div>
       <div class="main">
         <div class="main_box border_radius">
           <div class="left">
             <div class="message_box">
-             <%= yield %>
+              <%= yield %>
             </div>
           </div>
           <div class="right">
