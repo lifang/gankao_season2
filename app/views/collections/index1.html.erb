@@ -1,0 +1,46 @@
+<%= javascript_include_tag "/assets/application.js" %>
+<%= javascript_include_tag '/assets/jplayer/jquery.jplayer.min.js' %>
+<%= javascript_include_tag '/assets/main.js' %>
+<%= javascript_include_tag '/assets/collection1.js' %>
+
+<% category_id = params[:category].nil? ? '2' : params[:category] %>
+<% init_problem = params[:init_problem].nil? ? @group_index*@group_sum : params[:init_problem].to_i %>
+<script type="text/javascript" >
+  category = '<%= category_id %>';
+  collection_url = '<%= @collection_url %>';    //收藏夹文件路径
+  init_problem = <%= init_problem %>;           //初始化显示大题
+  group_index = <%= @group_index %>;            //当前第几组
+  group_sum = <%= @group_sum %>;                //每组几题
+  problems_sum = <%= @problems_sum %>;          //收藏夹里大题总数
+</script>
+<!-- 初始化jplayer播放器  -->
+<%= render :partial=>"/common/jquery_jplayer" %>
+
+<div class="m_top">
+  <h1 class="ex_paper_h">查找范围 <select><option>-请选择-</option></select> </h1>
+  <div class="icon_func">
+    <div class="float_right">
+      <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
+      <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
+      <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1);" name="缩小">缩小</a></span>
+      <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
+      <span class="icon_return"><a href="/<%= (params["type"].nil?||(params["type"]!="similarities"&&params["type"]!="specials")) ? "similarities" : params["type"]  %>?category=<%= category_id %>" class="tooltip" name="返回">返回</a></span>
+    </div>
+    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo('<%= params["type"] %>');">重做</a></span>
+  </div>
+</div>
+
+<div id="collection_resource" >
+  <% object={:group_index=>@group_index,:group_sum=>@group_sum,:problems=>@problems,:problems_sum=>@problems_sum,:init_problem=>init_problem} %>
+  <%= render :partial=>"/collections/problems",:object=>object %>
+</div>
+
+<script type="text/javascript">
+  //初始化大题
+  $(function(){
+    if($("#drag_tk_"+init_problem).length>0 && $("#drag_tk_"+init_problem).height()){
+      $("#drag_tk_box_"+init_problem).css("height",$("#drag_tk_"+init_problem).height()+20);
+    }
+    $("#jplayer_play_button_"+init_problem).trigger("click");
+  })
+</script>

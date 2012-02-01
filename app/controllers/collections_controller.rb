@@ -1,14 +1,22 @@
 #encoding: utf-8
 class CollectionsController < ApplicationController
   layout 'exam_user'
-
-  before_filter :sign?, :except => ["add_collection", "update_collection"]
+  #layout 'collection'
   require 'rexml/document'
   include REXML
-
+  before_filter :sign?, :except => ["index","error"]
+  
   def index
-    user = User.find(cookies[:user_id])
-    @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+    if cookies[:user_id]
+      user = User.find(cookies[:user_id])
+      if user.collection
+        @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+      else
+        redirect_to "/collections/error"
+      end
+    else
+      redirect_to "/collections/error"
+    end
   end
 
   def load_words
@@ -47,7 +55,7 @@ class CollectionsController < ApplicationController
     already_hash = {}
     last_problems = ""
     file = File.open(Constant::PUBLIC_PATH + collection.collection_url)
-    last_problems = file.readlines.join
+    last_problems = file.read
     unless last_problems.nil? or last_problems.strip == ""
       already_hash = JSON(last_problems.gsub("collections = ", ""))#ActiveSupport::JSON.decode(().to_json)
     else
@@ -65,8 +73,10 @@ class CollectionsController < ApplicationController
     path_url = collection.collection_url.split("/")
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
 
-    exam_user = ExamUser.find(params[:exam_user_id])
-    exam_user.update_user_collection(params[:question_id]) if exam_user
+    if params[:exam_user_id]
+      exam_user = ExamUser.find(params[:exam_user_id])
+      exam_user.update_user_collection(params[:question_id]) if exam_user
+    end
 
     respond_to do |format|
       format.json {
@@ -98,11 +108,65 @@ class CollectionsController < ApplicationController
     exam_user = ExamUser.find(params[:exam_user_id])
     exam_user.update_user_collection(params[:question_id]) if exam_user
 
+    if params[:sheet_url]
+      doc = get_doc(params[:sheet_url])
+      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+      collection =doc.root.elements["collection"]
+      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+      write_xml(doc, params[:sheet_url])
+    end
+    
     respond_to do |format|
       format.json {
         render :json => {:message => "收藏成功！"}
       }
     end
   end
+
+  def error
+  end
+
+
+  #收藏主页
+  def index1
+    begin
+      if cookies[:user_id]
+        user = User.find(cookies[:user_id])
+        if user.collection
+          @collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
+          f = File.open(@collection_url)
+          @problems = (JSON (f.read)[13..-1])["problems"]["problem"]
+          @problems_sum = @problems.length #总大题数
+          @group_sum = 2 #设置每组大题数
+          @group_index = params[:init_problem].nil? ? 0 : ((params[:init_problem].to_i)/@group_sum)  #设置载入第几组
+          @problems = @problems[(@group_index*@group_sum),@group_sum]
+          f.close
+        else
+          redirect_to "/collections/error"
+          return false
+        end
+      else
+        redirect_to "/collections/error"
+        return false
+      end
+    rescue
+      redirect_to "/collections/error"
+      return false
+    end
+  end
+
+  #读取题目资源
+  def ajax_load_problems
+    user = User.find(cookies[:user_id])
+    collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
+    f = File.open(collection_url)
+    @problems = (JSON (f.read)[13..-1])["problems"]["problem"]
+    @problems_sum = @problems.length #总大题数
+    @problems = @problems[params[:group_index].to_i*params[:group_sum].to_i,params[:group_sum].to_i]
+    f.close
+    object={:group_index=>params[:group_index].to_i,:group_sum=>params[:group_sum].to_i,:problems=>@problems,:problems_sum=>@problems_sum,:init_problem=>params[:init_problem].to_i}
+    render :partial=>"/collections/problems",:object=>object
+  end
+
 
 end

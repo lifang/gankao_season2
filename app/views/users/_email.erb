@@ -1,0 +1,17 @@
+<% unless @email.blank? %>
+  <div class="mess_top">
+    <span><input name="" type="checkbox" value="" onclick="javascript:$('#email_check input').attr('checked',this.checked);" /> 全选</span>
+    <span><button class="shanchu" onclick="delete_email()">删除</button></span>
+  </div>
+  <div class="mess_con" id="email_check">
+    <% @email.each do |email| %>
+      <div class="mess_list" >
+        <div class="mess_title"><input name="email" type="checkbox" value="<%=email.id  %>" /> <a href="#" onclick="javascript:$('.mess_tab_con').html($(this).html());show_div('.mess_tab')"><%= email.description %></a></div>
+        <div class="mess_time"><%= email.created_at.strftime("%Y-%m-%d") %></div>
+      </div>
+    <% end  %>
+    <%= will_paginate_remote(@email ,  "" ,{:url => "/users/email_info"}) %>
+  <% else %>
+    <div class="record_none">暂时没有邮件</div>
+  </div>
+<% end %>

@@ -1,0 +1,17 @@
+<div class="mess_top">
+  <span><input name="check_all" type="checkbox" value="" onclick="javascript:$('#mess_check input').attr('checked',this.checked);"/> 全选</span>
+  <span><button class="shanchu" onclick="delete_mess()">删除</button></span>
+</div>
+<div class="mess_con" id="mess_check">
+  <% unless @mess.blank? %>
+    <% @mess.each do |mess| %>
+      <div class="mess_list" >
+        <div class="mess_title"><input name="email" type="checkbox" value="<%=mess.id  %>" /> <a href="#" onclick="javascript:$('.mess_tab_con').html($(this).html());show_div('.mess_tab')"><%= mess.description %></a></div>
+        <div class="mess_time"><%= mess.created_at.strftime("%Y-%m-%d") %></div>
+      </div>
+    <% end  %>
+  <% else %>
+    <div class="record_none">暂时没有消息</div>
+  <% end %>
+  <%= will_paginate_remote(@mess ,  "" ,{:url => "/users/mess_info"}) %>
+</div>

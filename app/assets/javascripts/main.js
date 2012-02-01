@@ -13,7 +13,7 @@ $(function(){
 
     var main_height = win_height-(head_height+mainTop_height+foot_height);
     $(".m_side").css('height',main_height-12);//12为head的padding的12px
-    $(".main").css('height',main_height-12+34);//34是m_top的高度，
+    $(".main").css('height',main_height-12+30);//34是m_top的高度，
 })
 
 //控制其他页面主体高度
@@ -135,7 +135,7 @@ function create_element(element, name, id, class_name, type, ele_flag) {
 //弹出错误提示框
 function tishi_alert(str){
     var div = create_element("div",null,"flash_notice","tishi_tab border_radius",null,null);
-    div.innerHTML+="<span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/x.gif' /></span>";
+    div.innerHTML+="<span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>";
     var p = create_element("p","","","","innerHTML");
     p.innerHTML = str;
     div.appendChild(p);

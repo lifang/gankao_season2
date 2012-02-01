@@ -1,5 +1,6 @@
 # encoding: utf-8
 class SimilaritiesController < ApplicationController
+  before_filter :sign?, :except => "index"
   
   def index
     @category = Category.find_by_id(params[:category].to_i)
@@ -15,7 +16,7 @@ class SimilaritiesController < ApplicationController
     examination_ids = []
     @exam_user_hash = {}
     @similarities.each { |sim| examination_ids << sim.id }
-    @exam_users = ExamUser.find_by_sql(["select eu.id,eu.examination_id, eu.is_submited,eu.answer_sheet_url from exam_users eu where eu.user_id = ?
+    @exam_users = ExamUser.find_by_sql(["select eu.id, eu.examination_id, eu.is_submited, eu.answer_sheet_url from exam_users eu where eu.user_id = ?
       and eu.examination_id in (?)", cookies[:user_id].to_i, examination_ids])
     @exam_users.each { |eu| @exam_user_hash[eu.examination_id] = [eu.id,eu.is_submited,eu.answer_sheet_url] }
   end

@@ -1,5 +1,5 @@
 <div id='flash_notice' class="tishi_tab border_radius">
-  <span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/x.gif' /></span>
+  <span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>
   <p>
     <%  show=0; if flash[:warn] ;show=1;%>
       <%= flash[:warn] %><% flash[:warn] = nil %>
@@ -13,6 +13,8 @@
       <%= flash[:pic_warn] %><% flash[:pic_warn] = nil %>
     <% elsif flash[:failure] ;show=1;%>
       <%= flash[:failure] %><% flash[:failure] = nil %>
+    <% else %>
+      欢迎来到赶考网
     <% end %>
   </p>
 </div>

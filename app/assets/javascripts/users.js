@@ -60,3 +60,191 @@ function show_div(id){
     jQuery(id).css('left',(win_width-z_layer_width)/2);
     jQuery(id).css('display','block');
 }
+
+
+function show_detail(date,out_no,name,fee,remark){
+    $("#date").html(date);
+    $("#out_no").html(out_no);
+    $("#name").html(name);
+    $("#remark").html(remark);
+    $("#fee").html(fee);
+    show_div(".mess_tab");
+}
+
+function load_email(){
+    $.ajax({
+        async:true,
+        dataType:'script',
+        url:"/users/email_info",
+        type:'get'
+    });
+    return false;
+}
+
+function load_message(){
+    $.ajax({
+        async:true,
+        dataType:'script',
+        url:"/users/mess_info",
+        type:'get'
+    });
+    return false;
+}
+
+function get_record(){
+    $.ajax({
+        async:true,
+        dataType:'script',
+        url:"/users/record_info",
+        type:'get'
+    });
+    return false;
+}
+
+//提示框样式设定
+function generate_flash_div(style) {
+    var scolltop = document.body.scrollTop|document.documentElement.scrollTop;
+    var win_height = document.documentElement.clientHeight;//jQuery(document).height();
+    var win_width = jQuery(window).width();
+    var z_layer_height = jQuery(style).height();
+    var z_layer_width = jQuery(style).width();
+    jQuery(style).css('top',(win_height-z_layer_height)/2 + scolltop);
+    jQuery(style).css('left',(win_width-z_layer_width)/2);
+    jQuery(style).css('display','block');
+}
+
+//提示框弹出层
+function show_flash_div() {
+    $('.tishi_tab').stop();
+    generate_flash_div(".tishi_tab");
+    $('.tishi_tab').delay(2500).fadeTo("slow",0,function(){
+        $(this).remove();
+    });
+}
+
+//创建元素
+function create_element(element, name, id, class_name, type, ele_flag) {
+    var ele = document.createElement("" + element);
+    if (name != null)
+        ele.name = name;
+    if (id != null)
+        ele.id = id;
+    if (class_name != null)
+        ele.className = class_name;
+    if (type != null)
+        ele.type = type;
+    if (ele_flag == "innerHTML") {
+        ele.innerHTML = "";
+    }
+    else {
+        ele.value = ele_flag;
+    }
+    return ele;
+}
+
+//弹出错误提示框
+function tishi_alert(str){
+    var div = create_element("div",null,"flash_notice","tishi_tab",null,null);
+    var p = create_element("p","","","","innerHTML");
+    p.innerHTML = str;
+    div.appendChild(p);
+    var body = jQuery("body");
+    body.append(div);
+    show_flash_div();
+}
+
+function delete_email(){
+    if ($('#email_check input:checked').length==0){
+        tishi_alert("请选择删除对象");
+        return false;
+    }
+    var ids=[];
+    var all_emails=$('#email_check input:checked');
+    for(var i=0;i<=all_emails.length-1;i++){
+        ids.push(parseInt(all_emails[i].value));
+    }
+    $.ajax({
+        async:true,
+        dataType:'json',
+        data:{
+            ids:ids
+        },
+        url:"/users/delete_mess",
+        type:'post',
+        success : function(data) {
+            tishi_alert(data.message)
+            load_email();
+        }
+    });
+    return false;
+}
+
+function delete_mess(){
+    if ($('#mess_check input:checked').length==0){
+        tishi_alert("请选择删除对象");
+        return false;
+    }
+    var ids=[];
+    var all_emails=$('#mess_check input:checked');
+    for(var i=0;i<=all_emails.length-1;i++){
+        ids.push(parseInt(all_emails[i].value));
+    }
+    $.ajax({
+        async:true,
+        dataType:'json',
+        data:{
+            ids:ids
+        },
+        url:"/users/delete_mess",
+        type:'post',
+        success : function(data) {
+            tishi_alert(data.message)
+            load_message();
+        }
+    });
+    return false;
+}
+
+function update_users(){
+    var info={};
+    info["name"]=$("#name").val();
+    info["school"]=$("#school").val();
+    $.ajax({
+        async:true,
+        dataType:'json',
+        data:{
+            info:info,
+            id:parseInt($("#id").val())
+        },
+        url:"/users/update_users",
+        type:'post',
+        success : function(data) {
+            tishi_alert(data.message)
+        }
+    });
+    return false;
+}
+
+function accredit(){
+    if($("#invit_code").val()==""||$("#invit_code").val()==null){
+        tishi_alert("请输入邀请码");
+        return false;
+    }
+    $.ajax({
+        async:true,
+        dataType:'json',
+        data:{
+            info:$("#invit_code").val()
+        },
+        url:"/users/accredit_check",
+        type:'post',
+        success : function(data) {
+            $("#invit_code").val("");
+            tishi_alert(data.message);
+            get_record();
+        }
+    });
+    return false;
+}
+
+

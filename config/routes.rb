@@ -31,6 +31,7 @@ GankaoSeason2::Application.routes.draw do
   resources :collections do
     collection do
       post :load_words,:write_file, :add_collection, :update_collection
+      get :error,:index1,:ajax_load_problems
     end
   end
   resources :similarities do
@@ -81,7 +82,8 @@ GankaoSeason2::Application.routes.draw do
   end
   resources :users do
     collection do
-      get :delete_user
+      get :delete_user,:email_info,:mess_info,:record_info,:record,:alipay_exercise
+      post :delete_mess,:update_users,:alipay_compete,:accredit_check
     end
     member do
       get :info,:record

@@ -2,7 +2,7 @@
 class SpecialsController < ApplicationController
   
   def index
-    @specials = Examination.paginate_by_sql(["select t.name, e.id examination_id, etr.id etr_id
+    @specials = Examination.paginate_by_sql(["select e.id, t.name, e.id examination_id, etr.id etr_id
         from examination_tag_relations etr
         inner join examinations e on e.id = etr.examination_id
         inner join tags t on t.id = etr.tag_id where e.types = ? and e.status = ? and e.category_id = ?",
@@ -11,9 +11,9 @@ class SpecialsController < ApplicationController
     special_ids = []
     @exam_user_hash = {}
     @specials.each { |sim| special_ids << sim.id }
-    @exam_users = ExamUser.find_by_sql(["select eu.examination_id, eu.is_submited from exam_users eu where eu.user_id = ?
-      and eu.examination_id in (?)", cookies[:user_id].to_i, special_ids])
-    @exam_users.each { |eu| @exam_user_hash[eu.examination_id] = eu.is_submited }
+    @exam_users = ExamUser.find_by_sql(["select id, examination_id, is_submited, answer_sheet_url from exam_users where user_id = ?
+      and examination_id in (?)", cookies[:user_id].to_i, special_ids])
+    @exam_users.each { |eu| @exam_user_hash[eu.examination_id] = [eu.id,eu.is_submited,eu.answer_sheet_url] }
   end
 
 

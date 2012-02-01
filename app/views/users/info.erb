@@ -1,52 +1,28 @@
 <div class="tab_ul">
   <ul>
-    <li <%  if params[:target].nil? or params[:target].to_i==0  %> class="hover" <% end %>>收 件</li>
-    <li <%  if  params[:target].to_i==1  %> class="hover" <% end %>>通 知</li>
+    <li class="hover" id="email">收 件</li>
+    <li id="mess">通 知</li>
   </ul>
 </div>
 <div class="tab_box">
-  <div>
-    <div class="mess_top">
-      <span><input name="" type="checkbox" value="" /> 全选</span>
-      <span><input name="" type="checkbox" value="" /> 反选</span>
-      <span><button class="shanchu">删除</button></span>
-    </div>
-    <div class="mess_con">
-      <% unless @email.blank? %>
-        <div class="mess_list">
-          <% @email.each do |email| %>
-            <div class="mess_title"><input name="email" type="checkbox" value="" /> <a href="#" onclick="javascript:$('.mess_tab_con').html($(this).html());show_div('.mess_tab')"><%= email.description %></a></div>
-            <div class="mess_time"><%= email.created_at.strftime("%Y-%m-%d") %></div>
-          <% end  %>
-        </div>
-      <% else %>
-        <div class="record_none">暂时没有邮件</div>
-      <% end %>
-      <div class="sabrosus"><span class="disabled"> < </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2"> > </a></div>
-    </div>
+  <div id="email_info">
   </div>
-  <div style="display:none;">
-    <div class="mess_top">
-      <span><input name="" type="checkbox" value="" /> 全选</span>
-      <span><input name="" type="checkbox" value="" /> 反选</span>
-      <span><button class="shanchu">删除</button></span>
-    </div>
-    <div class="mess_con">
-      <% unless @mess.blank? %>
-        <div class="mess_list">
-          <% @mess.each do |mess| %>
-            <div class="mess_title"><input name="email" type="checkbox" value="" /> <a href="#" onclick="javascript:$('.mess_tab_con').html($(this).html());show_div('.mess_tab')"><%= mess.description %></a></div>
-            <div class="mess_time"><%= mess.created_at.strftime("%Y-%m-%d") %></div>
-          <% end  %>
-        </div>
-      <% else %>
-        <div class="record_none">暂时没有消息</div>
-      <% end %>
-      <div class="sabrosus"><span class="disabled"> < </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2"> > </a></div>
-    </div>
+  <script type="text/javascript">
+    load_email();
+  </script>
+  <div style="display:none;" id="mess_info">
   </div>
+  <script type="text/javascript">
+    load_message();
+  </script>
 </div>
-
+<%  if  params[:target].to_i==1  %>
+  <script type="text/javascript">
+    $("#mess").addClass('hover').siblings().removeClass('hover');
+    var index = $('div.tab_ul li').index($("#mess"));
+    $('div.tab_box > div').eq(index).show().siblings().hide();
+  </script>
+<% end %>
 <div class="mess_tab border_radius" style="display:none">
   <div class="mt_title"><span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('.mess_tab').css('display','none')"/></span></div>
   <div class="mess_tab_con">

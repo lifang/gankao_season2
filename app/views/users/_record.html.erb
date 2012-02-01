@@ -1,0 +1,15 @@
+<% unless @orders.blank? %>
+  <div class="mess_con">
+    <% @orders.each do |order| %>
+      <div class="mess_list">
+        <div class="mess_title"><a href="#" onclick="javascript:show_detail('<%=order.created_at.strftime("%Y-%m-%d")%>','<%=order.out_trade_no %>','<%=order.name  %>','<%=order.total_price %>','<%=order.remark %>')"><%= order.remark %></a></div>
+        <div class="mess_time">2012-01-01</div>
+      </div>
+    <% end %>
+    <%= will_paginate_remote(@orders ,  "" ,{:url => "/users/record_info"}) %>
+  </div>
+<% else %>
+  <div class="mess_con">
+    <div class="record_none">暂时没有消费记录</div>
+  </div>
+<% end %>

@@ -14,5 +14,19 @@ module Constant
 
   #赶考网官方微博
   TENCENT_WEIBO_NAME = "gankao2011"
-  
+
+
+  #请求服务器ip
+  IP="116.255.179.206:3001"
+ 
+  #充值vip有效期
+  DATE_LONG={:vip=>90,:trail=>7} #试用七天
+
+   #考试类型
+  EXAM_TYPES={:forth_level=>1,:sixth_level=>2}
+
+  #vip价格
+  VIP_FEE=0.01
+  SIMULATION_FEE=0.01
+  VIP_TYPE={:good=>1,:donate=>4}   #vip支付类型
 end
