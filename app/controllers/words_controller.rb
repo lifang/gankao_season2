@@ -13,7 +13,8 @@ class WordsController < ApplicationController
   def recite_word
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i})
-    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, @already_recited.total_num)
+    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, 
+      @already_recited.total_num, params[:type])
     @word_ids = []
     @sentence_hash = []
     unless @words.blank?
@@ -25,13 +26,15 @@ class WordsController < ApplicationController
   def recollection
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i})
-    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, @already_recited.total_num)
+    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, 
+      @already_recited.total_num, params[:type])
   end
 
   def use
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i})
-    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, @already_recited.total_num)
+    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, 
+      @already_recited.total_num, params[:type])
     @word_ids = []
     @sentence_hash = []
     unless @words.blank?
@@ -43,7 +46,8 @@ class WordsController < ApplicationController
   def hand_man
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i})
-    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, @already_recited.total_num)
+    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, 
+      @already_recited.total_num, params[:type])
     @word_ids = []
     @sentence_hash = []
     unless @words.blank?

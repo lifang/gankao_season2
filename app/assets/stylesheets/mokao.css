@@ -157,15 +157,16 @@ div.q_no, span.q_no, select.q_no, textarea.q_no { border: 2px #FF6C00 solid;}
 
 
 /*操作提示弹出层---*/
-.tishi_tab { width: 288px; padding: 20px; background: #FFF; border: 5px #666 solid; position: absolute; display: none; z-index: 9999;}
-.tishi_tab p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #333;}
+.tishi_tab { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none; z-index: 9999;}
+.tishi_tab p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #fff;}
 
 /*操作提示弹出层---*/
-.tishi_tab0 { width: 288px; padding: 20px; background: #FFF; border: 5px #666 solid; position: absolute; display: none; z-index: 9999;}
-.tishi_tab0 p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #333;}
+.tishi_tab0 { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none; z-index: 9999;}
+.tishi_tab p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #fff;}
 
 /*提交错误弹出层-----*/
-.upErrorTo_tab { width: 300px; padding: 10px; background: #FFF; border: 5px #333 solid; display: none; position: absolute;}
-.upErrorTo_tab li { height: 24px; line-height: 24px; color: #333; display: block; text-decoration: none;}
+.upErrorTo_tab { width: 300px; padding: 10px; background: url(/assets/black01_bg.png) repeat; display: none; position: absolute;}
+.upErrorTo_tab h3 { font-size: 14px; color: #FFF; margin: 5px 0;}
+.upErrorTo_tab li { height: 24px; line-height: 24px; color: #fff; display: block; text-decoration: none;}
 .upErrorTo_tab li input { margin-right: 5px;}
-.upErrorTo_tab textarea { width: 100%; margin: 5px 0;}
+.upErrorTo_tab textarea { width: 100%; margin: 5px 0; background: none; border: 1px #666 solid; color: #FFF; font-size: 12px;}

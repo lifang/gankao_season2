@@ -13,7 +13,7 @@ $(document).ready(function(){
             all_index += step;
         }
         setCookie("rem_word", all_index);
-    }
+    }    
     load_word();
     if ($("#jquery_jplayer").attr("id") != undefined) {
         $("#jquery_jplayer").jPlayer({
@@ -124,6 +124,8 @@ function load_word() {
         }
         setCookie("rem_word", current_order.join(","));
     }
+//    alert(getCookie("rem_word"));
+//    alert(getCookie("right_word"));
 }
 
 //播放MP3
@@ -159,20 +161,20 @@ function show_sentence(word_id) {
 }
 
 //看是否熟悉单词了
-function remember_word(word_id, current_index, category_id, flag) {
+function remember_word(word_id, current_index, category_id, flag, type) {
     var rem_word = getCookie("rem_word").split(",");
     var next_index = jQuery.inArray("0", rem_word, (current_index + 1));
     if (flag == 1) {
         is_right(word_id, rem_word, current_index, 1);
     }
     show_word(word_id, current_index, next_index);
-    is_remeber_pass(rem_word, word_id, next_index, category_id);
+    is_remeber_pass(rem_word, word_id, next_index, category_id, type);
 }
 
 //判断熟悉单词是否全部通过
-function is_remeber_pass(rem_word, word_id, next_index, category_id) {
+function is_remeber_pass(rem_word, word_id, next_index, category_id, type) {
     if (is_unremb_word(rem_word, 1)) {
-        window.location.href = "/words/recollection?category=" + category_id;
+        window.location.href = "/words/recollection?category=" + category_id + "&type=" + type;
     } else if (next_index == word_ids.length || next_index == -1) {
         show_word(word_id, next_index, jQuery.inArray("0", rem_word));
     }
@@ -229,9 +231,9 @@ function show_re_word(current_step, current_index, next_index) {
 }
 
 //回答正确
-function answer_right(current_word, category_id, current_index, current_step) {
+function answer_right(current_word, category_id, current_index, current_step, type) {
     var innhtml = "<div class='tab_x'><a href='javascript:void(0);' "
-    + "onclick='javascript:next_task("+ current_word +", "+ category_id +", "+ current_index +", "+ current_step +", 1);'>"
+    + "onclick=\"javascript:next_task("+ current_word +", "+ category_id +", "+ current_index +", "+ current_step +", 1, '"+ type +"');\">"
     + "<img src='/assets/x.gif'/></a></div><div class='tab_con'>"
     + "恭喜你，回答正确,进入下一题！</div>";
     $("#tab_box").removeClass("icon_false").addClass("icon_true");
@@ -251,11 +253,11 @@ function get_wrong_word(word_id) {
 }
 
 //回答错误
-function answer_wrong(current_word, category_id, current_index, current_step, str) {
+function answer_wrong(current_word, category_id, current_index, current_step, str, type) {
     get_wrong_word(current_word);
     var error_str = (str == null) ? "答错了，继续努力哦。" : str ;
     var innhtml = "<div class='tab_x'><a href='javascript:void(0);' "
-    + "onclick='javascript:next_task("+ current_word +", "+ category_id +", "+ current_index +", "+ current_step +", 0);';>"
+    + "onclick=\"javascript:next_task("+ current_word +", "+ category_id +", "+ current_index +", "+ current_step +", 0, '"+ type +"');\";>"
     + "<img src='/assets/x.gif'/></a></div><div class='tab_con'>"
     + error_str +"</div>";
     $("#tab_box").removeClass("icon_true").addClass("icon_false");
@@ -263,12 +265,12 @@ function answer_wrong(current_word, category_id, current_index, current_step, st
 }
 
 //回顾释义
-function recollection_word(current_word, target_word, category_id, current_index, current_step) {
+function recollection_word(current_word, target_word, category_id, current_index, current_step, type) {
     generate_flash_div("#tab_box");
     if (current_word == target_word) {
-        answer_right(current_word, category_id, current_index, current_step);
+        answer_right(current_word, category_id, current_index, current_step, type);
     } else {
-        answer_wrong(current_word, category_id, current_index, current_step, null);
+        answer_wrong(current_word, category_id, current_index, current_step, null, type);
     }
     $("#tab_box").css('display','block');
 }
@@ -295,30 +297,32 @@ function write_right_word(word_id, current_step) {
             setCookie("right_word", getCookie("right_word")+"&"+word_id+"="+current_step);
         }
     }
+//    alert(getCookie("right_word"));
 }
 
 //下一个任务
-function next_task(word_id, category_id, current_index, current_step, flag) {
+function next_task(word_id, category_id, current_index, current_step, flag, type) {
     $("#tab_box").css("display", "none");
     var rem_word = getCookie("rem_word").split(",");
     var next_index = jQuery.inArray(""+(current_step - 1), rem_word, (current_index + 1));
     if (flag == 1) {
         is_right(word_id, rem_word, current_index, current_step);
     }
+//    alert(next_index);
     show_re_word(current_step, current_index, next_index);
-    is_recollection_pass(word_id, rem_word, next_index, category_id, current_step);
+    is_recollection_pass(word_id, rem_word, next_index, category_id, current_step, type);
 }
 
 //回归释义是否全部通过
-function is_recollection_pass(word_id, rem_word, next_index, category_id, current_step) {
+function is_recollection_pass(word_id, rem_word, next_index, category_id, current_step, type) {
     if (is_unremb_word(rem_word, current_step)) {
-        recollection_next(category_id, current_step);
+        recollection_next(category_id, current_step, type);
     } else if (next_index == word_ids.length || next_index == -1) {
         generate_flash_div("#goon_tab");
         var innhtml = "<div class='tab_con'><div>您有回答错误的题，您需要重新回答做错的题吗？</div>"
         +"</div><div class='tab_btn'><button class='t_btn' "
         +"onclick=\"javascript:recollection_reload("+current_step+","+next_index+", "+$.inArray(""+(current_step-1), rem_word)+");\">是</button>"
-        +"<button class='t_btn' onclick='javascript:recollection_next("+category_id+", "+current_step+");'>否</button></div>";
+        +"<button class='t_btn' onclick=\"javascript:recollection_next("+category_id+", "+current_step+", '"+ type +"');\">否</button></div>";
         $("#goon_tab").html(innhtml);
         $("#goon_tab").css('display','block');
     }
@@ -331,13 +335,13 @@ function recollection_reload(current_step, current_index, next_index) {
 }
 
 //不再做做错的题
-function recollection_next(category_id, current_step) {
+function recollection_next(category_id, current_step, type) {
     setCookie("current_word", "");
     if (current_step == 2) {
-        window.location.href = "/words/use?category=" + category_id;
+        window.location.href = "/words/use?category=" + category_id + "&type=" + type;
     } else if (current_step == 3) {
-        window.location.href = "/words/hand_man?category=" + category_id;
-    } else if (current_step == 4) {
+        window.location.href = "/words/hand_man?category=" + category_id + "&type=" + type;
+    } else if (current_step == 4 && type == "new") {
         $.ajax({
             async:true,
             complete:function(request){
@@ -361,7 +365,7 @@ function recollection_next(category_id, current_step) {
 }
 
 //拼写游戏
-function show_result(letter, category_id, current_step) {
+function show_result(letter, category_id, current_step, type) {
     var word = $(".ch_text:visible input:hidden:first");
     var error_time = $(".ch_text:visible input:hidden:last").val();
     var inputs = $(".ch_text:visible .words_input");
@@ -385,7 +389,7 @@ function show_result(letter, category_id, current_step) {
         }
         if (is_complete) {
             generate_flash_div("#tab_box");
-            answer_right(word.attr("id"), category_id, word.attr("name"), current_step);
+            answer_right(word.attr("id"), category_id, word.attr("name"), current_step, type);
             $("#tab_box").css('display','block');
         }
     } else {
@@ -393,7 +397,7 @@ function show_result(letter, category_id, current_step) {
         $(".ch_text:visible .xiaoren").html("<img src='/assets/sd/0"+(parseFloat(error_time)+1)+".png'/>");
         if (parseFloat(error_time) + 1 == 4) {
             generate_flash_div("#tab_box");
-            answer_wrong(word.attr("id"), category_id, word.attr("name"), current_step, "拼字失败,正确答案为" + word.val());
+            answer_wrong(word.attr("id"), category_id, word.attr("name"), current_step, "拼字失败,正确答案为" + word.val(), type);
             $("#tab_box").css('display','block');
         }
     }
@@ -405,7 +409,7 @@ $(document).keyup(function(e){
     if ($("#letter_list").val() != null && $("#letter_list").val() != undefined) {
         if (e.keyCode >= 65 && e.keyCode <= 90) {
             var letters = $("#letter_list").val().split(",");
-            show_result(""+letters[e.keyCode-65], $("#category_id").val(), 4);
+            show_result(""+letters[e.keyCode-65], $("#category_id").val(), 4, $("#type").val());
         }
     }
 })
