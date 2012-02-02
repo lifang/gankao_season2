@@ -32,10 +32,11 @@
   var answers=[];
   var a = transform_array(answer.paper.problems.problem);
   for(var i=0;i<a.length;i++){
-    var a2 = transform_array(a[i].question);
-    answers.push(a2);
+    if(a[i]!=null){
+      var a2 = transform_array(a[i].question);
+      answers.push(a2);
+    }
   }
-  //unbind_arr=[]; //记录嵌入式大题的problem_index
 </script>
 
 <!-- 初始化jplayer播放器  -->
@@ -58,8 +59,8 @@
 <% blocks = @paper["blocks"]["block"] %>
 <% problem_index=-1 ; blocks.each do |block| %>
   <% problems = block["problems"]["problem"] %>
-  <% problems.each do |problem| ; problem_index+=1; %>
-    <% if problem["question_type"]=="0" %>
+  <% problems.each do |problem|; next unless problem["questions"]; problem_index+=1; %>
+    <% if problem["question_type"]=="0" || problem["question_type"].nil? %>
       <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
         <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem.to_json %>" />
         <div class="m_side m_problem_bg">

@@ -125,7 +125,8 @@ class Collection < ActiveRecord::Base
     else
       problem={}
       problem["id"]=this_problem["id"]
-      problem["question_type"]=this_problem["question_type"]
+      p_question_type = (this_problem["question_type"].nil? || this_problem["question_type"]=="") ? "0" : this_problem["question_type"]
+      problem["question_type"]=p_question_type
       problem["description"]=this_problem["description"]
       problem["title"]=this_problem["title"]
       problem["category"]=this_problem["category"]

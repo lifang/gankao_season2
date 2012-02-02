@@ -97,8 +97,8 @@
                   </div>
                   <div class="jiexi" >
                     <% this_answer = question["answer"].split(";|;").join(" , ") ; this_answer = "对/是" if this_answer=="0" ; this_answer = "错/否" if this_answer=="1" %>
-                    <div>正确答案：<span class="red"><%= this_answer %></span></div>
-                    <div><%= question["analysis"] %></div>
+                    <div>正确答案：<span class="red"><%= this_answer.html_safe %></span></div>
+                    <div><%= question["analysis"].html_safe if question["analysis"]!="null" %></div>
                   </div>
                   <div id="about_words_position<%= "_#{problem_index}_#{question_index}" %>"></div>
                 </div>
@@ -200,8 +200,8 @@
                   <div class="pro_qu_div" style="display:none;">
                     <div class="jiexi" >
                       <% this_answer = question["answer"].split(";|;").join(" , ") ; this_answer = "对/是" if this_answer=="0" ; this_answer = "错/否" if this_answer=="1" %>
-                      <div>正确答案：<span class="red"><%= this_answer %></span></div>
-                      <div><%= question["analysis"] %></div>
+                      <div>正确答案：<span class="red"><%= this_answer.html_safe %></span></div>
+                      <div><%= question["analysis"].html_safe if question["analysis"]!="null" %></div>
                     </div>
                     <div id="about_words_position<%= "_#{problem_index}_#{question_index}" %>"></div>
                   </div>

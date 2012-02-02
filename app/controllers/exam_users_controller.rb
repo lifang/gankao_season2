@@ -16,7 +16,7 @@ class ExamUsersController < ApplicationController
       @paper["blocks"]["block"].each do |block|
         block["problems"]["problem"] = (block["problems"].nil? || block["problems"]["problem"].nil?) ? [] : (block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]]
         block["problems"]["problem"].each do |problem|
-          problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]]
+          problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] if problem["questions"]
         end
       end
       #生成考生答卷
@@ -26,7 +26,7 @@ class ExamUsersController < ApplicationController
       @sheet = get_doc("#{@sheet_url}")
       close_file("#{@sheet_url}")
     rescue
-      flash[:warn] = "试卷加载错误，请您重新尝试。"
+      flash[:warn] = "试卷加载错误。"
       redirect_to "/similarities?category=#{params[:category]}"
     end
   end
