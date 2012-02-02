@@ -8,7 +8,9 @@
 <div class="cihui_lx">
   <div class="ch_lx_nav">
     <ul class="lx_ul">
-      <li class="hover"><a href="/words/recite_word?category=<%= params[:category] %>">单词认读</a></li>
+      <li class="hover">
+        <a href="/words/recite_word?category=<%= params[:category] %>&type=<%= params[:type] %>">单词认读</a>
+      </li>
       <li><a href="javascript:void(0);">回想释义</a></li>
       <li><a href="javascript:void(0);">词汇运用</a></li>
       <li><a href="javascript:void(0);">拼写游戏</a></li>
@@ -52,11 +54,11 @@
         </div>
         <div class="ch_words_line" id="btn_<%= word.id %>" style="display:none;">
           <button class="t_btn"
-                  onclick="javascript:remember_word(<%= word.id %>, <%= index %>, <%= params[:category] %>, 1);">
+                  onclick="javascript:remember_word(<%= word.id %>, <%= index %>, <%= params[:category] %>, 1, '<%= params[:type] %>');">
             熟悉了
           </button>
           <button class="t_btn"
-                  onclick="javascript:remember_word(<%= word.id %>, <%= index %>, <%= params[:category] %>, 0);" >
+                  onclick="javascript:remember_word(<%= word.id %>, <%= index %>, <%= params[:category] %>, 0, '<%= params[:type] %>');" >
             不熟悉
           </button>
         </div>

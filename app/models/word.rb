@@ -20,19 +20,41 @@ class Word < ActiveRecord::Base
     return Word.count('id', :conditions => "level < #{WORD_LEVEL[:THIRD]}")
   end
 
-  def self.current_recite_words(user_id, category_id, start_column)
-    words = UserWordRelation.find_by_sql(["select * from user_word_relations uwr
+  def self.current_recite_words(user_id, category_id, start_column, type)
+    return_word = []
+    if (type == "new")
+      words = UserWordRelation.find_by_sql(["select * from user_word_relations uwr
       inner join words w on w.id = uwr.word_id where w.category_id = ? 
       and uwr.status = #{UserWordRelation::STATUS[:NOMAL]}
       and uwr.user_id = ? limit 20", category_id, user_id])
-    if words.blank? or words.length < 20
-      other_length = 20 - words.length
+      if words.blank? or words.length < 20
+        other_length = 20 - words.length
+        other_words = Word.find(:all,
+          :conditions => ["id not in (select uwr.word_id from user_word_relations uwr where uwr.user_id = ?)
+         and category_id = ? and level < #{Word::WORD_LEVEL[:THIRD]} ",category_id, user_id],
+          :limit => other_length, :order => "id", :offset => start_column)
+      end
+      return_word = other_words.nil? ? words : (words + other_words)
+    else
+      words = UserWordRelation.find_by_sql(["select * from user_word_relations uwr
+      inner join words w on w.id = uwr.word_id where w.category_id = ?
+      and uwr.status = #{UserWordRelation::STATUS[:RECITE]}
+      and uwr.user_id = ?", category_id, user_id])
       other_words = Word.find(:all,
         :conditions => ["id not in (select uwr.word_id from user_word_relations uwr where uwr.user_id = ?)
-         and category_id = ? and level < #{Word::WORD_LEVEL[:THIRD]} ",category_id, user_id],
-        :limit => other_length, :order => "id", :offset => start_column)
+         and category_id = ? and level >= #{Word::WORD_LEVEL[:THIRD]} ",category_id, user_id],
+        :limit => start_column)
+      all_word = words.nil? ? other_words : (words + other_words)
+      if all_word.length > 20
+        chars = (1..all_word.length).to_a
+        code_array = []
+        1.upto(20) {code_array << chars[rand(chars.length)]}
+        code_array.each { |c| return_word << all_word[c] }
+      else
+        return_word = all_word
+      end      
     end
-    return other_words.nil? ? words : (words + other_words)
+    return return_word
   end
 
   def self.all_sentences(sentence_hash, word_ids)

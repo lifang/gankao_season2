@@ -10,11 +10,12 @@
       <li><a href="javascript:void(0);">单词认读</a></li>
       <li><a href="javascript:void(0);">回想释义</a></li>
       <li><a href="javascript:void(0);">词汇运用</a></li>
-      <li class="hover"><a href="/words/hand_man?category=<%= params[:category] %>">拼写游戏</a></li>
+      <li class="hover"><a href="/words/hand_man?category=<%= params[:category] %>&type=<%= params[:type] %>">拼写游戏</a></li>
     </ul>
   </div>
   <div class="ch_box">
     <% all_words = @words.sort_by{ rand } %>
+    <input type="hidden" name="type" id="type" value="<%= params[:type] %>" />
     <input type="hidden" name="category_id" id="category_id" value="<%= params[:category] %>" />
     <input type="hidden" name="all_words" id="all_words" value="<%= (all_words.collect { |word| word.id }).join(",") %>"/>
     <input type="hidden" name="step_page" id="step_page" value="3" />
@@ -50,13 +51,13 @@
       <ul class="words_letter">
         <% ("A".."Z").each do |letter| %>
           <li style="display: block;" id="li_letter_<%= letter.downcase %>"
-              onclick="show_result('<%= letter.downcase %>', <%= params[:category] %>, 4);"><%= letter %></li>
+              onclick="show_result('<%= letter.downcase %>', <%= params[:category] %>, 4, '<%= params[:type] %>');"><%= letter %></li>
           <li style="display:none;" class="hover" id="hi_letter_<%= letter.downcase %>"><%= letter %></li>
         <% end %>
       </ul>
     </div>
     <input type="hidden" name="letter_list" id="letter_list" value="<%= (("a".."z").collect{ |i| i }).join(",") %>" />
-    <div class="box_bottom_bg"></div>
+    <div class="box_bottom_bg"></div>    
   </div>
 </div>
 <div id="tab_box" class="tab_box border_radius icon_false" style="display: none;">

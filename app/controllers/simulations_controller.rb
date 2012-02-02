@@ -11,11 +11,13 @@ class SimulationsController < ApplicationController
     @simulations = Examination.find_by_sql([sql, params[:category].to_i])
     examination_ids = []
     @exam_user_hash = {}
-    @simulations.each { |sim| examination_ids << sim.id }
-    exam_users = ExamUser.find_by_sql(
-      ["select eu.id, eu.examination_id, eu.is_submited, eu.total_score from exam_users eu where eu.user_id = ?
+    if cookies[:user_id]
+      @simulations.each { |sim| examination_ids << sim.id }
+      exam_users = ExamUser.find_by_sql(
+        ["select eu.id, eu.examination_id, eu.is_submited, eu.total_score from exam_users eu where eu.user_id = ?
       and eu.examination_id in (?)", cookies[:user_id].to_i, examination_ids])
-    exam_users.each { |eu| @exam_user_hash[eu.examination_id] = eu }
+      exam_users.each { |eu| @exam_user_hash[eu.examination_id] = eu }
+    end
   end
 
   def do_exam

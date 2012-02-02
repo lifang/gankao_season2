@@ -515,7 +515,7 @@ function create_analysis(question_id, correct_type) {
     var analysis = (true_answers.get(question_id) != null && true_answers.get(question_id)[1] != null)
     ? true_answers.get(question_id)[1] : "";
     analysis_div.innerHTML = "<span class='xx_x' onclick=\"javascript:$('#analysis_"
-    + question_id +"').css('display', 'none');\"><img src='/assets/x.gif'></span>"
+    + question_id +"').css('display', 'none');\"><img src='/assets/xx.png'></span>"
     +"<div>正确答案：<span class='red'>"+ answer +"</span></div><div>"+ analysis +"</div>";
     return analysis_div;
 }
@@ -844,7 +844,6 @@ function erea_with(str) {
         width = (str.length * 10).to_s + "px";
     }else if (str.length > 48) {
         width = "610px";
-
     }
     return width;
 }
