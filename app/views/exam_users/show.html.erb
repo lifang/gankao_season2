@@ -40,8 +40,8 @@
 </script>
 
 <!-- 初始化jplayer播放器  -->
-<%= render :partial=>"/common/jquery_jplayer" %>
-
+<%#= render :partial=>"/common/jquery_jplayer" %>
+<%= render :partial=>"/common/flowplayer" %>
 <% constant_question_type = {"0"=>"单选题","1"=>"多选题","2"=>"判断题","3"=>"填空题","5"=>"简答题"} %>
 <div class="m_top">
   <h1 class="ex_paper_h"><%= @paper["base_info"]["title"] %></h1>
@@ -58,7 +58,7 @@
 </div>
 <% blocks = @paper["blocks"]["block"] %>
 <% problem_index=-1 ; blocks.each do |block| %>
-  <% problems = block["problems"]["problem"] %>
+  <% problems = block["problems"].nil? ? [] : block["problems"]["problem"] %>
   <% problems.each do |problem|; next unless problem["questions"]; problem_index+=1; %>
     <% if problem["question_type"]=="0" || problem["question_type"].nil? %>
       <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
@@ -78,7 +78,7 @@
                   //绑定音频播放事件
                   $(function(){
                     $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
-                      clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
+                      clone_flowplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
                     });
                   })
                 </script>
@@ -256,7 +256,7 @@
                 $(".draggable_attr_<%= problem_index %>").draggable({
                   helper: "clone"});
                 $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
-                  clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
+                  clone_flowplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
                 });
               })
             </script>

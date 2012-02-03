@@ -4,31 +4,33 @@ class ExamUsersController < ApplicationController
   before_filter :sign?
   def show
     #读取试题
-    begin
-      eu = ExamUser.find(params[:id])
-      @paper_id = eu.paper_id
-      p = Paper.find(@paper_id)
-      paper = File.open("#{Constant::BACK_PUBLIC_PATH}#{p.paper_js_url}")
-      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("paperjs/","answerjs/")
-      @paper = (JSON paper.read()[8..-1])["paper"]
-      #组织 @paper
-      @paper["blocks"]["block"] = @paper["blocks"]["block"].nil? ? [] : (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : [@paper["blocks"]["block"]]
-      @paper["blocks"]["block"].each do |block|
-        block["problems"]["problem"] = (block["problems"].nil? || block["problems"]["problem"].nil?) ? [] : (block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]]
+    #    begin
+    eu = ExamUser.find(params[:id])
+    @paper_id = eu.paper_id
+    p = Paper.find(@paper_id)
+    paper = File.open("#{Constant::BACK_PUBLIC_PATH}#{p.paper_js_url}")
+    @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("paperjs/","answerjs/")
+    @paper = (JSON paper.read()[8..-1])["paper"]
+    #组织 @paper
+    @paper["blocks"]["block"] = @paper["blocks"]["block"].nil? ? [] : (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : [@paper["blocks"]["block"]]
+    @paper["blocks"]["block"].each do |block|
+      if block["problems"]
+        block["problems"]["problem"] = (block["problems"]["problem"].nil?) ? [] : ((block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]])
         block["problems"]["problem"].each do |problem|
           problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] if problem["questions"]
         end
       end
-      #生成考生答卷
-      s_url = ExamUser.find(params[:id]).answer_sheet_url
-      @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
-      @sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(@sheet_url))
-      @sheet = get_doc("#{@sheet_url}")
-      close_file("#{@sheet_url}")
-    rescue
-      flash[:warn] = "试卷加载错误。"
-      redirect_to "/similarities?category=#{params[:category]}"
     end
+    #生成考生答卷
+    s_url = ExamUser.find(params[:id]).answer_sheet_url
+    @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+    @sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(@sheet_url))
+    @sheet = get_doc("#{@sheet_url}")
+    close_file("#{@sheet_url}")
+    #    rescue
+    #      flash[:warn] = "试卷加载错误。"
+    #      redirect_to "/similarities?category=#{params[:category]}"
+    #    end
   end
 
   #将变量转化为数组

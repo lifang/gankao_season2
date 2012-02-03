@@ -30,7 +30,8 @@ function click_next_problem(){
         next_problem.show();
         var problem_index = $(".problem_resource").index(next_problem);
         $("#report_error").hide();
-        $("#jquery_jplayer").jPlayer("stop");
+        $f("flowplayer").stop();
+        $f("audio-word").stop();
         if($("#drag_tk_"+problem_index).height()){
             $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
         }
@@ -51,7 +52,8 @@ function click_prev_problem(){
         prev_problem.show();
         var problem_index = $(".problem_resource").index(prev_problem);
         $("#report_error").hide();
-        $("#jquery_jplayer").jPlayer("stop");
+        $f("flowplayer").stop();
+        $f("audio-word").stop();
         if($("#drag_tk_"+problem_index).height()){
             $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
         }
@@ -95,7 +97,8 @@ function change_color(value,ele){
         if(value=="0"){
             $(ele).css("background","#FFEAEA");
             $(ele).closest(".pro_question_list").css("background","#FFEAEA");
-        }else{
+        }
+        else{
             $(ele).css("background","");
             $(ele).closest(".pro_question_list").css("background","");
         }
@@ -284,8 +287,8 @@ function change_display_answer(correct_type,answer){
 
 //核对小题
 function check_question(question_type,correct_type,attrs,problem_index,question_index){
-    if(question_type!=0 && question_type!=1){
-        question_type=0;
+    if(question_type!="0" && question_type!="1"){
+        question_type="0";
     }
     if($("#exam_user_answer_"+problem_index+"_"+question_index).val()==""){
         tishi_alert("请做题后再核对");
@@ -340,8 +343,8 @@ function check_question(question_type,correct_type,attrs,problem_index,question_
 
 //根据保存的用户答案，改变小题状态
 function refer_question(question_type,correct_type,attrs,problem_index,question_index){
-    if(question_type!=0 && question_type!=1){
-        question_type=0;
+    if(question_type!="0" && question_type!="1"){
+        question_type="0";
     }
     var answer = answers[problem_index][question_index].answer;
     var analysis = answers[problem_index][question_index].analysis;
@@ -586,10 +589,26 @@ function do_next_question(problem_index,question_index){
     }
 }
 
-function clone_jplayer(selector,audio_src){
-    $(selector).append($("#jp_container_1"));
-    $("#jquery_jplayer").jPlayer("setMedia", {
-        mp3: audio_src
+function clone_flowplayer(selector,audio_src){
+    $(selector).append($("#flowplayer_loader"));
+    $f("flowplayer", "/assets/flowplayer/flowplayer-3.2.7.swf", {
+        plugins: {
+            controls: {
+                fullscreen: false,
+                height: 30,
+                autoHide: false
+            }
+        },
+        clip: {
+            autoPlay: false,
+            onBeforeBegin: function() {
+                this.close();
+            }
+        },
+        onLoad: function() {
+            this.setVolume(90);
+            this.setClip(audio_src);
+        }
     });
 }
 
@@ -619,5 +638,6 @@ function normal_add_collect(problem_index,question_index){
 
 //播放词汇
 function play_word_enunciate(url){
-    jplayer_play(url);
+    //jplayer_play(url);
+    play_audio(url);
 }
