@@ -636,6 +636,33 @@ function normal_add_collect(problem_index,question_index){
     });
 }
 
+//题面中小题加入收藏夹
+function special_add_collect(problem_index,question_index,problem_id,question_id){
+    $.ajax({
+        type: "POST",
+        url: "/collections/add_collection.json",
+        dataType: "json",
+        data : {
+            "sheet_url" : sheet_url,
+            "problem_index" : problem_index,
+            "question_index" : question_index,
+            "paper_id" : init_paper_id,
+            "problem_json" : $("#problem_json_"+problem_index).val(),
+            "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
+            "question_answer" : answers[problem_index][question_index]["answer"],
+            "question_analysis" : answers[problem_index][question_index]["analysis"],
+            "problem_id" : problem_id,
+            "question_id" : question_id
+        },
+        success : function(data){
+            $("#shoucang_"+problem_index+"_"+question_index).addClass("hover");
+            $("#shoucang_"+problem_index+"_"+question_index).attr("name","已收藏");
+            $("#shoucang_"+problem_index+"_"+question_index).attr("onclick","");
+            tishi_alert("小题收藏成功");
+        }
+    });
+}
+
 //播放词汇
 function play_word_enunciate(url){
     //jplayer_play(url);

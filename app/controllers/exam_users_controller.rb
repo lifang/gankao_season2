@@ -125,7 +125,7 @@ class ExamUsersController < ApplicationController
     url=params[:sheet_url]
     doc = get_doc(url)
     ele_str = "_#{params[:problem_index]}_#{params[:question_index]}"
-    doc.attributes["init"].nil? ? doc.add_attribute("init", "#{params[:problem_index]}") : doc.attributes["init"] = "#{params[:problem_index]}"
+    doc.attributes["init"].nil? ? doc.add_attribute("init", "#{params[:problem_index]}") : (doc.attributes["init"] = "#{params[:problem_index]}")
     question = doc.elements[ele_str].nil? ? doc.add_element(ele_str) : doc.elements[ele_str]
     question.text.nil? ? question.add_text(params[:answer]) : question.text=params[:answer]
     manage_element(question,{},{"question_type"=>params[:question_type], "correct_type"=>params[:correct_type]})
@@ -192,5 +192,7 @@ class ExamUsersController < ApplicationController
       }
     end
   end
+
+  
 
 end

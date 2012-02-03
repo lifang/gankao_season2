@@ -13,7 +13,7 @@
   init_exam_user_id ='<%= params[:id] %>';
   init_paper_id = '<%= @paper_id %>';
   sheet_url = '<%= @sheet_url %>';
-  
+  var attrs = [];
   //将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
   function transform_array(object){
     var result = [];
@@ -208,7 +208,7 @@
                 result_title_arr << element_str << source_title_arr[sign_index+1]; %>
                 <script type="text/javascript" >
                   if('<%= question["correct_type"] %>'=="1"){
-                    var attrs = "<%= question["questionattrs"] %>".split(";-;");
+                    attrs = "<%= question["questionattrs"] %>".split(";-;");
                     for(var i=0;i<attrs.length;i++){
                       all_attrs.push(attrs[i]);
                     }
@@ -248,6 +248,7 @@
             <script type='text/javascript'>
               //设置可拖动元素，排序，以及绑定音频播放事件
               attrs_elements_str="";
+              all_attrs = all_attrs.sort();
               for(var i=0;i<all_attrs.length;i++){
                 attrs_elements_str += "<li name='"+all_attrs[i]+"' class='draggable_attr_<%= problem_index %>'>"+all_attrs[i]+"</li>"
               }
