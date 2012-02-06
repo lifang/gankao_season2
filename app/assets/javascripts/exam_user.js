@@ -304,21 +304,23 @@ function check_question(question_type,correct_type,attrs,problem_index,question_
     var answer = answers[problem_index][question_index].answer;
     var analysis = answers[problem_index][question_index].analysis;
     var user_answer = $("#exam_user_answer_"+problem_index+"_"+question_index).val();
-    //保存用户答案
-    $.ajax({
-        type: "POST",
-        url: "/exam_users/"+init_exam_user_id+"/ajax_save_question_answer.json",
-        dataType: "json",
-        data : {
-            "category_id":category,
-            "sheet_url":sheet_url,
-            "question_type":question_type,
-            "correct_type":correct_type,
-            "problem_index":problem_index,
-            "question_index":question_index,
-            "answer":user_answer
-        }
-    });
+    if(sheet_url!=""){
+        //保存用户答案
+        $.ajax({
+            type: "POST",
+            url: "/exam_users/"+init_exam_user_id+"/ajax_save_question_answer.json",
+            dataType: "json",
+            data : {
+                "category_id":category,
+                "sheet_url":sheet_url,
+                "question_type":question_type,
+                "correct_type":correct_type,
+                "problem_index":problem_index,
+                "question_index":question_index,
+                "answer":user_answer
+            }
+        });
+    }
     //改变答题正误的显示效果细节
     right_or_error_effect(user_answer,answer,analysis,problem_index,question_index,question_type,correct_type);
     //改变最终显示答案的内容，如单选题可以只显示"A"
@@ -380,9 +382,9 @@ function imitate_action(attrs,question_type,correct_type,user_answer,problem_ind
         }
         if(correct_type=="1"){
             var user_answer_arr = user_answer.split(";|;");
-            for(var i=0;i<user_answer_arr.length;i++){
+            for(var ii=0;ii<user_answer_arr.length;ii++){
                 for(var j=0;j<split_attrs.length;j++){
-                    if(user_answer_arr[i]==split_attrs[j]){
+                    if(user_answer_arr[ii]==split_attrs[j]){
                         $(".multi_choose_li_"+problem_index+"_"+question_index+":eq("+j+")").addClass("hover");
                     }
                 }
@@ -614,53 +616,57 @@ function clone_flowplayer(selector,audio_src){
 
 //题面后小题加入收藏夹
 function normal_add_collect(problem_index,question_index){
-    $.ajax({
-        type: "POST",
-        url: "/exam_users/ajax_add_collect.json",
-        dataType: "json",
-        data : {
-            "sheet_url" : sheet_url,
-            "paper_id" : init_paper_id,
-            "problem_index" : problem_index,
-            "question_index" : question_index,
-            "problem" : $("#problem_json_"+problem_index).val(),
-            "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
-            "addition" : answers[problem_index][question_index]
-        },
-        success : function(data){
-            $("#shoucang_"+problem_index+"_"+question_index).addClass("hover");
-            $("#shoucang_"+problem_index+"_"+question_index).attr("name","已收藏");
-            $("#shoucang_"+problem_index+"_"+question_index).attr("onclick","");
-            tishi_alert("小题收藏成功");
-        }
-    });
+    if(sheect_url!=""){
+        $.ajax({
+            type: "POST",
+            url: "/exam_users/ajax_add_collect.json",
+            dataType: "json",
+            data : {
+                "sheet_url" : sheet_url,
+                "paper_id" : init_paper_id,
+                "problem_index" : problem_index,
+                "question_index" : question_index,
+                "problem" : $("#problem_json_"+problem_index).val(),
+                "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
+                "addition" : answers[problem_index][question_index]
+            },
+            success : function(data){
+                $("#shoucang_"+problem_index+"_"+question_index).addClass("hover");
+                $("#shoucang_"+problem_index+"_"+question_index).attr("name","已收藏");
+                $("#shoucang_"+problem_index+"_"+question_index).attr("onclick","");
+                tishi_alert("小题收藏成功");
+            }
+        });
+    }
 }
 
 //题面中小题加入收藏夹
 function special_add_collect(problem_index,question_index,problem_id,question_id){
-    $.ajax({
-        type: "POST",
-        url: "/collections/add_collection.json",
-        dataType: "json",
-        data : {
-            "sheet_url" : sheet_url,
-            "problem_index" : problem_index,
-            "question_index" : question_index,
-            "paper_id" : init_paper_id,
-            "problem_json" : $("#problem_json_"+problem_index).val(),
-            "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
-            "question_answer" : answers[problem_index][question_index]["answer"],
-            "question_analysis" : answers[problem_index][question_index]["analysis"],
-            "problem_id" : problem_id,
-            "question_id" : question_id
-        },
-        success : function(data){
-            $("#shoucang_"+problem_index+"_"+question_index).addClass("hover");
-            $("#shoucang_"+problem_index+"_"+question_index).attr("name","已收藏");
-            $("#shoucang_"+problem_index+"_"+question_index).attr("onclick","");
-            tishi_alert("小题收藏成功");
-        }
-    });
+    if(sheect_url!=""){
+        $.ajax({
+            type: "POST",
+            url: "/collections/add_collection.json",
+            dataType: "json",
+            data : {
+                "sheet_url" : sheet_url,
+                "problem_index" : problem_index,
+                "question_index" : question_index,
+                "paper_id" : init_paper_id,
+                "problem_json" : $("#problem_json_"+problem_index).val(),
+                "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
+                "question_answer" : answers[problem_index][question_index]["answer"],
+                "question_analysis" : answers[problem_index][question_index]["analysis"],
+                "problem_id" : problem_id,
+                "question_id" : question_id
+            },
+            success : function(data){
+                $("#shoucang_"+problem_index+"_"+question_index).addClass("hover");
+                $("#shoucang_"+problem_index+"_"+question_index).attr("name","已收藏");
+                $("#shoucang_"+problem_index+"_"+question_index).attr("onclick","");
+                tishi_alert("小题收藏成功");
+            }
+        });
+    }
 }
 
 //播放词汇
