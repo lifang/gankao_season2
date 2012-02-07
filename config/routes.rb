@@ -43,7 +43,7 @@ GankaoSeason2::Application.routes.draw do
   resources :study_plans do
     collection do
       get :done_plans
-      post :plan_status
+      post :plan_status,:check_task
     end
   end
   resources :exam_users do
@@ -84,7 +84,7 @@ GankaoSeason2::Application.routes.draw do
   resources :users do
     collection do
       get :delete_user,:email_info,:mess_info,:record_info,:record,:alipay_exercise
-      post :delete_mess,:update_users,:alipay_compete,:accredit_check
+      post :delete_mess,:update_users,:alipay_compete,:accredit_check,:check_vip
     end
     member do
       get :info,:record

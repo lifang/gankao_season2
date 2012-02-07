@@ -150,7 +150,7 @@ function check_compelte(){
             var examination=data.examination_id;
             var  rater=data.rater_id;
             tishi_alert(data.notice);
-            window.location.href="/exam_raters/"+examination +"/reader_papers?rater_id="+rater;
+            window.location.href="/exam_raters/"+examination +"/reader_papers?rater_id="+rater; 
         }
     });
 }

@@ -12,7 +12,7 @@
   </div>
   <div id="today" style="display:none">
     <p><span id="whichs">第20天</span><span><%= "#{Time.now.strftime("%m/%d")}" %></span></p>
-    <p><a href="#">添加标记</a></p>
+    <p><a href="#"  id="check_over" onclick="task_over()">添加标记</a></p>
     <p><span class="pt_lianxi tooltip" title="练习" id="practice">40</span>
       <span class="pt_beici tooltip" title="背词" id="exercise">30</span></p>
   </div>
@@ -24,10 +24,24 @@
   </div>
 </div>
 <input type="hidden" value="" id="all_days"/>
-<input type="hidden" value="<%= params[:category] %>" id="category"/>
+<%= form_for :task,:url=>"/study_plans/check_task",:html=>{:id=>"task"},:remote=>true do %>
+  <input type="hidden" value="<%= params[:category] %>" id="category" name="category"/>
+<% end %>
 <script type="text/javascript">
   var today=new Date();
   var arr = [];
   new_calender();
   var $ = jQuery;
+<%#*$.ajax({%>
+<%#*type: "POST",%>
+<%#*url: "/study_plans/check_task.json",%>
+<%#*dataType: "json",%>
+<%#*data : {%>
+<%#*category:$("#category")%>
+<%#*},%>
+<%#*success : function(data) {%>
+<%#*//            tishi_alert(data.message);           }%>
+
+<%#*}%>
+<%#*})%>
 </script>
