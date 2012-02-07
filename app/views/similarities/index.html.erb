@@ -7,9 +7,36 @@
       <p>暂无<%= @category.name %>真题</p>
     <% else %>
       <% @similarities.each do |similarity| %>
-        <li><a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %> onclick="return already_submit('<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>>
-            <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %><span><img title="已完成" src="/assets/icon_wc.png" /></span><% end %>
-            <h2><%= similarity.title %></h2></a>
+        <li>
+          <% if cookies[:user_id].nil? %>
+            <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>">
+              <h2><%= similarity.title %></h2>
+            </a>
+          <% else %>
+            <% if is_vip?(params[:category]) %>
+              <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
+                   onclick="return already_submit('<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>>
+                <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %><span><img title="已完成" src="/assets/icon_wc.png" /></span><% end %>
+                <h2><%= similarity.title %></h2>
+              </a>
+            <% elsif is_nomal?(params[:category]) %>
+              <a href="javascript:void(0);" onclick="javascript:tishi_alert('您的试用期已过，升级为vip用户才能试用。');">
+                <h2><%= similarity.title %></h2>
+              </a>
+            <% else %>
+              <% if similarity.is_free %>
+                <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
+                     onclick="return already_submit('<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>>
+                  <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %><span><img title="已完成" src="/assets/icon_wc.png" /></span><% end %>
+                  <h2><%= similarity.title %></h2>
+                </a>
+              <% else %>
+                <a href="javascript:void(0);" onclick="javascript:tishi_alert('当前试卷为收费卷，升级为vip用户才能试用。');">
+                  <h2><%= similarity.title %></h2>
+                </a>
+              <% end %>
+            <% end %>
+          <% end %>
         </li>
       <% end %>
     <% end %>

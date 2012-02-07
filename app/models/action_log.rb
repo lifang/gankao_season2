@@ -19,6 +19,32 @@ class ActionLog < ActiveRecord::Base
     end
     return ActionLog.find_by_sql(sql)[0]
   end
+
+  #记录登录时候的action_log
+  def ActionLog.login_log(user_id)
+    action_log = ActionLog.find(:first,
+      :conditions => ["TO_DAYS(NOW())=TO_DAYS(created_at) and types = ? and user_id = ?",
+        ActionLog::TYPES[:LOGIN], user_id.to_i])
+    if action_log
+      action_log.increment!(:total_num, 1)
+    else
+      ActionLog.create(:user_id => user_id, :types => ActionLog::TYPES[:LOGIN],
+        :created_at => Time.now.to_date, :total_num => 1)
+    end
+  end
+
+  #记录模拟考试的log
+  def ActionLog.exam_log(category_id, user_id)
+    action_log = ActionLog.find(:first,
+        :conditions => ["category_id = ? and types = ? and TO_DAYS(NOW())-TO_DAYS(created_at)=0 and user_id = ?",
+          category_id.to_i, ActionLog::TYPES[:EXAM], user_id.to_i])
+      if action_log
+        action_log.increment!(:total_num, 1)
+      else
+        ActionLog.create(:user_id => user_id.to_i, :types => ActionLog::TYPES[:EXAM],
+          :category_id => category_id.to_i, :created_at => Time.now.to_date, :total_num => 1)
+      end
+  end
   
 end
 

@@ -70,8 +70,11 @@ GankaoSeason2::Application.routes.draw do
   end
   resources :simulations do
     member do
-      get 'do_exam', 'show_result'
+      get 'do_exam', 'show_result', 'reset_exam', 'end_exam'
       post 'get_exam_time', 'five_min_save', 'save_result', 'cancel_exam'
+    end
+    collection do
+      get 'goto_exam'
     end
   end
   resources :words do
