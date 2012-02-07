@@ -1,15 +1,12 @@
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
-<%= javascript_include_tag "/assets/main.js" %>
 
-<%= stylesheet_link_tag "/assets/jplayer.blue.monday.css" %>
-<%= javascript_include_tag "/assets/cookie.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.core.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.widget.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.mouse.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.draggable.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.droppable.js" %>
-<%= javascript_include_tag '/assets/jplayer/jquery.jplayer.min.js' %>
 <%= javascript_include_tag "#{@answer_js_url}" %>
+<%= javascript_include_tag "/assets/exam_user.js" %>
 <script type="text/javascript" >
   category = '<%= category_id %>';
   init_problem = '<%= @sheet.attributes["init"] %>';
@@ -40,40 +37,10 @@
   }
   //unbind_arr=[]; //记录嵌入式大题的problem_index
 </script>
-<%= javascript_include_tag "/assets/exam_user.js" %>
+
 <!-- 初始化jplayer播放器  -->
-<div id="jquery_jplayer_1"></div>
-<div id="jp_hidden_position" style="display:none">
-  <div id="jp_container_1" class="jp-audio">
-    <div class="jp-type-single">
-      <div class="jp-gui jp-interface">
-        <ul class="jp-controls">
-          <li><a href="javascript:void(0);" class="jp-play" tabindex="1">play</a></li>
-          <li><a href="javascript:void(0);" class="jp-pause" tabindex="1">pause</a></li>
-          <li><a href="javascript:void(0);" class="jp-stop" tabindex="1">stop</a></li>
-          <li><a href="javascript:void(0);" class="jp-mute" tabindex="1" title="mute">mute</a></li>
-          <li><a href="javascript:void(0);" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
-          <li><a href="javascript:void(0);" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
-        </ul>
-        <div class="jp-progress">
-          <div class="jp-seek-bar">
-            <div class="jp-play-bar"></div>
-          </div>
-        </div>
-        <div class="jp-volume-bar">
-          <div class="jp-volume-bar-value"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<script type="text/javascript">
-  $("#jquery_jplayer_1").jPlayer({
-    swfPath: "/javascripts/jplayer",
-    supplied: "mp3",
-    preload: "none"
-  });
-</script>
+<%= render :partial=>"/common/jquery_jplayer" %>
+
 <% constant_question_type = {"0"=>"单选题","1"=>"多选题","2"=>"判断题","3"=>"填空题","5"=>"简答题"} %>
 <div class="m_top">
   <h1 class="ex_paper_h"><%= @paper["base_info"]["title"] %></h1>
@@ -85,11 +52,11 @@
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
       <span class="icon_return"><a href="/<%= (params["type"].nil?||(params["type"]!="similarities"&&params["type"]!="specials")) ? "similarities" : params["type"]  %>?category=<%= category_id %>" class="tooltip" name="返回">返回</a></span>
     </div>
-    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo();">重做</a></span>
+    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo('<%= params["type"] %>');">重做</a></span>
   </div>
 </div>
 <% blocks = @paper["blocks"]["block"] %>
-<% problem_index=-1 ; global_question_index=-1 ; blocks.each do |block| %>
+<% problem_index=-1 ; blocks.each do |block| %>
   <% problems = block["problems"]["problem"] %>
   <% problems.each do |problem| ; problem_index+=1; %>
     <% if problem["question_type"]=="0" %>
@@ -107,7 +74,7 @@
               <% if audio_src != nil %>
                 <% audio_title_arr[1]="<input type='button' style='display:none;' id='jplayer_play_button_#{problem_index}' value='更新音频' />" %>
                 <script type='text/javascript'>
-                  //设置可拖动元素，排序，以及绑定音频播放事件
+                  //绑定音频播放事件
                   $(function(){
                     $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
                       clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
@@ -118,16 +85,15 @@
               <% resource_problem_title = audio_title_arr.join("") %>
               <%= resource_problem_title.html_safe %>
             </div>
-            <div id='jplayer_location_<%= problem_index %>'></div>
           </div>
         </div>
         <div class="m_side">
           <div class="problem_box">
             <% questions = problem["questions"]["question"] %>
-            <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
+            <% question_index=-1; questions.each do |question| ; question_index+=1; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line">
                 <div class="pql_left">
-                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="未收藏" onclick="javascript:$(function(){normal_add_collect(<%= "'#{problem_index}','#{question_index}'" %>)});">收藏</a></span>
+                  <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){normal_add_collect(<%= "'#{problem_index}','#{question_index}'" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
@@ -220,9 +186,10 @@
             </div>
             <div id='jplayer_location_<%= problem_index %>'></div>
             <div class="problem_text">
+              <script type="text/javascript">all_attrs = [];</script>
               <!-- 题面内大题  初始化小题 -->
               <% source_title_arr = problem["title"].nil? ? [] : problem["title"].split("((sign))"); result_title_arr = [] ; result_title_arr << source_title_arr[0] %>
-              <% questions = (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : problem["questions"]["question"].nil? ? [] : [problem["questions"]["question"]] %>
+              <% questions = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] %>
               <% sign_index=-1;has_drag = false; questions.each do |question| ; sign_index+=1;
                 element_str="<span class='span_tk' id='inner_span_tk_#{problem_index}_#{sign_index}'>";
                 if question["correct_type"]=="0";
@@ -239,6 +206,12 @@
                 element_str += "<button style='display:none;' id='refer_btn_#{problem_index}_#{sign_index}' >更新</button>"
                 result_title_arr << element_str << source_title_arr[sign_index+1]; %>
                 <script type="text/javascript" >
+                  if('<%= question["correct_type"] %>'=="1"){
+                    var attrs = "<%= question["questionattrs"] %>".split(";-;");
+                    for(var i=0;i<attrs.length;i++){
+                      all_attrs.push(attrs[i]);
+                    }
+                  }
                   $(function(){
                     $("#hedui_btn<%= "_#{problem_index}_#{sign_index}" %>").bind("click",function(){
                       check_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$("#resource_questionattrs<%= "_#{problem_index}_#{sign_index}" %>").val(),<%= problem_index %>,<%= sign_index %>);
@@ -254,12 +227,6 @@
                           $("#hedui_btn<%= "_#{problem_index}_#{sign_index}" %>").parent().show();
                         }
                       });
-                      attrs = "<%= question["questionattrs"] %>".split(";-;");
-                      new_attrs = "";
-                      for(var i=0;i<attrs.length;i++){
-                        new_attrs += "<li name='"+attrs[i]+"' class='draggable_attr_<%= problem_index %>'>"+attrs[i]+"</li>"
-                      }
-                      $("#draggable_list_<%= problem_index %>").html($("#draggable_list_<%= problem_index %>").html()+new_attrs);
                     }
                   })
                 </script>
@@ -270,30 +237,36 @@
                 <% audio_element="<input type='button' style='display:none;' id='jplayer_play_button_#{problem_index}' value='更新音频' />" ;%>
                 <% audio_title_arr[1]="" ; end ; %>
               <%= "#{audio_element}#{audio_title_arr.join('')}".html_safe %>
-              <script type='text/javascript'>
-                //设置可拖动元素，排序，以及绑定音频播放事件
-                $(function(){
-                  $(".draggable_attr_<%= problem_index %>").draggable({
-                    helper: "clone"});
-                  $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
-                    clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
-                  });
-                })
-              </script>
             </div>
+            <div id="hold_20px_height" style="height:20px;"></div>
             <div class="drag_tk_box" id="drag_tk_box_<%= problem_index %>" <% unless has_drag %>style="display:none;"<% end %> >
               <div class="drag_tk border_radius" id="drag_tk_<%= problem_index %>">
                 <ul id="draggable_list_<%= problem_index %>"></ul>
               </div>
             </div>
+            <script type='text/javascript'>
+              //设置可拖动元素，排序，以及绑定音频播放事件
+              attrs_elements_str="";
+              for(var i=0;i<all_attrs.length;i++){
+                attrs_elements_str += "<li name='"+all_attrs[i]+"' class='draggable_attr_<%= problem_index %>'>"+all_attrs[i]+"</li>"
+              }
+              $("#draggable_list_<%= problem_index %>").html(attrs_elements_str);
+              $(function(){
+                $(".draggable_attr_<%= problem_index %>").draggable({
+                  helper: "clone"});
+                $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
+                  clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
+                });
+              })
+            </script>
           </div>
         </div>
         <div class="m_side">
           <div class="problem_box">
-            <% question_index=-1; questions.each do |question| ; question_index+=1; global_question_index+=1 ; %>
+            <% question_index=-1; questions.each do |question| ; question_index+=1;%>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line" style='display:none;'>
                 <div class="pql_left">
-                  <span class="icon_shoucang"><a href="#" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="未收藏" onclick="javascript:$(function(){special_add_collect(<%= "'#{problem_index}','#{question_index}','#{problem["id"]}','#{question["id"]}'" %>)});">收藏</a></span>
+                  <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){special_add_collect(<%= "'#{problem_index}','#{question_index}','#{problem["id"]}','#{question["id"]}'" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
@@ -348,7 +321,7 @@
           <span class="font_size_24" id='about_word_name'></span>
           <span id='about_word_types'></span><span id='about_word_phonetic'></span>
           <input type="hidden" id="about_word_enunciate_url" />
-          <a href="javascript:void(0);" onclick="javascript:jplayer_play($('#about_word_enunciate_url').val());"><img alt="gankao" src="/assets/icon_fy.png" /></a>
+          <a href="javascript:void(0);" onclick="javascript:play_word_enunciate($('#about_word_enunciate_url').val());"><img alt="gankao" src="/assets/icon_fy.png" /></a>
         </div>
         <div class="ch_words_line">
           <p class="font_size_16" id='about_word_en_mean'></p>
@@ -363,19 +336,21 @@
 </div>
 
 <!-- 报告错误框  -->
-<div class="upErrorTo_tab border_radius" id="report_error" style="top: 242px; left: 490px; display: none; ">
-  <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:close_report_error();"/></span>
+<div class="upErrorTo_tab border_radius" id="report_error" style="top: 242px; left: 450px; display: none; ">
+  <span class="xx_x"><img src="/assets/xx.png" onclick="javascript:close_report_error();"/></span>
   <input type="hidden" id="report_error_paper_id" value="<%= @paper["id"] %>" />
   <input type="hidden" id="report_error_paper_title" value="<%= @paper["base_info"]["title"] %>" />
   <input type="hidden" id="report_error_user_id" value="<%= cookies[:user_id] %>" />
   <input type="hidden" id="report_error_user_name" value="<%= cookies[:user_name] %>" />
   <input type="hidden" id="report_error_question_id" />
+  <h3>错误类型:</h3>
   <ul>
     <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:TOPOIC] %>"/>题目错误</li>
     <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANSWER] %>"/>答案错误</li>
     <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANALISIS] %>"/>解析错误</li>
     <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:WORD] %>"/>词汇错误</li>
   </ul>
+  <h3>错误说明:</h3>
   <textarea name="" id='report_error_description' cols="" rows=""></textarea>
   <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
 </div>
@@ -396,74 +371,10 @@
 
   //初始化大题
   $(function(){
-    if($("#drag_tk_"+init_problem).height()){
+    if($("#drag_tk_"+init_problem).length>0 &&$("#drag_tk_"+init_problem).height()){
       $("#drag_tk_box_"+init_problem).css("height",$("#drag_tk_"+init_problem).height()+20);
     }
     $("#jplayer_play_button_"+init_problem).trigger("click");
   })
 </script>
 
-<script type="text/javascript" >
-  function clone_jplayer(selector,audio_src){
-    $(selector).append($("#jp_container_1"));
-    $("#jquery_jplayer_1").jPlayer("setMedia", {
-      mp3: audio_src
-    });
-  }
-
-  //题面后小题加入收藏夹
-  function normal_add_collect(problem_index,question_index){
-    $.ajax({
-      type: "POST",
-      url: "/exam_users/ajax_add_collect.json",
-      dataType: "json",
-      data : {
-        "sheet_url" : sheet_url,
-        "paper_id" : init_paper_id,
-        "problem_index" : problem_index,
-        "question_index" : question_index,
-        "problem" : $("#problem_json_"+problem_index).val(),
-        "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
-        "addition" : answers[problem_index][question_index]
-      },
-      success : function(data){
-        $("#shoucang_"+problem_index+"_"+question_index).addClass("hover");
-        $("#shoucang_"+problem_index+"_"+question_index).attr("name","已收藏");
-        $("#shoucang_"+problem_index+"_"+question_index).attr("onclick","");
-        tishi_alert("小题收藏成功");
-      }
-    });
-  }
-
-  //题面中小题加入收藏夹
-  function special_add_collect(problem_index,question_index,problem_id,question_id){
-    $.ajax({
-      type: "POST",
-      url: "/collections/add_collection.json",
-      dataType: "json",
-      data : {
-        "sheet_url" : sheet_url,
-        "problem_index" : problem_index,
-        "question_index" : question_index,
-        "paper_id" : init_paper_id,
-        "problem_json" : $("#problem_json_"+problem_index).val(),
-        "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
-        "question_answer" : answers[problem_index][question_index]["answer"],
-        "question_analysis" : answers[problem_index][question_index]["analysis"],
-        "problem_id" : problem_id,
-        "question_id" : question_id
-      },
-      success : function(data){
-        $("#shoucang_"+problem_index+"_"+question_index).addClass("hover");
-        $("#shoucang_"+problem_index+"_"+question_index).attr("name","已收藏");
-        $("#shoucang_"+problem_index+"_"+question_index).attr("onclick","");
-        tishi_alert("小题收藏成功");
-      }
-    });
-  }
-
-//  params[:problem_json], params[:paper_id],
-//  params[:question_answer], params[:question_analysis],
-//  params[:user_answer], params[:question_id].to_i
-
-</script>

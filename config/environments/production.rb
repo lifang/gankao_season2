@@ -1,6 +1,6 @@
 GankaoSeason2::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
-
+  ActionController::Base.relative_url_root = '/prefix'
   # Code is not reloaded between requests
   config.cache_classes = true
 

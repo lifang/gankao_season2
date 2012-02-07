@@ -123,9 +123,16 @@ class Collection < ActiveRecord::Base
         end        
       end
     else
-      this_problem["paper_id"] = paper_id
-      this_problem["questions"]["question"]=[this_question]
-      problems << this_problem
+      problem={}
+      problem["id"]=this_problem["id"]
+      problem["question_type"]=this_problem["question_type"]
+      problem["description"]=this_problem["description"]
+      problem["title"]=this_problem["title"]
+      problem["category"]=this_problem["category"]
+      problem["paper_id"] = paper_id
+      problem["questions"]={}
+      problem["questions"]["question"]=[this_question]
+      problems << problem
     end
 
     #更新collection.js内容
@@ -188,50 +195,6 @@ class Collection < ActiveRecord::Base
     return doc
   end
 
-  
-
-  #如果当前题目有题点已经收藏过，就只收藏题点
-  def add_question(question_id, answer_text, collection_xml)
-    question.add_element("user_answer").add_text("#{answer_text}")
-    question.add_attribute("repeat_num", "1")
-    question.add_attribute("error_percent", "0")
-    questions = collection_xml.elements["#{collection_problem.xpath}/questions"]
-    questions.elements.add(question)
-    return collection_xml
-  end
-
-  #如果当前题目没有做过笔记，则将题目加入到笔记
-  def auto_add_problem(paper_xml, question_id, problem_path, answer_text, collection_xml)
-    paper_problem = paper_xml.elements["#{problem_path}"]
-    paper_problem.elements["questions"].each_element do |question|
-      if question.attributes["id"].to_i != question_id.to_i
-        paper_xml.delete_element(question.xpath)
-      end
-    end if paper_problem
-    add_audio_to_title(paper_xml, paper_problem)
-    last_question = paper_problem.elements["questions"].elements["question[@id='#{question_id.to_i}']"]
-    last_question.add_element("user_answer").add_text("#{answer_text}")
-    last_question.add_attribute("repeat_num", "1")
-    last_question.add_attribute("error_percent", "0")
-    collection_xml.elements["/collection/problems"].elements.add(paper_problem)
-    return collection_xml
-  end
-
-  #根据问题的路径取出block中的音频文件
-  def add_audio_to_title(paper_xml, problem)
-    block_audio = ""
-    block_path = problem.xpath.split("/problems")[0]
-    block = paper_xml.elements["#{block_path}"]
-    if !block.nil? and !block.elements["base_info"].elements["description"].nil? and
-        block.elements["base_info"].elements["description"].text.to_s.html_safe =~ /<mp3>/
-      block_audio = block.elements["base_info"].elements["description"].text.to_s.html_safe.split("<mp3>")[1]
-      unless problem.elements["title"].nil?
-        problem.elements["title"].text = problem.elements["title"].text + "<mp3>" + block_audio + "<mp3>"
-      else
-        problem.add_element("title").add_text("<mp3>#{block_audio}<mp3>")
-      end
-    end
-  end
 
   #自动阅卷保存错题
   def self.auto_add_collection(answer, problem,question,already_hash)

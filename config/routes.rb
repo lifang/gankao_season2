@@ -31,6 +31,7 @@ GankaoSeason2::Application.routes.draw do
   resources :collections do
     collection do
       post :load_words,:write_file, :add_collection, :update_collection
+      get :error,:index1,:ajax_load_problems
     end
   end
   resources :similarities do
@@ -42,7 +43,7 @@ GankaoSeason2::Application.routes.draw do
   resources :study_plans do
     collection do
       get :done_plans
-      post :plan_status
+      post :plan_status,:check_task
     end
   end
   resources :exam_users do
