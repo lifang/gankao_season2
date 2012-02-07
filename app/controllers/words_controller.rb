@@ -4,6 +4,11 @@ class WordsController < ApplicationController
   before_filter :sign?, :except => "index"
   
   def index
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}词汇"
+    @meta_keywords = "#{@category.name}词汇表,大学英语四级必考词汇"
+    @meta_description = "搜集#{@category.name}必考词汇1000余条，以四步训练帮助掌握词汇的用法和拼写，为应试提供扎实的基础。"
     if cookies[:user_id]
       @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
           "user_id" => cookies[:user_id].to_i})
@@ -17,6 +22,9 @@ class WordsController < ApplicationController
   end
 
   def recite_word
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}词汇训练"
     if is_nomal?(params[:category])
       flash[:notice] = "您的试用期已过，升级为vip用户才能试用。"
       redirect_to "/words?category=#{params[:category]}"
@@ -39,20 +47,19 @@ class WordsController < ApplicationController
         redirect_to "/words?category=#{params[:category]}"
       end
     end
-    
   end
 
   def recollection
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i})
-    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, 
+    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i,
       @already_recited.total_num, params[:type])
   end
 
   def use
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i})
-    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, 
+    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i,
       @already_recited.total_num, params[:type])
     @word_ids = []
     @sentence_hash = []
@@ -65,7 +72,7 @@ class WordsController < ApplicationController
   def hand_man
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i})
-    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, 
+    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i,
       @already_recited.total_num, params[:type])
     @word_ids = []
     @sentence_hash = []
@@ -78,7 +85,7 @@ class WordsController < ApplicationController
   def word_log
     word_ids = params[:word_id].split(",")
     wrong_ids = (params[:wrong_id].nil? or params[:wrong_id].empty?) ? [] : params[:wrong_id].split(",")
-    unless (word_ids - wrong_ids).nil? or (word_ids - wrong_ids).blank? 
+    unless (word_ids - wrong_ids).nil? or (word_ids - wrong_ids).blank?
       user_word_relation = UserWordRelation.find(:all, :conditions => ["word_id in (?)", (word_ids - wrong_ids)])
       user_word_relation.each do |relation|
         relation.update_attributes(:status => UserWordRelation::STATUS[:RECITE])
@@ -93,7 +100,7 @@ class WordsController < ApplicationController
         ActionLog.create(:category_id => params[:category_id].to_i, :user_id => cookies[:user_id].to_i,
           :types => ActionLog::TYPES[:RECITE], :created_at => Time.now.to_date, :total_num => (word_ids - wrong_ids).length)
       end
-    end    
+    end
     render :text => ""
   end
 

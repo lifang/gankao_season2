@@ -4,7 +4,12 @@ class SimilaritiesController < ApplicationController
   
   def index
     user_order(params[:category].to_i, cookies[:user_id].to_i) unless cookies[:user_id].nil?
-    @category = Category.find_by_id(params[:category].to_i)
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title="#{@category.name}真题"
+    @meta_keywords="#{@category.name}真题打包下载"
+    @meta_description="汇集2006年12月至今左右#{@category.name}真题，提供在线听力录音，在线答题，实时核对，完整的解析和相关词汇表。"
+
     sql = "select e.id, e.title, e.is_free from examinations e
         where e.category_id = #{@category.id} and e.types = #{Examination::TYPES[:OLD_EXAM]}"
     if !params[:category_type].nil? and params[:category_type] == Examination::IS_FREE[:YES].to_s

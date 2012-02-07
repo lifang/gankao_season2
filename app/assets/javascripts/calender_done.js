@@ -140,22 +140,20 @@ function new_calender(){
                     document.getElementById("exercise").innerHTML=which[2];
                     var flag = data.days
                     var status=data.status
+                    var pre_day=new Date(data.date[0])
+                    var last_day=new Date(data.date[1])
                     var done_plans=new Array();
-                    for(var n = 0, lens = flag[month].length; n < lens; n++){
-                        done_plans[n]=days[flag[month][n]]
+                    var str_month=month<10 ? "0"+month : ""+month
+                    for(var n = 0, lens = flag[year+"_"+str_month].length; n < lens; n++){
+                        done_plans[n]=days[flag[year+"_"+str_month][n]]
                     }
                     for(var i =0, len = divs.length; i < len; i++){
-                        if(flag[month]==undefined){
+                        var now_date=new Date(year+"-"+month+"-"+divs[i].innerHTML)
+                        var day_status=parseInt(divs[i].innerHTML)<10 ? "0"+divs[i].innerHTML : ""+divs[i].innerHTML
+                        if(flag[year+"_"+str_month]!=undefined){
                             if (today.getDate()==parseInt(divs[i].innerHTML)&&month==(today.getMonth()+1)&&today.getFullYear()==year){
                                 divs[i].className= "pt_day_new";
-                                divs[i].innerHTML=document.getElementById("today").innerHTML;
-                            }else{
-                                divs[i].className= "gray";
-                            }
-                        }else{
-                            if (today.getDate()==parseInt(divs[i].innerHTML)&&month==(today.getMonth()+1)&&today.getFullYear()==year){
-                                divs[i].className= "pt_day_new";
-                                if(status[parseInt(divs[i].innerHTML)]){
+                                if(status[day_status]){
                                     divs[i].innerHTML=  divs[i].innerHTML+document.getElementById("medal").innerHTML;
                                 }else{
                                     divs[i].innerHTML=document.getElementById("today").innerHTML;
@@ -167,16 +165,10 @@ function new_calender(){
                                     for(; i < n; i++) if(i in this && this[i] === el) return i;
                                     return -1;
                                 }
+                                
                                 if(done_plans.indexOf(divs[i])>=0){
-                                    if(parseInt(divs[i].innerHTML)<today.getDate()&&month==(today.getMonth()+1)&&year<=today.getFullYear()){
-                                        if(status[parseInt(divs[i].innerHTML)]){
-                                            divs[i].innerHTML=  divs[i].innerHTML+document.getElementById("medal").innerHTML;
-                                        }else{
-                                            divs[i].innerHTML= divs[i].innerHTML+document.getElementById("yellow_card").innerHTML;
-                                        }
-                                    }
-                                    if(year<today.getFullYear()){
-                                        if(status[parseInt(divs[i].innerHTML)]){
+                                    if(now_date<last_day&&now_date>pre_day&&now_date<today){
+                                        if(status[day_status]){
                                             divs[i].innerHTML=  divs[i].innerHTML+document.getElementById("medal").innerHTML;
                                         }else{
                                             divs[i].innerHTML= divs[i].innerHTML+document.getElementById("yellow_card").innerHTML;
@@ -200,3 +192,10 @@ function new_calender(){
         cale.NextMonth();
     }
 }
+
+
+function task_over(){
+    $("#task").submit();
+}
+
+

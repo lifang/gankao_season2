@@ -13,7 +13,7 @@
   init_exam_user_id ='<%= params[:id] %>';
   init_paper_id = '<%= @paper_id %>';
   sheet_url = '<%= @sheet_url %>';
-  
+  var attrs = [];
   //将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
   function transform_array(object){
     var result = [];
@@ -32,15 +32,16 @@
   var answers=[];
   var a = transform_array(answer.paper.problems.problem);
   for(var i=0;i<a.length;i++){
-    var a2 = transform_array(a[i].question);
-    answers.push(a2);
+    if(a[i]!=null){
+      var a2 = transform_array(a[i].question);
+      answers.push(a2);
+    }
   }
-  //unbind_arr=[]; //记录嵌入式大题的problem_index
 </script>
 
 <!-- 初始化jplayer播放器  -->
-<%= render :partial=>"/common/jquery_jplayer" %>
-
+<%#= render :partial=>"/common/jquery_jplayer" %>
+<%= render :partial=>"/common/flowplayer" %>
 <% constant_question_type = {"0"=>"单选题","1"=>"多选题","2"=>"判断题","3"=>"填空题","5"=>"简答题"} %>
 <div class="m_top">
   <h1 class="ex_paper_h"><%= @paper["base_info"]["title"] %></h1>
@@ -57,9 +58,9 @@
 </div>
 <% blocks = @paper["blocks"]["block"] %>
 <% problem_index=-1 ; blocks.each do |block| %>
-  <% problems = block["problems"]["problem"] %>
-  <% problems.each do |problem| ; problem_index+=1; %>
-    <% if problem["question_type"]=="0" %>
+  <% problems = block["problems"].nil? ? [] : block["problems"]["problem"] %>
+  <% problems.each do |problem|; next unless problem["questions"]; problem_index+=1; %>
+    <% if problem["question_type"]=="0" || problem["question_type"].nil? %>
       <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
         <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem.to_json %>" />
         <div class="m_side m_problem_bg">
@@ -77,7 +78,7 @@
                   //绑定音频播放事件
                   $(function(){
                     $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
-                      clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
+                      clone_flowplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
                     });
                   })
                 </script>
@@ -207,7 +208,7 @@
                 result_title_arr << element_str << source_title_arr[sign_index+1]; %>
                 <script type="text/javascript" >
                   if('<%= question["correct_type"] %>'=="1"){
-                    var attrs = "<%= question["questionattrs"] %>".split(";-;");
+                    attrs = "<%= question["questionattrs"] %>".split(";-;");
                     for(var i=0;i<attrs.length;i++){
                       all_attrs.push(attrs[i]);
                     }
@@ -247,6 +248,7 @@
             <script type='text/javascript'>
               //设置可拖动元素，排序，以及绑定音频播放事件
               attrs_elements_str="";
+              all_attrs = all_attrs.sort();
               for(var i=0;i<all_attrs.length;i++){
                 attrs_elements_str += "<li name='"+all_attrs[i]+"' class='draggable_attr_<%= problem_index %>'>"+all_attrs[i]+"</li>"
               }
@@ -255,7 +257,7 @@
                 $(".draggable_attr_<%= problem_index %>").draggable({
                   helper: "clone"});
                 $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
-                  clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
+                  clone_flowplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
                 });
               })
             </script>

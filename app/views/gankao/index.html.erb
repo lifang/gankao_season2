@@ -1,8 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>首页</title>
+    <meta name="keywords" content="大学英语四级备考,大学英语四级真题,大学英语六级真题,大学英语四级备考" />
+    <meta name="description" content="大学英语四六级专业备考网站。提供在线真题，在线听力及背词功能。一站式完成四六级备考，便捷有效。" />
+    <title>赶考 - 备考四六级</title>
     <%= javascript_include_tag "/assets/application.js" %>
     <link href="/assets/index.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/assets/index.js"></script>
@@ -31,7 +32,7 @@
                 <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/renren_login', '_blank', 'height=500,width=600,left=300,top=100');"><img src="/assets/renren.png" /></a></li>
                 <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/sina_login', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/sina.png" /></a></li>
               <% else %>
-                <li><span style="cursor:pointer;" onclick="javascript:void(0);"><%= cookies[:user_name] %></span> | <span style="cursor:pointer;" onclick="javascript:window.location.href='/users/delete_user'">退出</span></li>
+                <li><span style="cursor:pointer;" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>';"><%= cookies[:user_name] %></span> | <span style="cursor:pointer;" onclick="javascript:window.location.href='/users/delete_user'">退出</span></li>
               <% end %>
             </ul>
           </div>

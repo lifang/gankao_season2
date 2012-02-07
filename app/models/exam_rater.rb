@@ -16,8 +16,10 @@ class ExamRater < ActiveRecord::Base
     #    else
     exam_users=ExamUser.find_by_sql("select e.id exam_user_id, r.id relation_id, r.is_marked ,
         r.exam_rater_id from exam_users e inner join orders o on o.user_id = e.user_id
-        left join rater_user_relations r   on r.exam_user_id= e.id
-        where e.examination_id=#{examination} and e.answer_sheet_url is not null and e.is_submited=1")
+        left join rater_user_relations r   on r.exam_user_id= e.id 
+        where e.examination_id=#{examination} and e.answer_sheet_url is not null and e.is_submited=1 and 
+      o.types in (#{Order::TYPES[:CHARGE]},#{Order::TYPES[:OTHER]},#{Order::TYPES[:ACCREDIT]}) and 
+      o.category_id=#{Category::TYPE_IDS[:english_fourth_level]} and o.status=#{Order::STATUS[:NOMAL]} group by o.types")
     return exam_users
   end
 

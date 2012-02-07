@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>赶考-英语真题练习网站</title>
+    <title><%= @title.nil? ? "大学英语四级词汇训练" : @title %></title>
     <%= stylesheet_link_tag    "style" %>
     <%= stylesheet_link_tag    "public" %>
     <%= javascript_include_tag "application" %>

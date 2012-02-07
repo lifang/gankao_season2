@@ -1,7 +1,13 @@
 # encoding: utf-8
 class StudyPlansController < ApplicationController
   before_filter :sign?, :except => ["index"]
+  
   def index
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}复习计划"
+    @meta_keywords = "#{@category.name}复习方法,大学英语四级学习计划"
+    @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提供#{@category.name}的应试能力。"
     @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", params[:category].to_i])
     if cookies[:user_id]
       @user_plan = UserPlanRelation.find(:first,
@@ -21,53 +27,32 @@ class StudyPlansController < ApplicationController
 
   def plan_status
     days=UserPlanRelation.find_by_user_id(cookies[:user_id].to_i)
-    day_all={}
     which_day=0
     practise=0
     exercise=0
-    month_action={}
-    day_all[params[:end].to_datetime.month]=[]
-    task_num={}
+    month_action=[]
+    day_all={}
+    end_at=days.ended_at.nil?? days.created_at.to_datetime : days.ended_at.to_datetime
+    created_at=days.created_at.to_datetime
+    day_index=[]
     unless days.nil?
-      end_at=days.ended_at.nil?? days.created_at.to_datetime : days.ended_at.to_datetime
-      created_at=days.created_at.to_datetime
-      if(end_at.month==created_at.month)
-        (end_at.day..created_at.day).each do |one_day|
-          day_all[created_at.month].nil??day_all[created_at.month]=[one_day] :day_all[created_at.month]<<one_day
-        end
-      else
-        (created_at.day..params[:end].to_datetime.day).each do |one_day|
-          day_all[created_at.month].nil??day_all[created_at.month]=[one_day] :day_all[created_at.month]<<one_day
-        end
-        (params[:start].to_datetime.day..end_at.day).each do |one_day|
-          day_all[end_at.month].nil??day_all[end_at.month]=[one_day] :day_all[end_at.month]<<one_day
-        end
+      created_at.step(end_at, 1) do |date|
+        day_index << date.strftime("%Y_%m_%d")
+        day_all["#{date.strftime("%Y_%m")}"].nil??day_all["#{date.strftime("%Y_%m")}"]=[date.day] :day_all["#{date.strftime("%Y_%m")}"]<<date.day
       end
-      actions=ActionLog.find_by_sql("select total_num,created_at,types from action_logs where user_id=#{cookies[:user_id].to_i} and types in
-                       (#{ActionLog::TYPES[:PRACTICE]},#{ActionLog::TYPES[:RECITE]}) and category_id=#{params[:category]} and created_at>='#{days.created_at}'")
-      actions.each do |action|
-        month_action["#{action.types}_#{action.created_at.to_datetime.day}"]=action.total_num
-      end unless actions.blank?
-      tasks=PlanTask.find_by_sql("select task_types,num from plan_tasks where study_plan_id=#{days.study_plan_id} and
-            period_types=#{PlanTask::PERIOD_TYPES[:EVERYDAY]} and task_types in (#{PlanTask::TASK_TYPES[:PRACTICE]},#{PlanTask::TASK_TYPES[:RECITE]})")
-      unless tasks.blank?
-        tasks.each do |task|
-          task_num["#{task.task_types}"]=task.num
-        end
-        practise=task_num["#{PlanTask::TASK_TYPES[:PRACTICE]}"]
-        exercise=task_num["#{PlanTask::TASK_TYPES[:RECITE]}"]
-      end
+      month_action=StudyPlan.check_actions(cookies[:user_id].to_i,params[:category],params[:start].to_datetime,params[:end].to_datetime)
+      task_num=StudyPlan.check_tasks(days.study_plan_id)
+      practise= task_num[0]
+      exercise=task_num[1]
       day_status={}
-      #      puts day_all[params[:end].to_datetime.month]
-      unless day_all[params[:end].to_datetime.month].blank?
-        which_day=day_all[params[:end].to_datetime.month].index(Time.now.day).nil? ? 0 :day_all[params[:end].to_datetime.month].index(Time.now.day)+1
-        day_all[params[:end].to_datetime.month].each do |day_task|
+      end_time=params[:end].to_datetime
+      unless day_all["#{end_time.strftime("%Y_%m")}"].blank?
+        which_day=day_index.index(Time.now.strftime("%Y_%m_%d"))
+        day_all["#{end_time.strftime("%Y_%m")}"].each do |day_task|
+          day_task= day_task<10 ? "0#{day_task}" : "#{day_task}"
           status=false
-          if !month_action["#{PlanTask::TASK_TYPES[:PRACTICE]}_#{day_task}"].nil? and !month_action["#{PlanTask::TASK_TYPES[:RECITE]}_#{day_task}"].nil? and
-              month_action["#{PlanTask::TASK_TYPES[:PRACTICE]}_#{day_task}"]== task_num["#{PlanTask::TASK_TYPES[:PRACTICE]}"] and month_action["#{PlanTask::TASK_TYPES[:RECITE]}_#{day_task}"]== task_num["#{PlanTask::TASK_TYPES[:RECITE]}"]
+          if month_action.include?("#{end_time.strftime("%Y_%m")}_#{day_task}")
             status=true
-          else
-            status=false
           end
           day_status[day_task]=status
         end
@@ -75,11 +60,27 @@ class StudyPlansController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        data={:days=>day_all,:status=>day_status,:which=>[which_day,practise,exercise]}
+        data={:days=>day_all,:status=>day_status,:which=>[which_day,practise,exercise],:date=>[created_at,end_at]}
         render :json=>data
       }
     end
   end
 
+  def done_plans
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}复习计划"
+    @meta_keywords = "#{@category.name}复习方法,大学英语四级学习计划"
+    @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提供#{@category.name}的应试能力。"
+  end
+
+  def check_task
+    check=StudyPlan.pass_task(cookies[:user_id],params[:category])
+    @message=check[0]
+    @over=check[1]
+    respond_to do |format|
+      format.js
+    end
+  end
 
 end

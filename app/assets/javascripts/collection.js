@@ -637,7 +637,7 @@ function test_again(){
             }
         })
         $("li[class*='drag_li']").draggable({
-            revert: true
+            helper: "clone"
         });
     }
  

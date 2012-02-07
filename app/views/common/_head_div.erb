@@ -2,11 +2,16 @@
 <div class="head">
   <div class="head_info">
     <% if cookies[:user_id] %>
-      <% order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]}") %>
+      <% order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]}  and status=#{Order::STATUS[:NOMAL]}") %>
       <div class="h_user"><a href="#" class="h_email email_u">邮件</a><a href="/users/<%= cookies[:user_id] %>"><%= if order.nil?
             cookies[:user_name]
           else
-            "#{cookies[:user_name]}(试用剩#{((order.end_time-Time.now.to_datetime)/1.day).to_i}天)"
+            time=((order.end_time-Time.now.to_datetime)/1.day).to_i
+            if time<=0
+              "#{cookies[:user_name]}"
+            else
+              "#{cookies[:user_name]}(试用剩#{((order.end_time-Time.now.to_datetime)/1.day).to_i}天)"
+            end
           end %></a>|<a href="/users/delete_user">退出</a>
         <div class="email_tab" style="display: none; ">
           <ul>

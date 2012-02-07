@@ -13,18 +13,11 @@
 <div class="rcf_box rcf_box_bottom">
   <label>会员：</label>
   <div class="setting-item-vip">
-    <% if @order==[] %>
+    <% if @order.nil?||@order.types==Order::TYPES[:CHARGE] %>
       &nbsp;&nbsp;普通会员&nbsp;&nbsp;&nbsp;&nbsp;
       <a href="/users/<%= cookies[:user_id] %>/record?vip=1">开通VIP</a>
     <% else %>
-      <%if @order.include?(Order::TYPES[:CHARGE])%>
-         &nbsp;&nbsp;<img src="/assets/users/V.png"/>
-      <% elsif !@order.include?(Order::TYPES[:CHARGE])&&@order.include?(Order::TYPES[:TRIAL_SEVEN]) %>
-        &nbsp;&nbsp;普通会员&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="/users/<%= cookies[:user_id] %>/record?vip=1">开通VIP</a>
-      <%else%>
-         &nbsp;&nbsp;<img src="/assets/users/V.png"/>
-      <% end %>
+      &nbsp;&nbsp;<img src="/assets/users/V.png"/>
     <% end %>
   </div>
 </div>

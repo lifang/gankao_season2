@@ -13,6 +13,10 @@ gem 'sinatra'
 gem 'oauth', '0.4.5'  #新浪微博使用oauth
 gem 'oauth2', '0.4.1' #人人使用oauth2
 gem 'weibo', '0.0.11'
+gem "mongrel", "~> 1.2.0.pre2"
+#gem 'mongrel','1.1.5'
+gem 'dispatcher','0.0.1'
+gem 'daemons', '1.1.6'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

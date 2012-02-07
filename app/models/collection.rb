@@ -58,7 +58,10 @@ class Collection < ActiveRecord::Base
   #修改需要添加的题目
   def update_problem_hash(problem_json, paper_id, answer, analysis, user_answer, question_id)
     new_col_problem = ActiveSupport::JSON.decode((JSON(problem_json)).to_json)
+    questions=new_col_problem["questions"]
+    new_col_problem.delete("questions")
     new_col_problem.merge!({"paper_id" => paper_id})
+    new_col_problem.merge!({"questions" => questions})
     unless new_col_problem["questions"]["question"].nil?
       new_col_questions = new_col_problem["questions"]["question"]
       if new_col_questions.class.to_s == "Hash"
@@ -125,7 +128,8 @@ class Collection < ActiveRecord::Base
     else
       problem={}
       problem["id"]=this_problem["id"]
-      problem["question_type"]=this_problem["question_type"]
+      p_question_type = (this_problem["question_type"].nil? || this_problem["question_type"]=="") ? "0" : this_problem["question_type"]
+      problem["question_type"]=p_question_type
       problem["description"]=this_problem["description"]
       problem["title"]=this_problem["title"]
       problem["category"]=this_problem["category"]
@@ -140,6 +144,139 @@ class Collection < ActiveRecord::Base
     path_url = collection.collection_url.split("/")
     collection.generate_collection_url(content, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
 
+  end
+
+
+  def open_xml
+    dir = "#{Rails.root}/public"
+    file=File.open(dir + self.collection_url)
+    doc=Document.new(file)
+    file.close
+    return doc
+  end
+
+  #添加题目xml
+  def add_problem(doc, problem_xml)
+    str = doc.to_s.split("<problems/>")
+    if doc.elements["collection"].elements["problems"].children.blank?
+      doc = str[0] + "<problems>" + problem_xml + "</problems>" + str[1]
+    else
+      str = doc.to_s.split("</problems>")
+      doc = str[0] + problem_xml + "</problems>" + str[1] if str[1]
+    end
+    return doc
+  end
+
+  #删除试题
+  def delete_problem(problem_id, doc)
+    doc.delete_element("/collection/problems/problem[@id='#{problem_id}']") if doc.elements["/collection/problems/problem[@id='#{problem_id}']"]
+    return doc
+  end
+
+  #查询试题
+  def search(doc, tag, category)
+    doc.root.elements["problems"].each_element do |problem|
+      if problem.elements["category"].text.to_i != category.to_i
+        doc.delete_element(problem.xpath)
+      end
+    end unless category.nil? or category == ""
+    unless tag.nil? or tag == ""
+      tags = tag.strip.split(" ")
+      doc.root.elements["problems"].each_element do |problem|
+        is_include = false
+        problem.elements["questions"].each_element do |question|
+          if !question.elements["tags"].nil? and !question.elements["tags"].text.nil? and question.elements["tags"].text != ""
+            question_tag = question.elements["tags"].text.split(" ")
+            tags.each { |t| is_include = true  if question_tag.include?(t) }
+          end
+          break if is_include
+        end
+        if is_include == false
+          doc.delete_element(problem.xpath)
+        end
+      end
+    end
+    return doc
+  end
+
+
+  #自动阅卷保存错题
+  def self.auto_add_collection(answer, problem,question,already_hash)
+    problems=already_hash["problems"]["problem"]
+    if problems.class.to_s == "Hash"
+      problems=[problems]
+    end
+    collection_problem =problem_in_collection(problem.attributes["id"],problems,answer,question)
+    if collection_problem[0]
+      already_hash["problems"]["problem"]=collection_problem[1]
+    else
+      problem.delete_element problem.elements["questions"]
+      question =update_question(answer,question)
+      problem.add_element("questions").add_element(question)
+      if already_hash["problems"]["problem"].class.to_s == "Hash"
+        already_hash["problems"]["problem"]=[already_hash["problems"]["problem"],Hash.from_xml(problem.to_s)["problem"]]
+      else
+        already_hash["problems"]["problem"] << Hash.from_xml(problem.to_s)["problem"]
+      end
+    end
+    return already_hash
+   
+  end
+
+  #当前题目是否已经收藏到错题集
+  def self.problem_in_collection(problem_id, collections,answer,question_one)
+    has_none=false
+    collections.each do |problem|
+      if  problem["id"]==problem_id
+        has_none=true
+        questions=problem["questions"]["question"]
+        if questions.class.to_s == "Hash"
+          questions=[questions]
+        end
+        question_none=true
+        questions.each do |question|
+          if question_one.attributes["id"]==question["id"]
+            question_none=false
+            if question["user_answer"].nil?
+              question["repeat_num"]= "1"
+              question["error_percent"]= "0"
+              question["user_answer"]=[question["user_answer"],answer]
+            else
+              true_num = (((question["error_percent"].to_i.to_f)/100) * (question["repeat_num"].to_i)).round
+              question["repeat_num"] = question["repeat_num"].to_i + 1
+              question["error_percent"] = ((true_num.to_f/(question["repeat_num"].to_i))*100).round
+              question["user_answer"] << answer
+            end
+          end
+        end
+        if question_none
+          question =update_question(answer,question_one)
+          if problem["questions"]["question"].class.to_s == "Hash"
+            problem["questions"]["question"]=[problem["questions"]["question"],Hash.from_xml(question.to_s)["question"]]
+          else
+            problem["questions"]["question"] << Hash.from_xml(question.to_s)["question"]
+          end
+        end
+        break
+      end
+    end
+    return [has_none,collections]
+  end
+
+
+  #更新当前提点的答案
+  def self.update_question(answer_text,que)
+    if que.elements["user_answer"].nil?
+      true_num = (((que.attributes["error_percent"].to_i.to_f)/100) * (que.attributes["repeat_num"].to_i)).round
+      que.attributes["repeat_num"] = que.attributes["repeat_num"].to_i + 1
+      que.attributes["error_percent"] = ((true_num.to_f/(que.attributes["repeat_num"].to_i))*100).round
+      que.add_element("user_answer").add_text("#{answer_text}")
+    else
+      que.add_attribute("repeat_num", "1")
+      que.add_attribute("error_percent", "0")
+    end
+
+    return que
   end
 
 end
