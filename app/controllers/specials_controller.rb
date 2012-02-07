@@ -2,6 +2,11 @@
 class SpecialsController < ApplicationController
   
   def index
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title="#{@category.name}真题专项训练"
+    @meta_keywords="#{@category.name}真题打包下载"
+    @meta_description="将2006年12月至今所有#{@category.name}真题，并按照听力、阅读、翻译、完形等专项汇编，以便进行有针对性的训练。提供在线听力录音，在线答题，实时核对，完整的解析和相关词汇表。"
     @specials = Examination.paginate_by_sql(["select e.id, t.name, e.id examination_id, etr.id etr_id
         from examination_tag_relations etr
         inner join examinations e on e.id = etr.examination_id

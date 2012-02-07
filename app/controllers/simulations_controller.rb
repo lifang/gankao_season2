@@ -4,6 +4,11 @@ class SimulationsController < ApplicationController
   before_filter :sign?, :except => "index"
   
   def index
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}模拟考试"
+    @meta_keywords = "2012年6月#{@category.name}押题猜题"
+    @meta_description = "精心编选，针对2012年6月#{@category.name}的3场模拟考试，帮助全面掌握备考状况，熟悉考试流程。"
     sql = "select e.* from examinations e
           where e.is_published = #{Examination::IS_PUBLISHED[:ALREADY]}
           and e.types = #{Examination::TYPES[:SIMULATION]} and e.status != #{Examination::STATUS[:CLOSED]}

@@ -10,6 +10,11 @@ class CollectionsController < ApplicationController
     if cookies[:user_id]
       user = User.find(cookies[:user_id])
       if user.collection
+        category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+        @category = Category.find_by_id(category_id.to_i)
+        @title = "#{@category.name}真题收藏"
+        @meta_keywords = "自动收藏做错的#{@category.name}真题"
+        @meta_description = "自动收藏做错的#{@category.name}真题"
         @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
       else
         redirect_to "/collections/error"
@@ -133,11 +138,16 @@ class CollectionsController < ApplicationController
       if cookies[:user_id]
         user = User.find(cookies[:user_id])
         if user.collection
+          category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+          @category = Category.find_by_id(category_id.to_i)
+          @title = "#{@category.name}真题收藏"
+          @meta_keywords = "自动收藏做错的#{@category.name}真题"
+          @meta_description = "自动收藏做错的#{@category.name}真题"
           @collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
           f = File.open(@collection_url)
           @problems = (JSON (f.read)[13..-1])["problems"]["problem"]
           @problems_sum = @problems.length #总大题数
-          @group_sum = 2 #设置每组大题数
+          @group_sum = 5 #设置每组大题数
           @group_index = params[:init_problem].nil? ? 0 : ((params[:init_problem].to_i)/@group_sum)  #设置载入第几组
           @problems = @problems[(@group_index*@group_sum),@group_sum]
           f.close

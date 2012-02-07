@@ -2,6 +2,11 @@
 class WordsController < ApplicationController
   layout "words", :except => ["index"]
   def index
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}词汇"
+    @meta_keywords = "#{@category.name}词汇表,大学英语四级必考词汇"
+    @meta_description = "搜集#{@category.name}必考词汇1000余条，以四步训练帮助掌握词汇的用法和拼写，为应试提供扎实的基础。"
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i})
     level_word_count = Word.recite_words
@@ -11,6 +16,9 @@ class WordsController < ApplicationController
   end
 
   def recite_word
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}词汇训练"
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i})
     @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i, 

@@ -12,6 +12,9 @@ class ExamUsersController < ApplicationController
       @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("paperjs/","answerjs/")
       @paper = (JSON paper.read()[8..-1])["paper"]
       #组织 @paper
+      @title = @paper["base_info"]["title"]
+      @meta_keywords = "在线做题,在线真题听力MP3,实时核对,完整的解析和相关词汇"
+      @meta_description = "在线做题，在线真题听力MP3，实时核对，完整的解析和相关词汇。"
       @paper["blocks"]["block"] = @paper["blocks"]["block"].nil? ? [] : (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : [@paper["blocks"]["block"]]
       @paper["blocks"]["block"].each do |block|
         if block["problems"]

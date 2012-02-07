@@ -1,8 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" manifest="/assets/local_save/answer.manifest">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>模考</title>
+    <title><%= @title.nil? ? "大学英语四级模拟考试" : @title %></title>
     <%= stylesheet_link_tag    "mokao" %>
     <%= stylesheet_link_tag    "public" %>
     <%= stylesheet_link_tag    "jplayer.blue.monday" %>

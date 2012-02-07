@@ -616,7 +616,7 @@ function clone_flowplayer(selector,audio_src){
 
 //题面后小题加入收藏夹
 function normal_add_collect(problem_index,question_index){
-    if(sheect_url!=""){
+    if(sheet_url!=""){
         $.ajax({
             type: "POST",
             url: "/exam_users/ajax_add_collect.json",
