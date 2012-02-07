@@ -9,10 +9,10 @@
 <%= javascript_include_tag "/assets/exam_user.js" %>
 <script type="text/javascript" >
   category = '<%= category_id %>';
-  init_problem = '<%= @sheet.attributes["init"] %>';
-  init_exam_user_id ='<%= params[:id] %>';
+  init_problem = 0;
+  init_exam_user_id ='<%= params[:id].nil? ? 0 : params[:id] %>';
   init_paper_id = '<%= @paper_id %>';
-  sheet_url = '<%= @sheet_url %>';
+  sheet_url = '';
   var attrs = [];
   //将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
   function transform_array(object){
@@ -53,7 +53,7 @@
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
       <span class="icon_return"><a href="/<%= (params["type"].nil?||(params["type"]!="similarities"&&params["type"]!="specials")) ? "similarities" : params["type"]  %>?category=<%= category_id %>" class="tooltip" name="返回">返回</a></span>
     </div>
-    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo('<%= params["type"] %>');">重做</a></span>
+    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:if(confirm('如果您选择重做此卷，所有已保存的答案都将被清空。\n您确认要重做么？')){window.location.href='/exam_users/preview?paper=<%= params["paper"] %>'}">重做</a></span>
   </div>
 </div>
 <% blocks = @paper["blocks"]["block"] %>
@@ -61,7 +61,7 @@
   <% problems = block["problems"].nil? ? [] : block["problems"]["problem"] %>
   <% problems.each do |problem|; next unless problem["questions"]; problem_index+=1; %>
     <% if problem["question_type"]=="0" || problem["question_type"].nil? %>
-      <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
+      <div class="problem_resource" name="<%= problem_index %>" <% if problem_index!=0 %> style="display:none;" <% end %> >
         <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem.to_json %>" />
         <div class="m_side m_problem_bg">
           <div class="problem_box">
@@ -94,14 +94,14 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line">
                 <div class="pql_left">
-                  <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){normal_add_collect(<%= "'#{problem_index}','#{question_index}'" %>)});">收藏</a></span>
+                  <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){$('#shoucang<%= "_#{problem_index}_#{question_index}" %>').addClass('hover');$('#shoucang<%= "_#{problem_index}_#{question_index}" %>').attr('name','已收藏');$('#shoucang<%= "_#{problem_index}_#{question_index}" %>').attr('onclick','');tishi_alert('小题收藏成功');});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
                     <div class="question_tx"><%= constant_question_type[question["correct_type"]] %></div>
                     <div class="pro_t_con"><%= question["description"] %></div>
                   </div>
-                  <input type="hidden" id="exam_user_answer<%= "_#{problem_index}_#{question_index}" %>" class="exam_user_answer exam_user_answer<%= "_#{problem_index}" %>" value="<%= @sheet.elements["_#{problem_index}_#{question_index}"].text if @sheet.elements["_#{problem_index}_#{question_index}"] %>" />
+                  <input type="hidden" id="exam_user_answer<%= "_#{problem_index}_#{question_index}" %>" class="exam_user_answer exam_user_answer<%= "_#{problem_index}" %>" value="" />
                   <input type="hidden" id="pass_check<%= "_#{problem_index}_#{question_index}" %>" class="pass_check" />
                   <div class="red_cuo" id="red_cuo<%= "_#{problem_index}_#{question_index}" %>" style="display:none;"><img src="/assets/red_cuo.png"/>
                   </div>
@@ -178,7 +178,7 @@
         </div>
       </div>
     <% else %>
-      <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
+      <div class="problem_resource" name="<%= problem_index %>" <% if problem_index!=0 %> style="display:none;" <% end %> >
         <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem.to_json %>" />
         <div class="m_side m_problem_bg">
           <div class="problem_box">
@@ -268,13 +268,13 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1;%>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line" style='display:none;'>
                 <div class="pql_left">
-                  <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){special_add_collect(<%= "'#{problem_index}','#{question_index}','#{problem["id"]}','#{question["id"]}'" %>)});">收藏</a></span>
+                  <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){$('#shoucang<%= "_#{problem_index}_#{question_index}" %>').addClass('hover');$('#shoucang<%= "_#{problem_index}_#{question_index}" %>').attr('name','已收藏');$('#shoucang<%= "_#{problem_index}_#{question_index}" %>').attr('onclick','');tishi_alert('小题收藏成功');});">收藏</a></span>
                 </div>
                 <div class="pql_right">
                   <div class="pro_qu_t pro_qu_t_<%= problem_index %> pro_qu_k pro_qu_h" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
                     <%= question["description"] %>
                   </div>
-                  <input type="hidden" id="exam_user_answer<%= "_#{problem_index}_#{question_index}" %>" class="exam_user_answer"  value="<%= @sheet.elements["_#{problem_index}_#{question_index}"].text if @sheet.elements["_#{problem_index}_#{question_index}"] %>"  />
+                  <input type="hidden" id="exam_user_answer<%= "_#{problem_index}_#{question_index}" %>" class="exam_user_answer"  value=""  />
                   <input type="hidden" id="pass_check<%= "_#{problem_index}_#{question_index}" %>" class="pass_check" />
                   <div class="red_cuo" id="red_cuo<%= "_#{problem_index}_#{question_index}" %>" style="display:none;"><img src="/assets/red_cuo.png"/>
                   </div>
@@ -354,23 +354,11 @@
   </ul>
   <h3>错误说明:</h3>
   <textarea name="" id='report_error_description' cols="" rows=""></textarea>
-  <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
+  <div><button class="t_btn" disabled="disabled">提交</button></div>
 </div>
 
 
 <script type="text/javascript">
-  //还原用户之前操作,以及标注收藏过的题
-  $(function(){
-<% @sheet.each_element do |ele| %>
-      $("#refer_btn<%= ele.name %>").trigger("click");
-<% end %>
-<% @sheet.elements["collection"].text.split(",").each do |str| %>
-      $("#shoucang<%= str %>").addClass("hover");
-      $("#shoucang<%= str %>").attr("name","已收藏");
-      $("#shoucang<%= str %>").attr("onclick","");
-<% end if @sheet.elements["collection"] && @sheet.elements["collection"].text %>
-  })
-
   //初始化大题
   $(function(){
     if($("#drag_tk_"+init_problem).length>0 &&$("#drag_tk_"+init_problem).height()){

@@ -1,7 +1,7 @@
 # encoding: utf-8
 class ExamUsersController < ApplicationController
   layout "exam_user"
-  before_filter :sign?
+  before_filter :sign? ,:except=>["preview","ajax_load_about_words"]
   def show
     #读取试题
     begin
@@ -14,9 +14,11 @@ class ExamUsersController < ApplicationController
       #组织 @paper
       @paper["blocks"]["block"] = @paper["blocks"]["block"].nil? ? [] : (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : [@paper["blocks"]["block"]]
       @paper["blocks"]["block"].each do |block|
-        block["problems"]["problem"] = (block["problems"].nil? || block["problems"]["problem"].nil?) ? [] : (block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]]
-        block["problems"]["problem"].each do |problem|
-          problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]]
+        if block["problems"]
+          block["problems"]["problem"] = (block["problems"]["problem"].nil?) ? [] : ((block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]])
+          block["problems"]["problem"].each do |problem|
+            problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] if problem["questions"]
+          end
         end
       end
       #生成考生答卷
@@ -26,7 +28,7 @@ class ExamUsersController < ApplicationController
       @sheet = get_doc("#{@sheet_url}")
       close_file("#{@sheet_url}")
     rescue
-      flash[:warn] = "试卷加载错误，请您重新尝试。"
+      flash[:warn] = "试卷加载错误。"
       redirect_to "/similarities?category=#{params[:category]}"
     end
   end
@@ -120,18 +122,20 @@ class ExamUsersController < ApplicationController
 
   #考生保存答案
   def ajax_save_question_answer
-    url=params[:sheet_url]
-    doc = get_doc(url)
-    ele_str = "_#{params[:problem_index]}_#{params[:question_index]}"
-    doc.attributes["init"].nil? ? doc.add_attribute("init", "#{params[:problem_index]}") : doc.attributes["init"] = "#{params[:problem_index]}"
-    question = doc.elements[ele_str].nil? ? doc.add_element(ele_str) : doc.elements[ele_str]
-    question.text.nil? ? question.add_text(params[:answer]) : question.text=params[:answer]
-    manage_element(question,{},{"question_type"=>params[:question_type], "correct_type"=>params[:correct_type]})
-    write_xml(doc, url)
-    #更新action_logs , total_num+1
-    log = ActionLog.find_by_sql("select * from action_logs where user_id=#{cookies[:user_id]} and types=#{ActionLog::TYPES[:PRACTICE]} and category_id=#{params[:category_id]} and TO_DAYS(NOW())=TO_DAYS(created_at)")[0]
-    log = ActionLog.create(:user_id=>cookies[:user_id],:types=>ActionLog::TYPES[:PRACTICE],:category_id=>params[:category_id],:total_num=>0) unless log
-    log.update_attribute("total_num",log.total_num+1)
+    if params[:sheet_url]!="" && params[:sheet_url]!=nil
+      url=params[:sheet_url]
+      doc = get_doc(url)
+      ele_str = "_#{params[:problem_index]}_#{params[:question_index]}"
+      doc.attributes["init"].nil? ? doc.add_attribute("init", "#{params[:problem_index]}") : (doc.attributes["init"] = "#{params[:problem_index]}")
+      question = doc.elements[ele_str].nil? ? doc.add_element(ele_str) : doc.elements[ele_str]
+      question.text.nil? ? question.add_text(params[:answer]) : question.text=params[:answer]
+      manage_element(question,{},{"question_type"=>params[:question_type], "correct_type"=>params[:correct_type]})
+      write_xml(doc, url)
+      #更新action_logs , total_num+1
+      log = ActionLog.find_by_sql("select * from action_logs where user_id=#{cookies[:user_id]} and types=#{ActionLog::TYPES[:PRACTICE]} and category_id=#{params[:category_id]} and TO_DAYS(NOW())=TO_DAYS(created_at)")[0]
+      log = ActionLog.create(:user_id=>cookies[:user_id],:types=>ActionLog::TYPES[:PRACTICE],:category_id=>params[:category_id],:total_num=>0) unless log
+      log.update_attribute("total_num",log.total_num+1)
+    end
     respond_to do |format|
       format.json {
         render :json=>""
@@ -154,12 +158,38 @@ class ExamUsersController < ApplicationController
 
   #改变答卷状态（即做完了最后一题）
   def ajax_change_status
-    ExamUser.find(params[:id]).update_attribute("is_submited",true)
-    url=params[:sheet_url]
-    doc = get_doc(url)
-    doc.attributes["status"] = "1"
-    doc.attributes["init"] = "0"
-    write_xml(doc, url)
+    if params[:sheet_url]!="" && params[:sheet_url]!=nil
+      ExamUser.find(params[:id]).update_attribute("is_submited",true)
+      url=params[:sheet_url]
+      doc = get_doc(url)
+      doc.attributes["status"] = "1"
+      doc.attributes["init"] = "0"
+      write_xml(doc, url)
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>""
+      }
+    end  
+  end
+
+  #添加收藏(题面后小题)
+  def ajax_add_collect
+    if params[:sheet_url]!="" && params[:sheet_url]!=nil
+      #解析参数
+      this_problem = JSON params["problem"]
+      problem_id = this_problem["id"]
+      this_question = this_problem["questions"]["question"][params["question_index"].to_i]
+      question_id = this_question["id"]
+      Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id,
+        params["paper_id"], params["addition"]["answer"], params["addition"]["analysis"], params["user_answer"])
+      #在sheet中记录小题的收藏状态
+      doc = get_doc(params[:sheet_url])
+      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+      collection =doc.root.elements["collection"]
+      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+      write_xml(doc, params[:sheet_url])
+    end
     respond_to do |format|
       format.json {
         render :json=>""
@@ -167,28 +197,23 @@ class ExamUsersController < ApplicationController
     end
   end
 
-  #添加收藏(题面后小题)
-  def ajax_add_collect
-    #解析参数
-    this_problem = JSON params["problem"]
-    problem_id = this_problem["id"]
-    this_question = this_problem["questions"]["question"][params["question_index"].to_i]
-    question_id = this_question["id"]
-    Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id,
-      params["paper_id"], params["addition"]["answer"], params["addition"]["analysis"], params["user_answer"])
-    
-    #在sheet中记录小题的收藏状态
-    doc = get_doc(params[:sheet_url])
-    new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-    collection =doc.root.elements["collection"]
-    collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-    write_xml(doc, params[:sheet_url])
-    
-    respond_to do |format|
-      format.json {
-        render :json=>""
-      }
+  #预览
+  def preview
+    paper = File.open("#{Constant::BACK_PUBLIC_PATH}/preview/paperjs/#{params[:paper]}.js")
+    @answer_js_url = "#{Constant::BACK_SERVER_PATH}/preview/answerjs/#{params[:paper]}.js"
+    @paper = (JSON paper.read()[8..-1])["paper"]
+    #组织 @paper
+    @paper["blocks"]["block"] = @paper["blocks"]["block"].nil? ? [] : (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : [@paper["blocks"]["block"]]
+    @paper["blocks"]["block"].each do |block|
+      if block["problems"]
+        block["problems"]["problem"] = (block["problems"]["problem"].nil?) ? [] : ((block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]])
+        block["problems"]["problem"].each do |problem|
+          problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] if problem["questions"]
+        end
+      end
     end
   end
+
+  
 
 end

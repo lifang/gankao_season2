@@ -859,7 +859,7 @@ function colse_or_open_block(current_time) {
                 var block_time = return_giving_time(block_end_hash.get(block_ids[i]));
                 if (block_time == current_time || (block_time > current_time && $("#block_" + block_ids[i]).css("display") != "none")) {
                     var flash_div = create_element("div", null, "flash_notice", "tishi_tab0 border_radius", null, "innerHTML");
-                    flash_div.innerHTML = "<span span class='xx_x' onclick='javascript:flash_remove(this);'><img src='/assets/x.gif'/></span>"
+                    flash_div.innerHTML = "<span span class='xx_x' onclick='javascript:flash_remove(this);'><img src='/assets/xx.png'/></span>"
                     + "<p>" + block_title + " 部分答题时间已到，您的答案将自动被提交，请您继续做其它部分的题。</p>";
                     document.body.appendChild(flash_div);
                     show_flash_not_close();
