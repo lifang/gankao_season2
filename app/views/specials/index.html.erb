@@ -5,14 +5,29 @@
   <ul>
     <% unless @specials.blank? %>
       <% @specials.each do |special| %>
-        <li><a href="/specials/<%= special.examination_id %>/join?category=<%= category_id %>" <% if @exam_user_hash[special.examination_id]&&@exam_user_hash[special.examination_id][1] %> onclick="return already_submit('<%= @exam_user_hash[special.examination_id][0] %>','<%= @exam_user_hash[special.examination_id][2] %>')" <% end %>>
-            <% if @exam_user_hash[special.examination_id]&&@exam_user_hash[special.examination_id][1] %><span><img title="已完成" src="/assets/icon_wc.png" /></span><% end %>
-            <h2><%= special.name %></h2>
-          </a>
+        <li>
+          <% if cookies[:user_id].nil? %>
+            <a href="/specials/<%= special.examination_id %>/join?category=<%= category_id %>">
+              <h2><%= special.name %></h2>
+            </a>
+          <% else %>
+            <% if is_vip?(category_id) %>
+              <a href="/specials/<%= special.examination_id %>/join?category=<%= category_id %>"
+                 <% if @exam_user_hash[special.examination_id]&&@exam_user_hash[special.examination_id][1] %> onclick="return already_submit('<%= @exam_user_hash[special.examination_id][0] %>','<%= @exam_user_hash[special.examination_id][2] %>')" <% end %>>
+                   <% if @exam_user_hash[special.examination_id]&&@exam_user_hash[special.examination_id][1] %>
+                  <span><img title="已完成" src="/assets/icon_wc.png" /></span><% end %>
+                <h2><%= special.name %></h2>
+              </a>
+            <% else %>
+              <a href="javascript:void(0);" onclick="javascript:tishi_alert('专题试卷为收费卷，升级为vip用户才能试用。');">
+                <h2><%= special.name %></h2>
+              </a>
+            <% end %>
+          <% end %>
         </li>
       <% end %>
     <% else %>
-        <p>暂无专项练习</p>
+      <p>暂无专项练习</p>
     <% end %>
   </ul>
   <%=  will_paginate @specials ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
@@ -21,12 +36,12 @@
 <script type="text/javascript">
 
   function already_submit(eu_id,sheet_url){
-   if(confirm("你已经做完了该专项练习，你想重做该练习么？\n 点击\"确定\"重做，点击\"取消\"只浏览试题")){
-     sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
-     window.location.href="/exam_users/"+eu_id+"/redo?category="+<%= category_id %>+"&sheet_url="+sheet_url+"&type=specials";
-     return false;
-   }else{
-     return true;
-   }
+    if(confirm("你已经做完了该专项练习，你想重做该练习么？\n 点击\"确定\"重做，点击\"取消\"只浏览试题")){
+      sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
+      window.location.href="/exam_users/"+eu_id+"/redo?category="+<%= category_id %>+"&sheet_url="+sheet_url+"&type=specials";
+      return false;
+    }else{
+      return true;
+    }
   }
 </script>

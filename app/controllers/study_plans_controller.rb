@@ -1,7 +1,13 @@
 # encoding: utf-8
 class StudyPlansController < ApplicationController
   before_filter :sign?, :except => ["index"]
+  
   def index
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}复习计划"
+    @meta_keywords = "#{@category.name}复习方法,大学英语四级学习计划"
+    @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提供#{@category.name}的应试能力。"
     @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", params[:category].to_i])
     if cookies[:user_id]
       @user_plan = UserPlanRelation.find(:first,
@@ -58,6 +64,14 @@ class StudyPlansController < ApplicationController
         render :json=>data
       }
     end
+  end
+
+  def done_plans
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}复习计划"
+    @meta_keywords = "#{@category.name}复习方法,大学英语四级学习计划"
+    @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提供#{@category.name}的应试能力。"
   end
 
   def check_task

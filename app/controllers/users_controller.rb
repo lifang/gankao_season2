@@ -11,6 +11,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    @title = "个人信息 - 赶考网"
     @user=User.find(cookies[:user_id])
     @order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and TO_DAYS(end_time)>TO_DAYS('#{Time.now}') and status=#{Order::STATUS[:NOMAL]}")
   end
@@ -187,5 +188,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def info
+    @title = "消息 - 赶考网"
+  end
+
+  def record
+    @title = "消费记录 - 赶考网"
+  end
 
 end

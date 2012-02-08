@@ -4,9 +4,15 @@ class SimulationsController < ApplicationController
   before_filter :sign?, :except => "index"
   
   def index
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}模拟考试"
+    @meta_keywords = "2012年6月#{@category.name}押题猜题"
+    @meta_description = "精心编选，针对2012年6月#{@category.name}的3场模拟考试，帮助全面掌握备考状况，熟悉考试流程。"
     sql = "select e.* from examinations e
           where e.is_published = #{Examination::IS_PUBLISHED[:ALREADY]}
           and e.types = #{Examination::TYPES[:SIMULATION]} and e.status != #{Examination::STATUS[:CLOSED]}
+          and e.is_published = #{Examination::IS_PUBLISHED[:ALREADY]}
           and e.category_id = ? "
     @simulations = Examination.find_by_sql([sql, params[:category].to_i])
     examination_ids = []
@@ -14,9 +20,18 @@ class SimulationsController < ApplicationController
     if cookies[:user_id]
       @simulations.each { |sim| examination_ids << sim.id }
       exam_users = ExamUser.find_by_sql(
-        ["select eu.id, eu.examination_id, eu.is_submited, eu.total_score from exam_users eu where eu.user_id = ?
-      and eu.examination_id in (?)", cookies[:user_id].to_i, examination_ids])
-      exam_users.each { |eu| @exam_user_hash[eu.examination_id] = eu }
+        ["select eu.id, eu.examination_id, eu.is_submited, eu.total_score, eu.rank, 
+          eu.paper_id, eu.correct_percent, eu.answer_sheet_url
+          from exam_users eu where eu.user_id = ?
+          and eu.examination_id in (?)", cookies[:user_id].to_i, examination_ids])
+      exam_users.each do |eu|
+        @exam_user_hash[eu.examination_id] = [eu]
+        begin
+          @exam_user_hash[eu.examination_id] += eu.part_score unless (eu.total_score.nil? and eu.paper_id.nil?)
+        rescue
+          @exam_user_hash[eu.examination_id] += [0, 0, 0, 0]
+        end
+      end      
     end
   end
 
@@ -117,15 +132,7 @@ class SimulationsController < ApplicationController
       @exam_user.generate_answer_sheet_url(
         @exam_user.update_answer_url(@exam_user.open_xml, question_hash, params[:block_ids]), "result")
       @exam_user.submited!
-      action_log = ActionLog.find(:first, 
-        :conditions => ["category_id = ? and types = ? and TO_DAYS(NOW())-TO_DAYS(created_at)=0 and user_id = ?",
-          params[:category_id].to_i, ActionLog::TYPES[:EXAM], cookies[:user_id].to_i])
-      if action_log
-        action_log.increment!(:total_num, 1)
-      else
-        ActionLog.create(:user_id => cookies[:user_id].to_i, :types => ActionLog::TYPES[:EXAM],
-          :category_id => params[:category_id].to_i, :created_at => Time.now.to_date, :total_num => 1)
-      end
+      ActionLog.exam_log(params[:category_id], cookies[:user_id])
       flash[:notice] = "您的试卷已经成功提交。"
       render :layout => "simulations"
     else
@@ -141,5 +148,27 @@ class SimulationsController < ApplicationController
       page.replace_html "remote_div" , :text => ""
     end
   end
-  
+
+  def goto_exam
+    redirect_to "/simulations?category=#{params[:category]}"
+  end
+
+  def reset_exam
+    @exam_user = ExamUser.find_by_examination_id_and_user_id(params[:id].to_i, cookies[:user_id].to_i)
+    @exam_user.destroy
+    do_exam
+  end
+
+  def end_exam
+    @exam_user = ExamUser.find_by_examination_id_and_user_id(params[:id].to_i, cookies[:user_id].to_i)
+    if @exam_user and (@exam_user.is_submited.nil? or @exam_user.is_submited == false)
+      @exam_user.submited!
+      ActionLog.exam_log(params[:category_id], cookies[:user_id])
+      flash[:notice] = "您的试卷已经成功提交。"
+    else
+      flash[:warn] = "您已经交卷。"
+    end
+    redirect_to "/simulations?category=#{params[:category]}"
+  end
+    
 end

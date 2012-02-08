@@ -23,13 +23,9 @@ class ExamUser < ActiveRecord::Base
       else
         if examination[0].paper_id.nil? and examination[0].start_at_time > Time.now
           str = "本场考试开始时间为#{examination[0].start_at_time.strftime("%Y-%m-%d %H:%M:%S")},请您做好准备。"
-        elsif (!examination[0].start_at_time.nil? and !examination[0].exam_time.nil? and examination[0].exam_time !=0 and
-              (examination[0].start_at_time + examination[0].exam_time.minutes) < Time.now) or
+        elsif (!examination[0].start_end_time.nil? and examination[0].start_end_time < Time.now) or
             examination[0].status == Examination::STATUS[:CLOSED]
           str = "本场考试已经结束。"
-        elsif examination[0].paper_id.nil? and examination[0].start_end_time  < Time.now
-          str = "您不能入场，本场考试入场时间为#{examination[0].start_at_time.strftime("%Y-%m-%d %H:%M:%S")}
-              -#{examination[0].start_end_time.strftime("%Y-%m-%d %H:%M:%S")}。"
         end if examination[0].start_at_time
       end
     else
@@ -140,6 +136,53 @@ class ExamUser < ActiveRecord::Base
       doc.root.elements["paper/collections"].add_text(question_id)
     end
     self.generate_answer_sheet_url(doc.to_s, "result")
+  end
+
+  #统计各部分的分数
+  def part_score
+    part_score_arr = []
+    answer_xml = self.open_xml
+    scores = answer_xml.get_elements("//blocks/block")
+    if scores[2].nil? or scores[2].attributes["score"].nil? or scores[2].attributes["score"].to_i == 0
+      part_score_arr << 0
+    elsif scores[2].attributes["score"].to_f*10%10 == 0
+      part_score_arr << scores[2].attributes["score"].to_i
+    elsif scores[2].attributes["score"].to_f*10%10 <= 5
+      part_score_arr << (scores[2].attributes["score"].to_f*10/10).to_f + 0.5
+    else
+      part_score_arr << (scores[2].attributes["score"].to_f*10/10).round
+    end
+    
+    second_score = (scores[1].nil? ? 0 :scores[1].attributes["score"].to_f) +
+      (scores[3].nil? ? 0 :scores[3].attributes["score"].to_f)
+    if second_score.to_f*10%10 == 0
+      part_score_arr << second_score.to_i
+    elsif second_score.to_f*10%10 <= 5
+      part_score_arr << (second_score.to_f*10/10).to_f + 0.5
+    else
+      part_score_arr << (second_score.to_f*10/10).round
+    end
+
+    if scores[4].nil? or scores[4].attributes["score"].nil? or scores[4].attributes["score"].to_i == 0
+      part_score_arr << 0
+    elsif scores[4].attributes["score"].to_f*10%10 == 0
+      part_score_arr << scores[4].attributes["score"].to_i
+    elsif scores[4].attributes["score"].to_f*10%10 <= 5
+      part_score_arr << (scores[4].attributes["score"].to_f*10/10).to_f + 0.5
+    else
+      part_score_arr << (scores[4].attributes["score"].to_f*10/10).round
+    end
+
+    forth_score = (scores[0].nil? ? 0 :scores[0].attributes["score"].to_f) +
+      (scores[5].nil? ? 0 :scores[5].attributes["score"].to_f)
+    if forth_score.to_f*10%10 == 0
+      part_score_arr << forth_score.to_i
+    elsif forth_score.to_f*10%10 <= 5
+      part_score_arr << (forth_score.to_f*10/10).to_f + 0.5
+    else
+      part_score_arr << (forth_score.to_f*10/10).round
+    end
+    return part_score_arr
   end
 
 end

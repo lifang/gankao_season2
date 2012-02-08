@@ -12,12 +12,12 @@ $(document).ready(function(){
             }
             all_index += step;
         }
-        setCookie("rem_word", all_index);
+        setCookie("rem_word", all_index, 86400000, '/');
     }    
     load_word();
     if ($("#jquery_jplayer").attr("id") != undefined) {
         $("#jquery_jplayer").jPlayer({
-            swfPath: "/assert/jplayer",
+            swfPath: "/assets/jplayer",
             supplied: "mp3",
             wmode: "window"
         });
@@ -122,10 +122,8 @@ function load_word() {
                 current_order[j] = $("#step_page").val();
             }
         }
-        setCookie("rem_word", current_order.join(","));
+        setCookie("rem_word", current_order.join(","), 86400000, '/');
     }
-//    alert(getCookie("rem_word"));
-//    alert(getCookie("right_word"));
 }
 
 //播放MP3
@@ -188,7 +186,7 @@ function show_word(word_id, current_index, next_index) {
     $("#sentence_" + word_id).css("display", "none");
     $("#btn_" + word_id).css("display", "none");
     $("#word_info_" + next_index).css("display", "block");    
-    setCookie("current_word", word_ids[next_index]);
+    setCookie("current_word", word_ids[next_index], 86400000, '/');
 }
 
 //判断有没有不熟悉的单词
@@ -207,7 +205,7 @@ function is_unremb_word(rem_word, current_step) {
 function show_re_word(current_step, current_index, next_index) {
     $("#word_info_" + current_index).css("display", "none");
     $("#word_info_" + next_index).css("display", "block");
-    setCookie("current_word", word_ids[next_index]);
+    setCookie("current_word", word_ids[next_index], 86400000, '/');
     if (current_step == 4) {
         var inputs = $("#word_info_" + current_index + " .words_input");
         if (inputs != null) {
@@ -232,9 +230,7 @@ function show_re_word(current_step, current_index, next_index) {
 
 //回答正确
 function answer_right(current_word, category_id, current_index, current_step, type) {
-    var innhtml = "<div class='tab_x'><a href='javascript:void(0);' "
-    + "onclick=\"javascript:next_task("+ current_word +", "+ category_id +", "+ current_index +", "+ current_step +", 1, '"+ type +"');\">"
-    + "<img src='/assets/x.gif'/></a></div><div class='tab_con'>"
+    var innhtml = "<div class='tab_x'></div><div class='tab_con'>"
     + "恭喜你，回答正确,进入下一题！</div>";
     $("#tab_box").removeClass("icon_false").addClass("icon_true");
     $("#tab_box").html(innhtml);
@@ -243,11 +239,11 @@ function answer_right(current_word, category_id, current_index, current_step, ty
 //记录回答错误的单词，目的是为了得到第一次全部正确的单词
 function get_wrong_word(word_id) {
     if (getCookie("wrong_word") == null) {
-        setCookie("wrong_word", word_id);
+        setCookie("wrong_word", word_id, 86400000, '/');
     } else {
         var wrong_words = getCookie("wrong_word").split(",");
         if ($.inArray(""+word_id, wrong_words) == -1) {
-            setCookie("wrong_word", getCookie("wrong_word") + "," + word_id);
+            setCookie("wrong_word", getCookie("wrong_word") + "," + word_id, 86400000, '/');
         }
     }
 }
@@ -256,9 +252,7 @@ function get_wrong_word(word_id) {
 function answer_wrong(current_word, category_id, current_index, current_step, str, type) {
     get_wrong_word(current_word);
     var error_str = (str == null) ? "答错了，继续努力哦。" : str ;
-    var innhtml = "<div class='tab_x'><a href='javascript:void(0);' "
-    + "onclick=\"javascript:next_task("+ current_word +", "+ category_id +", "+ current_index +", "+ current_step +", 0, '"+ type +"');\";>"
-    + "<img src='/assets/x.gif'/></a></div><div class='tab_con'>"
+    var innhtml = "<div class='tab_x'></div><div class='tab_con'>"
     + error_str +"</div>";
     $("#tab_box").removeClass("icon_true").addClass("icon_false");
     $("#tab_box").html(innhtml);
@@ -273,12 +267,22 @@ function recollection_word(current_word, target_word, category_id, current_index
         answer_wrong(current_word, category_id, current_index, current_step, null, type);
     }
     $("#tab_box").css('display','block');
+    $("#tab_box").css('opacity','100');
+    $('#tab_box').delay(1500).fadeTo("slow",0,function(){
+        $(this).css("display", "none");
+        if (current_word == target_word) {
+            next_task(current_word, category_id, current_index, current_step, 1, ""+type);
+        } else {
+            next_task(current_word, category_id, current_index, current_step, 0, ""+type);
+        }
+    });
+    
 }
 
 //回顾释义回答正确
 function is_right(word_id, rem_word, current_index, current_step) {
     rem_word[current_index] = current_step;
-    setCookie("rem_word",rem_word.join(","));
+    setCookie("rem_word",rem_word.join(","), 86400000, '/');
     $("#five_"+word_id).html("<img src='/assets/z/z"+current_step+".png'/>");
     $("#five_"+word_id).css("display", "block");
     write_right_word(word_id, current_step);
@@ -287,28 +291,32 @@ function is_right(word_id, rem_word, current_index, current_step) {
 //记录已经回答正确的题目，为了显示右侧的“正”字
 function write_right_word(word_id, current_step) {
     if (getCookie("right_word") == null) {
-        setCookie("right_word", word_id+"="+current_step);
+        setCookie("right_word", word_id+"="+current_step, 86400000, '/');
     } else {
         var word_index = getCookie("right_word").indexOf(""+word_id+"=");
         if (word_index != -1) {
             var old_step = getCookie("right_word").substring(word_index, (word_index + ("" + word_id).length + 2));
-            setCookie("right_word", getCookie("right_word").replace(old_step, word_id+"="+current_step));
+            setCookie("right_word", getCookie("right_word").replace(old_step, word_id+"="+current_step), 86400000, '/');
         } else {
-            setCookie("right_word", getCookie("right_word")+"&"+word_id+"="+current_step);
+            setCookie("right_word", getCookie("right_word")+"&"+word_id+"="+current_step, 86400000, '/');
         }
     }
-//    alert(getCookie("right_word"));
 }
 
 //下一个任务
 function next_task(word_id, category_id, current_index, current_step, flag, type) {
     $("#tab_box").css("display", "none");
     var rem_word = getCookie("rem_word").split(",");
-    var next_index = jQuery.inArray(""+(current_step - 1), rem_word, (current_index + 1));
+    var next_index = -1;
+    for (var m=new Number(current_index)+1; m<rem_word.length; m++) {
+        if (new Number(rem_word[m]) < current_step) {
+            next_index = m;
+            break;
+        }
+    }
     if (flag == 1) {
         is_right(word_id, rem_word, current_index, current_step);
     }
-//    alert(next_index);
     show_re_word(current_step, current_index, next_index);
     is_recollection_pass(word_id, rem_word, next_index, category_id, current_step, type);
 }
@@ -318,10 +326,17 @@ function is_recollection_pass(word_id, rem_word, next_index, category_id, curren
     if (is_unremb_word(rem_word, current_step)) {
         recollection_next(category_id, current_step, type);
     } else if (next_index == word_ids.length || next_index == -1) {
+        var n_n_index = 0;
+        for (var m=0; m<rem_word.length; m++) {
+            if (new Number(rem_word[m]) < current_step) {
+                n_n_index = m;
+                break;
+            }
+        }
         generate_flash_div("#goon_tab");
         var innhtml = "<div class='tab_con'><div>您有回答错误的题，您需要重新回答做错的题吗？</div>"
         +"</div><div class='tab_btn'><button class='t_btn' "
-        +"onclick=\"javascript:recollection_reload("+current_step+","+next_index+", "+$.inArray(""+(current_step-1), rem_word)+");\">是</button>"
+        +"onclick=\"javascript:recollection_reload("+current_step+","+next_index+", "+n_n_index+");\">是</button>"
         +"<button class='t_btn' onclick=\"javascript:recollection_next("+category_id+", "+current_step+", '"+ type +"');\">否</button></div>";
         $("#goon_tab").html(innhtml);
         $("#goon_tab").css('display','block');
@@ -336,7 +351,7 @@ function recollection_reload(current_step, current_index, next_index) {
 
 //不再做做错的题
 function recollection_next(category_id, current_step, type) {
-    setCookie("current_word", "");
+    setCookie("current_word", "", 86400000, '/');
     if (current_step == 2) {
         window.location.href = "/words/use?category=" + category_id + "&type=" + type;
     } else if (current_step == 3) {
@@ -361,48 +376,71 @@ function recollection_next(category_id, current_step, type) {
             type:'post'
         });
         return false;
+    } else if (current_step ==4 && type == "old") {
+        delCookie("wrong_word");
+        delCookie("rem_word");
+        delCookie("right_word");
+        delCookie("current_word");
+        window.location.href = "/words?category=" + category_id;
     }
 }
 
 //拼写游戏
 function show_result(letter, category_id, current_step, type) {
-    var word = $(".ch_text:visible input:hidden:first");
-    var error_time = $(".ch_text:visible input:hidden:last").val();
-    var inputs = $(".ch_text:visible .words_input");
-    var word_arr = word.val().split("");
-    if (jQuery.inArray(letter, word_arr) > -1) {
-        for (var i=0; i<word_arr.length; i++) {
-            if (word_arr[i] == letter) {
-                for (var k=0; k<inputs.length; k++) {
-                    if (inputs[k].id == "letter_" + i) {
-                        inputs[k].value = letter;
+    if ($("#li_letter_"+letter).css("display") != "none") {
+        var word = $(".ch_text:visible input:hidden:first");
+        var error_time = $(".ch_text:visible input:hidden:last").val();
+        var inputs = $(".ch_text:visible .words_input");
+        var word_arr = word.val().split("");
+        if ($.inArray(letter, word_arr) > -1) {
+            for (var i=0; i<word_arr.length; i++) {
+                if (word_arr[i] == letter) {
+                    for (var k=0; k<inputs.length; k++) {
+                        if (inputs[k].id == "letter_" + i) {
+                            inputs[k].value = letter;
+                        }
                     }
                 }
             }
-        }
-        var is_complete = true;
-        for (var j=0; j<inputs.length; j++) {
-            if (inputs[j].value == "" || inputs[j].value == null) {
-                is_complete = false;
-                break;
+            var is_complete = true;
+            for (var j=0; j<inputs.length; j++) {
+                if (inputs[j].value == "" || inputs[j].value == null) {
+                    is_complete = false;
+                    break;
+                }
+            }
+            if (is_complete) {
+                generate_flash_div("#tab_box");
+                answer_right(word.attr("id"), category_id, word.attr("name"), current_step, type);
+                $("#tab_box").css('display','block');
+                $("#tab_box").css('opacity','100');
+                $('#tab_box').delay(1500).fadeTo("slow",0,function(){
+                    $(this).css("display", "none");
+                    next_task(word.attr("id"), category_id, word.attr("name"), current_step, 1, ""+type);
+                });
+            
+            }
+        } else {
+            $(".ch_text:visible input:hidden:last").attr("value", parseFloat(error_time) + 1);
+            if (parseFloat(error_time)+1 <= 4) {
+                $(".ch_text:visible .xiaoren").html("<img src='/assets/sd/0"+(parseFloat(error_time)+1)+".png'/>");
+            } else {
+                $(".ch_text:visible .xiaoren").html("<img src='/assets/sd/04.png'/>");
+            }
+            if (parseFloat(error_time) + 1 == 4) {
+                generate_flash_div("#tab_box");
+                answer_wrong(word.attr("id"), category_id, word.attr("name"), current_step, "拼字失败,正确答案为" + word.val(), type);
+                $("#tab_box").css('display','block');
+                $("#tab_box").css('opacity','100');
+                $('#tab_box').delay(1500).fadeTo("slow",0,function(){
+                    $(this).css("display", "none");
+                    next_task(word.attr("id"), category_id, word.attr("name"), current_step, 0, ""+type);
+                });
             }
         }
-        if (is_complete) {
-            generate_flash_div("#tab_box");
-            answer_right(word.attr("id"), category_id, word.attr("name"), current_step, type);
-            $("#tab_box").css('display','block');
-        }
-    } else {
-        $(".ch_text:visible input:hidden:last").attr("value", parseFloat(error_time) + 1);
-        $(".ch_text:visible .xiaoren").html("<img src='/assets/sd/0"+(parseFloat(error_time)+1)+".png'/>");
-        if (parseFloat(error_time) + 1 == 4) {
-            generate_flash_div("#tab_box");
-            answer_wrong(word.attr("id"), category_id, word.attr("name"), current_step, "拼字失败,正确答案为" + word.val(), type);
-            $("#tab_box").css('display','block');
-        }
-    }
-    $("#li_letter_"+letter).css("display", "none");
-    $("#hi_letter_"+letter).css("display", "block");
+        $("#li_letter_"+letter).css("display", "none");
+        $("#hi_letter_"+letter).css("display", "block");
+    } 
 }
 
 $(document).keyup(function(e){

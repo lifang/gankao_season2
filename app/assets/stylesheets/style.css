@@ -24,6 +24,7 @@ button.green { color:#009900;}
 }
 .border_rb { border-left: 1px #CCC solid; border-top: 1px #CCC solid; border-right: 2px #999 solid; border-bottom: 2px #999 solid;}
 
+.zhezhao { width:100%; height: 100%; left:0; position:absolute; top:0; background:#000; opacity:0.5; filter:alpha(opacity=50); z-index:888;}
 
 .head {padding: 6px 0;}
 .logo {margin-left: 50px; float: left; display: inline;}
@@ -245,6 +246,39 @@ button.green { color:#009900;}
 .sabrosus span.current { border: #289FDB 1px solid;  padding: 6px 10px; font-weight: bold; color: #289FDB; margin-right: 4px; background: #d0e7ee;}
 .sabrosus span.disabled { border: #c1c1c1 1px solid; padding: 6px 10px; color: #929292; margin-right: 4px;}
 
+/*模考------------------------*/
+
+.mk_h { margin: 20px 0 10px; line-height: 24px; text-align: center;}
+.mokao_bg { width: 650px; height: 250px; margin: 0 auto; background: url(/assets/mokao_bg.png) no-repeat;}
+.mk_ul { width: 650px; height: 190px; margin: 0 auto;}
+.mk_ul li {
+    width: 215px;
+	height: 176px;
+	float: left;
+	border-right: 1px #dedede dotted;
+	border-top: 2px #fff solid;
+	color: #333;
+	padding: 10px 0 0 0;
+	margin-top: 1px;
+}
+.mk_ul li h1 { height: 40px; line-height: 40px; text-align: center; font-size: 16px;}
+.mk_ul li h3 { height: 20px; line-height: 20px; text-align: center; font-size: 12px; color: #666; font-weight: 100;}
+li.mk_li_hover { border-top: 2px #2875ae solid;}
+.mk_click { width: 160px; height: 37px; line-height: 37px; margin: 20px auto 10px; text-align: center;}
+.mk_click a { margin: 0 13px; text-decoration: underline;}
+.mk_click button { width: 110px; height: 37px; line-height: 37px; background: url(/assets/tt_btn.png) no-repeat; border: none; color: #2875ae;}
+
+.mk_chengj { padding: 20px 10px;}
+.mk_chengj h1 { height: 24px; line-height: 24px; font-size: 14px; font-weight: 600; margin-top: 20px;}
+.mk_chengj table { background: #CCC; margin-top: 20px;}
+.mk_chengj table td { background: #FFF; height: 30px; line-height: 30px; text-align: center;}
+
+.mk_time { width: 64px; height: 64px; margin: 0 auto;}
+
+.mk_wenti { text-align: left;}
+.mk_wenti ul { padding: 10px 0;}
+.mk_wenti li { padding-left: 20px;}
+
 
 /*真题列表------------------*/
 .zhenti_list { width:625px; margin: 0 auto;  overflow: hidden;}
@@ -384,7 +418,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 /*tab_box------------*/
 .tab_box { width: 300px; padding: 5px; min-height: 200px; background: #FFF; border: 5px #333 solid; position: fixed;z-index: 900;}
 .tab_x { float: right;}
-.tab_con { padding: 60px 10px; text-align: center;}
+.tab_con { min-height: 100px; padding: 20px 10px; text-align: center; line-height: 24px;}
 .tab_btn { width: 165px; margin: 0 auto;}
 .icon_false { background: url(/assets/false.png) no-repeat #FFF center center;}
 .icon_true { background: url(/assets/true.png) no-repeat #FFF center center;}
