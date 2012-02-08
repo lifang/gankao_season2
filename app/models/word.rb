@@ -22,7 +22,7 @@ class Word < ActiveRecord::Base
 
   def self.current_recite_words(user_id, category_id, start_column, type)
     return_word = []
-    if (type == "new")
+    if type == "new"
       words = UserWordRelation.find_by_sql(["select * from user_word_relations uwr
       inner join words w on w.id = uwr.word_id where w.category_id = ? 
       and uwr.status = #{UserWordRelation::STATUS[:NOMAL]}
@@ -42,8 +42,8 @@ class Word < ActiveRecord::Base
       and uwr.user_id = ?", category_id, user_id])
       other_words = Word.find(:all,
         :conditions => ["id not in (select uwr.word_id from user_word_relations uwr where uwr.user_id = ?)
-         and category_id = ? and level >= #{Word::WORD_LEVEL[:THIRD]} ",category_id, user_id],
-        :limit => start_column)
+         and category_id = ? and level < #{Word::WORD_LEVEL[:THIRD]} ",category_id, user_id],
+        :limit => start_column, :order => "id")
       all_word = words.nil? ? other_words : (words + other_words)
       if all_word.length > 20
         chars = (1..all_word.length).to_a

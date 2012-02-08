@@ -1,4 +1,3 @@
-<%= javascript_include_tag "/assets/main.js" %>
 <%= javascript_include_tag "cookie.js" %>
 <%= javascript_include_tag "collection.js" %>
 <%= javascript_include_tag "#{@collection_js_url}" %>
@@ -15,48 +14,20 @@
   if(!(getCookie("collection_problem_init")!= null)){
     setCookie("collection_problem_init","0");
   }
-  
   //字体放大、缩小
   var tgs = new Array( 'div','td','tr');
   var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
   var startSz = 2;
   var problem_init = <%= cookies[:collection_problem_init].nil? ? 0 : cookies[:collection_problem_init].to_i%>;
-  var problem=get_array(collections.problems.problem);
+  var problem=[];
   var problems=new Array;
   var tag_list=["全部收藏"];
-  var tag_problems={};
-  for(var i=0;i<problem.length;i++){
-    var questions=get_array(problem[i].questions.question);
-    problem[i].questions.question=questions;
-    for(var n=0;n<questions.length;n++){
-      var answer_array=[]
-      if(problem[i].questions.question[n].user_answer==null){
-        problem[i].questions.question[n].user_answer=[];
-      }else{
-        "string"==(typeof problem[i].questions.question[n].user_answer)?answer_array.push(problem[i].questions.question[n].user_answer):answer_array=problem[i].questions.question[n].user_answer
-      }
-      problem[i].questions.question[n].user_answer=answer_array;
-      if(questions[n].tags!=null){
-        var tags= questions[n].tags.split(",");
-        for(var k=0;k<tags.length;k++){
-          if(tag_problems[tags[k]]==null){
-            tag_problems[tags[k]]=[problem[i]]
-          }else{
-            if(tag_problems[tags[k]].indexOf(problem[i])==-1){
-              tag_problems[tags[k]].push(problem[i])
-            }
-          }
-          if(tag_list.indexOf(tags[k])==-1){
-            tag_list.push(tags[k]);
-          }
-        }
-      }
-    }
-    problems.push(problem[i]);
-  }
   var tag_types=tag_list[0];
-  tag_problems["全部收藏"]=problems;
+  var tag_problems={};
+  //记录最后打开的小题
+  var last_open_question=null;
 </script>
+<%= render :partial=>"/common/flowplayer" %>
 <div class="m_top">
   <h1 class="ex_paper_h">查看范围：
     <select name="scope" id="scope">
@@ -88,6 +59,7 @@
 <div class="m_side m_problem_bg">
   <div class="problem_box">
     <div class="problem_title">第<span id="global_problem_index" ></span>题/共<span id="global_problem_sum"></span>题</div>
+    <div id='flowplayer_postion'></div>
     <div class="problem_text" id="global_problem_title">
     </div>
   </div>
@@ -98,15 +70,6 @@
   </div>
 </div>
 <div id="jplayer_one"></div>
-<script type="text/javascript">
-  //记录最后打开的小题
-  var last_open_question=null;
-  //预载页面信息
-  $(function(){
-    $("#global_problem_sum").html(problems.length);
-    load_problem_collection(problem_init,tag_types);
-  })
-</script>
 <div class="m_side">
   <div class="problem_box" id="questions_resource"></div>
 </div>

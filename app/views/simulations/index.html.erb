@@ -1,27 +1,102 @@
-<% category_id = params[:category].nil? ? '2' : params[:category] %>
 <%= javascript_include_tag "main.js" %>
-<h1>模拟考试</h1>
-<div class="zhenti_list">
-  <ul>
-    <% unless @simulations.blank? %>
-      <% @simulations.each do |simulation| %>
+<div class="mk_h">您可以享受主观题专业老师阅卷的服务，并进一步获取信心指数，以达到更好的备考效果。</div>
+<% unless @simulations.blank? %>
+  <div class="mokao_bg">
+    <ul class="mk_ul">
+      <% @simulations[0, 3].each do |simulation| %>
         <li>
-          <h2><%= simulation.title %>
-            <% if @exam_user_hash[simulation.id].nil? or @exam_user_hash[simulation.id].is_submited == false %>
-              <a href="/simulations/<%= simulation.id %>/do_exam" target="_blank" >(开始考试)</a>
-            <% elsif @exam_user_hash[simulation.id].total_score.nil?  %>
-              (阅卷中)
-            <% elsif %>
-              <a href="/simulations/<%= @exam_user_hash[simulation.id].id %>/show_result" target="_blank" >
-                (<%= @exam_user_hash[simulation.id].total_score %>)
-              </a>
+          <h1><%= simulation.title %></h1>
+          <h3>
+            <%= simulation.start_at_time.strftime("%Y-%m-%d") if simulation.start_at_time %>
+            到 <%= simulation.start_end_time.strftime("%m-%d") if simulation.start_end_time %>
+          </h3>
+          <div class="mk_click">
+            <% if cookies[:user_id] %>
+              <% if @exam_user_hash[simulation.id].nil? or @exam_user_hash[simulation.id][0].nil? or @exam_user_hash[simulation.id][0].is_submited == false %>
+                <% is_submited = (@exam_user_hash[simulation.id].nil? or @exam_user_hash[simulation.id][0].nil?) ? '' : 'false' %>
+                <% if simulation.start_at_time and simulation.start_at_time > Time.now %>
+                  敬请关注
+                <% elsif simulation.start_end_time and simulation.start_end_time < Time.now %>
+                  考试已结束
+                <% else %>
+                  <% if is_vip?(params[:category]) or (is_trial?(params[:category]) and simulation.is_free) %>
+                    <button type="button" onclick="javascript:show_exam_tishi('<%= is_submited %>', <%= simulation.id %>);" >
+                      立即参加
+                    </button>
+                  <% else %>
+                    <button type="button" onclick="javascript:tishi_alert('当前试卷为收费卷，升级为vip用户才能试用。');" >
+                      立即参加
+                    </button>
+                  <% end %>
+                <% end %>
+              <% elsif @exam_user_hash[simulation.id][0].total_score.nil?  %>
+                阅卷中
+              <% elsif %>
+                <a href="javascript:void(0);"
+                   onclick="javascript:show_part_score('<%= @exam_user_hash[simulation.id][0].total_score %>',
+                     '<%= @exam_user_hash[simulation.id][0].rank %>', '<%= @exam_user_hash[simulation.id][1] %>',
+                     '<%= @exam_user_hash[simulation.id][2] %>', '<%= @exam_user_hash[simulation.id][3] %>',
+                     '<%= @exam_user_hash[simulation.id][4] %>');" >查看分数</a>
+                <a href="/simulations/<%= @exam_user_hash[simulation.id][0].id %>/show_result" target="_blank">查看试卷</a>
+              <% end %>
+            <% else %>
+              <% if simulation.start_at_time and  simulation.start_at_time > Time.now %>
+                敬请关注
+              <% elsif simulation.start_end_time and simulation.start_end_time < Time.now %>
+                考试已结束
+              <% else %>
+                <button onclick="window.location.href='/simulations/goto_exam?category=<%= params[:category] %>';" >立即参加</button>
+              <% end %>
             <% end %>
-          </h2>
-
+          </div>
         </li>
       <% end %>
-    <% else %>
-      <li>暂无模拟考试</li>
-    <% end %>
-  </ul>
+    </ul>
+  </div>
+<% end %>
+
+<div class="zhezhao" style="display: none; "></div>
+<div id="score_tab" class="tab_box border_radius" style="display: none; ">
+  <span class="xx_x"><img src="/assets/x.gif"/></span>
+  <div class="mk_chengj">
+    <h1>总分：<span class="red" id="total_score"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      排名：<span class="red" id="rank"></span>
+    </h1>
+    <table width="100%" border="0" cellpadding="0" cellspacing="1">
+      <tbody><tr>
+          <td>听力(20%)</td>
+          <td>阅读(40%)</td>
+          <td>综合(25%)</td>
+          <td>作文&amp;翻译(15%)</td>
+        </tr>
+        <tr>
+          <td id="listen">&nbsp;</td>
+          <td id="read">&nbsp;</td>
+          <td id="colligate">&nbsp;</td>
+          <td id="write">&nbsp;</td>
+        </tr>
+      </tbody></table>
+  </div>
+</div>
+<div id="mokao_tishi_tab" class="tab_box border_radius" style="display: none; ">
+  <input type="hidden" name="sim_id" id="sim_id" value=""/>
+  <span class="xx_x"><img src="/assets/x.gif"/></span>
+  <div class="tab_con">
+    <div class="mk_time"><img src="/assets/mk_time.png"/></div>
+    <div class="mk_wenti" id="not_join">
+      <p>如果交卷直接退出模拟考试，之前作答的内容是否会自动保存呢？</p>
+      <ul>
+        <li><input name="" type="radio" onclick="javascript:$('#error_p').css('display', 'block');" />A.不会</li>
+        <li><input name="" type="radio" onclick="javascript:goto_exam();" />B.会</li>
+      </ul>
+      <p class="red" id="error_p" style="display: none;" >"回答错误，直接退出考试，除非马上返回继续，会导致作答内容全部丢失。"</p>
+    </div>
+    <div class="mk_wenti" id="already_join" style="display: none;">
+      <p>您做过本套模拟考试，但并未保存您之前作答的内容，你是否要提交上次作答的内容？</p>
+      <ul>
+        <li><input name="" type="radio" onclick="javascript:end_exam(<%= params[:category] %>);" />A.提交试卷，完成考试</li>
+        <li><input name="" type="radio" onclick="javascript:reset_exam();" />B.不提交，重新答题</li>
+      </ul>
+    </div>
+  </div>
 </div>

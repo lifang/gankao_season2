@@ -43,10 +43,11 @@ class LoginsController < ApplicationController
       @user=User.where("code_id='#{user_info[:id]}' and code_type='sina'").first
       if @user.nil?
         @user=User.create(:code_id=>"#{user_info[:id]}",:code_type=>'sina',:name=>user_info[:name],:username=>user_info[:name])
-        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:status=>Order::STATUS[:NOMAL],:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:trail].days)
       end
       cookies[:user_name] ={:value =>user_info[:name], :path => "/", :secure  => false}
       cookies[:user_id]={:value =>@user.id, :path => "/", :secure  => false}
+      user_role?(cookies[:user_id])
+      ActionLog.login_log(cookies[:user_id])
       render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -61,10 +62,11 @@ class LoginsController < ApplicationController
       @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
       if @user.nil?
         @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
-        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:status=>Order::STATUS[:NOMAL],:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:trail].days)
       end
       cookies[:user_name] ={:value =>@user.name, :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
+      user_role?(cookies[:user_id])
+      ActionLog.login_log(cookies[:user_id])
       render :inline => "<script>window.opener.location.href='/';window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -90,13 +92,14 @@ class LoginsController < ApplicationController
       if @user.nil?
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>session[:qqopen_id])
-        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:status=>Order::STATUS[:NOMAL],:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:trail].days)
       end
       session[:qqtoken]=nil
       session[:qqsecret]=nil
       session[:qqopen_id]=nil
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.name, :path => "/", :secure  => false}
+      user_role?(cookies[:user_id])
+      ActionLog.login_log(cookies[:user_id])
       render :inline => "<script>window.opener.location.href='/collections';window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -127,6 +130,7 @@ class LoginsController < ApplicationController
   def logout
     cookies.delete(:user_id)
     cookies.delete(:user_name)
+    session.delete(:user_role)
     redirect_to root_path
   end
 

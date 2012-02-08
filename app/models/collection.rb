@@ -206,13 +206,14 @@ class Collection < ActiveRecord::Base
     if problems.class.to_s == "Hash"
       problems=[problems]
     end
+    question.add_element("c_flag").add_text("1") if problem.elements["question_type"].to_i==1 and question.elements["c_flag"].nil?
     collection_problem =problem_in_collection(problem.attributes["id"],problems,answer,question)
     if collection_problem[0]
       already_hash["problems"]["problem"]=collection_problem[1]
     else
       problem.delete_element problem.elements["questions"]
-      question =update_question(answer,question)
-      problem.add_element("questions").add_element(question)
+      single_question =update_question(answer,question)
+      problem.add_element("questions").add_element(single_question)
       if already_hash["problems"]["problem"].class.to_s == "Hash"
         already_hash["problems"]["problem"]=[already_hash["problems"]["problem"],Hash.from_xml(problem.to_s)["problem"]]
       else

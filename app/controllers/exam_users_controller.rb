@@ -31,8 +31,8 @@ class ExamUsersController < ApplicationController
       @sheet = get_doc("#{@sheet_url}")
       close_file("#{@sheet_url}")
     rescue
-      flash[:warn] = "试卷加载错误。"
-      redirect_to "/similarities?category=#{params[:category]}"
+      flash[:warn] = "试卷加载错误，请您重新尝试。"
+      redirect_to request.referer
     end
   end
 
