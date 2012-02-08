@@ -123,19 +123,16 @@ class ExamRatersController < ApplicationController
         single_score=score_reason["#{pro_index}_#{que_index}"][0].to_f
         reason=score_reason["#{pro_index}_#{que_index}"][1]
         result_question = doc.elements["/exam/paper/questions/question[@id='#{question.attributes["id"]}']"]
-        if result_question.nil?
-          Collection.auto_add_collection(" ", problem, @exam_user.user_id,question)
+        answer=result_question.nil? ? "" : result_question.elements["answer"].text
+        result_question.attributes["score"] = single_score
+        if question.attributes["score"].to_f!=single_score
+          problem.add_attribute("paper_id",doc.elements[1].attributes["id"])
+          already_hash=Collection.auto_add_collection(answer, problem,question,already_hash)
         else
-          result_question.attributes["score"] = single_score
-          if question.attributes["score"].to_f!=single_score
-            problem.add_attribute("paper_id",doc.elements[1].attributes["id"])
-            already_hash=Collection.auto_add_collection(result_question.elements["answer"].text, problem,question,already_hash)
-          else
-            problem.delete_element(question.xpath)
-          end
-          score += single_score
-          result_question.add_attribute("score_reason","#{reason}")
+          problem.delete_element(question.xpath)
         end
+        score += single_score
+        result_question.add_attribute("score_reason","#{reason}")
       end
     end
     collection_js="collections = " + already_hash.to_json.to_s

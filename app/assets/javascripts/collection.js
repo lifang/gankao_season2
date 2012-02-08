@@ -2,7 +2,42 @@ var word_in_problem={};
 var types=[ "n.",  "v.",  "pron.",  "adj.",  "adv.","num.",  "art.","prep.","conj.", "interj.", "u = ",  "c = ",  "pl = "];
 var question_types=["单选题","多选题","判断题","填空题","","简答题"];
 var close_question=null;
+//预载页面信息
 $(function(){
+    problem=get_array(collections.problems.problem);
+    for(var i=0;i<problem.length;i++){
+        var questions=get_array(problem[i].questions.question);
+        problem[i].questions.question=questions;
+        for(var n=0;n<questions.length;n++){
+            var answer_array=[]
+            if(problem[i].questions.question[n].user_answer==null){
+                problem[i].questions.question[n].user_answer=[];
+            }else{
+                "string"==(typeof problem[i].questions.question[n].user_answer)?answer_array.push(problem[i].questions.question[n].user_answer):answer_array=problem[i].questions.question[n].user_answer
+            }
+            problem[i].questions.question[n].user_answer=answer_array;
+            if(questions[n].tags!=null){
+                var tags= questions[n].tags.split(",");
+                for(var k=0;k<tags.length;k++){
+                    if(tag_problems[tags[k]]==null){
+                        tag_problems[tags[k]]=[problem[i]]
+                    }else{
+                        if(tag_problems[tags[k]].indexOf(problem[i])==-1){
+                            tag_problems[tags[k]].push(problem[i])
+                        }
+                    }
+                    if(tag_list.indexOf(tags[k])==-1){
+                        tag_list.push(tags[k]);
+                    }
+                }
+            }
+        }
+        problems.push(problem[i]);
+    }
+    tag_problems["全部收藏"]=problems;
+    $("#global_problem_sum").html(problems.length);
+    load_problem_collection(problem_init,tag_types);
+    $("#jplayer_play").trigger("onclick");
     var frag = document.createDocumentFragment();
     for(var i=0;i<tag_list.length;i++){
         var option=create_element("option", null, "options", null, null, "innerHTML");
@@ -28,6 +63,28 @@ $(function(){
     });
 })
 
+function flowplayer_mp3(audio_src){
+    $("#flowplayer_postion").append($("#flowplayer_loader"));
+    $f("flowplayer", "/assets/flowplayer/flowplayer-3.2.7.swf", {
+        plugins: {
+            controls: {
+                fullscreen: false,
+                height: 30,
+                autoHide: false
+            }
+        },
+        clip: {
+            autoPlay: false,
+            onBeforeBegin: function() {
+                this.close();
+            }
+        },
+        onLoad: function() {
+            this.setVolume(90);
+            this.setClip(audio_src);
+        }
+    });
+}
 
 function load_problem_collection(problem_index,tag){
     var word_list=[];
@@ -37,7 +94,7 @@ function load_problem_collection(problem_index,tag){
     $("#global_problem_sum").html(problems_tags.length);
     $("#global_problem_index").html(problem_index+1);
     var audio_title = problems_tags[problem_index].title==null ? [] : problems_tags[problem_index].title.split("((mp3))");
-    audio_title[1]= audio_title[1] == null? "": "<input type='button' value='播放' onclick=javascript:jplayer_play_title('"+ audio_title[1]+"'); />";
+    audio_title[1]= audio_title[1] == null? "": "<input type='button'   id='jplayer_play' value='ddddd'  onclick=javascript:flowplayer_mp3('"+ audio_title[1]+"'); />";
     var title=audio_title.join("");
     $("#draggable_list").html("");
     if(question_type=='1'){
@@ -55,7 +112,6 @@ function load_problem_collection(problem_index,tag){
                 if(u_answer!=null&&u_answer==q_answer){
                     element_str += "style='background-color: rgb(219, 234, 213);'";
                 }else{
-
                     element_str += "style='background-color: rgb(254, 230, 230);'";
                 }
                 element_str += ">";
@@ -142,6 +198,9 @@ function load_problem_collection(problem_index,tag){
     }
 }
 
+
+
+
 //循环载入小题
 function load_questions_collection(questions,problem_index,tag,question_type){
     $("#questions_resource").empty();
@@ -226,9 +285,6 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             }else{
                 xg_word.innerHTML="<center>没有相关词汇</center>"
             }
-
-
-
             //预载用户的答案
             if(u_answer!=null&&u_answer==q_answer){
                 $(pro_qu_t).css("background","#d2fddd");
@@ -237,7 +293,6 @@ function load_questions_collection(questions,problem_index,tag,question_type){
                 $(pro_qu_t).css("background","#ffd2d2");
                 $(pro_qu_t).closest(".pro_question_list").css("background","#ffd2d2");
             }
-
             //绑定显示，隐藏事件
             $(pro_qu_t).bind("click",function(){
                 var pro_qu_div = $(this).parent().find(".pro_qu_div");
@@ -398,8 +453,9 @@ function click_next_problem(){
     setCookie("collection_problem_init",problem_init);
     $("#draggable_list").html("");
     $("#upErrorTo_tab").hide();
-    $("#jplayer_one").jPlayer("stop");
+    $("#flowplayer_hidden_position").append($("#flowplayer_loader"));
     load_problem_collection(problem_init,tag_types);
+    $("#jplayer_play").trigger("onclick");
 }
 
 //上一题
@@ -412,8 +468,9 @@ function click_prev_problem(){
     setCookie("collection_problem_init",problem_init);
     $("#draggable_list").html("");
     $("#upErrorTo_tab").hide();
-    $("#jplayer_one").jPlayer("stop");
+    $("#flowplayer_hidden_position").append($("#flowplayer_loader"));
     load_problem_collection(problem_init,tag_types);
+    $("#jplayer_play").trigger("onclick");
 }
 
 function get_array(value){
