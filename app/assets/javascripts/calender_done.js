@@ -5,15 +5,15 @@ var Class = {
     create: function() {
         return function() {
             this.initialize.apply(this, arguments);
-        }
+        };
     }
-}
+};
 Object.extend = function(destination, source) {
     for (var property in source) {
         destination[property] = source[property];
     }
     return destination;
-}
+};
 var Calendar = Class.create();
 Calendar.prototype = {
     initialize: function(container, options) {
@@ -70,12 +70,12 @@ Calendar.prototype = {
         }
         var frag = document.createDocumentFragment();
         this.Days = [];
-        var head=["SE","MO","TU","WE","TH","FR","SU"]
+        var head=["SE","MO","TU","WE","TH","FR","SU"];
         for(var i = 1; i <= 7; i++){
-            var  div=document.createElement("div");
+            var div=document.createElement("div");
             var strong=document.createElement("strong");
-            strong.innerHTML=head[i-1]
-            div.appendChild(strong)
+            strong.innerHTML=head[i-1];
+            div.appendChild(strong);
             frag.appendChild(div);
         }
         while(arr.length > 0){
@@ -119,7 +119,7 @@ function new_calender(){
             var days=this.Days;
             var divs=jQuery("#idCalendar div");
             divs.splice(divs[0],7);
-            document.getElementById("date").innerHTML=today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+            document.getElementById("date").innerHTML=this.Year+"-"+this.Month;
             var start=this.Year+"-"+(this.Month)+"-"+ parseInt(days[1].innerHTML);
             var end=this.Year+"-"+(this.Month)+"-"+parseInt(days[days.length-1].innerHTML);
             jQuery.ajax({
@@ -138,18 +138,20 @@ function new_calender(){
                     document.getElementById("whichs").innerHTML="第"+ which[0]+"天";
                     document.getElementById("practice").innerHTML=which[1];
                     document.getElementById("exercise").innerHTML=which[2];
-                    var flag = data.days
-                    var status=data.status
-                    var pre_day=new Date(data.date[0])
-                    var last_day=new Date(data.date[1])
-                    var done_plans=new Array();
-                    var str_month=month<10 ? "0"+month : ""+month
-                    for(var n = 0, lens = flag[year+"_"+str_month].length; n < lens; n++){
-                        done_plans[n]=days[flag[year+"_"+str_month][n]]
+                    var flag = data.days;
+                    var status=data.status;
+                    var pre_day=new Date(data.date[0]);
+                    var last_day=new Date(data.date[1]);
+                    var done_plans=[];
+                    var str_month=month<10 ? "0"+month : ""+month;
+                    if(flag[year+"_"+str_month]!=undefined){
+                        for(var n = 0, lens = flag[year+"_"+str_month].length; n < lens; n++){
+                            done_plans[n]=days[flag[year+"_"+str_month][n]];
+                        }
                     }
                     for(var i =0, len = divs.length; i < len; i++){
-                        var now_date=new Date(year+"-"+month+"-"+divs[i].innerHTML)
-                        var day_status=parseInt(divs[i].innerHTML)<10 ? "0"+divs[i].innerHTML : ""+divs[i].innerHTML
+                        var now_date=new Date(year+"-"+month+"-"+divs[i].innerHTML);
+                        var day_status=parseInt(divs[i].innerHTML)<10 ? "0"+divs[i].innerHTML : ""+divs[i].innerHTML;
                         if(flag[year+"_"+str_month]!=undefined){
                             if (today.getDate()==parseInt(divs[i].innerHTML)&&month==(today.getMonth()+1)&&today.getFullYear()==year){
                                 divs[i].className= "pt_day_new";
@@ -164,10 +166,10 @@ function new_calender(){
                                     if(i < 0) i += n;
                                     for(; i < n; i++) if(i in this && this[i] === el) return i;
                                     return -1;
-                                }
-                                
+                                };
+
                                 if(done_plans.indexOf(divs[i])>=0){
-                                    if(now_date<last_day&&now_date>pre_day&&now_date<today){
+                                    if(now_date<=last_day&&now_date>=pre_day&&now_date<today){
                                         if(status[day_status]){
                                             divs[i].innerHTML=  divs[i].innerHTML+document.getElementById("medal").innerHTML;
                                         }else{
@@ -179,6 +181,8 @@ function new_calender(){
                                     divs[i].className= "gray";
                                 }
                             }
+                        }else{
+                            divs[i].className= "gray";
                         }
                     }
                 }
@@ -187,15 +191,14 @@ function new_calender(){
     });
     document.getElementById("idCalendarPre").onclick = function(){
         cale.PreMonth();
-    }
+    };
     document.getElementById("idCalendarNext").onclick = function(){
         cale.NextMonth();
-    }
+    };
 }
 
 
 function task_over(){
     $("#task").submit();
 }
-
 
