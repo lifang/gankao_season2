@@ -97,7 +97,7 @@ button.green { color:#009900;}
 /*题面-------------------*/
 .problem_box { padding: 10px; font-family:Arial;}
 .problem_title { height: 24px; line-height: 24px; padding-left: 20px; border-bottom: 1px #CCC solid;}
-.problem_text { line-height: 24px; padding: 10px; text-align:justify;}
+.problem_text { line-height: 30px; padding: 10px; text-align:justify;}
 .problem_text div { padding: 5px 0;}
 
 /*选择题小题------------------*/

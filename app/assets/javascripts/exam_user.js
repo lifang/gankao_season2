@@ -642,7 +642,7 @@ function normal_add_collect(problem_index,question_index){
 
 //题面中小题加入收藏夹
 function special_add_collect(problem_index,question_index,problem_id,question_id){
-    if(sheect_url!=""){
+    if(sheet_url!=""){
         $.ajax({
             type: "POST",
             url: "/collections/add_collection.json",
