@@ -3,6 +3,9 @@
 <%= javascript_include_tag '/assets/main.js' %>
 <%= javascript_include_tag '/assets/collection1.js' %>
 
+<!-- 初始化播放器  -->
+<%= render :partial=>"/common/flowplayer" %>
+
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 <% init_problem = params[:init_problem].nil? ? @group_index*@group_sum : params[:init_problem].to_i %>
 <script type="text/javascript" >
@@ -13,8 +16,6 @@
   group_sum = <%= @group_sum %>;                //每组几题
   problems_sum = <%= @problems_sum %>;          //收藏夹里大题总数
 </script>
-<!-- 初始化jplayer播放器  -->
-<%= render :partial=>"/common/jquery_jplayer" %>
 
 <div class="m_top">
   <h1 class="ex_paper_h">查找范围 <select><option>-请选择-</option></select> </h1>
