@@ -26,22 +26,24 @@ class StudyPlansController < ApplicationController
   end
 
   def plan_status
-    days=UserPlanRelation.find_by_user_id(cookies[:user_id].to_i)
-    which_day=0
-    practise=0
-    exercise=0
+    category_id = params[:category].nil? ? 2 : params[:category].to_i
+    plan_task=UserPlanRelation.find_by_sql("select up.created_at,up.ended_at from user_plan_relations up inner join study_plans sp on up.study_plan_id=sp.id where
+     up.user_id=#{cookies[:user_id]} and sp.category_id=#{category_id} limit 1 ")
+    which_day,practise,exercise=0
     month_action=[]
-    day_all={}
-    end_at=days.ended_at.nil?? days.created_at.to_datetime : days.ended_at.to_datetime
-    created_at=days.created_at.to_datetime
     day_index=[]
-    unless days.nil?
+    created_at,end_at=Time.now.strftime("%Y_%m_%d")
+    day_all={}
+    unless plan_task.blank?
+      days=plan_task[0]
+      end_at=days.ended_at.nil?? days.created_at.to_datetime : days.ended_at.to_datetime
+      created_at=days.created_at.to_datetime
       created_at.step(end_at, 1) do |date|
         day_index << date.strftime("%Y_%m_%d")
         day_all["#{date.strftime("%Y_%m")}"].nil??day_all["#{date.strftime("%Y_%m")}"]=[date.day] :day_all["#{date.strftime("%Y_%m")}"]<<date.day
       end
       month_action=StudyPlan.check_actions(cookies[:user_id].to_i,params[:category],params[:start].to_datetime,params[:end].to_datetime)
-      task_num=StudyPlan.check_tasks(days.study_plan_id)
+      task_num=StudyPlan.check_tasks(category_id,cookies[:user_id])
       practise= task_num[0]
       exercise=task_num[1]
       day_status={}
@@ -58,8 +60,6 @@ class StudyPlansController < ApplicationController
         end
       end
     end
-    puts day_all
-    puts day_status
     respond_to do |format|
       format.json {
         data={:days=>day_all,:status=>day_status,:which=>[which_day,practise,exercise],:date=>[created_at,end_at]}
@@ -77,7 +77,8 @@ class StudyPlansController < ApplicationController
   end
 
   def check_task
-    check=StudyPlan.pass_task(cookies[:user_id],params[:category])
+    category_id = params[:category].nil? ? 2 : params[:category].to_i
+    check=StudyPlan.pass_task(cookies[:user_id],category_id )
     @message=check[0]
     @over=check[1]
     respond_to do |format|
