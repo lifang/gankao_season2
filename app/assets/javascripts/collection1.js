@@ -36,7 +36,8 @@ function click_next_problem(){
         next_problem.show();
         var problem_index = init_problem+1;
         $("#report_error").hide();
-        $("#jquery_jplayer").jPlayer("stop");
+        $f("flowplayer").stop();
+        $f("audio-word").stop();
         if($("#drag_tk_"+problem_index).height()){
             $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
         }
@@ -83,7 +84,8 @@ function click_prev_problem(){
         prev_problem.show();
         var problem_index = init_problem-1;
         $("#report_error").hide();
-        $("#jquery_jplayer").jPlayer("stop");
+        $f("flowplayer").stop();
+        $f("audio-word").stop();
         if($("#drag_tk_"+problem_index).height()){
             $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
         }
@@ -221,4 +223,27 @@ function setSel(str,select,types){
             break;
         }
     }
+}
+
+function clone_flowplayer(selector,audio_src){
+    $(selector).append($("#flowplayer_loader"));
+    $f("flowplayer", "/assets/flowplayer/flowplayer-3.2.7.swf", {
+        plugins: {
+            controls: {
+                fullscreen: false,
+                height: 30,
+                autoHide: false
+            }
+        },
+        clip: {
+            autoPlay: false,
+            onBeforeBegin: function() {
+                this.close();
+            }
+        },
+        onLoad: function() {
+            this.setVolume(90);
+            this.setClip(audio_src);
+        }
+    });
 }

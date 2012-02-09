@@ -16,6 +16,7 @@ class CollectionsController < ApplicationController
         @meta_keywords = "自动收藏做错的#{@category.name}真题"
         @meta_description = "自动收藏做错的#{@category.name}真题"
         @collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
+        @collection_js="#{user.collection.collection_url}"
         f = File.open(@collection_url)
         @problems = (JSON (f.read)[13..-1])
       else
@@ -84,7 +85,16 @@ class CollectionsController < ApplicationController
       exam_user = ExamUser.find(params[:exam_user_id])
       exam_user.update_user_collection(params[:question_id]) if exam_user
     end
-
+    
+    if params[:sheet_url]
+      #在sheet中记录小题的收藏状态
+      doc = get_doc(params[:sheet_url])
+      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+      collection =doc.root.elements["collection"]
+      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+      write_xml(doc, params[:sheet_url])
+    end
+    
     respond_to do |format|
       format.json {
         render :json => {:message => "收藏成功！"}

@@ -51,17 +51,13 @@ class ExamRatersController < ApplicationController
       where exam_rater_id=#{cookies[:rater_id].to_i} and is_marked=0")
     if @exam_user.blank?||@exam_user==[]
       examination=params[:examination_id].to_i
-      #      if examination==Constant::EXAMINATION.to_i
-      #        @exam_user= ExamUser.find_by_sql("select eu.id from exam_users eu left join rater_user_relations r
-      #        on r.exam_user_id = eu.id where eu.answer_sheet_url is not null and
-      #        eu.is_submited=1 and eu.examination_id = #{examination} and r.exam_user_id is null order by rand() limit 1#")
-      #      else
       @exam_user= ExamUser.find_by_sql("select eu.id from exam_users eu left join rater_user_relations r
-        on r.exam_user_id = eu.id inner join orders o on o.user_id = eu.user_id where eu.answer_sheet_url is not null and
-        eu.is_submited=1 and eu.examination_id = #{examination} and r.exam_user_id is null and 
-       o.types in (#{Order::TYPES[:CHARGE]},#{Order::TYPES[:OTHER]},#{Order::TYPES[:ACCREDIT]}) and o.category_id=#{Category::TYPE_IDS[:english_fourth_level]}
-        and o.status=#{Order::STATUS[:NOMAL]} group by o.types order by rand() limit 1")
-      #      end
+        on r.exam_user_id = eu.id inner join orders o on o.user_id = eu.user_id 
+        inner join examinations ex on ex.id = eu.examination_id
+        where eu.answer_sheet_url is not null and
+        eu.is_submited=1 and eu.examination_id = #{examination} and o.category_id = ex.category_id and
+        o.types in (#{Order::TYPES[:CHARGE]},#{Order::TYPES[:OTHER]},#{Order::TYPES[:ACCREDIT]})        
+        and o.status=#{Order::STATUS[:NOMAL]} and r.exam_user_id is null order by rand() limit 1")
       id=@exam_user[0].id
     else
       id=@exam_user[0].exam_user_id
@@ -80,7 +76,7 @@ class ExamRatersController < ApplicationController
       render :inline=>"您访问的页面不存在。"
     else
       doc=open_file(Constant::PUBLIC_PATH + @exam_user.answer_sheet_url)
-      xml=open_file(Constant::PUBLIC_PATH + "/paper/#{doc.elements[1].attributes["id"]}.xml")
+      xml=open_file(Constant::BACK_PUBLIC_PATH + @exam_user.paper.paper_url)
       @xml=ExamRater.answer_questions(xml,doc)
       @reading= RaterUserRelation.find(:first, :conditions => ["exam_rater_id=#{cookies[:rater_id]} and is_marked=0"])
       if @xml[0].blank?
@@ -99,16 +95,16 @@ class ExamRatersController < ApplicationController
     @exam_relation=RaterUserRelation.find(params[:id])
     @exam_relation.update_attributes(:rate_time=>((Time.now-@exam_relation.started_at)/60+1).to_i)
     @exam_user=ExamUser.find(@exam_relation.exam_user_id)
-    begin
+#    begin
       url="#{Rails.root}/public#{@exam_user.answer_sheet_url}"
       doc=open_file(url)
-      xml=open_file(Constant::PUBLIC_PATH + "/paper/#{doc.elements[1].attributes["id"]}.xml")
+      xml=open_file(Constant::BACK_PUBLIC_PATH + @exam_user.paper.paper_url)
       ExamRater.set_answer(score_reason,@exam_user,xml,doc,url)
       @exam_relation.toggle!(:is_marked)
       notice="提交成功"
-    rescue
-      notice="提交失败"
-    end
+#    rescue
+#      notice="提交失败"
+#    end
     respond_to do |format|
       format.json {
         data={:examination_id=>@exam_user.examination_id,:rater_id=>@exam_relation.exam_rater_id,:notice=>notice}

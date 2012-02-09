@@ -9,17 +9,10 @@ class ExamRater < ActiveRecord::Base
 
   #选择批阅试卷
   def self.get_paper(examination)
-    #    if examination==Constant::EXAMINATION.to_i
-    #      exam_users=ExamUser.find_by_sql("select e.id exam_user_id, r.id relation_id, r.is_marked ,
-    #    r.exam_rater_id from exam_users e left join rater_user_relations r on r.exam_user_id= e.id
-    #    where e.examination_id=#{examination} and e.answer_sheet_url is not null and e.is_submited=1#")
-    #    else
     exam_users=ExamUser.find_by_sql("select e.id exam_user_id, r.id relation_id, r.is_marked ,
-        r.exam_rater_id from exam_users e inner join orders o on o.user_id = e.user_id
-        left join rater_user_relations r   on r.exam_user_id= e.id 
-        where e.examination_id=#{examination} and e.answer_sheet_url is not null and e.is_submited=1 and 
-      o.types in (#{Order::TYPES[:CHARGE]},#{Order::TYPES[:OTHER]},#{Order::TYPES[:ACCREDIT]}) and 
-      o.category_id=#{Category::TYPE_IDS[:english_fourth_level]} and o.status=#{Order::STATUS[:NOMAL]} group by o.types")
+        r.exam_rater_id from exam_users e inner join orders o on o.user_id = e.user_id inner join examinations ex on ex.id = e.examination_id 
+        left join rater_user_relations r on r.exam_user_id = e.id where e.examination_id=#{examination} and e.answer_sheet_url is not null and e.is_submited=1 and 
+        o.category_id = ex.category_id and o.types in (#{Order::TYPES[:CHARGE]},#{Order::TYPES[:OTHER]},#{Order::TYPES[:ACCREDIT]}) and o.status=#{Order::STATUS[:NOMAL]}")
     return exam_users
   end
 
@@ -31,11 +24,17 @@ class ExamRater < ActiveRecord::Base
         problem.elements["questions"].each_element do |question|
           element=doc.elements["paper/questions/question[@id=#{question.attributes["id"]}]"]
           if question.attributes["correct_type"].to_i ==Question::CORRECT_TYPE[:CHARACTER] or
-              question.attributes["correct_type"].to_i == Question::CORRECT_TYPE[:SINGLE_CALK]
-            answer = (element.nil? or element.elements["answer"].nil? or element.elements["answer"].text.nil?) ? "": element.elements["answer"].text
+              (question.attributes["correct_type"].to_i == Question::CORRECT_TYPE[:SINGLE_CALK] and
+                question.attributes["flag"].to_i != 1)
+            answer = (element.nil? or element.elements["answer"].nil? or
+                element.elements["answer"].text.nil?) ? "": element.elements["answer"].text
             question.add_attribute("user_answer","#{answer}")
           else
-            problem.delete_element(question.xpath)
+            if !problem.elements["question_type"].nil? and problem.elements["question_type"].text.to_i==Problem::QUESTION_TYPE[:INNER]
+              question.add_attribute("inner","1")
+            else
+              problem.delete_element(question.xpath)
+            end
           end
         end unless problem.elements["questions"].nil?
         block.delete_element(problem.xpath) if problem.elements["questions"].nil? or
@@ -82,26 +81,28 @@ class ExamRater < ActiveRecord::Base
       original_score = 0.0
       block.elements["problems"].each_element do |problem|
         problem.elements["questions"].each_element do |question|
-          single_score = score_reason["#{question.attributes["id"]}"][0].to_f
-          reason = score_reason["#{question.attributes["id"]}"][1]
-          result_question = doc.elements["/exam/paper/questions/question[@id=#{question.attributes["id"]}]"]
-          answer = (result_question.nil? or result_question.elements["answer"].nil? or result_question.elements["answer"].text.nil?) ? ""
-          : result_question.elements["answer"].text
-          if question.attributes["score"].to_f!=single_score
-            problem.add_attribute("paper_id",doc.elements[1].attributes["id"])
-            already_hash=Collection.auto_add_collection(answer, problem,question,already_hash)
-          else
-            problem.delete_element(question.xpath)
-          end
-          original_score += result_question.attributes["score"].to_f
-          result_question.attributes["score"] = single_score
-          score += single_score
-          block_score += single_score
-          question.add_attribute("user_answer","#{answer}")
-          if result_question.attributes["score_reason"].nil?
-            result_question.add_attribute("score_reason","#{reason}")
-          else
-            result_question.attributes["score_reason"]=reason
+          if  question.attributes["inner"].to_i!=1
+            single_score = score_reason["#{question.attributes["id"]}"][0].to_f
+            reason = score_reason["#{question.attributes["id"]}"][1]
+            result_question = doc.elements["/exam/paper/questions/question[@id=#{question.attributes["id"]}]"]
+            answer = (result_question.nil? or result_question.elements["answer"].nil? or result_question.elements["answer"].text.nil?) ? ""
+            : result_question.elements["answer"].text
+            if question.attributes["score"].to_f!=single_score
+              problem.add_attribute("paper_id",doc.elements[1].attributes["id"])
+              already_hash=Collection.auto_add_collection(answer, problem,question,already_hash)
+            else
+              problem.delete_element(question.xpath)
+            end
+            original_score += result_question.attributes["score"].to_f
+            result_question.attributes["score"] = single_score
+            score += single_score
+            block_score += single_score
+            question.add_attribute("user_answer","#{answer}")
+            if result_question.attributes["score_reason"].nil?
+              result_question.add_attribute("score_reason","#{reason}")
+            else
+              result_question.attributes["score_reason"]=reason
+            end
           end
         end unless problem.elements["questions"].nil?
       end

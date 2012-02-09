@@ -30,41 +30,52 @@
             <% if audio_title[1] != nil %>
               <% audio_title[1]="<input type='button' style='display:none' class='video_button' id='jplayer_button_#{pro_index}' value='更新音频' onclick=javascript:get_flowplayer('#{pro_index}','"+ audio_title[1]+"'); />" %>
             <% end %>
-            <% if problem.elements["question_type"]==Problem::QUESTION_TYPE[:INNER] %>
-            <%= render :partial=>"/exam_raters/inner_question",:object=>problem %>
+            <% if (!problem.elements["question_type"].nil?) and problem.elements["question_type"].text.to_i==Problem::QUESTION_TYPE[:INNER] %>
+              <%  problem.elements["title"].text=audio_title.join("") %>
+              <%= render :partial=>"/exam_raters/inner_question",:object=>problem %>
             <% else %>
               <%= audio_title.join("").html_safe %>
             <% end %>
           </div>
         </div>
+        <div class="drag_tk_box" id="drag_tk_box">
+          <div class="drag_tk border_radius" id="drag_tk">
+            <ul id="draggable_list_<%= problem.attributes["id"] %>"></ul>
+          </div>
+        </div>
+        <script type="text/javascript">
+          $("#draggable_list_"+'<%= problem.attributes["id"] %>').html($("#drag_li_"+<%= problem.attributes["id"] %>).val());
+        </script>
       </div>
       <div class="m_side">
         <div class="problem_box">
           <% problem.get_elements("questions//question").each_with_index do |question,que_index| %>
-            <% str += "#{pro_index}_#{question.attributes["id"]};" %>
-            <div class="pro_question_list p_q_line" id="<%="#{pro_index}_#{question.attributes["id"]}"%>">
-              <div class="pql_left"><%=que_index+1%>.</div>
-              <div class="pql_right">
-                <div class="pro_qu_t" onclick="javascript:$(this).closest('.pro_question_list').toggleClass('p_q_line');$(this).parent().parent().siblings('.pro_question_list').addClass('p_q_line');">
-                  <div class="question_tx"><%= Question::TYPE_NAMES[question.attributes["correct_type"].to_i] %></div>
-                  <div class="pro_t_con"><%= (question.elements["description"].nil? or question.elements["description"].text.nil?)? "" :question.elements["description"].text %></div>
-                </div>
-                <div class="pro_qu_div">
-                  <div class="pro_qu_ul">考生答案：<%= question.attributes["user_answer"].nil? ? "": question.attributes["user_answer"]  %></div>
-                  <div class="jiexi">
-                    <div>正确答案：<span class="red"><%= (question.elements["answer"].nil? or question.elements["answer"].text.nil?)? "": question.elements["answer"].text %></span></div>
-                    <div>解析：<%= (question.elements["analysis"].nil? or question.elements["analysis"].text.nil?)? "": question.elements["analysis"].text %></div>
+            <%if  question.attributes["inner"].to_i!=1%>
+              <% str += "#{pro_index}_#{question.attributes["id"]};" %>
+              <div class="pro_question_list p_q_line" id="<%="#{pro_index}_#{question.attributes["id"]}"%>">
+                <div class="pql_left"><%=que_index+1%>.</div>
+                <div class="pql_right">
+                  <div class="pro_qu_t" onclick="javascript:$(this).closest('.pro_question_list').toggleClass('p_q_line');$(this).parent().parent().siblings('.pro_question_list').addClass('p_q_line');">
+                    <div class="question_tx"><%= Question::TYPE_NAMES[question.attributes["correct_type"].to_i] %></div>
+                    <div class="pro_t_con"><%= (question.elements["description"].nil? or question.elements["description"].text.nil?)? "" :question.elements["description"].text %></div>
+                  </div>
+                  <div class="pro_qu_div">
+                    <div class="pro_qu_ul">考生答案：<%= question.attributes["user_answer"].nil? ? "": question.attributes["user_answer"]  %></div>
+                    <div class="jiexi">
+                      <div>正确答案：<span class="red"><%= (question.elements["answer"].nil? or question.elements["answer"].text.nil?)? "": question.elements["answer"].text %></span></div>
+                      <div>解析：<%= (question.elements["analysis"].nil? or question.elements["analysis"].text.nil?)? "": question.elements["analysis"].text %></div>
+                    </div>
                   </div>
                 </div>
+                <div class="clear"></div>
+                <div class="marking_box">
+                  <% score=(question.attributes["score"].nil? or question.attributes["score"]=='' ) ? 0 :question.attributes["score"].to_i %>
+                  <div><label>评分：</label><input  type="text" id="score_<%="#{pro_index}_#{question.attributes["id"]}"  %>"/>/<span id="fact_score_<%="#{pro_index}_#{question.attributes["id"]}"%>"><%= score %></span>分</div>
+                  <div><label>理由：</label><textarea cols="" rows="" id="reason_<%= "#{pro_index}_#{question.attributes["id"]}" %>"></textarea></div>
+                  <div><button class="t_btn save_score_btn" onclick="javascript:save_score('<%="#{pro_index}_#{question.attributes["id"]}"  %>',<%= score %>)">保存</button></div>
+                </div>
               </div>
-              <div class="clear"></div>
-              <div class="marking_box">
-                <% score=(question.attributes["score"].nil? or question.attributes["score"]=='' ) ? 0 :question.attributes["score"].to_i %>
-                <div><label>评分：</label><input  type="text" id="score_<%="#{pro_index}_#{question.attributes["id"]}"  %>"/>/<span id="fact_score_<%="#{pro_index}_#{question.attributes["id"]}"%>"><%= score %></span>分</div>
-                <div><label>理由：</label><textarea cols="" rows="" id="reason_<%= "#{pro_index}_#{question.attributes["id"]}" %>"></textarea></div>
-                <div><button class="t_btn save_score_btn" onclick="javascript:save_score('<%="#{pro_index}_#{question.attributes["id"]}"  %>',<%= score %>)">保存</button></div>
-              </div>
-            </div>
+            <% end %>
           <% end %>
         </div>
         <div class="marking_btn"><button class="t_btn green" onclick="javascript:check_compelte()">批改完成</button><button class="t_btn red" onclick="javascript:next_problem()">跳过</button></div>
@@ -77,6 +88,6 @@
 <script type="text/javascript">
   $("#single_problem_"+getCookie("show_problem")).css("display","");
   $(function(){
-    $(".video_button").trigger("onclick");
+    $("#jplayer_button_"+getCookie("show_problem")).trigger("onclick");
   })
 </script>

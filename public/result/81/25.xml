@@ -1,14 +1,15 @@
+
 <exam id='81'>
     <paper id='27' score='16'>
         <questions>
             <question id='112' is_sure='1' score='0'>
                 <answer>等待</answer>
             </question>
-             <question id='131' is_sure='1' score='0'>
+            <question id='131' is_sure='1' score='0'>
                 <answer>等待</answer>
             </question>
             <question id='113' is_sure='1' score='16'>
-                <answer>1</answer>
+                <answer>A) it has large audiences </answer>
             </question>
             <question id='114' is_sure='1' score='12.0' score_reason='11'>
                 <answer>休息休息</answer>
@@ -23,6 +24,18 @@
                 <answer>得得得得</answer>
             </question>
             <question id='118' is_sure='1' score='0'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='23' is_sure='1' score='0'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='24' is_sure='1' score='0'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='25' is_sure='1' score='0'>
+                <answer>得得得得</answer>
+            </question>
+            <question id='26' is_sure='1' score='0'>
                 <answer>得得得得</answer>
             </question>
             <question id='119' is_sure='1' score='0'>

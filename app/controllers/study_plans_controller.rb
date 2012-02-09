@@ -58,6 +58,8 @@ class StudyPlansController < ApplicationController
         end
       end
     end
+    puts day_all
+    puts day_status
     respond_to do |format|
       format.json {
         data={:days=>day_all,:status=>day_status,:which=>[which_day,practise,exercise],:date=>[created_at,end_at]}

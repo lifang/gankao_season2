@@ -513,10 +513,19 @@ function create_analysis(question_id, correct_type) {
         }
     }
     var analysis = (true_answers.get(question_id) != null && true_answers.get(question_id)[1] != null)
-    ? true_answers.get(question_id)[1] : "";
+    ? "解析：" + true_answers.get(question_id)[1] : "";
+    var answer_text = correct_type == "5" ? "参考" : "正确";
     analysis_div.innerHTML = "<span class='xx_x' onclick=\"javascript:$('#analysis_"
-    + question_id +"').css('display', 'none');\"><img src='/assets/xx.png'></span>"
-    +"<div>正确答案：<span class='red'>"+ answer +"</span></div><div>"+ analysis +"</div>";
+    + question_id +"').css('display', 'none');\"><img src='/assets/xx.png'></span>";
+    if (answer != "") {
+        analysis_div.innerHTML += "<div>"+ answer_text +"答案：<span class='red'>"+ answer +"</span></div>";
+    }
+    if (analysis != "") {
+        analysis_div.innerHTML += "<div>"+ analysis +"</div>";
+    }
+    if (answer_hash != null && answer_hash.get(question_id) != null && answer_hash.get(question_id)[2] != null) {
+        analysis_div.innerHTML += "<div>得分理由："+ answer_hash.get(question_id)[2] +"</div>";
+    }
     return analysis_div;
 }
 
@@ -778,7 +787,8 @@ function answer_xml() {
                 if (questions[i].getElementsByTagName("answer")[0].firstChild != null) {
                     answer = questions[i].getElementsByTagName("answer")[0].firstChild.data;
                 }
-                answer_hash.put(questions[i].getAttribute("id"), [answer, questions[i].getAttribute("score")]);
+                answer_hash.put(questions[i].getAttribute("id"), 
+                    [answer, questions[i].getAttribute("score"), questions[i].getAttribute("score_reason")]);
             }
         }
         var collections = xmlDom.getElementsByTagName("collections");

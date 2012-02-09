@@ -4,7 +4,7 @@ var question_types=["单选题","多选题","判断题","填空题","","简答�
 var close_question=null;
 //预载页面信息
 $(function(){
-    var problem=get_array(collections["problems"]["problem"]);
+    var problem=get_array(collections.problems.problem);
     var word_list=[];
     for(var i=0;i<problem.length;i++){
         var questions=get_array(problem[i].questions.question);

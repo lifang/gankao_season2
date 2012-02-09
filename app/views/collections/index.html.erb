@@ -1,6 +1,6 @@
 <%= javascript_include_tag "cookie.js" %>
 <%= javascript_include_tag "collection.js" %>
-<%#= javascript_include_tag "#{@collection_js_url}" %>
+<%= javascript_include_tag "#{@collection_js}" %>
 <%= javascript_include_tag "/assets/jplayer/jquery.jplayer.min.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.core.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.widget.js" %>
@@ -18,7 +18,6 @@
   var tgs = new Array( 'div','td','tr');
   var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
   var startSz = 2;
-  var collections=<%= @problems %>
   var problem_init = <%= cookies[:collection_problem_init].nil? ? 0 : cookies[:collection_problem_init].to_i%>;
   var problems=new Array;
   var tag_list=["全部收藏"];

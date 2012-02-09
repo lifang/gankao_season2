@@ -3,6 +3,7 @@
 <%= javascript_include_tag '/assets/main.js' %>
 <%= javascript_include_tag '/assets/collection1.js' %>
 
+
 <% @object = problems %>
 <% constant_question_type = {"0"=>"单选题","1"=>"多选题","2"=>"判断题","3"=>"填空题","5"=>"简答题"} %>
 <% problem_index=(@object[:group_index]*@object[:group_sum]-1); @object[:problems].each do |problem|; problem_index+=1 %>
@@ -22,13 +23,14 @@
             <% end %>
             <% resource_problem_title = audio_title_arr.join("") %>
             <%= resource_problem_title.html_safe %>
-              <script type='text/javascript'>
-                //绑定音频播放事件
-                  $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
-                    clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
-                  });
-              </script>
           </div>
+          <script type='text/javascript'>
+            //绑定音频播放事件
+            $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
+              clone_flowplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
+            });
+            $("#jplayer_play_button_<%= problem_index %>").attr("onclick","javascript:clone_flowplayer('#jplayer_location_<%= problem_index %>','<%= audio_src %>')");
+          </script>
         </div>
       </div>
       <div class="m_side">
@@ -134,26 +136,26 @@
             <!-- 题面内大题  初始化小题 -->
             <% source_title_arr = problem["title"].nil? ? [] : problem["title"].split("((sign))"); result_title_arr = [] ; result_title_arr << source_title_arr[0] %>
             <% questions = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] %>
-            <% sign_index=-1;has_drag = false; questions.each do |question| ; if question["c_flag"]&&question["c_flag"]=="1" ; sign_index+=1;
-                element_str="<span class='span_tk' id='inner_span_tk_#{problem_index}_#{sign_index}'>";
-                if question["correct_type"]=="0";
-                  element_str += "<select class='select_tk' name='#{question["user_answer"]}' id='input_inner_answer_#{problem_index}_#{sign_index}'>";element_str += "<option value=''></option>";
-                  question["questionattrs"].split(";-;").each do |attr|;element_str += "<option value='#{attr}'>#{attr}</option>";end;element_str += "</select>";
-                elsif question["correct_type"]=="1";
-                  element_str += "<span class='dragDrop_box' id='droppable_#{problem_index}_#{sign_index}'></span>";
-                  has_drag = true;
-                elsif question["correct_type"]=="3";
-                  element_str += "<input class='input_tk' type='text' id='input_inner_answer_#{problem_index}_#{sign_index}'></input>";
-                end;
-                element_str += "</span>";
-                result_title_arr << element_str << source_title_arr[sign_index+1]; %>
-                <script type="text/javascript" >
-                  var attrs = "<%= question["questionattrs"] %>".split(";-;");
-                  for(var i=0;i<attrs.length;i++){
-                    all_attrs.push(attrs[i]);
-                  }
-                </script>
-              <% end ; end %>
+            <% sign_index=-1;has_drag = false; questions.each do |question| ; sign_index+=1;
+              element_str="<span class='span_tk' id='inner_span_tk_#{problem_index}_#{sign_index}'>";
+              if question["correct_type"]=="0";
+                element_str += "<select class='select_tk' name='#{question["user_answer"]}' id='input_inner_answer_#{problem_index}_#{sign_index}'>";element_str += "<option value=''></option>";
+                question["questionattrs"].split(";-;").each do |attr|;element_str += "<option value='#{attr}'>#{attr}</option>";end;element_str += "</select>";
+              elsif question["correct_type"]=="1";
+                element_str += "<span class='dragDrop_box' id='droppable_#{problem_index}_#{sign_index}'></span>";
+                has_drag = true;
+              elsif question["correct_type"]=="3";
+                element_str += "<input class='input_tk' type='text' id='input_inner_answer_#{problem_index}_#{sign_index}'></input>";
+              end;
+              element_str += "</span>";
+              result_title_arr << element_str << source_title_arr[sign_index+1]; %>
+              <script type="text/javascript" >
+                var attrs = "<%= question["questionattrs"] %>".split(";-;");
+                for(var i=0;i<attrs.length;i++){
+                  all_attrs.push(attrs[i]);
+                }
+              </script>
+            <% end %>
             <!-- 题面内大题 初始化音频  -->
             <% audio_title_arr = result_title_arr.join("").split("((mp3))"); audio_src = audio_title_arr[1]; %>
             <% audio_element = "" ;if audio_src != nil ; %>
@@ -174,9 +176,9 @@
             }
             $("#draggable_list_<%= problem_index %>").html(attrs_elements_str);
             //绑定音频播放事件
-              $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
-                clone_jplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
-              });
+            $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
+              clone_flowplayer("#jplayer_location_<%= problem_index %>","<%= audio_src %>");
+            });
           </script>
         </div>
       </div>

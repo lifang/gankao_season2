@@ -210,13 +210,16 @@ class Collection < ActiveRecord::Base
     if collection_problem[0]
       already_hash["problems"]["problem"]=collection_problem[1]
     else
-      if problem.elements["question_type"].to_i==Problem::QUESTION_TYPE[:INNER]
-        question.add_element("c_flag").add_text("1")
+      if !problem.elements["question_type"].nil? and problem.elements["question_type"].text.to_i==Problem::QUESTION_TYPE[:INNER]
+        if problem.elements["questions/question[@id=#{question.attributes["id"]}]"].elements["c_flag"].nil?
+          problem.elements["questions/question[@id=#{question.attributes["id"]}]"].add_element("c_flag").add_text("1")
+        end
+        single_question =update_question(answer,question)
       else
         problem.delete_element problem.elements["questions"]
+        single_question =update_question(answer,question)
+        problem.add_element("questions").add_element(single_question)
       end
-      single_question =update_question(answer,question)
-      problem.add_element("questions").add_element(single_question)
       if already_hash["problems"]["problem"].class.to_s == "Hash"
         already_hash["problems"]["problem"]=[already_hash["problems"]["problem"],Hash.from_xml(problem.to_s)["problem"]]
       else
@@ -238,7 +241,8 @@ class Collection < ActiveRecord::Base
           questions=[questions]
         end
         question_none=true
-        question_one.add_element("c_flag").add_text("1") if single_problem.elements["question_type"].to_i==Problem::QUESTION_TYPE[:INNER] and question_one.elements["c_flag"].nil?
+        question_one.add_element("c_flag").add_text("1") if !single_problem.elements["question_type"] and
+          single_problem.elements["question_type"].text.to_i==Problem::QUESTION_TYPE[:INNER] and question_one.elements["c_flag"].nil?
         questions.each do |question|
           if question_one.attributes["id"]==question["id"]
             question_none=false
