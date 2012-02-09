@@ -45,7 +45,81 @@ class ExamRater < ActiveRecord::Base
         xml.delete_element(block.xpath)
       end
     end unless xml.elements["blocks"].nil?
-    return [xml.get_elements("/paper/blocks//problems//problem"),xml.elements["base_info/title"]]
+    return xml
   end
+
+  #设置手动阅卷分数
+  def self.rater(doc,id,score)
+    unless doc.elements[1].elements["auto_score"].nil?
+      auto_score=doc.elements[1].elements["auto_score"].text
+      if auto_score.to_f !=0.0
+        doc.elements[1].attributes["score"]=score+auto_score.to_f
+        ExamUser.find(id).update_attributes(:total_score=>score+auto_score.to_f)
+      end
+    end
+    return doc.to_s
+  end
+
+  #完成阅卷，并记录考分，错误则收藏
+  def self.set_answer(score_reason,exam_user,xml,doc,url)
+    score=0.0
+    only_xml=ExamRater.answer_questions(xml,doc)
+    collection = Collection.find_or_create_by_user_id(exam_user.user_id)
+    path =  "/collections/" + Time.now.to_date.to_s
+    collection_url = path + "/#{collection.id}.js"
+    collection.set_collection_url(path, collection_url)
+    already_hash = {"problems" => {"problem" => []}}
+    last_problems = ""
+    file = File.open(Constant::PUBLIC_PATH + collection.collection_url)
+    last_problems = file.readlines.join
+    unless last_problems.nil? or last_problems.strip == ""
+      already_hash = JSON(last_problems.gsub("collections = ", ""))#ActiveSupport::JSON.decode(().to_json)
+    end
+    file.close
+    score=0.0
+    only_xml.elements["blocks"].each_element do  |block|
+      block_score = 0.0
+      original_score = 0.0
+      block.elements["problems"].each_element do |problem|
+        problem.elements["questions"].each_element do |question|
+          single_score = score_reason["#{question.attributes["id"]}"][0].to_f
+          reason = score_reason["#{question.attributes["id"]}"][1]
+          result_question = doc.elements["/exam/paper/questions/question[@id=#{question.attributes["id"]}]"]
+          answer = (result_question.nil? or result_question.elements["answer"].nil? or result_question.elements["answer"].text.nil?) ? ""
+          : result_question.elements["answer"].text
+          if question.attributes["score"].to_f!=single_score
+            problem.add_attribute("paper_id",doc.elements[1].attributes["id"])
+            already_hash=Collection.auto_add_collection(answer, problem,question,already_hash)
+          else
+            problem.delete_element(question.xpath)
+          end
+          original_score += result_question.attributes["score"].to_f
+          result_question.attributes["score"] = single_score
+          score += single_score
+          block_score += single_score
+          question.add_attribute("user_answer","#{answer}")
+          if result_question.attributes["score_reason"].nil?
+            result_question.add_attribute("score_reason","#{reason}")
+          else
+            result_question.attributes["score_reason"]=reason
+          end
+        end unless problem.elements["questions"].nil?
+      end
+      unless doc.elements["/exam/paper/blocks"].nil?
+        answer_block = doc.elements["/exam/paper/blocks/block[@id=#{block.attributes["id"]}]"]
+        block_score = answer_block.attributes["score"].to_f - original_score + block_score
+        answer_block.attributes["score"] = block_score
+      end
+    end
+    doc.elements["paper"].elements["rate_score"].text = score
+    @xml=ExamRater.rater(doc,exam_user.id,score)
+    file = File.new(url, File::CREAT|File::TRUNC|File::RDWR, 0644)
+    file.write(doc.to_s)
+    file.close
+    collection_js="collections = " + already_hash.to_json.to_s
+    path_url = collection.collection_url.split("/")
+    collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
+  end
+
 
 end

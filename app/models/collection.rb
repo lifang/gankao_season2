@@ -206,12 +206,15 @@ class Collection < ActiveRecord::Base
     if problems.class.to_s == "Hash"
       problems=[problems]
     end
-    question.add_element("c_flag").add_text("1") if problem.elements["question_type"].to_i==1 and question.elements["c_flag"].nil?
-    collection_problem =problem_in_collection(problem.attributes["id"],problems,answer,question)
+    collection_problem =problem_in_collection(problem,problems,answer,question)
     if collection_problem[0]
       already_hash["problems"]["problem"]=collection_problem[1]
     else
-      problem.delete_element problem.elements["questions"]
+      if problem.elements["question_type"].to_i==Problem::QUESTION_TYPE[:INNER]
+        question.add_element("c_flag").add_text("1")
+      else
+        problem.delete_element problem.elements["questions"]
+      end
       single_question =update_question(answer,question)
       problem.add_element("questions").add_element(single_question)
       if already_hash["problems"]["problem"].class.to_s == "Hash"
@@ -225,16 +228,17 @@ class Collection < ActiveRecord::Base
   end
 
   #当前题目是否已经收藏到错题集
-  def self.problem_in_collection(problem_id, collections,answer,question_one)
+  def self.problem_in_collection(single_problem, collections,answer,question_one)
     has_none=false
     collections.each do |problem|
-      if  problem["id"]==problem_id
+      if  problem["id"]==single_problem.attributes["id"]
         has_none=true
         questions=problem["questions"]["question"]
         if questions.class.to_s == "Hash"
           questions=[questions]
         end
         question_none=true
+        question_one.add_element("c_flag").add_text("1") if single_problem.elements["question_type"].to_i==Problem::QUESTION_TYPE[:INNER] and question_one.elements["c_flag"].nil?
         questions.each do |question|
           if question_one.attributes["id"]==question["id"]
             question_none=false

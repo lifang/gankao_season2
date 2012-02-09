@@ -1,7 +1,8 @@
 <%= javascript_include_tag 'jquery' %>
 <div class="main">
+  <%= render :partial=>"/common/flowplayer" %>
   <div class="m_top">
-    <h1 class="ex_paper_h"><%= (@xml[1].nil? or @xml[1].text.nil?) ? "":@xml[1].text %></h1>
+    <h1 class="ex_paper_h"><%= (@xml.elements["base_info/title"].nil? or @xml.elements["base_info/title"].text.nil?) ? "":@xml.elements["base_info/title"].text %></h1>
     <div class="icon_func">
       <div class="float_right">
         <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:prev_problem();">上一题</a></span>
@@ -9,29 +10,39 @@
       </div>
     </div>
   </div>
+  <% xml=@xml.get_elements("/paper/blocks//problems//problem") %>
   <script type="text/javascript" >
     //初始化题目号
-    var total_problem=<%= @xml[0].size %>;
+    var total_problem=<%= xml.size %>;
     if(!(getCookie("show_problem")!= null)){
       setCookie("show_problem","0");
     }
   </script>
   <% str="" %>
-  <% @xml[0].each_with_index do |problem,pro_index|  %>
+  <% xml.each_with_index do |problem,pro_index|  %>
     <div id="single_problem_<%= pro_index %>" style="display:none">
       <div class="m_side m_problem_bg">
         <div class="problem_box">
-          <div class="problem_title">第<%=pro_index +1%>题/共<%= @xml[0].size %>题</div>
+          <div class="problem_title">第<%=pro_index +1%>题/共<%= xml.size %>题</div>
+          <div id='jplayer_location_<%= pro_index %>'></div>
           <div class="problem_text">
-            <%= problem.elements["title"].text %>
+            <% audio_title = (problem.elements["title"].nil? or problem.elements["title"].text.nil?) ? [] : problem.elements["title"].text.split("((mp3))")  %>
+            <% if audio_title[1] != nil %>
+              <% audio_title[1]="<input type='button' style='display:none' class='video_button' id='jplayer_button_#{pro_index}' value='更新音频' onclick=javascript:get_flowplayer('#{pro_index}','"+ audio_title[1]+"'); />" %>
+            <% end %>
+            <% if problem.elements["question_type"]==Problem::QUESTION_TYPE[:INNER] %>
+            <%= render :partial=>"/exam_raters/inner_question",:object=>problem %>
+            <% else %>
+              <%= audio_title.join("").html_safe %>
+            <% end %>
           </div>
         </div>
       </div>
       <div class="m_side">
         <div class="problem_box">
           <% problem.get_elements("questions//question").each_with_index do |question,que_index| %>
-            <% str += "#{pro_index}_#{que_index};" %>
-            <div class="pro_question_list p_q_line" id="<%="#{pro_index}_#{que_index}"%>">
+            <% str += "#{pro_index}_#{question.attributes["id"]};" %>
+            <div class="pro_question_list p_q_line" id="<%="#{pro_index}_#{question.attributes["id"]}"%>">
               <div class="pql_left"><%=que_index+1%>.</div>
               <div class="pql_right">
                 <div class="pro_qu_t" onclick="javascript:$(this).closest('.pro_question_list').toggleClass('p_q_line');$(this).parent().parent().siblings('.pro_question_list').addClass('p_q_line');">
@@ -49,9 +60,9 @@
               <div class="clear"></div>
               <div class="marking_box">
                 <% score=(question.attributes["score"].nil? or question.attributes["score"]=='' ) ? 0 :question.attributes["score"].to_i %>
-                <div><label>评分：</label><input  type="text" id="score_<%="#{pro_index}_#{que_index}"  %>"/>/<span id="fact_score_<%="#{pro_index}_#{que_index}"%>"><%= score %></span>分</div>
-                <div><label>理由：</label><textarea cols="" rows="" id="reason_<%= "#{pro_index}_#{que_index}" %>"></textarea></div>
-                <div><button class="t_btn save_score_btn" onclick="javascript:save_score('<%="#{pro_index}_#{que_index}"  %>',<%= score %>)">保存</button></div>
+                <div><label>评分：</label><input  type="text" id="score_<%="#{pro_index}_#{question.attributes["id"]}"  %>"/>/<span id="fact_score_<%="#{pro_index}_#{question.attributes["id"]}"%>"><%= score %></span>分</div>
+                <div><label>理由：</label><textarea cols="" rows="" id="reason_<%= "#{pro_index}_#{question.attributes["id"]}" %>"></textarea></div>
+                <div><button class="t_btn save_score_btn" onclick="javascript:save_score('<%="#{pro_index}_#{question.attributes["id"]}"  %>',<%= score %>)">保存</button></div>
               </div>
             </div>
           <% end %>
@@ -65,4 +76,7 @@
 <input type="hidden" id="rater_id" value="<%= @reading.id %>"/>
 <script type="text/javascript">
   $("#single_problem_"+getCookie("show_problem")).css("display","");
+  $(function(){
+    $(".video_button").trigger("onclick");
+  })
 </script>
