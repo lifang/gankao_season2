@@ -50,7 +50,7 @@ module ApplicationHelper
       order=Order.create(:user_id => user_id, :types => Order::TYPES[:TRIAL_SEVEN],
         :status => Order::STATUS[:NOMAL], :start_time => Time.now.to_datetime, :total_price => 0,
         :end_time => Time.now.to_datetime + Constant::DATE_LONG[:trail].days,
-        :category_id => category_id, :remark => Order::TYPE_NAME[2])
+        :category_id => category_id, :remark => Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
       this_order = "#{category_id}=#{Order::USER_ORDER[:TRIAL]}"
       cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
     end

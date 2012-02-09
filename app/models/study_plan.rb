@@ -10,7 +10,7 @@ class StudyPlan < ActiveRecord::Base
     month_action={}
     user_plan=UserPlanRelation.find_by_sql("select up.created_at,up.ended_at,sp.id,up.user_id from user_plan_relations up inner join study_plans sp on up.study_plan_id=sp.id where
      up.user_id=#{user_id} and sp.category_id=#{category} limit 1 ")[0]
-    message="未完成任务，离勋章只差一个坚持"
+    message="您还未完成今天的学习任务，离勋章只差一步坚持哦！"
     over=false
     practice_type=PlanTask::TASK_TYPES[:PRACTICE]
     recite_type=PlanTask::TASK_TYPES[:RECITE]

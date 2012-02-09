@@ -4,8 +4,6 @@ class User < ActiveRecord::Base
   has_many :roles,:through=>:user_role_relations,:foreign_key=>"role_id"
   has_many :category_manages,:dependent=>:destroy
   has_one :user_action_log
-  has_many :user_category_relations,:dependent => :destroy
-  has_many :categories,:through=>:user_category_relations, :source => :category
   has_many :user_plan_relations,:dependent => :destroy
   has_many :study_plans,:through=>:user_plan_relations, :source => :study_plan
   has_many :send_notices, :foreign_key => "send_id", :source => :notice
