@@ -191,4 +191,18 @@ class CollectionsController < ApplicationController
   end
 
 
+  def get_collections
+    user = User.find(cookies[:user_id])
+    @collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
+    f = File.open(@collection_url)
+    @problems = (JSON (f.read)[13..-1])
+    f.close
+    respond_to do |format|
+      format.json {
+        render :json => {:message =>@problems}
+      }
+    end
+  end
+
+
 end

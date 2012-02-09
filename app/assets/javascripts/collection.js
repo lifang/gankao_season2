@@ -2,89 +2,100 @@ var word_in_problem={};
 var types=[ "n.",  "v.",  "pron.",  "adj.",  "adv.","num.",  "art.","prep.","conj.", "interj.", "u = ",  "c = ",  "pl = "];
 var question_types=["单选题","多选题","判断题","填空题","","简答题"];
 var close_question=null;
+var collections;
 //预载页面信息
-$(function(){
-    var problem=get_array(collections.problems.problem);
-    var word_list=[];
-    for(var i=0;i<problem.length;i++){
-        var questions=get_array(problem[i].questions.question);
-        problem[i].questions.question=questions;
-        for(var n=0;n<questions.length;n++){
-            var answer_array=[]
-            if(problem[i].questions.question[n].user_answer==null){
-                problem[i].questions.question[n].user_answer=[];
-            }else{
-                "string"==(typeof problem[i].questions.question[n].user_answer)?answer_array.push(problem[i].questions.question[n].user_answer):answer_array=problem[i].questions.question[n].user_answer
-            }
-            problem[i].questions.question[n].user_answer=answer_array;
-            if(questions[n].words!=null){
-                var words= questions[n].words.split(";");
-                for(var m=0;m<words.length;m++){
-                    if(word_list.indexOf(words[m])==-1){
-                        word_list.push(""+words[m]);
-                    }
-                }
-            }
-            if(questions[n].tags!=null){
-                var tags= questions[n].tags.split(",");
-                for(var k=0;k<tags.length;k++){
-                    if(tag_problems[tags[k]]==null){
-                        tag_problems[tags[k]]=[i]
+$(document).ready(function(){
+    $.ajax({
+        async:true,
+        type: "POST",
+        url: "/collections/get_collections.json",
+        dataType: "json",
+        success : function(data) {
+            collections=data.message;
+            var problem=get_array(collections.problems.problem);
+            var word_list=[];
+            for(var i=0;i<problem.length;i++){
+                var questions=get_array(problem[i].questions.question);
+                problem[i].questions.question=questions;
+                for(var n=0;n<questions.length;n++){
+                    var answer_array=[]
+                    if(problem[i].questions.question[n].user_answer==null){
+                        problem[i].questions.question[n].user_answer=[];
                     }else{
-                        if(tag_problems[tags[k]].indexOf(i)==-1){
-                            tag_problems[tags[k]].push(i)
+                        "string"==(typeof problem[i].questions.question[n].user_answer)?answer_array.push(problem[i].questions.question[n].user_answer):answer_array=problem[i].questions.question[n].user_answer
+                    }
+                    problem[i].questions.question[n].user_answer=answer_array;
+                    if(questions[n].words!=null){
+                        var words= questions[n].words.split(";");
+                        for(var m=0;m<words.length;m++){
+                            if(word_list.indexOf(words[m])==-1){
+                                word_list.push(""+words[m]);
+                            }
                         }
                     }
-                    if(tag_list.indexOf(tags[k])==-1){
-                        tag_list.push(tags[k]);
+                    if(questions[n].tags!=null){
+                        var tags= questions[n].tags.split(",");
+                        for(var k=0;k<tags.length;k++){
+                            if(tag_problems[tags[k]]==null){
+                                tag_problems[tags[k]]=[i]
+                            }else{
+                                if(tag_problems[tags[k]].indexOf(i)==-1){
+                                    tag_problems[tags[k]].push(i)
+                                }
+                            }
+                            if(tag_list.indexOf(tags[k])==-1){
+                                tag_list.push(tags[k]);
+                            }
+                        }
                     }
                 }
+                problems.push(i);
             }
-        }
-        problems.push(i);
-    }
-    if(word_list.length!=0){
-        //准备数据，为problems加载词汇
-        $.ajax({
-            async:true,
-            type: "POST",
-            url: "/collections/load_words.json",
-            dataType: "json",
-            data : {
-                words :word_list
-            },
-            success : function(data) {
-                word_in_problem=data.words;
+            if(word_list.length!=0){
+                //准备数据，为problems加载词汇
+                $.ajax({
+                    async:true,
+                    type: "POST",
+                    url: "/collections/load_words.json",
+                    dataType: "json",
+                    data : {
+                        words :word_list
+                    },
+                    success : function(data) {
+                        word_in_problem=data.words;
+                        load_problem_collection(problem_init,tag_types);
+                    }
+                });
+            }
+            tag_problems["全部收藏"]=problems;
+            $("#global_problem_sum").html(problems.length);
+            $("#jplayer_play").trigger("onclick");
+            var frag = document.createDocumentFragment();
+            for(var i=0;i<tag_list.length;i++){
+                var option=create_element("option", null, "options", null, null, "innerHTML");
+                option.innerHTML=""+tag_list[i];
+                frag.appendChild(option)
+            }
+            $("#scope")[0].appendChild(frag);
+            $("#scope").change(function () {
+                var str ="";
+                $("#scope option:selected").each(function () {//选取select中被选中的元素
+                    str +=$(this).text() ;
+                });
+                tag_types=str;
+                setCookie("collection_problem_init","0");
+                problem_init=0;
                 load_problem_collection(problem_init,tag_types);
-            }
-        });
-    }
-    tag_problems["全部收藏"]=problems;
-    $("#global_problem_sum").html(problems.length);
-    $("#jplayer_play").trigger("onclick");
-    var frag = document.createDocumentFragment();
-    for(var i=0;i<tag_list.length;i++){
-        var option=create_element("option", null, "options", null, null, "innerHTML");
-        option.innerHTML=""+tag_list[i];
-        frag.appendChild(option)   
-    }
-    $("#scope")[0].appendChild(frag);
-    $("#scope").change(function () {
-        var str ="";
-        $("#scope option:selected").each(function () {//选取select中被选中的元素
-            str +=$(this).text() ;
-        });
-        tag_types=str;
-        setCookie("collection_problem_init","0");
-        problem_init=0;
-        load_problem_collection(problem_init,tag_types);
-    })
-    $("#jplayer_one").jPlayer({
-        swfPath: "/javascripts/jplayer",
-        supplied: "mp3",
-        wmode: "window",
-        preload: "none"
+            })
+            $("#jplayer_one").jPlayer({
+                swfPath: "/javascripts/jplayer",
+                supplied: "mp3",
+                wmode: "window",
+                preload: "none"
+            });
+        }
     });
+   
 })
 
 function flowplayer_mp3(audio_src){
