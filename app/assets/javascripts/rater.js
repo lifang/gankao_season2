@@ -121,7 +121,7 @@ function check_compelte(){
         var score=$("#fact_score_"+questions[i]).html();
         if(put_score==null||put_score==""||isNaN(parseInt(put_score))||parseInt(put_score)<0||parseInt(put_score)>parseInt(score)){
             var problem=questions[i].split("_");
-            tishi_alert("请检查第"+(parseInt(problem[0])+1) +"大题第"+(parseInt(problem[1])+1) +"小题的批阅分数");
+            tishi_alert("请检查第"+(parseInt(problem[0])+1) +"大题批阅分数");
             setCookie("show_problem",parseInt(problem[0]));
             $("div[id*='single_problem_']").css("display","none");
             $("#single_problem_"+getCookie("show_problem")).css("display","");
@@ -135,7 +135,8 @@ function check_compelte(){
     for(var k=0;k<=questions.length-1;k++){
         var input_score=$("#score_"+questions[k]).val();
         var input_reason=$("#reason_"+questions[k]).val();
-        score_reason[questions[k]]=[parseInt(input_score),input_reason];
+        var question_id=questions[k].split("_")[1];
+        score_reason[question_id]=[parseInt(input_score),input_reason];
     }
     $.ajax({
         async:true,
@@ -150,7 +151,7 @@ function check_compelte(){
             var examination=data.examination_id;
             var  rater=data.rater_id;
             tishi_alert(data.notice);
-            window.location.href="/exam_raters/"+examination +"/reader_papers?rater_id="+rater; 
+            window.location.href="/exam_raters/"+examination +"/reader_papers?rater_id="+rater;
         }
     });
 }
@@ -164,6 +165,7 @@ function prev_problem(){
     setCookie("show_problem",parseInt(getCookie("show_problem"))-1);
     $("div[id*='single_problem_']").css("display","none");
     $("#single_problem_"+getCookie("show_problem")).css("display","");
+    $("#jplayer_button_"+getCookie("show_problem")).trigger("onclick");
 }
 
 function next_problem(){
@@ -175,6 +177,7 @@ function next_problem(){
     setCookie("show_problem",parseInt(getCookie("show_problem"))+1);
     $("div[id*='single_problem_']").css("display","none");
     $("#single_problem_"+getCookie("show_problem")).css("display","");
+    $("#jplayer_button_"+getCookie("show_problem")).trigger("onclick");
 }
 
 function save_score(p_q_id,score){
@@ -197,4 +200,28 @@ function save_score(p_q_id,score){
             $($(".green")[0]).trigger("onclick");
         }
     }
+}
+
+
+function get_flowplayer(selector,audio_src){
+    $("#jplayer_location_"+selector).append($("#flowplayer_loader"));
+    $f("flowplayer", "/assets/flowplayer/flowplayer-3.2.7.swf", {
+        plugins: {
+            controls: {
+                fullscreen: false,
+                height: 30,
+                autoHide: false
+            }
+        },
+        clip: {
+            autoPlay: false,
+            onBeforeBegin: function() {
+                this.close();
+            }
+        },
+        onLoad: function() {
+            this.setVolume(90);
+            this.setClip(audio_src);
+        }
+    });
 }

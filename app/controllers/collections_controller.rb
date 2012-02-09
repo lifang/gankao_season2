@@ -15,7 +15,10 @@ class CollectionsController < ApplicationController
         @title = "#{@category.name}真题收藏"
         @meta_keywords = "自动收藏做错的#{@category.name}真题"
         @meta_description = "自动收藏做错的#{@category.name}真题"
-        @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+        @collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
+        @collection_js="#{user.collection.collection_url}"
+        f = File.open(@collection_url)
+        @problems = (JSON (f.read)[13..-1])
       else
         redirect_to "/collections/error"
       end
@@ -39,14 +42,14 @@ class CollectionsController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        data={:words=>load_words=={}?[] :load_words}
+        data={:words=>load_words=={} ? [] :load_words}
         render :json=>data
       }
     end
   end
 
   def write_file
-    url="#{Rails.root}/app/assets/javascripts/collections/1.js"
+    url="#{Rails.root}/public#{params[:file_path]}"
     doc="collections = "+(JSON params[:collecton]).to_json
     write_xml(url,doc)
     render :text=>""
