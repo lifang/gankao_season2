@@ -9,7 +9,7 @@ class StudyPlan < ActiveRecord::Base
     task_num={}
     month_action={}
     user_plan=UserPlanRelation.find_by_user_id(user_id)
-    message="未完成任务，离勋章只差一个坚持"
+    message="您还未完成今天的学习任务，离勋章只差一步坚持哦！"
     over=false
     practice_type=PlanTask::TASK_TYPES[:PRACTICE]
     recite_type=PlanTask::TASK_TYPES[:RECITE]
