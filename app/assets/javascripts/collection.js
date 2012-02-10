@@ -468,7 +468,6 @@ function get_array(value){
 
 //核对小题
 function check_question(question_index,problem_question_index,answer,problem_index,drag_answer_index,question_type){
-    alert(question_index);
     answer=unescape(answer);
     var user_answer;
     if(drag_answer_index!=''){
@@ -493,20 +492,24 @@ function check_question(question_index,problem_question_index,answer,problem_ind
             collections.problems.problem[i].questions.question=get_array(collection_problem[i].questions.question);
         }
         var one_problem=get_array(collections.problems.problem)[tag_problems[tag_types][problem_index]];
-        one_problem.questions.question[question_index].user_answer.push(user_answer);
-        collections.problems.problem[problems.indexOf(tag_problems[tag_types][problem_index])].questions.question[question_index].user_answer=one_problem.questions.question[question_index].user_answer;
-        var new_collection=collections;
-        $.ajax({
-            async:true,
-            type: "POST",
-            url: "/collections/write_file.json",
-            dataType: "json",
-            data : {
-                file_path :$("#file_path").val(),
-                collecton :JSON.stringify(new_collection)
-                
-            }
-        });
+        var question_id=one_problem.questions.question[question_index].id;
+        if (user_answer!=null&&user_answer!=""){
+            $.ajax({
+                async:true,
+                type: "POST",
+                url: "/collections/write_file.json",
+                dataType: "json",
+                data : {
+                    problem_id :one_problem.id,
+                    question_id :question_id,
+                    user_answer : user_answer
+                },
+                success : function(data) {
+                 tishi_alert(data.info);
+                }
+            });
+        }
+       
     }
     if(question_type=='0'){
         $("#pro_qu_div_"+ question_index+" .pro_btn a").css("display","");
