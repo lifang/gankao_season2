@@ -30,7 +30,7 @@
             <% if audio_title[1] != nil %>
               <% audio_title[1]="<input type='button' style='display:none' class='video_button' id='jplayer_button_#{pro_index}' value='更新音频' onclick=javascript:get_flowplayer('#{pro_index}','"+ audio_title[1]+"'); />" %>
             <% end %>
-            <% if (!problem.elements["question_type"].nil?) and problem.elements["question_type"].text.to_i==Problem::QUESTION_TYPE[:INNER] %>
+            <% if (!problem.attributes["question_type"].nil?) and problem.attributes["question_type"].to_i==Problem::QUESTION_TYPE[:INNER] %>
               <%  problem.elements["title"].text=audio_title.join("") %>
               <%= render :partial=>"/exam_raters/inner_question",:object=>problem %>
             <% else %>
