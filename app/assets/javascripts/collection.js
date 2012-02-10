@@ -63,13 +63,16 @@ $(document).ready(function(){
                     },
                     success : function(data) {
                         word_in_problem=data.words;
+                        if (problem_init>(tag_problems[tag_types].length-1)){
+                            problem_init=tag_problems[tag_types].length-1;
+                            setCookie("collection_problem_init",tag_problems[tag_types].length-1);
+                        }
                         load_problem_collection(problem_init,tag_types);
                     }
                 });
             }
             tag_problems["全部收藏"]=problems;
             $("#global_problem_sum").html(problems.length);
-            $("#jplayer_play").trigger("onclick");
             var frag = document.createDocumentFragment();
             for(var i=0;i<tag_list.length;i++){
                 var option=create_element("option", null, "options", null, null, "innerHTML");
@@ -129,82 +132,80 @@ function load_problem_collection(problem_index,tag){
     $("#global_problem_sum").html(problems_tags.length);
     $("#global_problem_index").html(problem_index+1);
     var audio_title = total_problem[problems_tags[problem_index]].title==null ? [] : total_problem[problems_tags[problem_index]].title.split("((mp3))");
-    audio_title[1]= audio_title[1] == null? "": "<input type='button'   id='jplayer_play' style='display:none'  onclick=javascript:flowplayer_mp3('"+ audio_title[1]+"'); />";
+    audio_title[1]= audio_title[1] == null? "": "<input type='button'   id='jplayer_play' style='display:none'  onclick=\"javascript:flowplayer_mp3('"+ audio_title[1]+"')\" />";
     var title=audio_title.join("");
     $("#draggable_list").html("");
     if(question_type=='1'){
         $("#drag_tk_box").css("display","");
         var title_arr = title==null ? [] : title.split("((sign))");
         var result_title = [] ;
-        result_title.push(title_arr[0]);
-        for(var sign_index=0;sign_index<questions.length;sign_index++){
-            var q_answer = questions[sign_index].answer==undefined ? "" : questions[sign_index].answer;
-            var flag= questions[sign_index].c_flag;
-            var u_answer =  questions[sign_index].user_answer[0];
-            var correct_type=questions[sign_index].correct_type;
-            var element_str="<span class='span_tk'";
-            if(flag==null&&parseInt(flag)!=1){
-                element_str += "style='display:none' >"
-            }else{
-                element_str += ">"
-            }
-            if (correct_type=="0"){
-                element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}'"
-                if(u_answer!=null&&u_answer==q_answer){
-                    element_str += "style='background-color: rgb(219, 234, 213);'";
-                }else{
-                    element_str += "style='background-color: rgb(254, 230, 230);'";
-                }
-                element_str += ">";
-                var question_attrs=questions[sign_index].questionattrs.split(";-;");
-                for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
-                    element_str += "<option ";
-                    if(u_answer!=null&&question_attrs[attr_index]==u_answer){
-                        element_str += "selected";
-
-                    }
-                    element_str += ">"+question_attrs[attr_index]+"</option>";
-                }
-                element_str +="</select>"
-            }
-            
-            if(correct_type=="1"){
-                var answers=u_answer==null?[]:u_answer.split(")");
-                var answer=answers[1]==null? " ":answers[1]
-                element_str += "<div class='dragDrop_box'"
-                if(u_answer!=null&&u_answer==q_answer){
-                    element_str += "style='background-color: rgb(219, 234, 213);'";
-                }else{
-
-                    element_str += "style='background-color: rgb(254, 230, 230);'";
-                }
-                element_str += ">"+ answer +"</div>";
-                var attrs =questions[sign_index].questionattrs.split(";-;");
-                var new_attrs = "";
-                for(var i=0;i<attrs.length;i++){
-                    new_attrs += "<li name='"+escape(attrs[i])+"'>"+attrs[i]+"</li>"
-                }
-                $("#draggable_list").html($("#draggable_list").html()+new_attrs);
-            }
-            if(correct_type=="3"){
-                var single_answer= u_answer==null? " ":u_answer
-                element_str = "<input class='input_tk' type='text' value='"+single_answer +"' disabled "
-                if(u_answer!=null&&u_answer==q_answer){
-                    element_str += "style='background-color: rgb(219, 234, 213);";
-                }else{
-
-                    element_str += "style='background-color: rgb(254, 230, 230);";
-                }
+        for(var sign_index=0;sign_index<title_arr.length;sign_index++){
+            result_title.push(title_arr[sign_index]);
+            if(questions[sign_index]!=undefined){
+                var q_answer = questions[sign_index].answer==undefined ? "" : questions[sign_index].answer;
+                var flag= questions[sign_index].c_flag;
+                var u_answer =  questions[sign_index].user_answer[0];
+                var correct_type=questions[sign_index].correct_type;
+                var element_str="<span class='span_tk'";
                 if(flag==null&&parseInt(flag)!=1){
-                    element_str += "display:none;'"
+                    element_str += "style='display:none' >"
                 }else{
-                    element_str += "'"
+                    element_str += ">"
                 }
-                element_str += "/>";
+                if (correct_type=="0"){
+                    element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}'"
+                    if(u_answer!=null&&u_answer==q_answer){
+                        element_str += "style='background-color: rgb(219, 234, 213);'";
+                    }else{
+                        element_str += "style='background-color: rgb(254, 230, 230);'";
+                    }
+                    element_str += ">";
+                    var question_attrs=questions[sign_index].questionattrs.split(";-;");
+                    for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
+                        element_str += "<option ";
+                        if(u_answer!=null&&question_attrs[attr_index]==u_answer){
+                            element_str += "selected";
+
+                        }
+                        element_str += ">"+question_attrs[attr_index]+"</option>";
+                    }
+                    element_str +="</select>"
+                } else if(correct_type=="1"){
+                    var answers=u_answer==null?[]:u_answer.split(")");
+                    var answer=answers[1]==null? " ":answers[1]
+                    element_str += "<div class='dragDrop_box'"
+                    if(u_answer!=null&&u_answer==q_answer){
+                        element_str += "style='background-color: rgb(219, 234, 213);'";
+                    }else{
+
+                        element_str += "style='background-color: rgb(254, 230, 230);'";
+                    }
+                    element_str += ">"+ answer +"</div>";
+                    var attrs =questions[sign_index].questionattrs.split(";-;");
+                    var new_attrs = "";
+                    for(var i=0;i<attrs.length;i++){
+                        new_attrs += "<li name='"+escape(attrs[i])+"'>"+attrs[i]+"</li>"
+                    }
+                    $("#draggable_list").html($("#draggable_list").html()+new_attrs);
+                } else if(correct_type=="3"){
+                    var single_answer= u_answer==null? " ":u_answer
+                    element_str = "<input class='input_tk' type='text' value='"+single_answer +"' disabled "
+                    if(u_answer!=null&&u_answer==q_answer){
+                        element_str += "style='background-color: rgb(219, 234, 213);";
+                    }else{
+
+                        element_str += "style='background-color: rgb(254, 230, 230);";
+                    }
+                    if(flag==null&&parseInt(flag)!=1){
+                        element_str += "display:none;'"
+                    }else{
+                        element_str += "'"
+                    }
+                    element_str += "/>";
+                }
+                element_str += "</span>";
+                result_title.push(element_str);
             }
-            element_str += "</span>";
-            result_title.push(element_str);
-            result_title.push(title_arr[sign_index+1]);
         }
         title=result_title.join("");
         $("#drag_tk_box").css("height",$("#drag_tk").height());
@@ -212,6 +213,7 @@ function load_problem_collection(problem_index,tag){
         $("#drag_tk_box").css("display","none");
     }
     $("#global_problem_title").html(title);
+    $("#jplayer_play").trigger("onclick");
     load_questions_collection(questions,problem_index,tag,question_type);
 }
 

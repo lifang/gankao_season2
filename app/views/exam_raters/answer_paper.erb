@@ -38,8 +38,8 @@
             <% end %>
           </div>
         </div>
-        <div class="drag_tk_box" id="drag_tk_box">
-          <div class="drag_tk border_radius" id="drag_tk">
+        <div class="drag_tk_box" id="<%= problem.attributes["id"] %>">
+          <div class="drag_tk border_radius" id="drag_tk_<%= problem.attributes["id"] %>">
             <ul id="draggable_list_<%= problem.attributes["id"] %>"></ul>
           </div>
         </div>
@@ -88,6 +88,9 @@
 <script type="text/javascript">
   $("#single_problem_"+getCookie("show_problem")).css("display","");
   $(function(){
+    $(".drag_tk_box").each(function(){
+      $("#"+this.id).css("height",$("#drag_tk_"+this.id).height()+20);
+    })
     $("#jplayer_button_"+getCookie("show_problem")).trigger("onclick");
   })
 </script>

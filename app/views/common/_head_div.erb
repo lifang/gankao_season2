@@ -3,20 +3,15 @@
   <div class="head_info">
     <% if cookies[:user_id] %>
       <% order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]}  and status=#{Order::STATUS[:NOMAL]}") %>
-      <div class="h_user"><a href="#" class="h_email email_u">邮件</a><a href="/users/<%= cookies[:user_id] %>"><%= if order.nil?
+      <div class="h_user"><a href="#" class="h_email email_u">邮件</a><a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= if order.nil?
             cookies[:user_name]
           else
-            time=((order.end_time-Time.now.to_datetime)/1.day).to_i
-            if time<=0
-              "#{cookies[:user_name]}"
-            else
-              "#{cookies[:user_name]}(试用剩#{((order.end_time-Time.now.to_datetime)/1.day).to_i}天)"
-            end
+            "#{cookies[:user_name]}(试用剩#{((order.end_time-Time.now.to_datetime)/1.day).to_i}天)"
           end %></a>|<a href="/users/delete_user">退出</a>
         <div class="email_tab" style="display: none; ">
           <ul>
-            <li><a href="/users/<%= cookies[:user_id] %>/info?target=0">收件箱:<span class="orange"><%=Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SINGLE]} and target_id=#{cookies[:user_id]}")  %></span></a></li>
-            <li><a href="/users/<%= cookies[:user_id] %>/info?target=1">通&nbsp;&nbsp;知:<span class="orange"><%= Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SYSTEM]} and TO_DAYS(ended_at)>TO_DAYS('#{Time.now}')") %></span></a></li>
+            <li><a href="/users/<%= cookies[:user_id] %>/info?target=0&category=<%= category_id %>">收件箱:<span class="orange"><%=Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SINGLE]} and target_id=#{cookies[:user_id]}")  %></span></a></li>
+            <li><a href="/users/<%= cookies[:user_id] %>/info?target=1&category=<%= category_id %>">通&nbsp;&nbsp;知:<span class="orange"><%= Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SYSTEM]} and TO_DAYS(ended_at)>TO_DAYS('#{Time.now}')") %></span></a></li>
           </ul>
         </div>
 
