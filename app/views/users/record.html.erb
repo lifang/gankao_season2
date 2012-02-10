@@ -1,8 +1,9 @@
-<% order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]} 
-  and category_id=#{Constant::EXAM_TYPES[:forth_level]} and status=#{Order::STATUS[:NOMAL]}") %>
+<% category_id = params[:category].nil? ? 2 : params[:category]
+order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]} 
+  and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
 <% unless order.nil? %>
   <div class="tishi_vip">你还有 <span class="red"><%= ((order.end_time-Time.now.to_datetime)/1.day).to_i %></span> 天试用的时间
-    <a href="/users/<%= cookies[:user_id] %>/record?vip=1" onclick="javascript:$('.tishi_vip').css('display','none')">升级为高级用户</a>
+    <a href="/users/<%= cookies[:user_id] %>/record?vip=1&category=<%= category_id %>" onclick="javascript:$('.tishi_vip').css('display','none')">升级为高级用户</a>
     <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('.tishi_vip').css('display','none')" /></span></div>
 <% end %>
 <div class="tab_ul">
