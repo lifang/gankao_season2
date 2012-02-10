@@ -304,4 +304,45 @@ class Collection < ActiveRecord::Base
     return que
   end
 
+
+  #错误核对，记录错误答案
+  def self.record_user_answer(user_id,problem_id,question_id,user_answer,message)
+    collection = Collection.find_or_create_by_user_id(user_id)
+    path =  "/collections/" + Time.now.to_date.to_s
+    collection_url = path + "/#{collection.id}.js"
+    collection.set_collection_url(path, collection_url)
+    file =  File.open("#{Rails.root}/public#{collection.collection_url}")
+    last_problems = file.readlines.join
+    unless last_problems.nil? or last_problems.strip == ""
+      collections = JSON(last_problems.gsub("collections = ", ""))#ActiveSupport::JSON.decode(().to_json)
+    end
+    file.close
+    problems=collections["problems"]["problem"]
+    if problems.class.to_s != "Array"
+      problems=[problems]
+    end
+    problems.each do |problem|
+      if problem["id"].to_i==problem_id
+        questions=problem["questions"]["question"]
+        if questions.class.to_s != "Array"
+          questions=[questions]
+        end
+        questions.each do |question|
+          if question["id"].to_i==question_id
+            message="已记录错误答案"
+            if question["user_answer"].class.to_s == "Array"
+              question["user_answer"] << user_answer
+            else
+              question["user_answer"]=[user_answer]
+            end
+          end
+        end
+      end
+    end
+    collection_js="collections = " + collections.to_json.to_s
+    path_url = collection.collection_url.split("/")
+    collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
+    return message
+  end
+
 end
