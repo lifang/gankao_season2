@@ -143,23 +143,11 @@ function load_problem_collection(problem_index,tag){
             result_title.push(title_arr[sign_index]);
             if(questions[sign_index]!=undefined){
                 var q_answer = questions[sign_index].answer==undefined ? "" : questions[sign_index].answer;
-                var flag= questions[sign_index].c_flag;
                 var u_answer =  questions[sign_index].user_answer[0];
                 var correct_type=questions[sign_index].correct_type;
-                var element_str="<span class='span_tk'";
-                if(flag==null&&parseInt(flag)!=1){
-                    element_str += "style='display:none' >"
-                }else{
-                    element_str += ">"
-                }
+                var element_str="<span class='span_tk'>";
                 if (correct_type=="0"){
-                    element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}'"
-                    if(u_answer!=null&&u_answer==q_answer){
-                        element_str += "style='background-color: rgb(219, 234, 213);'";
-                    }else{
-                        element_str += "style='background-color: rgb(254, 230, 230);'";
-                    }
-                    element_str += ">";
+                    element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}'>"
                     var question_attrs=questions[sign_index].questionattrs.split(";-;");
                     for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
                         element_str += "<option ";
@@ -173,14 +161,7 @@ function load_problem_collection(problem_index,tag){
                 } else if(correct_type=="1"){
                     var answers=u_answer==null?[]:u_answer.split(")");
                     var answer=answers[1]==null? " ":answers[1]
-                    element_str += "<div class='dragDrop_box'"
-                    if(u_answer!=null&&u_answer==q_answer){
-                        element_str += "style='background-color: rgb(219, 234, 213);'";
-                    }else{
-
-                        element_str += "style='background-color: rgb(254, 230, 230);'";
-                    }
-                    element_str += ">"+ answer +"</div>";
+                    element_str += "<div class='dragDrop_box'>"+ answer +"</div>";
                     var attrs =questions[sign_index].questionattrs.split(";-;");
                     var new_attrs = "";
                     for(var i=0;i<attrs.length;i++){
@@ -189,19 +170,7 @@ function load_problem_collection(problem_index,tag){
                     $("#draggable_list").html($("#draggable_list").html()+new_attrs);
                 } else if(correct_type=="3"){
                     var single_answer= u_answer==null? " ":u_answer
-                    element_str = "<input class='input_tk' type='text' value='"+single_answer +"' disabled "
-                    if(u_answer!=null&&u_answer==q_answer){
-                        element_str += "style='background-color: rgb(219, 234, 213);";
-                    }else{
-
-                        element_str += "style='background-color: rgb(254, 230, 230);";
-                    }
-                    if(flag==null&&parseInt(flag)!=1){
-                        element_str += "display:none;'"
-                    }else{
-                        element_str += "'"
-                    }
-                    element_str += "/>";
+                    element_str = "<input class='input_tk' type='text' value='"+single_answer +"' disabled /> "
                 }
                 element_str += "</span>";
                 result_title.push(element_str);
@@ -308,14 +277,6 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             }else{
                 xg_word.innerHTML="<center>没有相关词汇</center>"
             }
-            //预载用户的答案
-            if(u_answer!=null&&u_answer==q_answer){
-                $(pro_qu_t).css("background","#d2fddd");
-                $(pro_qu_t).closest(".pro_question_list").css("background","#d2fddd");
-            }else{
-                $(pro_qu_t).css("background","#ffd2d2");
-                $(pro_qu_t).closest(".pro_question_list").css("background","#ffd2d2");
-            }
             //绑定显示，隐藏事件
             $(pro_qu_t).bind("click",function(){
                 var pro_qu_div = $(this).parent().find(".pro_qu_div");
@@ -332,8 +293,6 @@ function load_questions_collection(questions,problem_index,tag,question_type){
                     $(this).parent().parent().removeClass("p_q_line");
                     $(this).parent().removeClass("p_q_line");
                     $(this).removeClass("pro_qu_h");
-                    $(this).css("background","");
-                    $(this).closest(".pro_question_list").css("background","");
                     last_open_question=$(this);
                 }
             })
