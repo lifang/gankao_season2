@@ -201,16 +201,17 @@ class Collection < ActiveRecord::Base
 
 
   #自动阅卷保存错题
-  def self.auto_add_collection(answer, problem,question,already_hash)
+  def self.auto_add_collection(answer, problem,question,already_hash,block)
     problems=already_hash["problems"]["problem"]
     if problems.class.to_s == "Hash"
       problems=[problems]
     end
+    problem=add_problem_mp3(block,problem)
     collection_problem =problem_in_collection(problem,problems,answer,question)
     if collection_problem[0]
       already_hash["problems"]["problem"]=collection_problem[1]
     else
-      if !problem.elements["question_type"].nil? and problem.elements["question_type"].text.to_i==Problem::QUESTION_TYPE[:INNER]
+      if !problem.attributes["question_type"].nil? and problem.attributes["question_type"].to_i==Problem::QUESTION_TYPE[:INNER]
         if problem.elements["questions/question[@id=#{question.attributes["id"]}]"].elements["c_flag"].nil?
           problem.elements["questions/question[@id=#{question.attributes["id"]}]"].add_element("c_flag").add_text("1")
         end
@@ -230,6 +231,22 @@ class Collection < ActiveRecord::Base
    
   end
 
+  #为大题添加MP3
+  def self.add_problem_mp3(block,problem)
+    description=block.elements["base_info/description"]
+    if !description.nil? and !description.text.nil? and !description.text.index("((mp3))").nil?
+      if problem.elements["title"].nil?
+        problem.add_element["title"].add_text("((mp3))#{description.text.split("((mp3))")[1]}((mp3))")
+      else
+        if problem.elements["title"].text.nil?
+          problem.elements["title"].text="((mp3))#{description.text.split("((mp3))")[1]}((mp3))"
+        elsif problem.elements["title"].text.index("((mp3))").nil?
+          problem.elements["title"].text=problem.elements["title"].text+"((mp3))#{description.text.split("((mp3))")[1]}((mp3))"
+        end
+      end
+    end
+    return problem
+  end
   #当前题目是否已经收藏到错题集
   def self.problem_in_collection(single_problem, collections,answer,question_one)
     has_none=false
@@ -241,8 +258,7 @@ class Collection < ActiveRecord::Base
           questions=[questions]
         end
         question_none=true
-        question_one.add_element("c_flag").add_text("1") if !single_problem.elements["question_type"] and
-          single_problem.elements["question_type"].text.to_i==Problem::QUESTION_TYPE[:INNER] and question_one.elements["c_flag"].nil?
+        question_one.add_element("c_flag").add_text("1") if !single_problem.attributes["question_type"].nil? and single_problem.attributes["question_type"].to_i==Problem::QUESTION_TYPE[:INNER] and question_one.elements["c_flag"].nil?
         questions.each do |question|
           if question_one.attributes["id"]==question["id"]
             question_none=false

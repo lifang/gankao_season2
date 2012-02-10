@@ -30,7 +30,7 @@
             <% if audio_title[1] != nil %>
               <% audio_title[1]="<input type='button' style='display:none' class='video_button' id='jplayer_button_#{pro_index}' value='更新音频' onclick=javascript:get_flowplayer('#{pro_index}','"+ audio_title[1]+"'); />" %>
             <% end %>
-            <% if (!problem.elements["question_type"].nil?) and problem.elements["question_type"].text.to_i==Problem::QUESTION_TYPE[:INNER] %>
+            <% if (!problem.attributes["question_type"].nil?) and problem.attributes["question_type"].to_i==Problem::QUESTION_TYPE[:INNER] %>
               <%  problem.elements["title"].text=audio_title.join("") %>
               <%= render :partial=>"/exam_raters/inner_question",:object=>problem %>
             <% else %>
@@ -38,8 +38,8 @@
             <% end %>
           </div>
         </div>
-        <div class="drag_tk_box" id="drag_tk_box">
-          <div class="drag_tk border_radius" id="drag_tk">
+        <div class="drag_tk_box" id="<%= problem.attributes["id"] %>">
+          <div class="drag_tk border_radius" id="drag_tk_<%= problem.attributes["id"] %>">
             <ul id="draggable_list_<%= problem.attributes["id"] %>"></ul>
           </div>
         </div>
@@ -88,6 +88,9 @@
 <script type="text/javascript">
   $("#single_problem_"+getCookie("show_problem")).css("display","");
   $(function(){
+    $(".drag_tk_box").each(function(){
+      $("#"+this.id).css("height",$("#drag_tk_"+this.id).height()+20);
+    })
     $("#jplayer_button_"+getCookie("show_problem")).trigger("onclick");
   })
 </script>

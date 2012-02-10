@@ -21,6 +21,7 @@ class ExamRater < ActiveRecord::Base
   def self.answer_questions(xml,doc)
     xml.elements["blocks"].each_element do  |block|
       block.elements["problems"].each_element do |problem|
+        inner=true
         problem.elements["questions"].each_element do |question|
           element=doc.elements["paper/questions/question[@id=#{question.attributes["id"]}]"]
           if question.attributes["correct_type"].to_i ==Question::CORRECT_TYPE[:CHARACTER] or
@@ -28,9 +29,10 @@ class ExamRater < ActiveRecord::Base
                 question.attributes["flag"].to_i != 1)
             answer = (element.nil? or element.elements["answer"].nil? or
                 element.elements["answer"].text.nil?) ? "": element.elements["answer"].text
+            inner=false
             question.add_attribute("user_answer","#{answer}")
           else
-            if !problem.elements["question_type"].nil? and problem.elements["question_type"].text.to_i==Problem::QUESTION_TYPE[:INNER]
+            if !problem.attributes["question_type"].nil? and problem.attributes["question_type"].to_i==Problem::QUESTION_TYPE[:INNER]
               question.add_attribute("inner","1")
             else
               problem.delete_element(question.xpath)
@@ -38,7 +40,7 @@ class ExamRater < ActiveRecord::Base
           end
         end unless problem.elements["questions"].nil?
         block.delete_element(problem.xpath) if problem.elements["questions"].nil? or
-          problem.elements["questions"].elements.size <= 0
+          problem.elements["questions"].elements.size <= 0 or inner
       end unless block.elements["problems"].nil?
       if block.elements["problems"].nil? or block.elements["problems"].elements.size<=0
         xml.delete_element(block.xpath)
@@ -89,7 +91,7 @@ class ExamRater < ActiveRecord::Base
             : result_question.elements["answer"].text
             if question.attributes["score"].to_f!=single_score
               problem.add_attribute("paper_id",doc.elements[1].attributes["id"])
-              already_hash=Collection.auto_add_collection(answer, problem,question,already_hash)
+              already_hash=Collection.auto_add_collection(answer, problem,question,already_hash,block)
             else
               problem.delete_element(question.xpath)
             end
