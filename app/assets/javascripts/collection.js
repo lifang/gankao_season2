@@ -503,9 +503,6 @@ function check_question(question_index,problem_question_index,answer,problem_ind
                     problem_id :one_problem.id,
                     question_id :question_id,
                     user_answer : user_answer
-                },
-                success : function(data) {
-                 tishi_alert(data.info);
                 }
             });
         }

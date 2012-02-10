@@ -46,12 +46,10 @@ class CollectionsController < ApplicationController
   end
 
   def write_file
-    message="找不到试题，请联系管理员"
-    message=Collection.record_user_answer(cookies[:user_id],params[:problem_id].to_i,params[:question_id].to_i,params[:user_answer],message)
+    Collection.record_user_answer(cookies[:user_id],params[:problem_id].to_i,params[:question_id].to_i,params[:user_answer])
     respond_to do |format|
       format.json {
-        data={:info=>message}
-        render :json=>data
+        render :json=>"成功"
       }
     end
   end
