@@ -306,7 +306,7 @@ class Collection < ActiveRecord::Base
 
 
   #错误核对，记录错误答案
-  def self.record_user_answer(user_id,problem_id,question_id,user_answer,message)
+  def self.record_user_answer(user_id,problem_id,question_id,user_answer)
     collection = Collection.find_or_create_by_user_id(user_id)
     path =  "/collections/" + Time.now.to_date.to_s
     collection_url = path + "/#{collection.id}.js"
@@ -329,7 +329,6 @@ class Collection < ActiveRecord::Base
         end
         questions.each do |question|
           if question["id"].to_i==question_id
-            message="已记录错误答案"
             if question["user_answer"].class.to_s == "Array"
               question["user_answer"] << user_answer
             else
@@ -342,7 +341,6 @@ class Collection < ActiveRecord::Base
     collection_js="collections = " + collections.to_json.to_s
     path_url = collection.collection_url.split("/")
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
-    return message
   end
 
 end
