@@ -15,7 +15,7 @@ class CollectionsController < ApplicationController
         @title = "#{@category.name}真题收藏"
         @meta_keywords = "自动收藏做错的#{@category.name}真题"
         @meta_description = "自动收藏做错的#{@category.name}真题"
-        @collection_js_url = "#{Constant::SERVER_PATH}#{user.collection.collection_url}"
+        @collection_js="#{user.collection.collection_url}"
       else
         redirect_to "/collections/error"
       end
@@ -39,17 +39,19 @@ class CollectionsController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        data={:words=>load_words=={}?[] :load_words}
+        data={:words=>load_words=={} ? [] :load_words}
         render :json=>data
       }
     end
   end
 
   def write_file
-    url="#{Rails.root}/app/assets/javascripts/collections/1.js"
-    doc="collections = "+(JSON params[:collecton]).to_json
-    write_xml(url,doc)
-    render :text=>""
+    Collection.record_user_answer(cookies[:user_id],params[:problem_id].to_i,params[:question_id].to_i,params[:user_answer])
+    respond_to do |format|
+      format.json {
+        render :json=>"成功"
+      }
+    end
   end
 
   def add_collection
@@ -70,9 +72,9 @@ class CollectionsController < ApplicationController
       params[:problem_id].to_i, params[:question_id].to_i,
       params[:question_answer], params[:question_analysis], params[:user_answer])
     if is_problem_in == false
-      new_col_problem = collection.update_problem_hash(params[:problem_json], params[:paper_id], 
+      new_col_problem = collection.update_problem_hash(params[:problem_json], params[:paper_id],
         params[:question_answer], params[:question_analysis], params[:user_answer], params[:question_id].to_i)
-      already_hash["problems"]["problem"] << new_col_problem      
+      already_hash["problems"]["problem"] << new_col_problem
     end
     collection_js = "collections = " + already_hash.to_json.to_s
     path_url = collection.collection_url.split("/")
@@ -116,7 +118,7 @@ class CollectionsController < ApplicationController
       end
     end
     
-    Collection.update_collection(cookies[:user_id].to_i, this_problem, 
+    Collection.update_collection(cookies[:user_id].to_i, this_problem,
       params[:problem_id], this_question, params[:question_id],
       params[:paper_id], params[:question_answer], params[:question_analysis], params[:user_answer])
     exam_user = ExamUser.find(params[:exam_user_id])
@@ -185,6 +187,20 @@ class CollectionsController < ApplicationController
     f.close
     object={:group_index=>params[:group_index].to_i,:group_sum=>params[:group_sum].to_i,:problems=>@problems,:problems_sum=>@problems_sum,:init_problem=>params[:init_problem].to_i}
     render :partial=>"/collections/problems",:object=>object
+  end
+
+
+  def get_collections
+    user = User.find(cookies[:user_id])
+    @collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
+    f = File.open(@collection_url)
+    @problems = (JSON (f.read)[13..-1])
+    f.close
+    respond_to do |format|
+      format.json {
+        render :json => {:message =>@problems}
+      }
+    end
   end
 
 

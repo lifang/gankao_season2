@@ -2,65 +2,103 @@ var word_in_problem={};
 var types=[ "n.",  "v.",  "pron.",  "adj.",  "adv.","num.",  "art.","prep.","conj.", "interj.", "u = ",  "c = ",  "pl = "];
 var question_types=["单选题","多选题","判断题","填空题","","简答题"];
 var close_question=null;
+var collections;
 //预载页面信息
-$(function(){
-    problem=get_array(collections.problems.problem);
-    for(var i=0;i<problem.length;i++){
-        var questions=get_array(problem[i].questions.question);
-        problem[i].questions.question=questions;
-        for(var n=0;n<questions.length;n++){
-            var answer_array=[]
-            if(problem[i].questions.question[n].user_answer==null){
-                problem[i].questions.question[n].user_answer=[];
-            }else{
-                "string"==(typeof problem[i].questions.question[n].user_answer)?answer_array.push(problem[i].questions.question[n].user_answer):answer_array=problem[i].questions.question[n].user_answer
-            }
-            problem[i].questions.question[n].user_answer=answer_array;
-            if(questions[n].tags!=null){
-                var tags= questions[n].tags.split(",");
-                for(var k=0;k<tags.length;k++){
-                    if(tag_problems[tags[k]]==null){
-                        tag_problems[tags[k]]=[problem[i]]
+$(document).ready(function(){
+    $.ajax({
+        async:true,
+        type: "POST",
+        url: "/collections/get_collections.json",
+        dataType: "json",
+        success : function(data) {
+            collections=data.message;
+            var problem=get_array(collections.problems.problem);
+            var word_list=[];
+            for(var i=0;i<problem.length;i++){
+                var questions=get_array(problem[i].questions.question);
+                problem[i].questions.question=questions;
+                for(var n=0;n<questions.length;n++){
+                    var answer_array=[]
+                    if(problem[i].questions.question[n].user_answer==null){
+                        problem[i].questions.question[n].user_answer=[];
                     }else{
-                        if(tag_problems[tags[k]].indexOf(problem[i])==-1){
-                            tag_problems[tags[k]].push(problem[i])
+                        "string"==(typeof problem[i].questions.question[n].user_answer)?answer_array.push(problem[i].questions.question[n].user_answer):answer_array=problem[i].questions.question[n].user_answer
+                    }
+                    problem[i].questions.question[n].user_answer=answer_array;
+                    if(questions[n].words!=null){
+                        var words= questions[n].words.split(";");
+                        for(var m=0;m<words.length;m++){
+                            if(word_list.indexOf(words[m])==-1){
+                                word_list.push(""+words[m]);
+                            }
                         }
                     }
-                    if(tag_list.indexOf(tags[k])==-1){
-                        tag_list.push(tags[k]);
+                    if(questions[n].tags!=null){
+                        var tags= questions[n].tags.split(",");
+                        for(var k=0;k<tags.length;k++){
+                            if(tag_problems[tags[k]]==null){
+                                tag_problems[tags[k]]=[i]
+                            }else{
+                                if(tag_problems[tags[k]].indexOf(i)==-1){
+                                    tag_problems[tags[k]].push(i)
+                                }
+                            }
+                            if(tag_list.indexOf(tags[k])==-1){
+                                tag_list.push(tags[k]);
+                            }
+                        }
                     }
                 }
+                problems.push(i);
             }
+            if(word_list.length!=0){
+                //准备数据，为problems加载词汇
+                $.ajax({
+                    async:true,
+                    type: "POST",
+                    url: "/collections/load_words.json",
+                    dataType: "json",
+                    data : {
+                        words :word_list
+                    },
+                    success : function(data) {
+                        word_in_problem=data.words;
+                        if (problem_init>(tag_problems[tag_types].length-1)){
+                            problem_init=tag_problems[tag_types].length-1;
+                            setCookie("collection_problem_init",tag_problems[tag_types].length-1);
+                        }
+                        load_problem_collection(problem_init,tag_types);
+                    }
+                });
+            }
+            tag_problems["全部收藏"]=problems;
+            $("#global_problem_sum").html(problems.length);
+            var frag = document.createDocumentFragment();
+            for(var i=0;i<tag_list.length;i++){
+                var option=create_element("option", null, "options", null, null, "innerHTML");
+                option.innerHTML=""+tag_list[i];
+                frag.appendChild(option)
+            }
+            $("#scope")[0].appendChild(frag);
+            $("#scope").change(function () {
+                var str ="";
+                $("#scope option:selected").each(function () {//选取select中被选中的元素
+                    str +=$(this).text() ;
+                });
+                tag_types=str;
+                setCookie("collection_problem_init","0");
+                problem_init=0;
+                load_problem_collection(problem_init,tag_types);
+            })
+            $("#jplayer_one").jPlayer({
+                swfPath: "/javascripts/jplayer",
+                supplied: "mp3",
+                wmode: "window",
+                preload: "none"
+            });
         }
-        problems.push(problem[i]);
-    }
-    tag_problems["全部收藏"]=problems;
-    $("#global_problem_sum").html(problems.length);
-    load_problem_collection(problem_init,tag_types);
-    $("#jplayer_play").trigger("onclick");
-    var frag = document.createDocumentFragment();
-    for(var i=0;i<tag_list.length;i++){
-        var option=create_element("option", null, "options", null, null, "innerHTML");
-        option.innerHTML=""+tag_list[i];
-        frag.appendChild(option)   
-    }
-    $("#scope")[0].appendChild(frag);
-    $("#scope").change(function () {
-        var str ="";
-        $("#scope option:selected").each(function () {//选取select中被选中的元素
-            str +=$(this).text() ;
-        });
-        tag_types=str;
-        setCookie("collection_problem_init","0");
-        problem_init=0;
-        load_problem_collection(problem_init,tag_types);
-    })
-    $("#jplayer_one").jPlayer({
-        swfPath: "/javascripts/jplayer",
-        supplied: "mp3",
-        wmode: "window",
-        preload: "none"
     });
+   
 })
 
 function flowplayer_mp3(audio_src){
@@ -87,78 +125,56 @@ function flowplayer_mp3(audio_src){
 }
 
 function load_problem_collection(problem_index,tag){
-    var word_list=[];
+    var total_problem=get_array(collections.problems.problem);
     var problems_tags=tag_problems[tag];
-    var question_type=problems_tags[problem_index].question_type;
-    var questions=problems_tags[problem_index].questions.question;
+    var question_type=total_problem[problems_tags[problem_index]].question_type;
+    var questions=total_problem[problems_tags[problem_index]].questions.question;
     $("#global_problem_sum").html(problems_tags.length);
     $("#global_problem_index").html(problem_index+1);
-    var audio_title = problems_tags[problem_index].title==null ? [] : problems_tags[problem_index].title.split("((mp3))");
-    audio_title[1]= audio_title[1] == null? "": "<input type='button'   id='jplayer_play' value='ddddd'  onclick=javascript:flowplayer_mp3('"+ audio_title[1]+"'); />";
+    var audio_title = total_problem[problems_tags[problem_index]].title==null ? [] : total_problem[problems_tags[problem_index]].title.split("((mp3))");
+    audio_title[1]= audio_title[1] == null? "": "<input type='button'   id='jplayer_play' style='display:none'  onclick=\"javascript:flowplayer_mp3('"+ audio_title[1]+"')\" />";
     var title=audio_title.join("");
     $("#draggable_list").html("");
     if(question_type=='1'){
         $("#drag_tk_box").css("display","");
         var title_arr = title==null ? [] : title.split("((sign))");
         var result_title = [] ;
-        result_title.push(title_arr[0]);
-        for(var sign_index=0;sign_index<questions.length;sign_index++){
-            var q_answer = questions[sign_index].answer==undefined ? "" : questions[sign_index].answer;
-            var u_answer =  questions[sign_index].user_answer[0];
-            var correct_type=questions[sign_index].correct_type;
-            var element_str="<span class='span_tk'>";
-            if (correct_type=="0"){
-                element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}'"
-                if(u_answer!=null&&u_answer==q_answer){
-                    element_str += "style='background-color: rgb(219, 234, 213);'";
-                }else{
-                    element_str += "style='background-color: rgb(254, 230, 230);'";
-                }
-                element_str += ">";
-                var question_attrs=questions[sign_index].questionattrs.split(";-;");
-                for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
-                    element_str += "<option ";
-                    if(u_answer!=null&&question_attrs[attr_index]==u_answer){
-                        element_str += "selected";
+        for(var sign_index=0;sign_index<title_arr.length;sign_index++){
+            result_title.push(title_arr[sign_index]);
+            if(questions[sign_index]!=undefined){
+                var q_answer = questions[sign_index].answer==undefined ? "" : questions[sign_index].answer;
+                var u_answer =  questions[sign_index].user_answer[0];
+                var correct_type=questions[sign_index].correct_type;
+                var element_str="<span class='span_tk'>";
+                if (correct_type=="0"){
+                    element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}'>"
+                    var question_attrs=questions[sign_index].questionattrs.split(";-;");
+                    for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
+                        element_str += "<option ";
+                        if(u_answer!=null&&question_attrs[attr_index]==u_answer){
+                            element_str += "selected";
 
+                        }
+                        element_str += ">"+question_attrs[attr_index]+"</option>";
                     }
-                    element_str += ">"+question_attrs[attr_index]+"</option>";
+                    element_str +="</select>"
+                } else if(correct_type=="1"){
+                    var answers=u_answer==null?[]:u_answer.split(")");
+                    var answer=answers[1]==null? " ":answers[1]
+                    element_str += "<div class='dragDrop_box'>"+ answer +"</div>";
+                    var attrs =questions[sign_index].questionattrs.split(";-;");
+                    var new_attrs = "";
+                    for(var i=0;i<attrs.length;i++){
+                        new_attrs += "<li name='"+escape(attrs[i])+"'>"+attrs[i]+"</li>"
+                    }
+                    $("#draggable_list").html($("#draggable_list").html()+new_attrs);
+                } else if(correct_type=="3"){
+                    var single_answer= u_answer==null? " ":u_answer
+                    element_str = "<input class='input_tk' type='text' value='"+single_answer +"' disabled /> "
                 }
-                element_str +="</select>"
+                element_str += "</span>";
+                result_title.push(element_str);
             }
-            
-            if(correct_type=="1"){
-                var answers=u_answer==null?[]:u_answer.split(")");
-                var answer=answers[1]==null? " ":answers[1]
-                element_str += "<div class='dragDrop_box'"
-                if(u_answer!=null&&u_answer==q_answer){
-                    element_str += "style='background-color: rgb(219, 234, 213);'";
-                }else{
-
-                    element_str += "style='background-color: rgb(254, 230, 230);'";
-                }
-                element_str += ">"+ answer +"</div>";
-                var attrs =questions[sign_index].questionattrs.split(";-;");
-                var new_attrs = "";
-                for(var i=0;i<attrs.length;i++){
-                    new_attrs += "<li name='"+escape(attrs[i])+"'>"+attrs[i]+"</li>"
-                }
-                $("#draggable_list").html($("#draggable_list").html()+new_attrs);
-            }
-            if(correct_type=="3"){
-                var single_answer= u_answer==null? " ":u_answer
-                element_str = "<input class='input_tk' type='text' value='"+single_answer +"' disabled "
-                if(u_answer!=null&&u_answer==q_answer){
-                    element_str += "style='background-color: rgb(219, 234, 213);'";
-                }else{
-
-                    element_str += "style='background-color: rgb(254, 230, 230);'";
-                }
-                element_str += "/>";
-            }
-            element_str += "</span>";
-            result_title.push(element_str);
-            result_title.push(title_arr[sign_index+1]);
         }
         title=result_title.join("");
         $("#drag_tk_box").css("height",$("#drag_tk").height());
@@ -166,36 +182,8 @@ function load_problem_collection(problem_index,tag){
         $("#drag_tk_box").css("display","none");
     }
     $("#global_problem_title").html(title);
-    for(var n=0;n<questions.length;n++){
-        if(questions[n].words!=undefined){
-            var words= questions[n].words.split(";");
-            for(var m=0;m<words.length;m++){
-                if(word_list.indexOf(words[m])==-1){
-                    word_list.push(""+words[m]);
-                }
-            }
-        }
-    }
-    if(word_list.length!=0){
-        //准备数据，为problems加载词汇
-        $.ajax({
-            async:true,
-            type: "POST",
-            url: "/collections/load_words.json",
-            dataType: "json",
-            data : {
-                words :word_list
-            },
-            success : function(data) {
-                word_in_problem=data.words;
-                //组合questions数组
-                load_questions_collection(questions,problem_index,tag,question_type);
-            }
-        });
-    }else{
-        //组合questions数组
-        load_questions_collection(questions,problem_index,tag,question_type);
-    }
+    $("#jplayer_play").trigger("onclick");
+    load_questions_collection(questions,problem_index,tag,question_type);
 }
 
 
@@ -205,6 +193,7 @@ function load_problem_collection(problem_index,tag){
 function load_questions_collection(questions,problem_index,tag,question_type){
     $("#questions_resource").empty();
     for(var q_index=0;q_index<questions.length;q_index++){
+        var flag= questions[q_index].c_flag;
         var tags= questions[q_index].tags==undefined?[]:questions[q_index].tags.split(",");
         if(tag=="全部收藏"||question_type=='1'||tags.indexOf(tag)!=-1){
             var q_description = questions[q_index].description ;
@@ -213,6 +202,9 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             var q_analysis = questions[q_index].analysis==null? "":questions[q_index].analysis;
             var u_answer =  questions[q_index].user_answer[0];
             var pro_question_list = $("#questions_resource")[0].appendChild(create_element("div", null, "pro_question_list_"+problem_index+"_"+q_index, "pro_question_list border_rb  p_q_line", null, "innerHTML"));
+            if(question_type=='1'&&flag==null&&parseInt(flag)!=1){
+                $(pro_question_list).css("display","none");
+            }
             var pql_left = pro_question_list.appendChild(create_element("div", null, null, "pql_left", null, "innerHTML"));
             pql_left.innerHTML=""+(q_index+1)+".";
             var pql_right = pro_question_list.appendChild(create_element("div", null, null, "pql_right", null, "innerHTML"));
@@ -235,7 +227,7 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             pro_qu_div.style.display="none";
             //pro_qu_ul 小题答案div
             var pro_qu_ul = pro_qu_div.appendChild(create_element("div", null, "pro_qu_ul_"+q_index, "pro_qu_ul", null, "innerHTML"));
-            collection_correct_type(q_correct_type,pro_qu_ul,problem_index,q_index,question_type);
+            collection_correct_type(q_correct_type,pro_qu_ul,problem_index,q_index,question_type,questions[q_index]);
             var pro_btn = pro_qu_div.appendChild(create_element("div", null, "pro_btn_"+q_index, "pro_btn", null, "innerHTML"));
             pro_btn.innerHTML +="<button class='t_btn hedui_t_btn' style='display:none'id='check' onclick=\"javascript:check_question("+q_index+",'"+problem_index+"_"+q_index+"','"+escape(q_answer) +"',"+problem_index+",'','"+question_type +"')\">核对</button>"
             pro_btn.innerHTML += "<a href='#' class='upErrorTo_btn' onclick=javascript:$('#question_id').val("+questions[q_index].id +");show_div('.upErrorTo_tab');>报告错误</a>";
@@ -251,19 +243,19 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             xx_word.innerHTML="<img onclick=javascript:$('.word_"+problem_index+"_"+q_index+"').css('display','none'); src='/assets/x.gif' />";
             var xg_word=jiexi_word.appendChild(create_element("div", null, null, "xg_words", null, "innerHTML"));
             var words= questions[q_index].words==null ?[]:questions[q_index].words.split(";");
-            if(word_in_problem.length!=0&&words.length!=0){
-                var word_ul=xg_word.appendChild(create_element("ul", null, null, null, null, "innerHTML"));
-                var valid_words=[];
-                for(var k=0;k<words.length;k++){
-                    jiexi_word.appendChild(create_element("input", null, "li_value_"+ q_index+"_"+k, "", "hidden",words[k]))
-                    if(word_in_problem[words[k]]!=null){
-                        valid_words.push(words[k]);
-                        var word_li=create_element("li", null, null, null, null, "innerHTML");
-                        var li_a="<a href='#' onclick=javascript:show_words("+q_index+","+k+")>"+words[k] +"</a>";
-                        word_li.innerHTML=li_a;
-                        word_ul.appendChild(word_li);
-                    }
+            var word_ul=xg_word.appendChild(create_element("ul", null, null, null, null, "innerHTML"));
+            var valid_words=[];
+            for(var k=0;k<words.length;k++){
+                jiexi_word.appendChild(create_element("input", null, "li_value_"+ q_index+"_"+k, "", "hidden",words[k]))
+                if(word_in_problem[words[k]]!=null){
+                    valid_words.push(words[k]);
+                    var word_li=create_element("li", null, null, null, null, "innerHTML");
+                    var li_a="<a href='#' onclick=javascript:show_words("+q_index+","+k+")>"+words[k] +"</a>";
+                    word_li.innerHTML=li_a;
+                    word_ul.appendChild(word_li);
                 }
+            }
+            if(valid_words[0]!=null){
                 var single_word=word_in_problem[valid_words[0]];
                 jiexi_word.appendChild(create_element("input", null, "enunciate_url_"+q_index, "", "hidden",single_word[0].enunciate_url ))
                 var xg_word_ny=jiexi_word.appendChild(create_element("div", null, null, "xg_words_ny", null, "innerHTML"));
@@ -285,14 +277,6 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             }else{
                 xg_word.innerHTML="<center>没有相关词汇</center>"
             }
-            //预载用户的答案
-            if(u_answer!=null&&u_answer==q_answer){
-                $(pro_qu_t).css("background","#d2fddd");
-                $(pro_qu_t).closest(".pro_question_list").css("background","#d2fddd");
-            }else{
-                $(pro_qu_t).css("background","#ffd2d2");
-                $(pro_qu_t).closest(".pro_question_list").css("background","#ffd2d2");
-            }
             //绑定显示，隐藏事件
             $(pro_qu_t).bind("click",function(){
                 var pro_qu_div = $(this).parent().find(".pro_qu_div");
@@ -309,8 +293,6 @@ function load_questions_collection(questions,problem_index,tag,question_type){
                     $(this).parent().parent().removeClass("p_q_line");
                     $(this).parent().removeClass("p_q_line");
                     $(this).removeClass("pro_qu_h");
-                    $(this).css("background","");
-                    $(this).closest(".pro_question_list").css("background","");
                     last_open_question=$(this);
                 }
             })
@@ -355,9 +337,8 @@ function jplayer_play_title(src){
 
 
 //根据小题的类型，区别操作
-function collection_correct_type(correct_type,ele,problem_index,question_index,question_type){
+function collection_correct_type(correct_type,ele,problem_index,question_index,question_type,question_detail){
     //显示单选题
-    var question_detail = problems[problem_index].questions.question[question_index];
     var q_answer = question_detail.answer==undefined ? null : question_detail.answer;
     var q_analysis =question_detail.analysis==undefined ? null : question_detail.analysis;
     var u_answer = question_detail.user_answer==undefined ? null : question_detail.user_answer[0];
@@ -510,20 +491,22 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         for(var i=0;i<collection_problem.length;i++){
             collections.problems.problem[i].questions.question=get_array(collection_problem[i].questions.question);
         }
-        var one_problem=tag_problems[tag_types][problem_index];
-        one_problem.questions.question[question_index].user_answer.push(user_answer);
-        collections.problems.problem[problems.indexOf(tag_problems[tag_types][problem_index])].questions.question[question_index].user_answer=one_problem.questions.question[question_index].user_answer;
-        var new_collection=collections;
-        $.ajax({
-            async:true,
-            type: "POST",
-            url: "/collections/write_file.json",
-            dataType: "json",
-            data : {
-                collecton :JSON.stringify(new_collection)
-                
-            }
-        });
+        var one_problem=get_array(collections.problems.problem)[tag_problems[tag_types][problem_index]];
+        var question_id=one_problem.questions.question[question_index].id;
+        if (user_answer!=null&&user_answer!=""){
+            $.ajax({
+                async:true,
+                type: "POST",
+                url: "/collections/write_file.json",
+                dataType: "json",
+                data : {
+                    problem_id :one_problem.id,
+                    question_id :question_id,
+                    user_answer : user_answer
+                }
+            });
+        }
+       
     }
     if(question_type=='0'){
         $("#pro_qu_div_"+ question_index+" .pro_btn a").css("display","");
@@ -543,6 +526,7 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         if(close_question!=null){
             close_question.children().find(".pro_qu_t").trigger("click");
         }
+        $("#pro_question_list_"+problem_question_index).css("display","");
         $("#pro_question_list_"+problem_question_index).removeClass("p_q_line");
         //        $("#pro_question_list_"+problem_question_index+" .pql_right").removeClass("p_q_line");
         $("#pro_question_list_"+problem_question_index).removeClass("pro_qu_h");
@@ -616,8 +600,9 @@ function show_div(id){
 
 function test_again(){
     var problems_tags=tag_problems[tag_types];
-    var question_type=problems_tags[problem_init].question_type;
-    var questions=problems_tags[problem_init].questions.question;
+    var problem=get_array(collections.problems.problem)[problems_tags[problem_init]]
+    var question_type=problem.question_type;
+    var questions=problem.questions.question;
     if(question_type=='0'){
         for(var q_index=0;q_index<questions.length;q_index++){
             var correct_type=questions[q_index].correct_type;
@@ -638,8 +623,8 @@ function test_again(){
     }else{
         $(".pro_question_list").css('display','none');
         $("#draggable_list").html("");
-        var audio_title = problems_tags[problem_init].title==null ? [] : problems_tags[problem_init].title.split("((mp3))");
-        audio_title[1]= audio_title[1] == null? "": "<input type='button' value='播放' onclick=javascript:jplayer_play_title('"+ audio_title[1]+"'); />";
+        var audio_title =problem.title==null ? [] : problem.title.split("((mp3))");
+        audio_title[1]= audio_title[1] == null? "": "<input type='button'   id='jplayer_play' style='display:none'  onclick=javascript:flowplayer_mp3('"+ audio_title[1]+"'); />";
         var title=audio_title.join("");
         var title_arr = title==null ? [] : title.split("((sign))");
         var result_title = [] ;
@@ -651,7 +636,7 @@ function test_again(){
             var element_str="<span class='span_tk'>";
             if (inner_correct_type=="0"){
                 $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                element_str += "<select class='select_tk' id='select_tk_"+sign_index +"' onfocus=javascript:$('#check_"+sign_index +"').css('display',''); onblur=javascript:$('#check_"+sign_index +"').css('display','none'); onchange=javascript:inner_value("+inner_correct_type+","+sign_index +");>";
+                element_str += "<select class='select_tk' id='select_tk_"+sign_index +"' onfocus=javascript:$('#check_"+sign_index +"').css('display','');  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +");>";
                 element_str += "<option></option>"
                 var question_attrs=questions[sign_index].questionattrs.split(";-;");
                 for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
@@ -797,7 +782,7 @@ function do_answer(e,single_answer,question,correct_type){
 
 function for_error(){
     var question_id=$("#question_id").val();
-    var paper_id=tag_problems[tag_types][problem_init].paper_id;
+    var paper_id=get_array(collections.problems.problem)[tag_problems[tag_types][problem_init]].paper_id;
     var error_type=$("#upErrorTo_tab :radio:checked").val();
     if(paper_id==null){
         tishi_alert("试题有问题");

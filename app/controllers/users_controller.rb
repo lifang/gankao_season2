@@ -71,7 +71,7 @@ class UsersController < ApplicationController
       if code.is_used
         data="邀请码已被使用"
       else
-        code.update_attributes(:use_time=>Time.now,:is_used=>InviteCode::IS_USED[:YES])
+        code.update_attributes(:use_time=>Time.now,:user_id=>cookies[:user_id])
         order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{Constant::EXAM_TYPES[:forth_level]}")
         if order.nil? || order.types==Order::TYPES[:COMPETE] || order.types==Order::TYPES[:TRIAL_SEVEN]
           Order.create(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:ACCREDIT],
@@ -96,7 +96,7 @@ class UsersController < ApplicationController
 
 
   def check_vip
-    order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{Constant::EXAM_TYPES[:forth_level]}")
+    order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{params[:category]}")
     end_time=""
     if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
       data=true
@@ -110,7 +110,7 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        render :json=>{:message=>data,:time=>end_time}
+        render :json=>{:message=>data,:time=>end_time,:category=>params[:category]}
       }
     end
   end
@@ -118,7 +118,7 @@ class UsersController < ApplicationController
   def alipay_exercise
     options ={
       :service=>"create_direct_pay_by_user",
-      :notify_url=>"http://localhost:3001/competes/alipay_compete",
+      :notify_url=>"http://localhost:3001/competes/alipay_compete?category=>#{params[:category]}",
       :subject=>"会员升级vip",
       :payment_type=>Constant::VIP_TYPE[:good],
       :total_fee=>Constant::SIMULATION_FEE
@@ -161,13 +161,13 @@ class UsersController < ApplicationController
           @@m.synchronize {
             begin
               Order.transaction do
-                order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{Constant::EXAM_TYPES[:forth_level]}")
+                order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{params[:category]}")
                 if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
-                  Order.create(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:CHARGE],
+                  Order.create(:user_id=>cookies[:user_id],:category_id=>params[:category],:types=>Order::TYPES[:CHARGE],
                     :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
                 else
                   unless order.status
-                    Order.update_attributes(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:CHARGE],
+                    Order.update_attributes(:user_id=>cookies[:user_id],:category_id=>params[:category],:types=>Order::TYPES[:CHARGE],
                       :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
                   end
                 end

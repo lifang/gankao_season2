@@ -1,8 +1,9 @@
-<% order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]} 
-  and category_id=#{Constant::EXAM_TYPES[:forth_level]} and status=#{Order::STATUS[:NOMAL]}") %>
+<% category_id = params[:category].nil? ? 2 : params[:category]
+order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]} 
+  and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
 <% unless order.nil? %>
   <div class="tishi_vip">你还有 <span class="red"><%= ((order.end_time-Time.now.to_datetime)/1.day).to_i %></span> 天试用的时间
-    <a href="/users/<%= cookies[:user_id] %>/record?vip=1" onclick="javascript:$('.tishi_vip').css('display','none')">升级为高级用户</a>
+    <a href="/users/<%= cookies[:user_id] %>/record?vip=1&category=<%= category_id %>" onclick="javascript:$('.tishi_vip').css('display','none')">升级为高级用户</a>
     <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('.tishi_vip').css('display','none')" /></span></div>
 <% end %>
 <div class="tab_ul">
@@ -17,9 +18,16 @@
   <script type="text/javascript">
     get_record();
   </script>
+  <input type="hidden" value="<%=category_id  %>" id="category"/>
   <div style="display:none;">
     <div class="vip_box sq_code"><div class="sq_con">授权码 <input id="invit_code" type="text" /><button class="t_btn" onclick="accredit()">确定</button></div></div>
-    <div class="vip_box vip_zfb"><div class="zfb_con"><img src="/assets/users/zfb_pic.png" /><button class="t_btn" onclick="check_vip()">确定</button></div></div>
+    <div class="vip_box vip_zfb"><div class="zfb_con"><img src="/assets/users/zfb_pic.png" /><select name="" id="vip_style">
+          <option></option>
+           <option value="<%=Category::TYPE_IDS[:english_fourth_level]  %>">英语四级</option>
+          <option value="<%=Category::TYPE_IDS[:english_sixth_level]  %>">英语六级</option>
+         
+        </select>
+        <button class="t_btn" onclick="check_vip()">确定</button></div></div>
   </div>
 </div>
 <%  if  params[:vip].to_i==1  %>
@@ -30,7 +38,7 @@
   </script>
 <% end %>
 <div class="mess_tab border_radius" style="display:none">
-<span class="xx_x"><img src="/assets/users/xx.png" onclick="javascript:$('.mess_tab').css('display','none')" /></span>
+  <span class="xx_x"><img src="/assets/users/xx.png" onclick="javascript:$('.mess_tab').css('display','none')" /></span>
   <div class="mess_tab_con">
     <p class="mess_padding_left">日期：<span id="date"></span></p>
     <p class="mess_padding_left">订单号：<span id="out_no"></span></p>

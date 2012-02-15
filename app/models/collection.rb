@@ -201,19 +201,26 @@ class Collection < ActiveRecord::Base
 
 
   #自动阅卷保存错题
-  def self.auto_add_collection(answer, problem,question,already_hash)
+  def self.auto_add_collection(answer, problem,question,already_hash,block)
     problems=already_hash["problems"]["problem"]
     if problems.class.to_s == "Hash"
       problems=[problems]
     end
-    question.add_element("c_flag").add_text("1") if problem.elements["question_type"].to_i==1 and question.elements["c_flag"].nil?
-    collection_problem =problem_in_collection(problem.attributes["id"],problems,answer,question)
+    problem=add_problem_mp3(block,problem)
+    collection_problem =problem_in_collection(problem,problems,answer,question)
     if collection_problem[0]
       already_hash["problems"]["problem"]=collection_problem[1]
     else
-      problem.delete_element problem.elements["questions"]
-      single_question =update_question(answer,question)
-      problem.add_element("questions").add_element(single_question)
+      if !problem.attributes["question_type"].nil? and problem.attributes["question_type"].to_i==Problem::QUESTION_TYPE[:INNER]
+        if problem.elements["questions/question[@id=#{question.attributes["id"]}]"].elements["c_flag"].nil?
+          problem.elements["questions/question[@id=#{question.attributes["id"]}]"].add_element("c_flag").add_text("1")
+        end
+        single_question =update_question(answer,question)
+      else
+        problem.delete_element problem.elements["questions"]
+        single_question =update_question(answer,question)
+        problem.add_element("questions").add_element(single_question)
+      end
       if already_hash["problems"]["problem"].class.to_s == "Hash"
         already_hash["problems"]["problem"]=[already_hash["problems"]["problem"],Hash.from_xml(problem.to_s)["problem"]]
       else
@@ -224,17 +231,34 @@ class Collection < ActiveRecord::Base
    
   end
 
+  #为大题添加MP3
+  def self.add_problem_mp3(block,problem)
+    description=block.elements["base_info/description"]
+    if !description.nil? and !description.text.nil? and !description.text.index("((mp3))").nil?
+      if problem.elements["title"].nil?
+        problem.add_element["title"].add_text("((mp3))#{description.text.split("((mp3))")[1]}((mp3))")
+      else
+        if problem.elements["title"].text.nil?
+          problem.elements["title"].text="((mp3))#{description.text.split("((mp3))")[1]}((mp3))"
+        elsif problem.elements["title"].text.index("((mp3))").nil?
+          problem.elements["title"].text=problem.elements["title"].text+"((mp3))#{description.text.split("((mp3))")[1]}((mp3))"
+        end
+      end
+    end
+    return problem
+  end
   #当前题目是否已经收藏到错题集
-  def self.problem_in_collection(problem_id, collections,answer,question_one)
+  def self.problem_in_collection(single_problem, collections,answer,question_one)
     has_none=false
     collections.each do |problem|
-      if  problem["id"]==problem_id
+      if  problem["id"]==single_problem.attributes["id"]
         has_none=true
         questions=problem["questions"]["question"]
         if questions.class.to_s == "Hash"
           questions=[questions]
         end
         question_none=true
+        question_one.add_element("c_flag").add_text("1") if !single_problem.attributes["question_type"].nil? and single_problem.attributes["question_type"].to_i==Problem::QUESTION_TYPE[:INNER] and question_one.elements["c_flag"].nil?
         questions.each do |question|
           if question_one.attributes["id"]==question["id"]
             question_none=false
@@ -278,6 +302,45 @@ class Collection < ActiveRecord::Base
     end
 
     return que
+  end
+
+
+  #错误核对，记录错误答案
+  def self.record_user_answer(user_id,problem_id,question_id,user_answer)
+    collection = Collection.find_or_create_by_user_id(user_id)
+    path =  "/collections/" + Time.now.to_date.to_s
+    collection_url = path + "/#{collection.id}.js"
+    collection.set_collection_url(path, collection_url)
+    file =  File.open("#{Rails.root}/public#{collection.collection_url}")
+    last_problems = file.readlines.join
+    unless last_problems.nil? or last_problems.strip == ""
+      collections = JSON(last_problems.gsub("collections = ", ""))#ActiveSupport::JSON.decode(().to_json)
+    end
+    file.close
+    problems=collections["problems"]["problem"]
+    if problems.class.to_s != "Array"
+      problems=[problems]
+    end
+    problems.each do |problem|
+      if problem["id"].to_i==problem_id
+        questions=problem["questions"]["question"]
+        if questions.class.to_s != "Array"
+          questions=[questions]
+        end
+        questions.each do |question|
+          if question["id"].to_i==question_id
+            if question["user_answer"].class.to_s == "Array"
+              question["user_answer"] << user_answer
+            else
+              question["user_answer"]=[user_answer]
+            end
+          end
+        end
+      end
+    end
+    collection_js="collections = " + collections.to_json.to_s
+    path_url = collection.collection_url.split("/")
+    collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
   end
 
 end

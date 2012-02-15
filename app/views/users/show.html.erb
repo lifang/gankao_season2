@@ -13,7 +13,7 @@
 <div class="rcf_box rcf_box_bottom">
   <label>会员：</label>
   <div class="setting-item-vip">
-    <% if @order.nil?||@order.types==Order::TYPES[:CHARGE] %>
+    <% if @order.nil?||@order.types==Order::TYPES[:TRIAL_SEVEN]||@order.types==Order::TYPES[:COMPETE] %>
       &nbsp;&nbsp;普通会员&nbsp;&nbsp;&nbsp;&nbsp;
       <a href="/users/<%= cookies[:user_id] %>/record?vip=1">开通VIP</a>
     <% else %>

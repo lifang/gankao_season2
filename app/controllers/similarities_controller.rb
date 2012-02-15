@@ -43,7 +43,7 @@ class SimilaritiesController < ApplicationController
       end
       if papers_arr.length>0
         @paper = papers_arr.sample
-        @exam_user = ExamUser.find_by_sql("select * from exam_users where user_id = #{cookies[:user_id]} and examination_id = #{params[:id]} and paper_id = #{@paper.id}")[0]
+        @exam_user = ExamUser.find_by_sql("select * from exam_users where paper_id = #{@paper.id} and examination_id = #{params[:id]} and user_id = #{cookies[:user_id]}")[0]
         if @exam_user.nil?
           @exam_user = ExamUser.create(:user_id=>cookies[:user_id],:examination_id=>params[:id],:paper_id=>@paper.id)
         end
