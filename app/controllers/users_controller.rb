@@ -118,7 +118,7 @@ class UsersController < ApplicationController
   def alipay_exercise
     options ={
       :service=>"create_direct_pay_by_user",
-      :notify_url=>"http://localhost:3001/competes/alipay_compete?category=>#{params[:category]}",
+      :notify_url=>Constant::SERVER_PATH+"/competes/alipay_compete?category=>#{params[:category]}",
       :subject=>"会员升级vip",
       :payment_type=>Constant::VIP_TYPE[:good],
       :total_fee=>Constant::SIMULATION_FEE
