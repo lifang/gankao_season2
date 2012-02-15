@@ -63,7 +63,7 @@ class ExamUsersController < ApplicationController
           sentences << sentence.description
         end
         sentences = sentences.join(";")
-        data[word_index]={:name=>@word.name,:category_id=>@word.category_id,:en_mean=>@word.en_mean,:ch_mean=>@word.ch_mean,:types=>Word::TYPES[@word.types],:phonetic=>@word.phonetic,:enunciate_url=>@word.enunciate_url,:sentences=>sentences}
+        data[word_index]={:id=>@word.id,:name=>@word.name,:category_id=>@word.category_id,:en_mean=>@word.en_mean,:ch_mean=>@word.ch_mean,:types=>Word::TYPES[@word.types],:phonetic=>@word.phonetic,:enunciate_url=>@word.enunciate_url,:sentences=>sentences}
         word_index += 1
       end
     end
@@ -214,6 +214,32 @@ class ExamUsersController < ApplicationController
           problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] if problem["questions"]
         end
       end
+    end
+  end
+
+  #单词加入背诵列表
+  def ajax_add_word
+    word_id = params[:word_id]
+    @message=""
+    if Word.find(word_id).level && Word.find(word_id).level<=Word::WORD_LEVEL[:SECOND]
+      @message="该单词为必备单词，无须添加"
+    else
+      relation = UserWordRelation.find_by_sql("select id from user_word_relations where user_id=#{cookies[:user_id]} and word_id=#{word_id}")[0]
+      if relation
+        @message="该单词已经添加到背诵列表中"
+      else
+        relation = UserWordRelation.new(:user_id=>cookies[:user_id],:word_id=>word_id.to_i,:status=>UserWordRelation::STATUS[:NOMAL])
+        if relation.save
+          @message="单词添加成功"
+        else
+          @message="单词添加失败"
+        end
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:message=>@message}
+      }
     end
   end
 
