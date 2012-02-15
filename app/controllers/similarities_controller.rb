@@ -58,4 +58,19 @@ class SimilaritiesController < ApplicationController
     end
   end
 
+  #重做卷子
+  def redo
+    url=params[:sheet_url]
+    doc = get_doc(url)
+    collection = ""
+    collection = doc.root.elements["collection"].text if doc.root.elements["collection"]
+    f=File.new(url,"w+")
+    f.write("#{sheet_outline(collection).force_encoding('UTF-8')}")
+    f.close
+    ExamUser.find(params[:id]).update_attribute("is_submited",false)
+    redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}&type=#{params[:type]}"
+  end
+
+
+
 end

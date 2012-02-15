@@ -40,7 +40,6 @@
 </script>
 
 <!-- 初始化播放器  -->
-<%#= render :partial=>"/common/jquery_jplayer" %>
 <%= render :partial=>"/common/flowplayer" %>
 <% constant_question_type = {"0"=>"单选题","1"=>"多选题","2"=>"判断题","3"=>"填空题","5"=>"简答题"} %>
 <div class="m_top">
@@ -48,6 +47,7 @@
   <div class="icon_func">
     <div class="float_right">
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
+      <span class="problem_title"><font id="global_problem_index"><%= @sheet.attributes["init"].to_i+1 %></font>/<font id="global_problem_sum"></font></span>
       <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
       <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1);" name="缩小">缩小</a></span>
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
@@ -65,10 +65,10 @@
         <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem.to_json %>" />
         <div class="m_side m_problem_bg">
           <div class="problem_box">
-            <div class="problem_title">
-              第<%= problem_index+1 %>题/共<span class="global_problem_sum"></span>题
-            </div>
             <div id='jplayer_location_<%= problem_index %>'></div>
+            <div class="question_explain">
+              <p><em><%= "#{problem["description"]}" %></em></p>
+            </div>
             <div class="problem_text">
               <!-- 题面后大题  初始化音频 -->
               <% audio_title_arr = problem["title"].nil? ? [] : problem["title"].split("((mp3))"); audio_src = audio_title_arr[1]; %>
@@ -94,6 +94,7 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1; %>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line">
                 <div class="pql_left">
+                  <div id="color_flag<%= "_#{problem_index}_#{question_index}" %>" class="un_white">未做</div>
                   <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){normal_add_collect(<%= "'#{problem_index}','#{question_index}'" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
@@ -182,10 +183,10 @@
         <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem.to_json %>" />
         <div class="m_side m_problem_bg">
           <div class="problem_box">
-            <div class="problem_title">
-              第<%= problem_index+1 %>题/共<span class="global_problem_sum"></span>题
-            </div>
             <div id='jplayer_location_<%= problem_index %>'></div>
+            <div class="question_explain">
+              <p><em><%= "#{problem["description"]}" %></em></p>
+            </div>
             <div class="problem_text">
               <script type="text/javascript">all_attrs = [];</script>
               <!-- 题面内大题  初始化小题 -->
@@ -268,6 +269,7 @@
             <% question_index=-1; questions.each do |question| ; question_index+=1;%>
               <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line" style='display:none;'>
                 <div class="pql_left">
+                  <div id="color_flag<%= "_#{problem_index}_#{question_index}" %>" class="un_white">未做</div>
                   <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){special_add_collect(<%= "'#{problem_index}','#{question_index}','#{problem["id"]}','#{question["id"]}'" %>)});">收藏</a></span>
                 </div>
                 <div class="pql_right">
@@ -307,7 +309,7 @@
 <% end %>
 <script type="text/javascript">
   // 更新总题数
-  $(".global_problem_sum").html("<%= problem_index+1 %>");
+  $("#global_problem_sum").html("<%= problem_index+1 %>");
 </script>
 
 <!-- 相关词汇框 -->
@@ -323,7 +325,9 @@
           <span class="font_size_24" id='about_word_name'></span>
           <span id='about_word_types'></span><span id='about_word_phonetic'></span>
           <input type="hidden" id="about_word_enunciate_url" />
-          <a href="javascript:void(0);" onclick="javascript:play_word_enunciate($('#about_word_enunciate_url').val());"><img alt="gankao" src="/assets/icon_fy.png" /></a>
+          <input type="hidden" id="about_word_id" />
+          <a href="javascript:void(0);" title="发音" onclick="javascript:play_word_enunciate($('#about_word_enunciate_url').val());"><img alt="gankao" src="/assets/icon_fy.png" /></a>
+          <a href="javascript:void(0);" title="加入背诵单词" onclick="javascript:ajax_add_word($('#about_word_id').val());"><img src="/assets/join_bs.png" /></a>
         </div>
         <div class="ch_words_line">
           <p class="font_size_16" id='about_word_en_mean'></p>
@@ -353,7 +357,7 @@
     <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:WORD] %>"/>词汇错误</li>
   </ul>
   <h3>错误说明:</h3>
-  <textarea name="" id='report_error_description' cols="" rows=""></textarea>
+  <textarea name="" id='report_error_description' cols="" rows="5"></textarea>
   <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
 </div>
 

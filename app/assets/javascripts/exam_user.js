@@ -26,17 +26,18 @@ function click_next_problem(){
         tishi_alert("当前已是最后一题");
         return false;
     }else{
-        this_problem.hide();
-        next_problem.show();
         var problem_index = $(".problem_resource").index(next_problem);
+        $("#jplayer_play_button_"+problem_index).trigger("click");
         $("#report_error").hide();
         $f("flowplayer").stop();
         $f("audio-word").stop();
+        $("#global_problem_index").html(problem_index+1);
+        init_problem = ""+problem_index;
+        this_problem.hide();
+        next_problem.show();
         if($("#drag_tk_"+problem_index).height()){
             $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
         }
-        $("#jplayer_play_button_"+problem_index).trigger("click");
-        init_problem = ""+problem_index;
     }
 }
 
@@ -48,17 +49,18 @@ function click_prev_problem(){
         tishi_alert("当前已是第一题");
         return false;
     }else{
-        this_problem.hide();
-        prev_problem.show();
         var problem_index = $(".problem_resource").index(prev_problem);
+        $("#jplayer_play_button_"+problem_index).trigger("click");
         $("#report_error").hide();
         $f("flowplayer").stop();
         $f("audio-word").stop();
+        $("#global_problem_index").html(problem_index+1);
+        init_problem = ""+problem_index;
+        this_problem.hide();
+        prev_problem.show();
         if($("#drag_tk_"+problem_index).height()){
             $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
         }
-        $("#jplayer_play_button_"+problem_index).trigger("click");
-        init_problem = ""+problem_index;
     }
 }
 
@@ -89,18 +91,15 @@ $(function(){
 })
 
 //题面后小题列表改变颜色
-function change_color(value,ele){
+function change_color(value,problem_index,question_index){
     if(value=="1"){
-        $(ele).css("background","#EEFFEE");
-        $(ele).closest(".pro_question_list").css("background","#EEFFEE");
+        $("#color_flag_"+problem_index+"_"+question_index).attr("class","ture_green");
     }else{
         if(value=="0"){
-            $(ele).css("background","#FFEAEA");
-            $(ele).closest(".pro_question_list").css("background","#FFEAEA");
+            $("#color_flag_"+problem_index+"_"+question_index).attr("class","false_red");
         }
         else{
-            $(ele).css("background","");
-            $(ele).closest(".pro_question_list").css("background","");
+            $("#color_flag_"+problem_index+"_"+question_index).attr("class","un_white");
         }
     }
 }
@@ -152,7 +151,7 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
         $("#pass_check_"+problem_index+"_"+question_index).val(1);
         $("#green_dui_"+problem_index+"_"+question_index).show();
         $("#red_cuo_"+problem_index+"_"+question_index).hide();
-        change_color("1",$("#pro_qu_t_"+problem_index+"_"+question_index));
+        change_color("1",problem_index,question_index);
         if(question_type=="1"){
             if(correct_type=="1"){
                 $("#droppable_"+problem_index+"_"+question_index).css("background","#EEFFEE");
@@ -164,7 +163,7 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
         $("#pass_check_"+problem_index+"_"+question_index).val(0);
         $("#green_dui_"+problem_index+"_"+question_index).hide();
         $("#red_cuo_"+problem_index+"_"+question_index).show();
-        change_color("0",$("#pro_qu_t_"+problem_index+"_"+question_index));
+        change_color("0",problem_index,question_index);
         if(question_type=="1"){
             if(correct_type=="1"){
                 $("#droppable_"+problem_index+"_"+question_index).css("background","#FFEAEA");
@@ -353,9 +352,9 @@ function refer_question(question_type,correct_type,attrs,problem_index,question_
     var user_answer = $("#exam_user_answer_"+problem_index+"_"+question_index).val();
     //直接改变小题的背景颜色
     if(user_answer==answer){
-        change_color("1",$("#pro_qu_t_"+problem_index+"_"+question_index)[0]);
+        change_color("1",problem_index,question_index);
     }else{
-        change_color("0",$("#pro_qu_t_"+problem_index+"_"+question_index)[0]);
+        change_color("0",problem_index,question_index);
     }
     if(question_type=="1"){
         $(".pro_question_list_"+problem_index+":eq("+question_index+")").show();
@@ -465,12 +464,13 @@ function ajax_load_about_words(words,problem_index,question_index){
                 if(data[i]!=null){
                     html_str +="<li>";
                     html_str +="<a class='single_word_li' href='javascript:void(0);' onclick='javascript:show_single_word(this,"+n+");'>"+data[n].name+"</a>";
+                    html_str +="<input type='hidden' id='about_word_id_"+n+"' value='"+data[n].id+"' />";
                     html_str +="<input type='hidden' id='about_word_name_"+n+"' value='"+data[n].name+"' />";
                     html_str +="<input type='hidden' id='about_word_category_id_"+n+"' value='"+data[n].category_id+"' />";
                     html_str +="<input type='hidden' id='about_word_en_mean_"+n+"' value='"+data[n].en_mean+"' />";
                     html_str +="<input type='hidden' id='about_word_ch_mean_"+n+"' value='"+data[n].ch_mean+"' />";
                     html_str +="<input type='hidden' id='about_word_types_"+n+"' value='"+data[n].types+"' />";
-                    html_str +="<input type='hidden' id='about_word_phonetic_"+n+"' value='"+data[n].phonetic+"' />";
+                    html_str +="<input type='hidden' id='about_word_phonetic_"+n+"' value=\""+data[n].phonetic+"\" />";
                     html_str +="<input type='hidden' id='about_word_enunciate_url_"+n+"' value='"+data[n].enunciate_url+"' />";
                     html_str +="<input type='hidden' id='about_word_sentences_"+n+"' value='"+data[n].sentences+"' />";
                     html_str +="</li>";
@@ -545,6 +545,7 @@ function show_single_word(ele,i){
     $("#about_word_types").html($("#about_word_types_"+i).val());
     $("#about_word_phonetic").html($("#about_word_phonetic_"+i).val());
     $("#about_word_enunciate_url").val($("#about_word_enunciate_url_"+i).val());
+    $("#about_word_id").val($("#about_word_id_"+i).val());
     var sentences = $("#about_word_sentences_"+i).val().split(";");
     var sentences_html = "";
     for(var i=0;i<sentences.length;i++){
@@ -592,7 +593,9 @@ function do_next_question(problem_index,question_index){
 }
 
 function clone_flowplayer(selector,audio_src){
+    $(selector).hide();
     $(selector).append($("#flowplayer_loader"));
+    $(selector).show();
     $f("flowplayer", "/assets/flowplayer/flowplayer-3.2.7.swf", {
         plugins: {
             controls: {
@@ -673,4 +676,19 @@ function special_add_collect(problem_index,question_index,problem_id,question_id
 function play_word_enunciate(url){
     //jplayer_play(url);
     play_audio(url);
+}
+
+//添加背诵单词
+function ajax_add_word(word_id){
+    $.ajax({
+        type: "POST",
+        url: "/exam_users/ajax_add_word.json",
+        dataType: "json",
+        data : {
+            "word_id" : word_id
+        },
+        success : function(data){
+            tishi_alert(data.message);
+        }
+    });
 }
