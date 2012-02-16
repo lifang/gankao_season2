@@ -54,6 +54,8 @@ $(document).ready(function(){
                     }
                     problems.push(i);
                 }
+                tag_problems[tag_types]=problems;
+                $("#global_problem_sum").html(problems.length);
                 if(word_list.length!=0){
                     //准备数据，为problems加载词汇
                     $.ajax({
@@ -73,9 +75,13 @@ $(document).ready(function(){
                             load_problem_collection(problem_init,tag_types);
                         }
                     });
+                }else{
+                    if (problem_init>(tag_problems[tag_types].length-1)){
+                        problem_init=tag_problems[tag_types].length-1;
+                        setCookie("collection_problem_init",tag_problems[tag_types].length-1);
+                    }
+                    load_problem_collection(problem_init,tag_types);
                 }
-                tag_problems["全部收藏"]=problems;
-                $("#global_problem_sum").html(problems.length);
                 var frag = document.createDocumentFragment();
                 for(var i=0;i<tag_list.length;i++){
                     var option=create_element("option", null, "options", null, null, "innerHTML");
@@ -814,8 +820,8 @@ function for_error(){
         data : {
             "post":{
                 "paper_id":paper_id,
-                "user_id":"1",//getCookies("user_id"),
-                "user_name":"qianjun",//getCookies("user_name"),
+                "user_id":getCookies("user_id"),
+                "user_name":getCookies("user_name"),
                 "description":$("#error_content").val(),
                 "error_type":error_type,
                 "question_id":question_id
