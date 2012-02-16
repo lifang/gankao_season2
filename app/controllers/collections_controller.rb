@@ -216,24 +216,21 @@ class CollectionsController < ApplicationController
     problems = (JSON (f.read)[13..-1])
     f.close
     collections=problems["problems"]["problem"].delete_at(params[:problem_id].to_i)
-    collection_info=CollectionInfo.first(:condtions=>"user_id=#{cookies[:user_id]} and paper_id=#{collections["paper_id"]}")
+    collection_info=CollectionInfo.first(:conditions=>"user_id=#{cookies[:user_id]} and paper_id=#{collections["paper_id"]}")
     unless collection_info.nil? or collection_info.question_ids.nil?
       ids=collection_info.question_ids.split(",")
       questions=collections["questions"]["question"]
-      if questions.class=="Hash"
+      if questions.class.to_s=="Hash"
         questions=[questions]
       end
-      question_ids=[]
       questions.each do |question|
-        question_ids << question["id"]
+        ids.delete(question["id"].to_s)
       end
-      puts question_ids
-      ids.delete(question_ids)
-      puts ids
+      collection_info.update_attributes(:question_ids=>ids.join(",")) unless ids.blank?
     end
-#    collection_js="collections = " + problems.to_json.to_s
-#    path_url = collection.collection_url.split("/")
-#    collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
+    collection_js="collections = " + problems.to_json.to_s
+    path_url = collection.collection_url.split("/")
+    collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
     respond_to do |format|
       format.json {
         render :json=>{:category=>params[:category_id]}
