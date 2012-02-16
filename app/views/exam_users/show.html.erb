@@ -6,7 +6,7 @@
 <%= javascript_include_tag "/assets/jquery.ui.draggable.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.droppable.js" %>
 <%= javascript_include_tag "#{@answer_js_url}" %>
-<%= javascript_include_tag "/assets/exam_user.js" %>
+<%= javascript_include_tag "/assets/exam_user/exam_user.js" %>
 <script type="text/javascript" >
   category = '<%= category_id %>';
   init_problem = '<%= @sheet.attributes["init"] %>';
@@ -28,7 +28,7 @@
     return result;
   }
 
-  //组合标准答案和用户答案
+  //组合标准答案
   var answers=[];
   var a = transform_array(answer.paper.problems.problem);
   for(var i=0;i<a.length;i++){

@@ -147,7 +147,7 @@ class ExamUsersController < ApplicationController
   end
 
   #重做卷子
-  def redo
+  def redo_paper
     url=params[:sheet_url]
     doc = get_doc(url)
     collection = ""
@@ -241,6 +241,22 @@ class ExamUsersController < ApplicationController
         render :json=>{:message=>@message}
       }
     end
+  end
+
+
+  #JS版本,show页面
+  def show_js
+    #答卷
+    eu = ExamUser.find(params[:id])
+    @paper_id = eu.paper_id
+    @paper = Paper.find(@paper_id)
+    @answer_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
+    s_url = ExamUser.find(params[:id]).answer_sheet_url
+    sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+    sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
+    @sheet_url = sheet_url
+    @sheet = get_doc("#{sheet_url}")
+    close_file("#{sheet_url}")
   end
 
   
