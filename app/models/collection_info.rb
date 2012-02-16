@@ -5,8 +5,8 @@ class CollectionInfo < ActiveRecord::Base
     if info.nil?
       CollectionInfo.create(:paper_id => paper_id, :user_id => user_id, :question_ids => question_ids.join(","))
     else
-      new_arr = info.question_ids.nil? ? question_ids : (question_ids - info.question_ids.split(","))
-      info.update_attributes(:question_ids => new_arr)
+      new_arr = info.question_ids.nil? ? question_ids : (question_ids | info.question_ids.split(","))
+      info.update_attributes(:question_ids => new_arr.join(","))
     end
   end
 end

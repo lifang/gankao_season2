@@ -82,19 +82,19 @@ class CollectionsController < ApplicationController
 
     CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id].to_i])
 
-    if params[:exam_user_id]
-      exam_user = ExamUser.find(params[:exam_user_id])
-      exam_user.update_user_collection(params[:question_id]) if exam_user
-    end
-    
-    if params[:sheet_url]
-      #在sheet中记录小题的收藏状态
-      doc = get_doc(params[:sheet_url])
-      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-      collection =doc.root.elements["collection"]
-      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-      write_xml(doc, params[:sheet_url])
-    end
+#    if params[:exam_user_id]
+#      exam_user = ExamUser.find(params[:exam_user_id])
+#      exam_user.update_user_collection(params[:question_id]) if exam_user
+#    end
+#
+#    if params[:sheet_url]
+#      #在sheet中记录小题的收藏状态
+#      doc = get_doc(params[:sheet_url])
+#      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+#      collection =doc.root.elements["collection"]
+#      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+#      write_xml(doc, params[:sheet_url])
+#    end
     
     respond_to do |format|
       format.json {
@@ -119,23 +119,22 @@ class CollectionsController < ApplicationController
         end unless new_col_questions.blank?
       end
     end
-    
     Collection.update_collection(cookies[:user_id].to_i, this_problem,
       params[:problem_id], this_question, params[:question_id],
       params[:paper_id], params[:question_answer], params[:question_analysis], params[:user_answer])
 
     CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id].to_i])
 
-    exam_user = ExamUser.find(params[:exam_user_id])
-    exam_user.update_user_collection(params[:question_id]) if exam_user
-
-    if params[:sheet_url]
-      doc = get_doc(params[:sheet_url])
-      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-      collection =doc.root.elements["collection"]
-      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-      write_xml(doc, params[:sheet_url])
-    end
+#    exam_user = ExamUser.find(params[:exam_user_id])
+#    exam_user.update_user_collection(params[:question_id]) if exam_user
+#
+#    if params[:sheet_url]
+#      doc = get_doc(params[:sheet_url])
+#      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+#      collection =doc.root.elements["collection"]
+#      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+#      write_xml(doc, params[:sheet_url])
+#    end
     
     respond_to do |format|
       format.json {

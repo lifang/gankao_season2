@@ -130,7 +130,7 @@ div.q_no, span.q_no, select.q_no, textarea.q_no { border: 2px #FF6C00 solid;}
 	min-width: 148px;
 	height: 22px;
 	line-height: 22px;
-	text-align: center;
+	padding-left: 4px;
 	border: 1px #e2e2e2 solid;
 	background: #FFF;
 }
@@ -162,7 +162,7 @@ div.q_no, span.q_no, select.q_no, textarea.q_no { border: 2px #FF6C00 solid;}
 
 /*操作提示弹出层---*/
 .tishi_tab0 { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none; z-index: 9999;}
-.tishi_tab p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #fff;}
+.tishi_tab0 p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #fff;}
 
 /*提交错误弹出层-----*/
 .upErrorTo_tab { width: 300px; padding: 10px; background: url(/assets/black01_bg.png) repeat; display: none; position: absolute;}

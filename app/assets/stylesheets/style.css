@@ -247,7 +247,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     min-width: 148px; 
     height: 20px;
     line-height: 20px;
-    text-align: center; 
+    padding-left: 4px;
     border: 1px #e2e2e2 solid; 
     background: #FFF;
     cursor: move;}
