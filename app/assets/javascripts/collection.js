@@ -482,7 +482,7 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         $("#red_cuo_"+problem_question_index).hide();
         $("#color_"+question_index).attr("class","ture_green");
     }else{
-       $("#color_"+question_index).attr("class","false_red");
+        $("#color_"+question_index).attr("class","false_red");
         $("#pass_radio_"+problem_question_index).attr("checked",false);
         $("#green_dui_"+problem_question_index).hide();
         $("#red_cuo_"+problem_question_index).show();
@@ -643,7 +643,6 @@ function test_again(){
                         element_str += "<option>"+question_attrs[attr_index]+"</option>";
                     }
                     element_str +="</select>"
-
                     element_str += " <span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+problem_init +"_"+sign_index +"','"+ escape(answer)+"',"+problem_init +",'',"+question_type +") >核对</button></span></span>";
                 }
                 if(inner_correct_type=="1"){
@@ -682,7 +681,6 @@ function test_again(){
             helper: "clone"
         });
     }
- 
 }
 
 
