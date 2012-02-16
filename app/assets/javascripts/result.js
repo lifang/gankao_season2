@@ -350,17 +350,17 @@ function drag_problem(title_div, problem, block_nav_div, drag_li_arr, question_i
 
 //隐藏problem的json
 function create_problem_json(problem, block_id) {
-    var new_problem = problem;
     var problem_json = create_element("input", null, "p_json_"+problem.id, null, "hidden", "value");
-    if ($("#jquery_jplayer_" + block_id).attr("id") != undefined) {
-        if (new_problem.title.indexOf("((mp3))") == -1) {
-            var new_title = mp3_url + new_problem.title;
-            new_problem.title = new_title;
+    var json_arr = json_to_str(problem).split(",");
+    if ($("#jquery_jplayer_" + block_id).attr("id") !== undefined) {
+        if (problem.title.indexOf("((mp3))") == -1) {
+            var new_title = json_arr[3].split("\"title\":\"");
+            if (new_title[1] != null) {
+             json_arr[3] = new_title[0] + "\"title\":\"((mp3))" + mp3_url + "((mp3))" + new_title[1];
+            }
         }
     }
-    problem_json.value = "" + json_to_str(new_problem);
-//    alert(json_to_str(problem));
-//    alert(json_to_str(new_problem));
+    problem_json.value = "" + json_arr.join(",");
     return problem_json;
 }
 
