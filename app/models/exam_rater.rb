@@ -81,6 +81,7 @@ class ExamRater < ActiveRecord::Base
     end
     file.close
     score=0.0
+    question_ids=[]
     only_xml.elements["blocks"].each_element do  |block|
       block_score = 0.0
       original_score = 0.0
@@ -94,6 +95,7 @@ class ExamRater < ActiveRecord::Base
             : result_question.elements["answer"].text
             if question.attributes["score"].to_f!=single_score
               problem.add_attribute("paper_id",doc.elements[1].attributes["id"])
+              question_ids << question.attributes["id"]
               already_hash=Collection.auto_add_collection(answer, problem,question,already_hash,block)
             else
               problem.delete_element(question.xpath)
@@ -117,6 +119,8 @@ class ExamRater < ActiveRecord::Base
         answer_block.attributes["score"] = block_score
       end
     end
+    paper_id=doc.elements["/exam/paper"].attributes["id"].to_i
+    CollectionInfo.update_collection_infos(paper_id, exam_user.user_id, question_ids)
     doc.elements["paper"].elements["rate_score"].text = score
     @xml=ExamRater.rater(doc,exam_user.id,score)
     file = File.new(url, File::CREAT|File::TRUNC|File::RDWR, 0644)
