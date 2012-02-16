@@ -16,7 +16,7 @@ namespace :check do
       end unless tasks.blank?
       actions=ActionLog.find_by_sql("select total_num,created_at,types from action_logs where user_id=#{user_plan.user_id}
            and types in (#{ActionLog::TYPES[:PRACTICE]},#{ActionLog::TYPES[:RECITE]}) and category_id=#{user_plan.category_id} and
-                        TO_DAYS(NOW())-TO_DAYS(created_at)=1 group by types ")
+                        TO_DAYS(NOW())-TO_DAYS(created_at)=1 ")
       actions.each do |action|
         month_action["#{action.types}"]=action.total_num
       end unless actions.blank?

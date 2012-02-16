@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   def delete_user
     cookies.delete(:user_id)
     cookies.delete(:user_name)
+    cookies.delete(:user_role)
     redirect_to "/"
   end
 
@@ -64,27 +65,30 @@ class UsersController < ApplicationController
 
 
   def accredit_check
-    code=InviteCode.first(:conditions=>"code='#{params[:info]}'")
+    code=InviteCode.first(:conditions=>"code='#{params[:info].strip}'")
     if code.nil?
       data="邀请码不存在"
     else
-      if code.is_used
+      if code.user_id
         data="邀请码已被使用"
       else
-        code.update_attributes(:use_time=>Time.now,:is_used=>InviteCode::IS_USED[:YES])
-        order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{Constant::EXAM_TYPES[:forth_level]}")
+        data="升级成功"
+        code.update_attributes(:use_time=>Time.now)
+        order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{code.category_id}")
         if order.nil? || order.types==Order::TYPES[:COMPETE] || order.types==Order::TYPES[:TRIAL_SEVEN]
-          Order.create(:user_id=>cookies[:user_id],:category_id=>Constant::EXAM_TYPES[:forth_level],:types=>Order::TYPES[:ACCREDIT],
-            :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].days)
+          Order.create(:user_id=>cookies[:user_id],:category_id=>code.category_id,:types=>Order::TYPES[:ACCREDIT],
+            :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",
+            :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,
+            :end_time=>Time.now+Constant::DATE_LONG[:vip].days)
+
         else
           if order.status
             data="您已是vip用户，截止日期是#{order.end_time.strftime("%Y-%m-%d")}"
           else
             Order.update_attributes(:types=>Order::TYPES[:ACCREDIT],:out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",
               :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].days)
-          end         
-        end
-        data="升级成功"
+          end
+        end        
       end
     end
     respond_to do |format|

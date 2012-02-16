@@ -69,7 +69,7 @@ class ExamRater < ActiveRecord::Base
     score=0.0
     only_xml=ExamRater.answer_questions(xml,doc)
     collection = Collection.find_or_create_by_user_id(exam_user.user_id)
-    path =  "/collections/" + Time.now.to_date.to_s
+    path =  Collection::COLLECTION_PATH + "/" + Time.now.to_date.to_s
     collection_url = path + "/#{collection.id}.js"
     collection.set_collection_url(path, collection_url)
     already_hash = {"problems" => {"problem" => []}}

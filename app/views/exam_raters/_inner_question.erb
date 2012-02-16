@@ -17,7 +17,7 @@ questions=inner_question.get_elements("questions//question")
           element_str += "selected"
         end
         element_str += ">#{attr}</option>"
-      end;
+      end
       element_str += "</select>"
     elsif question.attributes["correct_type"]=="1"
       element_str += "<div class='dragDrop_box' id='dragDrop_box_#{question.attributes["id"]}'></div>"
@@ -27,7 +27,7 @@ questions=inner_question.get_elements("questions//question")
       end
     elsif question.attributes["correct_type"]=="3"
       element_str += "<input class='input_tk' type='text' disabled value='#{answer}' id='input_inner_answer_#{question.attributes["id"]}' />"
-    end;
+    end
     element_str += "</span>"
     new_title << element_str
   end

@@ -301,9 +301,9 @@ function create_problem(part_message, block_id, block_div, problem, block_nav_di
                     question_num ++ ;
                 }
             }
-            problem_div.appendChild(create_problem_json(problem));
+            problem_div.appendChild(create_problem_json(problem, block_id));
         } else {
-            drag_problem(out_que_div, problem, block_nav_div, drag_li_arr, question_id_input);
+            drag_problem(out_que_div, problem, block_nav_div, drag_li_arr, question_id_input, block_id);
         }
         if (drag_li_arr.length > 0) {
             if (drop_div != null) {
@@ -316,7 +316,7 @@ function create_problem(part_message, block_id, block_div, problem, block_nav_di
     }
 }
 
-function drag_problem(title_div, problem, block_nav_div, drag_li_arr, question_id_input) {
+function drag_problem(title_div, problem, block_nav_div, drag_li_arr, question_id_input, block_id) {
     var new_title = title_div.innerHTML;
     if (problem.questions != undefined && problem.questions.question != undefined) {
         var questions = problem.questions.question;
@@ -345,13 +345,22 @@ function drag_problem(title_div, problem, block_nav_div, drag_li_arr, question_i
             }
         }
     }
-    title_div.appendChild(create_problem_json(problem));
+    title_div.appendChild(create_problem_json(problem, block_id));
 }
 
 //隐藏problem的json
-function create_problem_json(problem) {
+function create_problem_json(problem, block_id) {
+    var new_problem = problem;
     var problem_json = create_element("input", null, "p_json_"+problem.id, null, "hidden", "value");
-    problem_json.value = "" + json_to_str(problem);
+    if ($("#jquery_jplayer_" + block_id).attr("id") != undefined) {
+        if (new_problem.title.indexOf("((mp3))") == -1) {
+            var new_title = mp3_url + new_problem.title;
+            new_problem.title = new_title;
+        }
+    }
+    problem_json.value = "" + json_to_str(new_problem);
+//    alert(json_to_str(problem));
+//    alert(json_to_str(new_problem));
     return problem_json;
 }
 
