@@ -78,7 +78,7 @@ class ExamRatersController < ApplicationController
       doc=open_file(Constant::PUBLIC_PATH + @exam_user.answer_sheet_url)
       xml=open_file(Constant::BACK_PUBLIC_PATH + @exam_user.paper.paper_url)
       @xml=ExamRater.answer_questions(xml,doc)
-      @reading= RaterUserRelation.find(:first, :conditions => ["exam_rater_id=#{cookies[:rater_id]} and is_marked=0"])
+      @reading= RaterUserRelation.find(:first, :conditions => ["exam_rater_id=#{cookies[:rater_id]} and is_marked=0 and exam_user_id=#{@exam_user.id}"])
       if @xml[0].blank?
         flash[:notice] = "感谢您的参与，当前试卷没有需要批改的试卷。"
       else
