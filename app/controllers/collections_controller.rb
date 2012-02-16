@@ -80,6 +80,8 @@ class CollectionsController < ApplicationController
     path_url = collection.collection_url.split("/")
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
 
+    CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id].to_i])
+
     if params[:exam_user_id]
       exam_user = ExamUser.find(params[:exam_user_id])
       exam_user.update_user_collection(params[:question_id]) if exam_user
@@ -121,6 +123,9 @@ class CollectionsController < ApplicationController
     Collection.update_collection(cookies[:user_id].to_i, this_problem,
       params[:problem_id], this_question, params[:question_id],
       params[:paper_id], params[:question_answer], params[:question_analysis], params[:user_answer])
+
+    CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id].to_i])
+
     exam_user = ExamUser.find(params[:exam_user_id])
     exam_user.update_user_collection(params[:question_id]) if exam_user
 

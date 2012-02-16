@@ -20,8 +20,7 @@ class SimulationsController < ApplicationController
     if cookies[:user_id]
       @simulations.each { |sim| examination_ids << sim.id }
       exam_users = ExamUser.find_by_sql(
-        ["select eu.id, eu.examination_id, eu.is_submited, eu.total_score, eu.rank, 
-          eu.paper_id, eu.correct_percent, eu.answer_sheet_url
+        ["select eu.id, eu.examination_id, eu.is_submited, eu.total_score, eu.rank, eu.paper_id, eu.answer_sheet_url
           from exam_users eu where eu.user_id = ?
           and eu.examination_id in (?)", cookies[:user_id].to_i, examination_ids])
       exam_users.each do |eu|
