@@ -21,7 +21,7 @@ class StudyPlan < ActiveRecord::Base
         task_num["#{task.task_types}"]=task.num
       end unless tasks.blank?
       actions=ActionLog.find_by_sql("select total_num,created_at,types from action_logs where user_id=#{user_plan.user_id}
-           and types in (#{practice_type},#{recite_type}) and category_id=#{category} and TO_DAYS(created_at)=(NOW()) group by types ")
+           and types in (#{practice_type},#{recite_type}) and category_id=#{category} and TO_DAYS(created_at)=(NOW()) ")
       actions.each do |action|
         month_action["#{action.types}"]=action.total_num
       end unless actions.blank?

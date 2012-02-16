@@ -31,7 +31,7 @@ module ApplicationHelper
           this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
         elsif order.types == Order::TYPES[:TRIAL_SEVEN]
-          if order.end_time < Time.now.to_datetime or order.status == false
+          if order.end_time < Time.now or order.status == false            
             this_order = "#{order.category_id}=#{Order::USER_ORDER[:NOMAL]}"
             order.update_attributes(:status => Order::STATUS[:INVALIDATION]) if order.status != false
           else
@@ -58,7 +58,8 @@ module ApplicationHelper
 
   #判断有没有当前分类的权限
   def category_role(category_id)
-    current_role = 2
+    current_role = Order::USER_ORDER[:NOMAL]
+    user_role?(cookies[:user_id]) if cookies[:user_role].nil?
     all_category = cookies[:user_role].split("&")
     all_category.each do |category|
       if category =~ /#{category_id}/

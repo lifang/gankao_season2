@@ -1,4 +1,4 @@
-//试卷初始化，处理试卷和答案
+//此JS进行试卷初始化，处理试卷和答案数据
 
 var attrs = []; //拖拽题选项临时保存。
 //将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
@@ -30,15 +30,13 @@ for(var i=0;i<b.length;i++){
     if(b[i]!=null&&b[i].problems!=null){
         var b1 = transform_array(b[i].problems.problem);
         for(var j=0;j<b1.length;j++){
+            b1[j].questions =  transform_array(b1[j].questions.question);
             problems.push(b1[j])
         }
     }
 }
 //alert(JSON.encode(problems));
 $(function(){
-//    $("#log").html(JSON.encode(problems[init_problem].questions.question));
-//    $("#log").html($("#log").html()+"<p>-----------------------"+(problems[init_problem].questions.question.length==answers[init_problem].length)+"------------------------</p>");
-//    $("#log").html($("#log").html()+JSON.encode(answers[init_problem]));
     //写入总题数
     $("#global_problem_sum").html(problems.length);
 })

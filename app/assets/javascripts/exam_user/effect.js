@@ -1,3 +1,5 @@
+//此JS记录了考试页面相关的方法
+
 
 //字体放大、缩小
 var tgs = new Array( 'div','td','tr');
@@ -27,20 +29,7 @@ function click_next_problem(){
         return false;
     }else{
         init_problem += 1;
-        $("#jplayer_play_button_"+init_problem).trigger("click");
-        $("#report_error").hide();
-        $f("flowplayer").stop();
-        $f("audio-word").stop();
-        $("#global_problem_index").html(init_problem+1);
-        if(next_problem.length>0){
-            next_problem.show();
-        }else{
-            load_problem(init_problem);
-        }
-        this_problem.hide();
-    //        if($("#drag_tk_"+init_problem).height()){
-    //            $("#drag_tk_box_"+init_problem).css("height",$("#drag_tk_"+init_problem).height()+20);
-    //        }
+        active(this_problem,next_problem);
     }
 }
 
@@ -53,28 +42,34 @@ function click_prev_problem(){
         return false;
     }else{
         init_problem -= 1;
-        $("#jplayer_play_button_"+init_problem).trigger("click");
-        $("#report_error").hide();
-        $f("flowplayer").stop();
-        $f("audio-word").stop();
-        $("#global_problem_index").html(init_problem+1);      
-        if(prev_problem.length>0){
-            prev_problem.show();
-        }else{
-            load_problem(init_problem);
-        }
-        this_problem.hide();
-    //        if($("#drag_tk_"+problem_index).height()){
-    //            $("#drag_tk_box_"+problem_index).css("height",$("#drag_tk_"+problem_index).height()+20);
-    //        }
+        active(this_problem,prev_problem);
     }
+}
+
+function active(this_problem,old_problem){
+    $("#report_error").hide();
+    $f("audio-word").stop();
+    $f("flowplayer").stop();
+    $("#global_problem_index").html(init_problem+1);
+    if(old_problem.length>0){
+        old_problem.show();
+        if(mp3s[init_problem]){
+            $("#flowplayer_location_"+init_problem).attr("style","display:block;width:350px;height:30px;margin:auto;margin-top:10px;");
+            $("#flowplayer_location_"+init_problem).attr("href","http://test.mp3");
+            clone_flowplayer(("#flowplayer_location_"+init_problem),mp3s[init_problem]);
+        }
+    }else{
+        load_problem(init_problem);
+    }
+    this_problem.hide();
+    drag_tk();
 }
 
 
 last_opened_question = null;
 //初始化显示、隐藏小题功能
-$(function(){  
-    $(".pro_qu_t").bind("click",function(){
+function pro_qu_t(problem_index){
+    $(".pro_qu_t_"+problem_index).bind("click",function(){
         var pro_qu_div = $(this).parent().find(".pro_qu_div");
         if(pro_qu_div.is(":visible")){
             pro_qu_div.hide();
@@ -94,7 +89,7 @@ $(function(){
             last_opened_question = $(this);
         }
     })
-})
+}
 
 //题面后小题列表改变颜色
 function change_color(value,problem_index,question_index){
@@ -196,11 +191,13 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
             $(".judge_li_"+problem_index+"_"+question_index).attr("onclick","");
         }
         if(correct_type=="3" || correct_type=="5"){
-            $("#fill_input_"+problem_index+"_"+question_index).attr("disabled",true);
+            $("#fill_input_"+problem_index+"_"+question_index).attr("readonly","readonly");
         }
     }
     if(question_type=="1"){
         $("#hedui_btn_"+problem_index+"_"+question_index).parent().hide();
+        $("#inner_span_tk_"+problem_index+"_"+question_index).attr("onmouseover","");
+        $("#inner_span_tk_"+problem_index+"_"+question_index).attr("onmouseout","");
         if(correct_type=="0"){
             if(!$("#input_inner_answer_"+problem_index+"_"+question_index).attr("name")){
                 $("#input_inner_answer_"+problem_index+"_"+question_index).attr("name",user_answer);
@@ -221,7 +218,7 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
             })
         }
         if(correct_type=="3"){
-            $("#input_inner_answer_"+problem_index+"_"+question_index).attr("disabled",true);
+            $("#input_inner_answer_"+problem_index+"_"+question_index).attr("readonly","readonly");
         }
         $("#inner_span_tk_"+problem_index+"_"+question_index).bind("click",function(){
             if(!$("#pro_qu_t_"+problem_index+"_"+question_index).parent().find(".pro_qu_div").is(":visible")){
@@ -437,11 +434,15 @@ function open_display_answer(problem_index,question_index){
 function do_inner_question(correct_type,problem_index,question_index){
     var this_answer = $("#input_inner_answer_"+problem_index+"_"+question_index).val();
     $("#exam_user_answer_"+problem_index+"_"+question_index).val(this_answer);
-    show_hedui(problem_index,question_index);
+//show_hedui(problem_index,question_index);
 }
 
 function show_hedui(problem_index,question_index){
     $("#hedui_btn_"+problem_index+"_"+question_index).parent().show();
+}
+
+function hide_hedui(problem_index,question_index){
+    $("#hedui_btn_"+problem_index+"_"+question_index).parent().hide();
 }
 
 //播放音频

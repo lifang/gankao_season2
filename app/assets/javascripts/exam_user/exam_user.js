@@ -190,11 +190,13 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
             $(".judge_li_"+problem_index+"_"+question_index).attr("onclick","");
         }
         if(correct_type=="3" || correct_type=="5"){
-            $("#fill_input_"+problem_index+"_"+question_index).attr("disabled",true);
+            $("#fill_input_"+problem_index+"_"+question_index).attr("readonly","readonly");
         }
     }
     if(question_type=="1"){
         $("#hedui_btn_"+problem_index+"_"+question_index).parent().hide();
+        $("#inner_span_tk_"+problem_index+"_"+question_index).attr("onmouseover","");
+        $("#inner_span_tk_"+problem_index+"_"+question_index).attr("onmouseout","");
         if(correct_type=="0"){
             if(!$("#input_inner_answer_"+problem_index+"_"+question_index).attr("name")){
                 $("#input_inner_answer_"+problem_index+"_"+question_index).attr("name",user_answer);
@@ -215,7 +217,7 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
             })
         }
         if(correct_type=="3"){
-            $("#input_inner_answer_"+problem_index+"_"+question_index).attr("disabled",true);
+            $("#input_inner_answer_"+problem_index+"_"+question_index).attr("readonly","readonly");
         }
         $("#inner_span_tk_"+problem_index+"_"+question_index).bind("click",function(){
             if(!$("#pro_qu_t_"+problem_index+"_"+question_index).parent().find(".pro_qu_div").is(":visible")){
@@ -431,11 +433,15 @@ function open_display_answer(problem_index,question_index){
 function do_inner_question(correct_type,problem_index,question_index){
     var this_answer = $("#input_inner_answer_"+problem_index+"_"+question_index).val();
     $("#exam_user_answer_"+problem_index+"_"+question_index).val(this_answer);
-    show_hedui(problem_index,question_index);
+    //show_hedui(problem_index,question_index);
 }
 
 function show_hedui(problem_index,question_index){
     $("#hedui_btn_"+problem_index+"_"+question_index).parent().show();
+}
+
+function hide_hedui(problem_index,question_index){
+    $("#hedui_btn_"+problem_index+"_"+question_index).parent().hide();
 }
 
 //播放音频
