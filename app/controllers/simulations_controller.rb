@@ -20,8 +20,7 @@ class SimulationsController < ApplicationController
     if cookies[:user_id]
       @simulations.each { |sim| examination_ids << sim.id }
       exam_users = ExamUser.find_by_sql(
-        ["select eu.id, eu.examination_id, eu.is_submited, eu.total_score, eu.rank, 
-          eu.paper_id, eu.correct_percent, eu.answer_sheet_url
+        ["select eu.id, eu.examination_id, eu.is_submited, eu.total_score, eu.rank, eu.paper_id, eu.answer_sheet_url
           from exam_users eu where eu.user_id = ?
           and eu.examination_id in (?)", cookies[:user_id].to_i, examination_ids])
       exam_users.each do |eu|
@@ -53,9 +52,10 @@ class SimulationsController < ApplicationController
     if @exam_user
       @examination = Examination.find_by_id(@exam_user.examination_id)
       @exam_user.set_paper(@examination) if @exam_user.paper_id.nil?
+      @title = "#{@examination.title}模拟考试"
       if @exam_user.paper_id
         @paper_url = "#{Constant::BACK_SERVER_PATH}#{@exam_user.paper.paper_js_url}"
-        @exam_user.update_info_for_join_exam if @exam_user.started_at.nil? or @exam_user.started_at == ""
+        @exam_user.update_info_for_join_exam if @exam_user.started_at.nil? or @exam_user.started_at == ""        
         render :layout => "simulations"
       else
         flash[:warn] = "试卷加载错误，请您重新尝试。"
@@ -71,9 +71,12 @@ class SimulationsController < ApplicationController
     @exam_user = ExamUser.find_by_id(params[:id].to_i)
     if @exam_user
       @examination = Examination.find_by_id(@exam_user.examination_id)
+      @title = "#{@examination.title}模拟考试"
       if @exam_user.paper_id
         @paper_url = "#{Constant::BACK_SERVER_PATH}#{@exam_user.paper.paper_js_url}"
         @answer_url = @paper_url.gsub("paperjs", "answerjs")
+        @collection_info = CollectionInfo.find_by_paper_id_and_user_id(@exam_user.paper_id,
+          @exam_user.user_id)
         render :layout => "result"
       else
         flash[:warn] = "试卷加载错误，请您重新尝试。"

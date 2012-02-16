@@ -95,6 +95,10 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 
 .icon_return a { background: url(/assets/icon_func.png) no-repeat -180px 0;}
 .icon_return a:hover { background: url(/assets/icon_func.png) no-repeat -180px -30px;}
+.icon_shanchu a {background: url(/assets/icon_func.png) no-repeat -211px 0;}
+.icon_shanchu a:hover { background: url(/assets/icon_func.png) no-repeat -211px -30px;}
+
+
 
 .tooltip_box { position: absolute;}
 .tooltip_next { background: #000; height: 25px; line-height: 25px; text-align: center; padding: 5px 10px; color: #FFF;}
@@ -247,7 +251,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     min-width: 148px; 
     height: 20px;
     line-height: 20px;
-    text-align: center; 
+    padding-left: 4px;
     border: 1px #e2e2e2 solid; 
     background: #FFF;
     cursor: move;}

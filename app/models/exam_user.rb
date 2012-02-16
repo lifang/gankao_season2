@@ -121,6 +121,7 @@ class ExamUser < ActiveRecord::Base
 
   def submited!
     self.is_submited=1
+    self.submited_at = Time.now
     self.save
   end
 

@@ -188,12 +188,14 @@ class ExamUsersController < ApplicationController
       question_id = this_question["id"]
       Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id,
         params["paper_id"], params["addition"]["answer"], params["addition"]["analysis"], params["user_answer"])
+
+      CollectionInfo.update_collection_infos(params["paper_id"].to_i, cookies[:user_id].to_i, [question_id.to_i])
       #在sheet中记录小题的收藏状态
-      doc = get_doc(params[:sheet_url])
-      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-      collection =doc.root.elements["collection"]
-      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-      write_xml(doc, params[:sheet_url])
+#      doc = get_doc(params[:sheet_url])
+#      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+#      collection =doc.root.elements["collection"]
+#      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+#      write_xml(doc, params[:sheet_url])
     end
     respond_to do |format|
       format.json {
