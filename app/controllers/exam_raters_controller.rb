@@ -95,16 +95,16 @@ class ExamRatersController < ApplicationController
     @exam_relation=RaterUserRelation.find(params[:id])
     @exam_relation.update_attributes(:rate_time=>((Time.now-@exam_relation.started_at)/60+1).to_i)
     @exam_user=ExamUser.find(@exam_relation.exam_user_id)
-#    begin
+    begin
       url="#{Rails.root}/public#{@exam_user.answer_sheet_url}"
       doc=open_file(url)
       xml=open_file(Constant::BACK_PUBLIC_PATH + @exam_user.paper.paper_url)
       ExamRater.set_answer(score_reason,@exam_user,xml,doc,url)
       @exam_relation.toggle!(:is_marked)
       notice="提交成功"
-#    rescue
-#      notice="提交失败"
-#    end
+    rescue
+      notice="提交失败"
+    end
     respond_to do |format|
       format.json {
         data={:examination_id=>@exam_user.examination_id,:rater_id=>@exam_relation.exam_rater_id,:notice=>notice}

@@ -1,4 +1,6 @@
 // JavaScript Document
+var vip_style=["","","英语四级","英语六级"]
+
 $(function() {
     $('div.tab_ul li').bind('click',function(){
         $(this).addClass('hover').siblings().removeClass('hover');
@@ -249,16 +251,24 @@ function accredit(){
 
 
 function check_vip(){
+    var category=$("#category").val();
+    if($("#vip_style option:selected").val()==""){
+        tishi_alert("请选择充值类型，您当前的充值页面为"+vip_style[parseInt(category)])
+        return false;
+    }
     $.ajax({
         async:true,
         dataType:'json',
         url:"/users/check_vip",
+        data:{
+            category:category
+        },
         type:'post',
         success : function(data) {
             if(data.message){
-                window.open("/users/alipay_exercise")
+                window.open("/users/alipay_exercise?category="+data.category);
             }else{
-                tishi_alert("您已是vip用户，截止日期是"+data.time)
+                tishi_alert("您已是vip用户，截止日期是"+data.time);
             }
         }
     });

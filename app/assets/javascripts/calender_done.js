@@ -131,8 +131,6 @@ function new_calender(){
                     end : end,
                     category :  document.getElementById("category").value
                 },
-                beforeSend: function() {
-                },
                 success : function(data) {
                     var which=data.which;
                     document.getElementById("whichs").innerHTML="第"+ which[0]+"天";
