@@ -101,6 +101,23 @@ $(document).ready(function(){
    
 })
 
+function delete_this(){
+    $.ajax({
+        async:true,
+        type: "POST",
+        url: "/collections/delete_problem.json",
+        dataType: "json",
+        data : {
+            problem_id :problem_init,
+            category_id:$("#category_id").val()
+        },
+        success : function(data) {
+            window.location.href="/collections?category="+data.category
+        }
+    });
+}
+
+
 function flowplayer_mp3(audio_src){
     $("#flowplayer_postion").append($("#flowplayer_loader"));
     $f("flowplayer", "/assets/flowplayer/flowplayer-3.2.7.swf", {

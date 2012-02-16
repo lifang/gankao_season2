@@ -1,6 +1,5 @@
 <%= javascript_include_tag "cookie.js" %>
 <%= javascript_include_tag "collection.js" %>
-<%#= javascript_include_tag "#{@collection_js}" %>
 <%= javascript_include_tag "/assets/jplayer/jquery.jplayer.min.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.core.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.widget.js" %>
@@ -36,14 +35,17 @@
     <div class="float_right">
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
       <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();">下一题</a></span>
+      <span class="problem_title"><font id="global_problem_index"></font>/<font id="global_problem_sum"></font></span>
       <span class="icon_big"><a href="javascript:void(0);" class="tooltip" name="缩小" onclick="javascript:ts('body',-1);">缩小</a></span>
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" name="放大" onclick="javascript:ts('body',1);">放大</a></span>
-      <span class="icon_return"><a href="javascript:void(0);" class="tooltip" name="退出">退出</a></span>
+      <span class="icon_shanchu"><a href="javascript:void(0);" class="tooltip" name="删除" onclick="javascript:delete_this()">删除</a></span>
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" onclick="javascript:test_again()" name="重做">重做</a></span>
   </div>
 </div>
+<% category_id = params[:category].nil? ? 2 : params[:category] %>
 <input type="hidden" value="<%= @collection_url %>" id="file_path" />
+<input type="hidden" value="<%= category_id %>" id="category_id" />
 <div class="upErrorTo_tab border_radius" id="upErrorTo_tab">
   <input type="hidden" value="" id="question_id"/>
   <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('.upErrorTo_tab').css('display','none');"/></span>
@@ -58,7 +60,6 @@
 </div>
 <div class="m_side m_problem_bg">
   <div class="problem_box">
-    <div class="problem_title">第<span id="global_problem_index" ></span>题/共<span id="global_problem_sum"></span>题</div>
     <div id='flowplayer_postion'></div>
     <div class="problem_text" id="global_problem_title">
     </div>
