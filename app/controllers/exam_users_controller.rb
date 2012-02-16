@@ -82,7 +82,9 @@ class ExamUsersController < ApplicationController
     if find_arr.length>0
       data={:message=>"您已经提交过此错误，感谢您的支持。"}
     else
-      reporterror = ReportError.new(params["post"])
+      attributes = params["post"]
+      attributes[:status] = ReportError::STATUS[:UNSOVLED]
+      reporterror = ReportError.new(attributes)
       if reporterror.save
         data={:message=>"错误报告提交成功"}
       else

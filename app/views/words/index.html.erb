@@ -6,11 +6,14 @@
       <a href="/words/recite_word?category=<%= params[:category] %>&type=old" class="danci_hg">回顾</a>
       <p>已掌握单词：<span class="orange">0</span></p>
     <% else %>
-      <% if @already_recited.total_num > 0 %>
-      <a href="javascript:void(0);" onclick="javascript:start_word('<%= params[:category] %>', 'old');" class="danci_hg">回顾</a>
-        <!--<a href="/words/recite_word?category=<%#= params[:category] %>&type=old" class="danci_hg">回顾</a>-->
+      <% if is_nomal?(params[:category]) %>
+        <a href="javascript:void(0);" onclick="javascript:tishi_alert('您的试用期已过，升级为vip用户才能试用。');" class="danci_hg">回顾</a>
       <% else %>
-        <a href="javascript:void(0);" title="您目前还没有已经掌握的单词" class="danci_hg">回顾</a>
+        <% if @already_recited.total_num > 0 %>
+          <a href="javascript:void(0);" onclick="javascript:start_word('<%= params[:category] %>', 'old');" class="danci_hg">回顾</a>
+        <% else %>
+          <a href="javascript:void(0);" title="您目前还没有已经掌握的单词" class="danci_hg">回顾</a>
+        <% end %>
       <% end %>
       <p>已掌握单词：<span class="orange"><%= @already_recited.total_num %></span></p>
     <% end %>
@@ -21,11 +24,14 @@
       <a href="/words/recite_word?category=<%= params[:category] %>&type=new" class="danci_hg">背词</a>
       <p>未掌握单词：<span class="orange"><%= @leaving_count %></span></p>
     <% else %>
-      <% if @leaving_count > 0 %>
-      <a href="javascript:void(0);" onclick="javascript:start_word('<%= params[:category] %>', 'new');" class="danci_bc">背词</a>
-        <!--<a href="/words/recite_word?category=<%#= params[:category] %>&type=new" class="danci_bc">背词</a>-->
+      <% if is_nomal?(params[:category]) %>
+        <a href="javascript:void(0);" onclick="javascript:tishi_alert('您的试用期已过，升级为vip用户才能试用。');" class="danci_bc">背词</a>
       <% else %>
-        <a href="javascript:void(0);" title="您目已经没有未掌握的单词了" class="danci_hg">背词</a>
+        <% if @leaving_count > 0 %>
+          <a href="javascript:void(0);" onclick="javascript:start_word('<%= params[:category] %>', 'new');" class="danci_bc">背词</a>
+        <% else %>
+          <a href="javascript:void(0);" title="您目已经没有未掌握的单词了" class="danci_hg">背词</a>
+        <% end %>
       <% end %>
       <p>未掌握单词：<span class="orange"><%= @leaving_count %></span></p>
     <% end %>

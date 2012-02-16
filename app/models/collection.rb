@@ -4,7 +4,7 @@ class Collection < ActiveRecord::Base
 
   require 'rexml/document'
   include REXML
-  COLLECTION_PATH = "/collections"
+  COLLECTION_PATH = "/collection_datas"
 
   def set_collection_url(path, url)
     if self.collection_url.nil? || !File.exist?(Constant::PUBLIC_PATH + self.collection_url)
@@ -15,8 +15,8 @@ class Collection < ActiveRecord::Base
 
   #创建收藏文件
   def generate_collection_url(str, path, url)
-    unless File.directory?(Constant::PUBLIC_PATH + "/collections")
-      Dir.mkdir(Constant::PUBLIC_PATH + "/collections")
+    unless File.directory?(Constant::PUBLIC_PATH + COLLECTION_PATH)
+      Dir.mkdir(Constant::PUBLIC_PATH + COLLECTION_PATH)
     end
     unless File.directory?(Constant::PUBLIC_PATH + path)
       Dir.mkdir(Constant::PUBLIC_PATH + path)
@@ -308,7 +308,7 @@ class Collection < ActiveRecord::Base
   #错误核对，记录错误答案
   def self.record_user_answer(user_id,problem_id,question_id,user_answer)
     collection = Collection.find_or_create_by_user_id(user_id)
-    path =  "/collections/" + Time.now.to_date.to_s
+    path =  COLLECTION_PATH + "/" + Time.now.to_date.to_s
     collection_url = path + "/#{collection.id}.js"
     collection.set_collection_url(path, collection_url)
     file =  File.open("#{Rails.root}/public#{collection.collection_url}")

@@ -2,5 +2,9 @@ development:
  api_key : 770137049
  api_secret : 4e143ff2b65518f19871d23420142ac2
 
+production:
+ api_key : 3987186573
+ api_secret : 645c8b4c620d162d84450c9e93f79d4c
+
 
 
