@@ -1,5 +1,4 @@
 // JavaScript Document
-var vip_style=["","","英语四级","英语六级"]
 
 $(function() {
     $('div.tab_ul li').bind('click',function(){
@@ -251,9 +250,8 @@ function accredit(){
 
 
 function check_vip(){
-    var category=$("#category").val();
     if($("#vip_style option:selected").val()==""){
-        tishi_alert("请选择充值类型，您当前的充值页面为"+vip_style[parseInt(category)])
+        tishi_alert("请选择需要充值的产品类型。")
         return false;
     }
     $.ajax({
@@ -261,7 +259,7 @@ function check_vip(){
         dataType:'json',
         url:"/users/check_vip",
         data:{
-            category:category
+            category:$("#vip_style option:selected").val()
         },
         type:'post',
         success : function(data) {

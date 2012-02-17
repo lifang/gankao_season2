@@ -100,30 +100,28 @@ class UsersController < ApplicationController
 
 
   def check_vip
-    order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{params[:category]}")
-    end_time=""
-    if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
-      data=true
-    else
-      if order.status
-        end_time=order.end_time.strftime("%Y-%m-%d")
-        data=false
-      else
-        data=true
-      end
+    order = Order.first(
+      :conditions => "user_id = #{cookies[:user_id]} and category_id = #{params[:category]} and status = #{Order::STATUS[:NOMAL]}")
+    end_time = ""
+    is_not_vip = true
+    if !order.nil? and
+        (order.types == Order::TYPES[:CHARGE] or order.types == Order::TYPES[:OTHER] or order.types == Order::TYPES[:ACCREDIT])
+      is_not_vip = false
+      end_time = order.end_time.strftime("%Y-%m-%d")
     end
     respond_to do |format|
       format.json {
-        render :json=>{:message=>data,:time=>end_time,:category=>params[:category]}
+        render :json=>{:message => is_not_vip, :time => end_time, :category => params[:category]}
       }
     end
   end
 
   def alipay_exercise
+    category = Category.find(params[:category].to_s)
     options ={
       :service=>"create_direct_pay_by_user",
       :notify_url=>Constant::SERVER_PATH+"/competes/alipay_compete?category=>#{params[:category]}",
-      :subject=>"会员升级vip",
+      :subject=>"会员购买#{category.name}产品",
       :payment_type=>Constant::VIP_TYPE[:good],
       :total_fee=>Constant::SIMULATION_FEE
     }

@@ -233,10 +233,31 @@ $(document).ready(function(){
             $(objStr + ":visible").addClass("in");
             $(objStr + ".in").next().fadeIn("slow");
             $(objStr + ".in").hide().removeClass("in")
-            }
+        }
     },4000) //每3秒钟切换
 })
 
-
-
-
+$(function(){
+    var x = -20;
+    var y = 15;
+    if ($(".tooltip_vip").length > 0) {
+        $(".tooltip_vip").mouseover(function(e){
+            this.myTitle=this.title;
+            this.title="";
+            var tooltip = "<div class='tooltip_box'><div class='tooltip_next'>"+this.myTitle+"</div></div>";
+            $("body").append(tooltip);
+            $(".tooltip_box").css({
+                "top":(e.pageY+y)+"px",
+                "left":(e.pageX+x)+"px"
+            }).show("fast");
+        }).mouseout(function(){
+            this.title = this.myTitle;
+            $(".tooltip_box").remove();
+        }).mousemove(function(e){
+            $(".tooltip_box").css({
+                "top":(e.pageY+y)+"px",
+                "left":(e.pageX+x)+"px"
+            })
+        });
+    }    
+})

@@ -1,5 +1,4 @@
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
-<%= javascript_include_tag "main.js" %>
 <h1>历年<%= @category.name %>真题</h1>
 <div class="zhenti_list">
   <ul>
@@ -20,7 +19,8 @@
                 <h2><%= similarity.title %></h2>
               </a>
             <% elsif is_nomal?(params[:category]) %>
-              <a href="javascript:void(0);" onclick="javascript:tishi_alert('您的试用期已过，升级为vip用户才能试用。');">
+              <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
+                 onclick="javascript:tishi_alert('您的试用期已过，升级为vip用户才能试用。');">
                 <h2><%= similarity.title %></h2>
               </a>
             <% else %>
@@ -31,7 +31,8 @@
                   <h2><%= similarity.title %></h2>
                 </a>
               <% else %>
-                <a href="javascript:void(0);" onclick="javascript:tishi_alert('当前试卷为收费卷，升级为vip用户才能试用。');">
+                <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
+                   onclick="javascript:tishi_alert('当前试卷为收费卷，升级为vip用户才能试用。');">
                   <h2><%= similarity.title %></h2>
                 </a>
               <% end %>
