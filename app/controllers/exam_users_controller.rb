@@ -98,12 +98,9 @@ class ExamUsersController < ApplicationController
     end
   end
 
-  def sheet_outline(collection_str = "")
+  def sheet_outline
     outline = "<?xml version='1.0' encoding='UTF-8'?>"
     outline += "<sheet init='0' status='0'>"
-    outline += "<collection>"
-    outline += "#{collection_str}"
-    outline += "</collection>"
     outline += "</sheet>"
     return outline
   end
@@ -155,7 +152,7 @@ class ExamUsersController < ApplicationController
     collection = ""
     collection = doc.root.elements["collection"].text if doc.root.elements["collection"]
     f=File.new(url,"w+")
-    f.write("#{sheet_outline(collection).force_encoding('UTF-8')}")
+    f.write("#{sheet_outline.force_encoding('UTF-8')}")
     f.close
     ExamUser.find(params[:id]).update_attribute("is_submited",false)
     redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}&type=#{params[:type]}"
@@ -182,21 +179,15 @@ class ExamUsersController < ApplicationController
   def ajax_add_collect
     if params[:sheet_url]!="" && params[:sheet_url]!=nil
       #解析参数
-      this_problem = JSON params["problem"]
+      this_problem = params["problem"]
       problem_id = this_problem["id"]
-      this_question = this_problem["questions"]["question"][params["question_index"].to_i]
+      this_question = this_problem["questions"]["#{params["question_index"]}"]
       question_id = this_question["id"]
       Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id,
         params["paper_id"], params["addition"]["answer"], params["addition"]["analysis"], params["user_answer"])
-
-      CollectionInfo.update_collection_infos(params["paper_id"].to_i, cookies[:user_id].to_i, [question_id.to_i])
-      #在sheet中记录小题的收藏状态
-#      doc = get_doc(params[:sheet_url])
-#      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-#      collection =doc.root.elements["collection"]
-#      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-#      write_xml(doc, params[:sheet_url])
+      CollectionInfo.update_collection_infos(params["paper_id"].to_i, cookies[:user_id].to_i, [question_id])
     end
+    
     respond_to do |format|
       format.json {
         render :json=>""
@@ -259,7 +250,16 @@ class ExamUsersController < ApplicationController
     sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
     sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
     @sheet_url = sheet_url
-    @sheet = get_doc("#{sheet_url}")
+    sheet = get_doc("#{sheet_url}")
+    @init_problem = sheet.attributes["init"]
+    @sheet = "{"
+    sheet.each_element do |ele|
+#      @sheet += "'#{ele.name}':'#{ele.text}'"
+    end
+    @sheet += "}"
+    puts @sheet
+    collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
+    @collection = collection.nil? ? [] : collection.question_ids.split(",")
     close_file("#{sheet_url}")
   end
 

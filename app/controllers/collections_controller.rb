@@ -72,7 +72,7 @@ class CollectionsController < ApplicationController
       params[:problem_id].to_i, params[:question_id].to_i,
       params[:question_answer], params[:question_analysis], params[:user_answer])
     if is_problem_in == false
-      new_col_problem = collection.update_problem_hash(params[:problem_json], params[:paper_id],
+      new_col_problem = collection.update_problem_hash(params[:problem_json].to_s, params[:paper_id],
         params[:question_answer], params[:question_analysis], params[:user_answer], params[:question_id].to_i)
       already_hash["problems"]["problem"] << new_col_problem
     end
@@ -80,21 +80,7 @@ class CollectionsController < ApplicationController
     path_url = collection.collection_url.split("/")
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
 
-    CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id].to_i])
-
-#    if params[:exam_user_id]
-#      exam_user = ExamUser.find(params[:exam_user_id])
-#      exam_user.update_user_collection(params[:question_id]) if exam_user
-#    end
-#
-#    if params[:sheet_url]
-#      #在sheet中记录小题的收藏状态
-#      doc = get_doc(params[:sheet_url])
-#      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-#      collection =doc.root.elements["collection"]
-#      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-#      write_xml(doc, params[:sheet_url])
-#    end
+    CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id]])
     
     respond_to do |format|
       format.json {
