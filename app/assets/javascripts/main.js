@@ -115,7 +115,7 @@ function show_flash_div() {
 function create_element(element, name, id, class_name, type, ele_flag) {
     var ele = document.createElement("" + element);
     if (name != null)
-        ele.name = name;
+        $(ele).attr("name",name);
     if (id != null)
         ele.id = id;
     if (class_name != null)
