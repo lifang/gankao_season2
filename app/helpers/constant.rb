@@ -7,7 +7,6 @@ module Constant
   PUBLIC_PATH = "#{Rails.root}/public"
 
   #后台项目文件目录
-
   BACK_PUBLIC_PATH = "d:/exam_season2/public"
 
   #weibo账号

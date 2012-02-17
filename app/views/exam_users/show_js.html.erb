@@ -6,9 +6,8 @@
   init_exam_user_id ='<%= params[:id] %>';
   init_paper_id = '<%= @paper_id %>';
   sheet_url = '<%= @sheet_url %>';
-  sheet = <%= @sheet %>; //记录@sheet
-  collection = {}; //记录@collection
-  alert(sheet);
+  //sheet = <%= options_for_javascript(@sheet) %>; //记录@sheet
+  collection = <%= array_or_string_for_javascript(@collection) %>; //记录@collection
 </script>
 
 <script src="/assets/exam_user/mootools-yui-compressed.js"></script>
@@ -35,7 +34,7 @@
   <div class="icon_func">
     <div class="float_right">
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
-      <span class="problem_title"><font id="global_problem_index"><%= @sheet.attributes["init"].to_i+1 %></font>/<font id="global_problem_sum"></font></span>
+      <span class="problem_title"><font id="global_problem_index"><%= @init_problem.to_i+1 %></font>/<font id="global_problem_sum"></font></span>
       <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
       <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1);" name="缩小">缩小</a></span>
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>

@@ -64,7 +64,7 @@ class CollectionsController < ApplicationController
     file = File.open(Constant::PUBLIC_PATH + collection.collection_url)
     last_problems = file.read
     unless last_problems.nil? or last_problems.strip == ""
-      already_hash = JSON(last_problems.gsub("collections = ", ""))#ActiveSupport::JSON.decode(().to_json)
+      already_hash = JSON(last_problems.gsub("collections = ", ""))
     else
       already_hash = {"problems" => {"problem" => []}}
     end
@@ -72,7 +72,9 @@ class CollectionsController < ApplicationController
       params[:problem_id].to_i, params[:question_id].to_i,
       params[:question_answer], params[:question_analysis], params[:user_answer])
     if is_problem_in == false
-      new_col_problem = collection.update_problem_hash(params[:problem_json].to_s, params[:paper_id],
+      problem_json = params[:problem_json].class.to_s == "String" ?
+        JSON(params[:problem_json]) : params[:problem_json]
+      new_col_problem = collection.update_problem_hash(problem_json, params[:paper_id],
         params[:question_answer], params[:question_analysis], params[:user_answer], params[:question_id].to_i)
       already_hash["problems"]["problem"] << new_col_problem
     end
@@ -109,18 +111,7 @@ class CollectionsController < ApplicationController
       params[:problem_id], this_question, params[:question_id],
       params[:paper_id], params[:question_answer], params[:question_analysis], params[:user_answer])
 
-    CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id].to_i])
-
-#    exam_user = ExamUser.find(params[:exam_user_id])
-#    exam_user.update_user_collection(params[:question_id]) if exam_user
-#
-#    if params[:sheet_url]
-#      doc = get_doc(params[:sheet_url])
-#      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-#      collection =doc.root.elements["collection"]
-#      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-#      write_xml(doc, params[:sheet_url])
-#    end
+    CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id]])
     
     respond_to do |format|
       format.json {

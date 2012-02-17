@@ -145,11 +145,16 @@ function question_box(questions_resource,question_index){
     $(element2).append(element3);
     element3 = create_element("span",null,null,"icon_shoucang",null,"innerHTML");
     $(element2).append(element3);
-    if(problems[init_problem]["question_type"]=="0"){
-        $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions[question_index].id+"' class='tooltip' name='收藏' onclick=\"javascript:normal_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
+    if(collection.indexOf(problems[init_problem].questions[question_index].id)==-1){
+        if(problems[init_problem]["question_type"]=="0"){
+            $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions[question_index].id+"' class='tooltip' name='收藏' onclick=\"javascript:normal_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
+        }else{
+            $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions[question_index].id+"' class='tooltip' name='收藏' onclick=\"javascript:special_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
+        }
     }else{
-        $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions[question_index].id+"' class='tooltip' name='收藏' onclick=\"javascript:special_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
+        $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions[question_index].id+"' class='tooltip hover' name='已收藏'>收藏</a>");
     }
+    
     element2 = create_element("div",null,null,"pql_right",null,"innerHTML");
     $(element1).append(element2);
     element3 = create_element("div",null,"pro_qu_t_"+init_problem+"_"+question_index,"pro_qu_t pro_qu_k pro_qu_h pro_qu_t_"+init_problem,null,"innerHTML");
@@ -190,6 +195,10 @@ function question_box(questions_resource,question_index){
     $(element2).attr("onclick","javascript:close_display_answer("+init_problem+","+question_index+");");
     $(element2).html("<img src='/assets/x.gif'>");
     $(element1).append(element2);
+    element2 = create_element("div",null,null,null,null,"innerHTML");
+    $(element1).append(element2);
+    $(element2).html("正确答案：");
+    element3 = create_element("span",null,null,"xx_x",null,"innerHTML");
 }
 
 //题面中小题细节

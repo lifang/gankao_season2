@@ -252,12 +252,10 @@ class ExamUsersController < ApplicationController
     @sheet_url = sheet_url
     sheet = get_doc("#{sheet_url}")
     @init_problem = sheet.attributes["init"]
-    @sheet = "{"
+    @sheet = {}
     sheet.each_element do |ele|
-#      @sheet += "'#{ele.name}':'#{ele.text}'"
+      @sheet["#{ele.name}"]="#{ele.text}"
     end
-    @sheet += "}"
-    puts @sheet
     collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
     @collection = collection.nil? ? [] : collection.question_ids.split(",")
     close_file("#{sheet_url}")
