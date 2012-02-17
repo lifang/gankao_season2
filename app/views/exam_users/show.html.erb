@@ -1,10 +1,10 @@
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 
-<%= javascript_include_tag "/assets/jquery.ui.core.js" %>
-<%= javascript_include_tag "/assets/jquery.ui.widget.js" %>
-<%= javascript_include_tag "/assets/jquery.ui.mouse.js" %>
-<%= javascript_include_tag "/assets/jquery.ui.draggable.js" %>
-<%= javascript_include_tag "/assets/jquery.ui.droppable.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.core.min.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.widget.min.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.mouse.min.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.draggable.min.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.droppable.min.js" %>
 <%= javascript_include_tag "#{@answer_js_url}" %>
 <%= javascript_include_tag "/assets/exam_user/exam_user.js" %>
 <script type="text/javascript" >
