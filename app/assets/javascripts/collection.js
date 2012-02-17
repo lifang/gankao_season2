@@ -237,8 +237,8 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             pql_left.innerHTML=pql_left.innerHTML+(q_index+1)+".";
             var pql_right = pro_question_list.appendChild(create_element("div", null, null, "pql_right", null, "innerHTML"));
             var pro_qu_t = pql_right.appendChild(create_element("div", null, "pro_qu_t_"+q_index, "pro_qu_t pro_qu_k pro_qu_h", null, "innerHTML"));
-            var pro_t_con = pro_qu_t.appendChild(create_element("div", null, null, "pro_t_con", null, "innerHTML"));
             if(q_description!=null){
+                var pro_t_con = pro_qu_t.appendChild(create_element("div", null, null, "pro_t_con", null, "innerHTML"));
                 pro_t_con.innerHTML=q_description;
             }
             //            var title= pql_right.appendChild(create_element("div", null, null, "question_tx", null, "innerHTML"));
