@@ -356,7 +356,7 @@ function create_problem_json(problem, block_id) {
         if (problem.title.indexOf("((mp3))") == -1) {
             var new_title = json_arr[3].split("\"title\":\"");
             if (new_title[1] != null) {
-             json_arr[3] = new_title[0] + "\"title\":\"((mp3))" + mp3_url + "((mp3))" + new_title[1];
+                json_arr[3] = new_title[0] + "\"title\":\"((mp3))" + mp3_url + "((mp3))" + new_title[1];
             }
         }
     }
@@ -381,6 +381,9 @@ function create_drag_question(problem, question_id_input, question, drag_li_arr)
     var analysis = (true_answers.get(question.id) != null && true_answers.get(question.id)[1] != null)
     ? true_answers.get(question.id)[1] : "";
     question_str += "<input type='hidden' id='q_analysis_"+ question.id +"' value='"+ analysis +"' />";
+    var user_answer = (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "")
+        ? answer_hash.get(question.id)[0] : "";
+    question_str += "<input type='hidden' id='u_answer_"+ question.id +"' value='"+ user_answer +"' />";
     if ((parseFloat(question.correct_type) == 0) || (parseFloat(question.correct_type) == 2)) {
         if (question.questionattrs != undefined && question.questionattrs != null) {
             
@@ -445,7 +448,7 @@ function create_review(problem_id, problem_type, question_id) {
         collction_str = "<span id='c_c_"+ question_id +"'><a href='javascript:void(0);'>已收藏</a></span>";
     } else {
         collction_str = "<span id='c_c_"+ question_id +"'><a href='javascript:void(0);' onclick=\"javascript:create_collection("
-        + problem_id +"," + question_id +", '"+ problem_type +"');\" class='scang_btn'>收藏</a></span>";
+        + problem_id +",'" + question_id +"', '"+ problem_type +"');\" class='scang_btn'>收藏</a></span>";
     }
     review_div.innerHTML = " <a href='javascript:void(0);' onclick='javascript:show_analysis("
     +  question_id + ");' class='jiexi_btn'>解析</a>" + collction_str
@@ -456,8 +459,8 @@ function create_review(problem_id, problem_type, question_id) {
 
 //创建收藏
 function create_collection(problem_id, question_id, problem_type) {
-    var user_answer = ($("#question_answer_"+question_id).attr("value") != undefined)
-    ? $("#question_answer_"+question_id).val() : $("#question_answer_"+question_id).html();
+    var user_answer = ($("#u_answer_"+question_id).attr("value") != undefined)
+    ? $("#u_answer_"+question_id).val() : null;
     if (problem_type == "1") {
         $.ajax({
             type: "POST",
@@ -476,6 +479,7 @@ function create_collection(problem_id, question_id, problem_type) {
             success : function(data) {
                 tishi_alert(data["message"]);
                 $("#c_c_"+question_id).html("<a href='javascript:void(0);'>已收藏</a>");
+                user_collection.push(question_id);
             }
         });
     } else {
@@ -496,6 +500,7 @@ function create_collection(problem_id, question_id, problem_type) {
             success : function(data) {
                 tishi_alert(data["message"]);
                 $("#c_c_"+question_id).html("<a href='javascript:void(0);'>已收藏</a>");
+                user_collection.push(question_id);
             }
         });
     }    
@@ -558,7 +563,9 @@ function create_question(problem, question_id_input, parent_div, question, inner
     var analysis = (true_answers.get(question.id) != null && true_answers.get(question.id)[1] != null)
     ? true_answers.get(question.id)[1] : "";
     hidden_text += "<input type='hidden' id='q_analysis_"+ question.id +"' value='"+ analysis +"' />";
-    
+    var user_answer = (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "")
+        ? answer_hash.get(question.id)[0] : "";
+    hidden_text += "<input type='hidden' id='u_answer_"+ question.id +"' value='"+ user_answer +"' />";
     var que_out_div = create_element("div", null, "que_out_" + question.id, "question_area", null, "innerHTML");
     que_out_div.innerHTML = hidden_text + "<div class='area_left'>" + innerHTML + ".</div>";
     parent_div.appendChild(que_out_div);
@@ -663,7 +670,8 @@ function create_single_question(que_div, question, drag_li_arr) {
                             attr.innerHTML += "<input type='checkbox' name='question_attr_"+ question.id +"' id='question_attr_"+ i +"' value=\""
                             + que_attrs[i] +"\" checked='true'/>";
                             attr.className = bk_color;
-                        } else {
+                        }
+                        else {
                             attr.innerHTML += "<input type='checkbox' name='question_attr_"+ question.id +"' id='question_attr_"+ i +"' value=\""
                             + que_attrs[i] +"\"/>";
                         }
@@ -800,10 +808,10 @@ function answer_xml() {
                     [answer, questions[i].getAttribute("score"), questions[i].getAttribute("score_reason")]);
             }
         }
-        var collections = xmlDom.getElementsByTagName("collections");
-        if (collections.length > 0 && collections[0].firstChild != undefined) {
-            user_collection = collections[0].firstChild.data.split(",");
-        }
+//            var collections = xmlDom.getElementsByTagName("collections");
+//            if (collections.length > 0 && collections[0].firstChild != undefined) {
+//                user_collection = collections[0].firstChild.data.split(",");
+//            }
     }
 }
 

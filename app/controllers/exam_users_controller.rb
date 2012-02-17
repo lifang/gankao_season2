@@ -149,7 +149,7 @@ class ExamUsersController < ApplicationController
   end
 
   #重做卷子
-  def redo
+  def redo_paper
     url=params[:sheet_url]
     doc = get_doc(url)
     collection = ""
@@ -188,12 +188,14 @@ class ExamUsersController < ApplicationController
       question_id = this_question["id"]
       Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id,
         params["paper_id"], params["addition"]["answer"], params["addition"]["analysis"], params["user_answer"])
+
+      CollectionInfo.update_collection_infos(params["paper_id"].to_i, cookies[:user_id].to_i, [question_id.to_i])
       #在sheet中记录小题的收藏状态
-      doc = get_doc(params[:sheet_url])
-      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-      collection =doc.root.elements["collection"]
-      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-      write_xml(doc, params[:sheet_url])
+#      doc = get_doc(params[:sheet_url])
+#      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+#      collection =doc.root.elements["collection"]
+#      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+#      write_xml(doc, params[:sheet_url])
     end
     respond_to do |format|
       format.json {
@@ -243,6 +245,22 @@ class ExamUsersController < ApplicationController
         render :json=>{:message=>@message}
       }
     end
+  end
+
+
+  #JS版本,show页面
+  def show_js
+    #答卷
+    eu = ExamUser.find(params[:id])
+    @paper_id = eu.paper_id
+    @paper = Paper.find(@paper_id)
+    @answer_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
+    s_url = ExamUser.find(params[:id]).answer_sheet_url
+    sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+    sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
+    @sheet_url = sheet_url
+    @sheet = get_doc("#{sheet_url}")
+    close_file("#{sheet_url}")
   end
 
   

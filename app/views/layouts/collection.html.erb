@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>赶考-英语真题练习网站</title>
+    <title><%= @title.nil? ? "赶考网" : @title %></title>
+    <meta name="description" content="<%= @meta_description.nil? ? "赶考网" : @meta_description %>" />
     <%= stylesheet_link_tag    "/assets/style.css" %>
     <%= stylesheet_link_tag    "/assets/public.css" %>
     <%= stylesheet_link_tag "/assets/jplayer.blue.monday.css" %>
