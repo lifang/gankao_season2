@@ -1,0 +1,4 @@
+<div class="no_sc">
+<% if signed_in? %> 您的试用期已结束。[<a class='link_c' href='/users/<%= cookies[:user_id] %>/record?vip=1'>升级为正式用户</a>]
+<% else %> 抱歉，您没有登录。 <% end %>
+</div>

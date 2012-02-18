@@ -26,7 +26,7 @@ class WordsController < ApplicationController
     @category = Category.find_by_id(category_id.to_i)
     @title = "#{@category.name}词汇训练"
     if is_nomal?(params[:category])
-      flash[:notice] = "您的试用期已过，升级为vip用户才能试用。"
+      flash[:notice] = "您的试用期已结束。[<a class='link_c' href='/users/#{cookies[:user_id]}/record?vip=1'>升级为正式用户</a>]"
       redirect_to "/words?category=#{params[:category]}"
     else
       @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],

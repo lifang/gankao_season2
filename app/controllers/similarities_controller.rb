@@ -22,18 +22,14 @@ class SimilaritiesController < ApplicationController
     examination_ids = []
     @exam_user_hash = {}
     @similarities.each { |sim| examination_ids << sim.id }
-    @exam_users = ExamUser.find_by_sql(["select eu.id, eu.examination_id, eu.is_submited, eu.answer_sheet_url from exam_users eu where eu.user_id = ?
+    @exam_users = ExamUser.find_by_sql(["select eu.id, eu.examination_id, eu.is_submited,
+      eu.answer_sheet_url from exam_users eu where eu.user_id = ?
       and eu.examination_id in (?)", cookies[:user_id].to_i, examination_ids])
     @exam_users.each { |eu| @exam_user_hash[eu.examination_id] = [eu.id,eu.is_submited,eu.answer_sheet_url] }
   end
 
   def join
     category_id = params[:category].nil? ? 2 : params[:category]
-    if cookies[:user_id].nil?
-      redirect_to "/logins?last_url=#{Constant::SERVER_PATH}/similarities?category=#{category_id}"
-      return false
-    end
-
     similarity = Examination.find(params[:id])
     if is_vip?(category_id) or (is_trial?(category_id) and similarity.is_free)
       #设置考试试卷
@@ -43,7 +39,8 @@ class SimilaritiesController < ApplicationController
       end
       if papers_arr.length>0
         @paper = papers_arr.sample
-        @exam_user = ExamUser.find_by_sql("select * from exam_users where paper_id = #{@paper.id} and examination_id = #{params[:id]} and user_id = #{cookies[:user_id]}")[0]
+        @exam_user = ExamUser.find_by_sql("select * from exam_users where paper_id = #{@paper.id}
+          and examination_id = #{params[:id]} and user_id = #{cookies[:user_id]}")[0]
         if @exam_user.nil?
           @exam_user = ExamUser.create(:user_id=>cookies[:user_id],:examination_id=>params[:id],:paper_id=>@paper.id)
         end
@@ -53,7 +50,11 @@ class SimilaritiesController < ApplicationController
         redirect_to "/similarities?category=#{category_id}"
       end
     else
-      flash[:notice]="当前试卷为收费卷，升级为vip用户才能试用。"
+      if is_nomal?(category_id)
+        flash[:notice]="您的试用期已结束。[<a class='link_c' href='/users/#{cookies[:user_id]}/record?vip=1'>升级为正式用户</a>]"
+      else
+        flash[:notice]="本试卷仅供正式用户使用。[<a class='link_c' href='/users/#{cookies[:user_id]}/record?vip=1'>升级为正式用户</a>]"
+      end
       redirect_to "/similarities?category=#{category_id}"
     end
   end

@@ -9,18 +9,23 @@
         <li>
           <% if cookies[:user_id].nil? %>
             <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>">
+              <% unless similarity.is_free %><span><img src="/assets/icon_tx.png" /></span><% end %>
               <h2><%= similarity.title %></h2>
             </a>
           <% else %>
             <% if is_vip?(params[:category]) %>
               <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
                    onclick="return already_submit('<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>>
-                <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %><span><img title="已完成" src="/assets/icon_wc.png" /></span><% end %>
+                <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
+                <span><img title="已完成" src="/assets/icon_wc.png" /></span>
+                <% elsif !similarity.is_free %><span><img src="/assets/icon_tx.png" /></span>
+                <% end %>
                 <h2><%= similarity.title %></h2>
               </a>
             <% elsif is_nomal?(params[:category]) %>
               <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
-                 onclick="javascript:tishi_alert('您的试用期已过，升级为vip用户才能试用。');">
+                 onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>
+                <% unless similarity.is_free %><span><img src="/assets/icon_tx.png" /></span><% end %>
                 <h2><%= similarity.title %></h2>
               </a>
             <% else %>
@@ -32,7 +37,8 @@
                 </a>
               <% else %>
                 <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
-                   onclick="javascript:tishi_alert('当前试卷为收费卷，升级为vip用户才能试用。');">
+                   onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>
+                  <span><img src="/assets/icon_tx.png" /></span>
                   <h2><%= similarity.title %></h2>
                 </a>
               <% end %>

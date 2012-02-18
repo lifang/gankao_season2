@@ -18,12 +18,13 @@
                 <% elsif simulation.start_end_time and simulation.start_end_time < Time.now %>
                   考试已结束
                 <% else %>
-                  <% if is_vip?(params[:category]) or (is_trial?(params[:category]) and simulation.is_free) %>
+                  <% if is_vip?(params[:category]) %>
                     <button type="button" onclick="javascript:show_exam_tishi('<%= is_submited %>', <%= simulation.id %>);" >
                       立即参加
                     </button>
                   <% else %>
-                    <button type="button" onclick="javascript:tishi_alert('当前试卷为收费卷，升级为vip用户才能试用。');" >
+                    <button type="button" class="tooltip_vip" title="仅供正式用户使用"
+                            onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>
                       立即参加
                     </button>
                   <% end %>
@@ -31,12 +32,19 @@
               <% elsif @exam_user_hash[simulation.id][0].total_score.nil?  %>
                 阅卷中
               <% elsif %>
-                <a href="javascript:void(0);"
-                   onclick="javascript:show_part_score('<%= @exam_user_hash[simulation.id][0].total_score %>',
-                     '<%= @exam_user_hash[simulation.id][0].rank %>', '<%= @exam_user_hash[simulation.id][1] %>',
-                     '<%= @exam_user_hash[simulation.id][2] %>', '<%= @exam_user_hash[simulation.id][3] %>',
-                     '<%= @exam_user_hash[simulation.id][4] %>');" >查看分数</a>
-                <a href="/simulations/<%= @exam_user_hash[simulation.id][0].id %>/show_result" target="_blank">查看试卷</a>
+                <% if is_vip?(params[:category]) %>
+                  <a href="javascript:void(0);"
+                     onclick="javascript:show_part_score('<%= @exam_user_hash[simulation.id][0].total_score %>',
+                               '<%= @exam_user_hash[simulation.id][0].rank %>', '<%= @exam_user_hash[simulation.id][1] %>',
+                               '<%= @exam_user_hash[simulation.id][2] %>', '<%= @exam_user_hash[simulation.id][3] %>',
+                               '<%= @exam_user_hash[simulation.id][4] %>');" >查看分数</a>
+                  <a href="/simulations/<%= @exam_user_hash[simulation.id][0].id %>/show_result" target="_blank">查看试卷</a>
+                <% else %>
+                  <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
+                     onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>查看分数</a>
+                  <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
+                     href='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>查看试卷</a>
+                <% end %>
               <% end %>
             <% else %>
               <% if simulation.start_at_time and  simulation.start_at_time > Time.now %>
