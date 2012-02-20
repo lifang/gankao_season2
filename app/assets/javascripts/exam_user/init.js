@@ -30,8 +30,10 @@ for(var i=0;i<b.length;i++){
     if(b[i]!=null&&b[i].problems!=null){
         var b1 = transform_array(b[i].problems.problem);
         for(var j=0;j<b1.length;j++){
-            b1[j].questions =  transform_array(b1[j].questions.question);
-            problems.push(b1[j])
+            if(b1[j].questions!=null){
+                b1[j].questions =  transform_array(b1[j].questions.question);
+                problems.push(b1[j]);
+            }
         }
     }
 }
@@ -40,5 +42,8 @@ $(function(){
     //写入总题数
     $("#global_problem_sum").html(problems.length);
 })
+
+
+
 
 
