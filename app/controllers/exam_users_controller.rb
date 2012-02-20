@@ -7,29 +7,21 @@ class ExamUsersController < ApplicationController
     begin
       eu = ExamUser.find(params[:id])
       @paper_id = eu.paper_id
-      p = Paper.find(@paper_id)
-      paper = File.open("#{Constant::BACK_PUBLIC_PATH}#{p.paper_js_url}")
-      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("paperjs/","answerjs/")
-      @paper = (JSON paper.read()[8..-1])["paper"]
-      #组织 @paper
-      @title = @paper["base_info"]["title"]
-      @meta_keywords = "在线做题,在线真题听力MP3,实时核对,完整的解析和相关词汇"
-      @meta_description = "在线做题，在线真题听力MP3，实时核对，完整的解析和相关词汇。"
-      @paper["blocks"]["block"] = @paper["blocks"]["block"].nil? ? [] : (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : [@paper["blocks"]["block"]]
-      @paper["blocks"]["block"].each do |block|
-        if block["problems"]
-          block["problems"]["problem"] = (block["problems"]["problem"].nil?) ? [] : ((block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]])
-          block["problems"]["problem"].each do |problem|
-            problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] if problem["questions"]
-          end
-        end
-      end
-      #生成考生答卷
+      @paper = Paper.find(@paper_id)
+      @answer_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
       s_url = ExamUser.find(params[:id]).answer_sheet_url
-      @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
-      @sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(@sheet_url))
-      @sheet = get_doc("#{@sheet_url}")
-      close_file("#{@sheet_url}")
+      sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+      sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
+      @sheet_url = sheet_url
+      sheet = get_doc("#{sheet_url}")
+      @init_problem = sheet.attributes["init"]
+      @sheet = {}
+      sheet.each_element do |ele|
+        @sheet["#{ele.name}"]="#{ele.text}"
+      end
+      collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
+      @collection = collection.nil? ? [] : collection.question_ids.split(",")
+      close_file("#{sheet_url}")
     rescue
       flash[:warn] = "试卷加载错误，请您重新尝试。"
       redirect_to request.referer
@@ -197,21 +189,14 @@ class ExamUsersController < ApplicationController
 
   #预览
   def preview
-    paper = File.open("#{Constant::BACK_PUBLIC_PATH}/preview/paperjs/#{params[:paper]}.js")
-    @answer_js_url = "#{Constant::BACK_SERVER_PATH}/preview/answerjs/#{params[:paper]}.js"
-    @paper = (JSON paper.read()[8..-1])["paper"]
-    #组织 @paper
-    @paper["blocks"]["block"] = @paper["blocks"]["block"].nil? ? [] : (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : [@paper["blocks"]["block"]]
-    @paper["blocks"]["block"].each do |block|
-      if block["problems"]
-        block["problems"]["problem"] = (block["problems"]["problem"].nil?) ? [] : ((block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]])
-        block["problems"]["problem"].each do |problem|
-          problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] if problem["questions"]
-        end
-      end
-    end
+    #读取试题
+    @paper_id = params[:paper]
+    @paper = Paper.find(@paper_id)
+    @paper_url = "#{Constant::BACK_SERVER_PATH}/preview/paperjs/#{params[:paper]}.js"
+    @answer_url = "#{Constant::BACK_SERVER_PATH}/preview/answerjs/#{params[:paper]}.js"
+    @collection = []
   end
-
+  
   #单词加入背诵列表
   def ajax_add_word
     word_id = params[:word_id]
@@ -237,30 +222,5 @@ class ExamUsersController < ApplicationController
       }
     end
   end
-
-
-  #JS版本,show页面
-  def show_js
-    #答卷
-    eu = ExamUser.find(params[:id])
-    @paper_id = eu.paper_id
-    @paper = Paper.find(@paper_id)
-    @answer_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
-    s_url = ExamUser.find(params[:id]).answer_sheet_url
-    sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
-    sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
-    @sheet_url = sheet_url
-    sheet = get_doc("#{sheet_url}")
-    @init_problem = sheet.attributes["init"]
-    @sheet = {}
-    sheet.each_element do |ele|
-      @sheet["#{ele.name}"]="#{ele.text}"
-    end
-    collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
-    @collection = collection.nil? ? [] : collection.question_ids.split(",")
-    close_file("#{sheet_url}")
-  end
-
-  
 
 end

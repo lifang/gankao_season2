@@ -62,7 +62,7 @@ function active(this_problem,old_problem){
         load_problem(init_problem);
     }
     this_problem.hide();
-    drag_tk();
+    afterload();
 }
 
 
@@ -74,17 +74,13 @@ function pro_qu_t(problem_index){
         if(pro_qu_div.is(":visible")){
             pro_qu_div.hide();
             $(this).parent().parent().addClass("p_q_line");
-            $(this).addClass("pro_qu_h");
             last_opened_question = null;
         }else{
             pro_qu_div.show();
             $(this).parent().parent().removeClass("p_q_line");
-            $(this).parent().removeClass("p_q_line");
-            $(this).removeClass("pro_qu_h");
             if(last_opened_question!=null){
                 last_opened_question.parent().find(".pro_qu_div").hide();
                 last_opened_question.parent().parent().addClass("p_q_line");
-                last_opened_question.addClass("pro_qu_h");
             }
             last_opened_question = $(this);
         }
@@ -251,42 +247,6 @@ function change_display_answer(correct_type,answer){
     return answer
 }
 
-//防止冒泡
-//function stop_bubble(){
-//    $(function(){
-//        var e = getEvent();
-//        if (window.event) {
-//            //e.returnValue=false;
-//            e.cancelBubble=true;
-//        }else{
-//            //e.preventDefault();
-//            e.stopPropagation();
-//        }
-//    }
-//    );
-//}
-
-//在火狐和Ie下取event事件
-//function getEvent(){
-//    if(window.event){
-//        return window.event;
-//    }
-//    func=getEvent.caller;
-//    while(func!=null){
-//        var arg0=func.arguments[0];
-//        if(arg0){
-//            if((arg0.constructor==Event || arg0.constructor ==MouseEvent
-//                || arg0.constructor==KeyboardEvent)
-//            ||(typeof(arg0)=="object" && arg0.preventDefault
-//                && arg0.stopPropagation)){
-//                return arg0;
-//            }
-//        }
-//        func=func.caller;
-//    }
-//    return null;
-//}
-
 //核对小题
 function check_question(question_type,correct_type,problem_index,question_index){
     var attrs = problems[problem_index].questions[question_index]["questionattrs"];
@@ -298,6 +258,7 @@ function check_question(question_type,correct_type,problem_index,question_index)
         return false;
     }else{
         if(question_type=="1"){
+            $("#tk_zuoda_"+problem_index).hide();
             $(".pro_question_list_"+problem_index+":eq("+question_index+")").show();
             $("#pro_qu_t_"+problem_index+"_"+question_index).trigger("click");
         }
@@ -331,9 +292,7 @@ function check_question(question_type,correct_type,problem_index,question_index)
     $("#display_answer_"+problem_index+"_"+question_index).html(answer);
 
     //判断是否最后一小题，若是，则改变答卷状态 status="1"
-    var this_problem = $(".problem_resource:visible");
-    var next_problem = this_problem.next(".problem_resource");
-    if((question_index+1)>=answers[problem_index].length && next_problem.length==0){
+    if((question_index+1)>=answers[problem_index].length && (problem_index+1)>=problems.length){
         $.ajax({
             type: "POST",
             url: "/exam_users/"+init_exam_user_id+"/ajax_change_status.json",
@@ -353,7 +312,7 @@ function refer_question(question_type,correct_type,problem_index,question_index)
     }
     var answer = answers[problem_index][question_index].answer;
     var analysis = answers[problem_index][question_index].analysis;
-    var user_answer = $("#exam_user_answer_"+problem_index+"_"+question_index).val();
+    var user_answer = sheet["_"+problem_index+"_"+question_index];
     //直接改变小题的背景颜色
     if(user_answer==answer){
         change_color("1",problem_index,question_index);
@@ -361,6 +320,7 @@ function refer_question(question_type,correct_type,problem_index,question_index)
         change_color("0",problem_index,question_index);
     }
     if(question_type=="1"){
+        $("#tk_zuoda_"+problem_index).hide();
         $(".pro_question_list_"+problem_index+":eq("+question_index+")").show();
     }
     //改变答题正误的显示效果细节
@@ -370,15 +330,14 @@ function refer_question(question_type,correct_type,problem_index,question_index)
     $("#display_answer_"+problem_index+"_"+question_index).html(answer);
     //模拟用户操作，如单选题选择了哪个，selector选中哪个
     imitate_action(question_type,correct_type,user_answer,problem_index,question_index);
-    //alert(""+attrs+","+question_type+","+correct_type+","+user_answer+","+problem_index+","+question_index);
 }
 
 //模拟用户操作
 function imitate_action(question_type,correct_type,user_answer,problem_index,question_index){
-    var attrs = problems[problem_index].questions[question_index]["questionattrs"];
-    var split_attrs = attrs.split(";-;");
     if(question_type=="0"){
         if(correct_type=="0"){
+            var attrs = problems[problem_index].questions[question_index]["questionattrs"];
+            var split_attrs = attrs.split(";-;");
             for(var i=0;i<split_attrs.length;i++){
                 if(user_answer==split_attrs[i]){
                     $(".single_choose_li_"+problem_index+"_"+question_index+":eq("+i+")").addClass("hover");
@@ -386,6 +345,8 @@ function imitate_action(question_type,correct_type,user_answer,problem_index,que
             }
         }
         if(correct_type=="1"){
+            var attrs = problems[problem_index].questions[question_index]["questionattrs"];
+            var split_attrs = attrs.split(";-;");
             var user_answer_arr = user_answer.split(";|;");
             for(var ii=0;ii<user_answer_arr.length;ii++){
                 for(var j=0;j<split_attrs.length;j++){
@@ -622,7 +583,7 @@ function clone_flowplayer(selector,audio_src){
         },
         onLoad: function() {
             this.setVolume(90);
-            this.setClip(audio_src);
+            this.setClip(back_server_path+audio_src);
         }
     });
 }
@@ -650,6 +611,11 @@ function normal_add_collect(problem_index,question_index){
                 tishi_alert("小题收藏成功");
             }
         });
+    }else{
+        $("#shoucang_"+problems[problem_index].questions[question_index].id).addClass("hover");
+        $("#shoucang_"+problems[problem_index].questions[question_index].id).attr("name","已收藏");
+        $("#shoucang_"+problems[problem_index].questions[question_index].id).attr("onclick","");
+        tishi_alert("小题收藏成功(预览)");
     }
 }
 
@@ -679,6 +645,11 @@ function special_add_collect(problem_index,question_index){
                 tishi_alert("小题收藏成功");
             }
         });
+    }else{
+        $("#shoucang_"+problems[problem_index].questions[question_index].id).addClass("hover");
+        $("#shoucang_"+problems[problem_index].questions[question_index].id).attr("name","已收藏");
+        $("#shoucang_"+problems[problem_index].questions[question_index].id).attr("onclick","");
+        tishi_alert("小题收藏成功(预览)");
     }
 }
 
