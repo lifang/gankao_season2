@@ -43,9 +43,10 @@ class LoginsController < ApplicationController
       @user=User.where("code_id='#{user_info[:id]}' and code_type='sina'").first
       if @user.nil?
         @user=User.create(:code_id=>"#{user_info[:id]}",:code_type=>'sina',:name=>user_info[:name],:username=>user_info[:name])
+        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       end
-      cookies[:user_name] ={:value =>user_info[:name], :path => "/", :secure  => false}
-      cookies[:user_id]={:value =>@user.id, :path => "/", :secure  => false}
+      cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
+      cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
       ActionLog.login_log(cookies[:user_id])
       render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
@@ -62,8 +63,9 @@ class LoginsController < ApplicationController
       @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
       if @user.nil?
         @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
+        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       end
-      cookies[:user_name] ={:value =>@user.name, :path => "/", :secure  => false}
+      cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
       ActionLog.login_log(cookies[:user_id])
@@ -92,12 +94,13 @@ class LoginsController < ApplicationController
       if @user.nil?
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>session[:qqopen_id])
+        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       end
       session[:qqtoken]=nil
       session[:qqsecret]=nil
       session[:qqopen_id]=nil
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
-      cookies[:user_name] ={:value =>@user.name, :path => "/", :secure  => false}
+      cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
       ActionLog.login_log(cookies[:user_id])
       render :inline => "<script>window.opener.location.href='/collections';window.close();</script>"

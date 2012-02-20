@@ -11,12 +11,12 @@ class WordsController < ApplicationController
     @meta_description = "搜集#{@category.name}必考词汇1000余条，以四步训练帮助掌握词汇的用法和拼写，为应试提供扎实的基础。"
     if cookies[:user_id]
       @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
-          "user_id" => cookies[:user_id].to_i})
-      level_word_count = Word.recite_words
-      user_word_count = UserWordRelation.user_words(cookies[:user_id].to_i)
+          "user_id" => cookies[:user_id].to_i, "category_id" => category_id.to_i})
+      level_word_count = Word.recite_words(category_id.to_i)
+      user_word_count = UserWordRelation.user_words(cookies[:user_id].to_i, category_id.to_i)
       @leaving_count = level_word_count + user_word_count - @already_recited.total_num
     else
-      @leaving_count = Word.recite_words
+      @leaving_count = Word.recite_words(category_id.to_i)
     end
     render :layout => "application"
   end
@@ -30,8 +30,8 @@ class WordsController < ApplicationController
       redirect_to "/words?category=#{params[:category]}"
     else
       @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
-          "user_id" => cookies[:user_id].to_i})
-      @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i,
+          "user_id" => cookies[:user_id].to_i, "category_id" => category_id.to_i})
+      @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
         @already_recited.total_num, params[:type])
       @word_ids = []
       @sentence_hash = []
@@ -51,15 +51,15 @@ class WordsController < ApplicationController
 
   def recollection
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
-        "user_id" => cookies[:user_id].to_i})
-    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i,
+        "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
+    @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
       @already_recited.total_num, params[:type])
   end
 
   def use
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
-        "user_id" => cookies[:user_id].to_i})
-    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i,
+        "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
+    @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
       @already_recited.total_num, params[:type])
     @word_ids = []
     @sentence_hash = []
@@ -71,8 +71,8 @@ class WordsController < ApplicationController
 
   def hand_man
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
-        "user_id" => cookies[:user_id].to_i})
-    @words = Word.current_recite_words(params[:category].to_i, cookies[:user_id].to_i,
+        "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
+    @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
       @already_recited.total_num, params[:type])
     @word_ids = []
     @sentence_hash = []

@@ -18,8 +18,10 @@ class UsersController < ApplicationController
   end
 
   def update_users
-    User.find(params[:id].to_i).update_attributes(params[:info])
-    data="更新成功"
+    user = User.find(cookies[:user_id].to_i)
+    user.update_attributes(params[:info]) if user
+    cookies.delete(:first) unless cookies[:first].nil?
+    data="个人信息更新成功。"
     respond_to do |format|
       format.json {
         render :json=>{:message=>data}

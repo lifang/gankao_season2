@@ -206,26 +206,6 @@ function delete_mess(){
     return false;
 }
 
-function update_users(){
-    var info={};
-    info["name"]=$("#name").val();
-    info["school"]=$("#school").val();
-    $.ajax({
-        async:true,
-        dataType:'json',
-        data:{
-            info:info,
-            id:parseInt($("#id").val())
-        },
-        url:"/users/update_users",
-        type:'post',
-        success : function(data) {
-            tishi_alert(data.message)
-        }
-    });
-    return false;
-}
-
 function accredit(){
     if($("#invit_code").val()==""||$("#invit_code").val()==null){
         tishi_alert("请输入邀请码");
