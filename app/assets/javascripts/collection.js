@@ -323,6 +323,7 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             if(valid_words[0]!=null){
                 var single_word=word_in_problem[valid_words[0]];
                 jiexi_word.appendChild(create_element("input", null, "enunciate_url_"+q_index, "", "hidden",single_word[0].enunciate_url ))
+                jiexi_word.appendChild(create_element("input", null, "word_id_"+q_index, "", "hidden",single_word[0].id ))
                 var xg_word_ny=jiexi_word.appendChild(create_element("div", null, null, "xg_words_ny", null, "innerHTML"));
                 var ch_text=xg_word_ny.appendChild(create_element("div", null, null, "ch_text", null, "innerHTML"));
                 var ch_words_line_1=ch_text.appendChild(create_element("div", null, "ch_words_line", "ch_words_line", null, "innerHTML"));
@@ -330,7 +331,7 @@ function load_questions_collection(questions,problem_index,tag,question_type){
                 var ch_words_line_3=ch_text.appendChild(create_element("div", null, "ch_words_line_"+q_index, "ch_words_line", null, "innerHTML"));
                 ch_words_line_1.innerHTML="<span class='font_size_24' id='name_"+q_index +"'>"+single_word[0].name +"</span><span id='types_"+q_index +"'>"+
                 types[single_word[0].types] +"</span><span id='phonetic_"+q_index +"'>"+single_word[0].phonetic +"</span>\n\
-                <a href='#'onclick=javascript:jplayer_play("+q_index +");><img src='/assets/icon_fy.png' /></a>"
+                <a href='#'onclick=javascript:jplayer_play("+q_index +");><img src='/assets/icon_fy.png' /></a> <a href='javascript:void(0);' title='加入背诵单词' onclick=\"javascript:ajax_add_word('"+ q_index+"');\"><img src='/assets/join_bs.png' /></a>"
                 ch_words_line_2.innerHTML="<p class='font_size_16' id='en_mean_"+ q_index+"'>"+single_word[0].en_mean +"</p><p id='ch_mean_"+q_index +"'>"+single_word[0].ch_mean +"</p>";
                 var sentence=single_word[1];
                 if(sentence.length!=0){
@@ -391,9 +392,26 @@ function load_questions_collection(questions,problem_index,tag,question_type){
     }
 }
 
+//添加背诵单词
+function ajax_add_word(word_index){
+    var word_id=$("#word_id_"+word_index).val();
+    $.ajax({
+        type: "POST",
+        url: "/exam_users/ajax_add_word.json",
+        dataType: "json",
+        data : {
+            "word_id" : word_id
+        },
+        success : function(data){
+            tishi_alert(data.message);
+        }
+    });
+}
+
 function show_words(index,li_index){
     var name=$("#li_value_"+ index+"_"+li_index).val();
     $("#enunciate_url_"+index).val(word_in_problem[name][0].enunciate_url);
+     $("#word_id_"+index).val(word_in_problem[name][0].id);
     $("#name_"+index).html(word_in_problem[name][0].name);
     $("#types_"+index).html(types[word_in_problem[name][0].types]);
     $("#phonetic_"+index).html(word_in_problem[name][0].phonetic);

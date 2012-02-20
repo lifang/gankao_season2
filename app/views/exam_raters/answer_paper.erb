@@ -88,6 +88,7 @@
 <script type="text/javascript">
   $("#single_problem_"+getCookie("show_problem")).css("display","");
   $(function(){
+    $(".pro_qu_t").first().trigger("click");
     $(".drag_tk_box").each(function(){
       $("#"+this.id).css("height",$("#drag_tk_"+this.id).height()+20);
     })

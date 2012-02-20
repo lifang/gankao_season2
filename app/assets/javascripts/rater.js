@@ -165,6 +165,7 @@ function prev_problem(){
     setCookie("show_problem",parseInt(getCookie("show_problem"))-1);
     $("div[id*='single_problem_']").css("display","none");
     $("#single_problem_"+getCookie("show_problem")).css("display","");
+    $("#single_problem_"+getCookie("show_problem")+" .pro_qu_t" ).first().trigger("onclick");
     $("#jplayer_button_"+getCookie("show_problem")).trigger("onclick");
 }
 
@@ -177,6 +178,7 @@ function next_problem(){
     setCookie("show_problem",parseInt(getCookie("show_problem"))+1);
     $("div[id*='single_problem_']").css("display","none");
     $("#single_problem_"+getCookie("show_problem")).css("display","");
+    $("#single_problem_"+getCookie("show_problem")+" .pro_qu_t" ).first().trigger("onclick");
     $("#jplayer_button_"+getCookie("show_problem")).trigger("onclick");
 }
 
