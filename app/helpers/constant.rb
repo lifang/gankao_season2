@@ -8,7 +8,7 @@ module Constant
 
   #后台项目文件目录
 
-  BACK_PUBLIC_PATH = "d:/exam_season2/public"
+  BACK_PUBLIC_PATH = "f:/exam_season2/public"
 
   #weibo账号
   WEIBO_ID = 2359288352
