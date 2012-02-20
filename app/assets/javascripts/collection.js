@@ -348,25 +348,31 @@ function load_questions_collection(questions,problem_index,tag,question_type){
                 if(pro_qu_div.is(":visible")){
                     pro_qu_div.hide();
                     $(this).parent().parent().addClass("p_q_line");
-                    $(this).parent().parent().removeClass("backg_blue");
                     $(this).addClass("pro_qu_h");
-                    var ids=this.id.split("_");
-                    var id=ids[ids.length-1];
-                    $("#"+id).removeClass("backg_blue");
+                    if(question_type=='1'){
+                        $(this).parent().parent().removeClass("backg_blue");
+                        var ids=this.id.split("_");
+                        var id=ids[ids.length-1];
+                        $("#"+id).removeClass("backg_blue");
+                    }
                     last_open_question=null;
                 }else{
                     if(last_open_question!=null){
-                        var question=(last_open_question[0].id).split("_");
-                        var question_id=question[question.length-1];
-                        $("#"+question_id).removeClass("backg_blue");
+                        if(question_type=='1'){
+                            var question=(last_open_question[0].id).split("_");
+                            var question_id=question[question.length-1];
+                            $("#"+question_id).removeClass("backg_blue");
+                        }
                         last_open_question.trigger("click");
                     }
                     pro_qu_div.show();
-                    var open_ids=this.id.split("_");
-                    var open_id=open_ids[open_ids.length-1];
-                    $("#"+open_id).addClass("backg_blue");
+                    if(question_type=='1'){
+                        var open_ids=this.id.split("_");
+                        var open_id=open_ids[open_ids.length-1];
+                        $("#"+open_id).addClass("backg_blue");
+                        $(this).parent().parent().addClass("backg_blue");
+                    }
                     $(this).parent().parent().removeClass("p_q_line");
-                    $(this).parent().parent().addClass("backg_blue");
                     $(this).parent().removeClass("p_q_line");
                     $(this).removeClass("pro_qu_h");
                     last_open_question=$(this);
@@ -593,9 +599,12 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         $("#pro_qu_div_"+ question_index+" .pro_btn #check").bind("click",function(){
             if(($(".pro_qu_t").index($("#pro_qu_t_"+question_index))+1)==$(".pro_qu_t").length){
                 $(".icon_next a").trigger("onclick");
-                $(".pro_qu_t").first().trigger("click");
             }else{
+                if(last_open_question!=null){
+                    last_open_question.trigger("click");
+                }
                 $($(".pro_qu_t")[$(".pro_qu_t").index($("#pro_qu_t_"+question_index))+1]).trigger("click");
+                last_open_question=$($(".pro_qu_t")[$(".pro_qu_t").index($("#pro_qu_t_"+question_index))+1]);
             }
             
         })
@@ -617,8 +626,6 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         $("#check_"+question_index).css("display","none");
         last_open_question=$("#pro_question_list_"+problem_question_index).children().find(".pro_qu_t");
     }
-   
-  
 }
 
 //字体放大、缩小
@@ -685,7 +692,6 @@ function test_again(){
     var problem=get_array(collections.problems.problem)[problems_tags[problem_init]]
     var question_type=problem.question_type;
     var questions=problem.questions.question;
-    last_open_question=null;
     if(question_type=='0'){
         for(var q_index=0;q_index<questions.length;q_index++){
             var correct_type=questions[q_index].correct_type;
