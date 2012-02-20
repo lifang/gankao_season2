@@ -7,8 +7,8 @@
         <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %></a>
         <% if is_trial?(category_id)
           order = Order.first(:conditions=>"user_id = #{cookies[:user_id]}
-      and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}") %>
-          <%= "使用剩#{((order.end_time - Time.now.to_datetime)/1.day).to_i}天"  unless order.nil? %>
+            and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}") %>
+          <%= "试用剩#{((order.end_time - Time.now.to_datetime)/1.day).to_i}天"  unless order.nil? %>
         <%  elsif is_nomal?(category_id) %>
           试用结束
         <% end %>|<a href="/users/delete_user">退出</a>
@@ -39,7 +39,11 @@
       <li><a href="/words?category=<%= category_id %>"       <% if controller.controller_name=="words" %> class="hover" <% end %> >词汇</a></li>
       <li><a href="/simulations?category=<%= category_id %>" <% if controller.controller_name=="simulations" %> class="hover" <% end %> >模考</a></li>
       <li><a href="/study_plans?category=<%= category_id %>" <% if controller.controller_name=="study_plans" %> class="hover" <% end %> >计划</a></li>
+      <% if cookies[:user_id].nil? or (!cookies[:user_id].nil? and !is_nomal?(params[:category])) %>
       <li><a href="/collections?category=<%= category_id %>" <% if controller.controller_name=="collections" %> class="hover" <% end %> >收藏</a></li>
+      <% else %>
+      <li><a class="tooltip_vip" title="仅供正式用户使用" href="/collections/not_vip?category=<%= category_id %>">收藏</a></li>
+      <% end %>
     </ul>
   </div>
   <div class="clear"></div>

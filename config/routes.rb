@@ -31,7 +31,7 @@ GankaoSeason2::Application.routes.draw do
   resources :collections do
     collection do
       post :load_words,:write_file, :add_collection, :update_collection,:get_collections,:delete_problem
-      get :error,:index1,:ajax_load_problems
+      get :error,:index1,:ajax_load_problems, :not_vip
     end
   end
   resources :similarities do

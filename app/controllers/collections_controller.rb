@@ -1,13 +1,14 @@
 #encoding: utf-8
 class CollectionsController < ApplicationController
   layout 'exam_user'
-  #layout 'collection'
   require 'rexml/document'
   include REXML
-  before_filter :sign?, :except => ["index","error"]
+  before_filter :sign?, :except => ["error"]
   
   def index
-    if cookies[:user_id]
+    if is_nomal?(params[:category])
+      redirect_to "/collections/not_vip?category=#{params[:category]}"
+    else
       user = User.find(cookies[:user_id])
       if user.collection
         category_id = "#{params[:category]}"=="" ? 2 : params[:category]
@@ -17,11 +18,10 @@ class CollectionsController < ApplicationController
         @meta_description = "自动收藏做错的#{@category.name}真题"
         @collection_js="#{user.collection.collection_url}"
       else
-        redirect_to "/collections/error"
+        redirect_to "/collections/error?category=#{params[:category]}"
       end
-    else
-      redirect_to "/collections/error"
     end
+    
   end
 
   def load_words
@@ -83,7 +83,7 @@ class CollectionsController < ApplicationController
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
 
     CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id]])
-    
+
     respond_to do |format|
       format.json {
         render :json => {:message => "收藏成功！"}

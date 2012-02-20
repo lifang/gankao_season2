@@ -7,10 +7,12 @@
       <p>已掌握单词：<span class="orange">0</span></p>
     <% else %>
       <% if is_nomal?(params[:category]) %>
-        <a href="javascript:void(0);" onclick="javascript:tishi_alert('您的试用期已过，升级为vip用户才能试用。');" class="danci_hg">回顾</a>
+        <a href="javascript:void(0);"  class="danci_hg tooltip_vip" title="仅供正式用户使用" 
+           onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>回顾</a>
       <% else %>
         <% if @already_recited.total_num > 0 %>
-          <a href="javascript:void(0);" onclick="javascript:start_word('<%= params[:category] %>', 'old');" class="danci_hg">回顾</a>
+          <a href="javascript:void(0);"
+             onclick="javascript:start_word('<%= params[:category] %>', 'old');" class="danci_hg">回顾</a>
         <% else %>
           <a href="javascript:void(0);" title="您目前还没有已经掌握的单词" class="danci_hg">回顾</a>
         <% end %>
@@ -25,10 +27,12 @@
       <p>未掌握单词：<span class="orange"><%= @leaving_count %></span></p>
     <% else %>
       <% if is_nomal?(params[:category]) %>
-        <a href="javascript:void(0);" onclick="javascript:tishi_alert('您的试用期已过，升级为vip用户才能试用。');" class="danci_bc">背词</a>
+        <a href="javascript:void(0);"  class="danci_bc tooltip_vip" title="仅供正式用户使用" 
+           onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>背词</a>
       <% else %>
         <% if @leaving_count > 0 %>
-          <a href="javascript:void(0);" onclick="javascript:start_word('<%= params[:category] %>', 'new');" class="danci_bc">背词</a>
+          <a href="javascript:void(0);"
+             onclick="javascript:start_word('<%= params[:category] %>', 'new');" class="danci_bc">背词</a>
         <% else %>
           <a href="javascript:void(0);" title="您目已经没有未掌握的单词了" class="danci_hg">背词</a>
         <% end %>

@@ -2,11 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <%= render :partial => "/common/seo"  %>
-    
+
     <%= stylesheet_link_tag    "/assets/style.css" %>
     <%= stylesheet_link_tag    "/assets/public.css" %>
     <%= javascript_include_tag "/assets/application.js" %>
-     <%= javascript_include_tag "main.js" %>
+    <%= javascript_include_tag "main.js" %>
+    <%= javascript_include_tag "/assets/jquery.ui.core.min.js" %>
+    <%= javascript_include_tag "/assets/jquery.ui.widget.min.js" %>
+    <%= javascript_include_tag "/assets/jquery.ui.mouse.min.js" %>
+    <%= javascript_include_tag "/assets/jquery.ui.draggable.min.js" %>
+    <%= javascript_include_tag "/assets/jquery.ui.droppable.min.js" %>
     <%= csrf_meta_tags %>
     <!--[if IE 6]>
 		<script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
