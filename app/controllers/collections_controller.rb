@@ -1,13 +1,14 @@
 #encoding: utf-8
 class CollectionsController < ApplicationController
   layout 'exam_user'
-  #layout 'collection'
   require 'rexml/document'
   include REXML
-  before_filter :sign?, :except => ["index","error"]
+  before_filter :sign?, :except => ["error"]
   
   def index
-    if cookies[:user_id]
+    if is_nomal?(params[:category])
+      redirect_to "/collections/not_vip?category=#{params[:category]}"
+    else
       user = User.find(cookies[:user_id])
       if user.collection
         category_id = "#{params[:category]}"=="" ? 2 : params[:category]
@@ -17,11 +18,10 @@ class CollectionsController < ApplicationController
         @meta_description = "自动收藏做错的#{@category.name}真题"
         @collection_js="#{user.collection.collection_url}"
       else
-        redirect_to "/collections/error"
+        redirect_to "/collections/error?category=#{params[:category]}"
       end
-    else
-      redirect_to "/collections/error"
     end
+    
   end
 
   def load_words
@@ -72,7 +72,8 @@ class CollectionsController < ApplicationController
       params[:problem_id].to_i, params[:question_id].to_i,
       params[:question_answer], params[:question_analysis], params[:user_answer])
     if is_problem_in == false
-      new_col_problem = collection.update_problem_hash(params[:problem_json], params[:paper_id],
+      problem_json = JSON(params[:problem_json]) if params[:problem_json].class.to_s == "String"
+      new_col_problem = collection.update_problem_hash(problem_json, params[:paper_id],
         params[:question_answer], params[:question_analysis], params[:user_answer], params[:question_id].to_i)
       already_hash["problems"]["problem"] << new_col_problem
     end
@@ -82,19 +83,19 @@ class CollectionsController < ApplicationController
 
     CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id].to_i])
 
-#    if params[:exam_user_id]
-#      exam_user = ExamUser.find(params[:exam_user_id])
-#      exam_user.update_user_collection(params[:question_id]) if exam_user
-#    end
-#
-#    if params[:sheet_url]
-#      #在sheet中记录小题的收藏状态
-#      doc = get_doc(params[:sheet_url])
-#      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-#      collection =doc.root.elements["collection"]
-#      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-#      write_xml(doc, params[:sheet_url])
-#    end
+    #    if params[:exam_user_id]
+    #      exam_user = ExamUser.find(params[:exam_user_id])
+    #      exam_user.update_user_collection(params[:question_id]) if exam_user
+    #    end
+    #
+    #    if params[:sheet_url]
+    #      #在sheet中记录小题的收藏状态
+    #      doc = get_doc(params[:sheet_url])
+    #      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
+    #      collection =doc.root.elements["collection"]
+    #      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
+    #      write_xml(doc, params[:sheet_url])
+    #    end
     
     respond_to do |format|
       format.json {
@@ -123,18 +124,7 @@ class CollectionsController < ApplicationController
       params[:problem_id], this_question, params[:question_id],
       params[:paper_id], params[:question_answer], params[:question_analysis], params[:user_answer])
 
-    CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id].to_i])
-
-#    exam_user = ExamUser.find(params[:exam_user_id])
-#    exam_user.update_user_collection(params[:question_id]) if exam_user
-#
-#    if params[:sheet_url]
-#      doc = get_doc(params[:sheet_url])
-#      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-#      collection =doc.root.elements["collection"]
-#      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-#      write_xml(doc, params[:sheet_url])
-#    end
+    CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id]])
     
     respond_to do |format|
       format.json {

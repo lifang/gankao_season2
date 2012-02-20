@@ -25,11 +25,6 @@ class SpecialsController < ApplicationController
 
   def join
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
-    if cookies[:user_id].nil?
-      redirect_to "/logins?last_url=#{Constant::SERVER_PATH}/specials?category=#{category_id}"
-      return false
-    end
-
     special = Examination.find(params[:id])
     if is_vip?(category_id)
       #设置考试试卷
@@ -49,7 +44,7 @@ class SpecialsController < ApplicationController
         redirect_to "/specials?category=#{category_id}"
       end
     else
-      flash[:notice]="专题试卷为收费卷，升级为vip用户才能试用。"
+      flash[:notice]="本试卷仅供正式用户使用。[<a class='link_c' href='/users/#{cookies[:user_id]}/record?vip=1'>升级为正式用户</a>]"
       redirect_to "/specials?category=#{category_id}"
     end
   end

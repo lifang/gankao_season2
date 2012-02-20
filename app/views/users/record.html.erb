@@ -22,10 +22,10 @@ order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::
   <div style="display:none;">
     <div class="vip_box sq_code"><div class="sq_con">授权码 <input id="invit_code" type="text" /><button class="t_btn" onclick="accredit()">确定</button></div></div>
     <div class="vip_box vip_zfb"><div class="zfb_con"><img src="/assets/users/zfb_pic.png" /><select name="" id="vip_style">
-          <option></option>
-           <option value="<%=Category::TYPE_IDS[:english_fourth_level]  %>">英语四级</option>
-          <option value="<%=Category::TYPE_IDS[:english_sixth_level]  %>">英语六级</option>
-         
+          <option value="">产品类型</option>
+          <% Category.all.each do |c| %>
+          <option value="<%= c.id %>"><%= c.name %></option>
+          <% end %>
         </select>
         <button class="t_btn" onclick="check_vip()">确定</button></div></div>
   </div>

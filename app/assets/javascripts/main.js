@@ -220,5 +220,44 @@ function reset_exam() {
     window.open("/simulations/" + sim_id + "/reset_exam");
 }
 
+// 自动轮换内容
+$(document).ready(function(){
+    var objStr = ".change ul li";
+    $(objStr + ":not(:first)").css("display","none");
+    setInterval(function(){
+        if( $(objStr + ":last").is(":visible")){
+            $(objStr + ":first").fadeIn("slow").addClass("in");
+            $(objStr + ":last").hide()
+        }
+        else{
+            $(objStr + ":visible").addClass("in");
+            $(objStr + ".in").next().fadeIn("slow");
+            $(objStr + ".in").hide().removeClass("in")
+        }
+    },4000) //每3秒钟切换
+})
 
-
+$(function(){
+    var x = -20;
+    var y = 15;
+    if ($(".tooltip_vip").length > 0) {
+        $(".tooltip_vip").mouseover(function(e){
+            this.myTitle=this.title;
+            this.title="";
+            var tooltip = "<div class='tooltip_box'><div class='tooltip_next'>"+this.myTitle+"</div></div>";
+            $("body").append(tooltip);
+            $(".tooltip_box").css({
+                "top":(e.pageY+y)+"px",
+                "left":(e.pageX+x)+"px"
+            }).show("fast");
+        }).mouseout(function(){
+            this.title = this.myTitle;
+            $(".tooltip_box").remove();
+        }).mousemove(function(e){
+            $(".tooltip_box").css({
+                "top":(e.pageY+y)+"px",
+                "left":(e.pageX+x)+"px"
+            })
+        });
+    }    
+})

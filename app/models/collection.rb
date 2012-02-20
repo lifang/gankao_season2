@@ -57,7 +57,7 @@ class Collection < ActiveRecord::Base
 
   #修改需要添加的题目
   def update_problem_hash(problem_json, paper_id, answer, analysis, user_answer, question_id)
-    new_col_problem = ActiveSupport::JSON.decode((JSON(problem_json)).to_json)
+    new_col_problem = problem_json 
     questions=new_col_problem["questions"]
     new_col_problem.delete("questions")
     new_col_problem.merge!({"paper_id" => paper_id})

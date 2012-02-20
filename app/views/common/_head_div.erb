@@ -8,7 +8,7 @@
         <% if is_trial?(category_id)
           order = Order.first(:conditions=>"user_id = #{cookies[:user_id]}
             and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}") %>
-          <%= "使用剩#{((order.end_time - Time.now.to_datetime)/1.day).to_i}天"  unless order.nil? %>
+          <%= "试用剩#{((order.end_time - Time.now.to_datetime)/1.day).to_i}天"  unless order.nil? %>
         <%  elsif is_nomal?(category_id) %>
           试用结束
         <% end %>|<a href="/users/delete_user">退出</a>
@@ -23,7 +23,13 @@
     <% else %>
       <div class="h_user"><a href="/logins">登录</a></div>
     <% end %>
-    <div class="h_banner"><a href="#"><img src="/assets/banner.png" /></a></div>
+    <div class="h_banner"><div class="change">
+        <ul>
+          <li><a href="#"><img src="/assets/banner.png"/></a></li>
+          <li><a href="#"><img src="/assets/banner8.png"/></a></li>
+          <li><a href="#"><img src="/assets/banner9.png"/></a></li>
+        </ul>
+      </div></div>
   </div>
   <div class="logo"><a href="/"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
   <div class="nav">
@@ -33,7 +39,11 @@
       <li><a href="/words?category=<%= category_id %>"       <% if controller.controller_name=="words" %> class="hover" <% end %> >词汇</a></li>
       <li><a href="/simulations?category=<%= category_id %>" <% if controller.controller_name=="simulations" %> class="hover" <% end %> >模考</a></li>
       <li><a href="/study_plans?category=<%= category_id %>" <% if controller.controller_name=="study_plans" %> class="hover" <% end %> >计划</a></li>
+      <% if cookies[:user_id].nil? or (!cookies[:user_id].nil? and !is_nomal?(params[:category])) %>
       <li><a href="/collections?category=<%= category_id %>" <% if controller.controller_name=="collections" %> class="hover" <% end %> >收藏</a></li>
+      <% else %>
+      <li><a class="tooltip_vip" title="仅供正式用户使用" href="/collections/not_vip?category=<%= category_id %>">收藏</a></li>
+      <% end %>
     </ul>
   </div>
   <div class="clear"></div>
