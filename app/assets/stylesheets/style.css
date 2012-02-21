@@ -13,6 +13,8 @@ button { cursor: pointer;}
 .gray { color: #999;}
 button.green { color:#009900;}
 .blue { color: #2875AE;}
+.span_right {background: #EEFFEE;}
+.span_error {background: #FFEAEA;}
 .xx_x { cursor: pointer; position: absolute; top: 5px; right: 5px;}
 .t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none;}
 .btn_box { width: 81px; height: 27px; margin: 0 auto;}
@@ -257,7 +259,6 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     line-height: 20px;
     padding-left: 4px;
     border: 1px #e2e2e2 solid; 
-    background: #FFF;
     cursor: move;}
 
 /*相关词汇---------------*/
@@ -494,3 +495,5 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .tk_zuoda { padding-top: 50px; text-align: center; color: #F00;}
 .backg_blue { background: #ebf9ff;}
 .link_c {color: red;}
+
+.backg_blue { background: #ebf9ff;}
