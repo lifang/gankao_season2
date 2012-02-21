@@ -411,7 +411,7 @@ function ajax_add_word(word_index){
 function show_words(index,li_index){
     var name=$("#li_value_"+ index+"_"+li_index).val();
     $("#enunciate_url_"+index).val(word_in_problem[name][0].enunciate_url);
-     $("#word_id_"+index).val(word_in_problem[name][0].id);
+    $("#word_id_"+index).val(word_in_problem[name][0].id);
     $("#name_"+index).html(word_in_problem[name][0].name);
     $("#types_"+index).html(types[word_in_problem[name][0].types]);
     $("#phonetic_"+index).html(word_in_problem[name][0].phonetic);
@@ -541,6 +541,7 @@ function click_next_problem(){
     $("#draggable_list").html("");
     $("#upErrorTo_tab").hide();
     $("#flowplayer_hidden_position").append($("#flowplayer_loader"));
+    $(".tk_zuoda").css("display","none");
     load_problem_collection(problem_init,tag_types);
     $("#jplayer_play").trigger("onclick");
 }
@@ -556,6 +557,7 @@ function click_prev_problem(){
     $("#draggable_list").html("");
     $("#upErrorTo_tab").hide();
     $("#flowplayer_hidden_position").append($("#flowplayer_loader"));
+    $(".tk_zuoda").css("display","none");
     load_problem_collection(problem_init,tag_types);
     $("#jplayer_play").trigger("onclick");
 }
@@ -628,6 +630,7 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         })
         $("#display_jiexi_"+problem_question_index).show();
     }else{
+        $(".tk_zuoda").css("display","none");
         if(last_open_question!=null){
             var question=(last_open_question[0].id).split("_");
             var que_id=question[question.length-1];
@@ -710,6 +713,7 @@ function test_again(){
     var problem=get_array(collections.problems.problem)[problems_tags[problem_init]]
     var question_type=problem.question_type;
     var questions=problem.questions.question;
+    last_open_question=null;
     if(question_type=='0'){
         for(var q_index=0;q_index<questions.length;q_index++){
             var correct_type=questions[q_index].correct_type;
@@ -728,6 +732,7 @@ function test_again(){
             }
         }
     }else{
+        $(".tk_zuoda").css("display","");
         $(".pro_question_list").css('display','none');
         $("#draggable_list").html("");
         var audio_title =problem.title==null ? [] : problem.title.split("((mp3))");
