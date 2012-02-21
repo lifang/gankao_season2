@@ -193,11 +193,11 @@ function load_problem_collection(problem_index,tag){
                 } else if(correct_type=="1"){
                     var answers=u_answer==null?[]:u_answer.split(")");
                     var answer=answers[1]==null? " ":answers[1]
-                    element_str += "<div class='dragDrop_box"
+                    element_str += "<span class='dragDrop_box'"
                     if(question_type=='1'&&flag!=null&&parseInt(flag)==1){
-                        element_str +=" drag_box'"
+                        element_str +="onclick=\"javascript:show_question('"+sign_index +"', this);\""
                     }
-                    element_str +=" id='"+sign_index +"'>"+ answer +"</div>";
+                    element_str +=" id='"+sign_index +"'>"+ answer +"</span>";
                     var attrs =questions[sign_index].questionattrs.split(";-;");
                     var new_attrs = "";
                     for(var i=0;i<attrs.length;i++){
@@ -222,21 +222,7 @@ function load_problem_collection(problem_index,tag){
         $("#drag_tk_box").css("display","none");
     }
     $("#global_problem_title").html(title);
-    $(".drag_box").bind("click",function(){
-        var question_index=this.id;
-        if(last_open_question!=null){
-            last_open_question.trigger("click");
-        }
-        $(this).addClass("backg_blue");
-        var index=problem_init+"_"+question_index;
-        $("#pro_question_list_"+index).css("display","");
-        $("#pro_question_list_"+index).removeClass("p_q_line");
-        $("#pro_question_list_"+index).removeClass("pro_qu_h");
-        $("#pro_question_list_"+index).addClass("backg_blue");
-        $("#pro_qu_div_"+question_index).css("display","");
-        $("#check_"+question_index).css("display","none");
-        last_open_question=$("#pro_question_list_"+index).children().find(".pro_qu_t");
-    });
+
     $("#jplayer_play").trigger("onclick");
     load_questions_collection(questions,problem_index,tag,question_type);
 }
@@ -642,6 +628,7 @@ function check_question(question_index,problem_question_index,answer,problem_ind
             $("#"+que_id).removeClass("backg_blue");
             last_open_question.trigger("click");
         }
+        $("#"+question_index).attr("onclick","javascript:show_question('"+question_index +"', this);")
         $("#"+question_index).addClass("backg_blue");
         $("#"+question_index).parent().attr("onmouseover","");
         $("#"+question_index).parent().attr("onmouseout","");
@@ -721,7 +708,6 @@ function test_again(){
     var question_type=problem.question_type;
     var questions=problem.questions.question;
     $(".un_white").css("display","");
-    last_open_question=null;
     if(question_type=='0'){
         for(var q_index=0;q_index<questions.length;q_index++){
             var correct_type=questions[q_index].correct_type;
@@ -740,6 +726,7 @@ function test_again(){
             }
         }
     }else{
+        last_open_question=null;
         $(".tk_zuoda").css("display","");
         $(".pro_question_list").css('display','none');
         $("#draggable_list").html("");
