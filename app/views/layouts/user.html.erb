@@ -30,7 +30,7 @@
             else
               "#{cookies[:user_name]}(试用剩#{((order.end_time-Time.now.to_datetime)/1.day).to_i}天)"
             end %></a>|<a href="/">首页</a>|<a href="/users/delete_user">退出</a></div>
-        <div class="logo"><a href="/"><img src="/assets/users/logo.png" /></a></div>
+        <div class="logo"><a href="/"><img src="/assets/logo.png" /></a></div>
       </div>
       <div class="main">
         <div class="main_box border_radius">
@@ -42,9 +42,9 @@
           <div class="right">
             <div class="tab_project">
               <ul>
-                <li><a href="/users/<%=cookies[:user_id] %>?category=<%= category_id %>" <% if request.parameters["action"]=="show" %> class="hover" <% end %>><img src="/assets/users/icon_1.png" />个人信息</a></li>
-                <li><a href="/users/<%=cookies[:user_id] %>/info?category=<%= category_id %>" <% if request.parameters["action"]=="info" %> class="hover" <% end %>><img src="/assets/users/icon_2.png" />消 息</a></li>
-                <li><a href="/users/<%=cookies[:user_id] %>/record?category=<%= category_id %>" <% if request.parameters["action"]=="record" %> class="hover" <% end %>><img src="/assets/users/icon_3.png" />消费记录</a></li>
+                <li><a href="/users/<%=cookies[:user_id] %>?category=<%= category_id %>" <% if request.parameters["action"]=="show" %> class="hover" <% end %>><img src="/assets/icon_1.png" />个人信息</a></li>
+                <li><a href="/users/<%=cookies[:user_id] %>/info?category=<%= category_id %>" <% if request.parameters["action"]=="info" %> class="hover" <% end %>><img src="/assets/icon_2.png" />消 息</a></li>
+                <li><a href="/users/<%=cookies[:user_id] %>/record?category=<%= category_id %>" <% if request.parameters["action"]=="record" %> class="hover" <% end %>><img src="/assets/icon_3.png" />消费记录</a></li>
               </ul>
             </div>
           </div>

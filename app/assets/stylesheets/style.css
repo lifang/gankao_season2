@@ -494,3 +494,21 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .tk_zuoda { padding-top: 50px; text-align: center; color: #F00;}
 .backg_blue { background: #ebf9ff;}
 .link_c {color: red;}
+
+/*tab_box------------*/
+.userMess_tab_box { background: #FFF; border: 2px #333 solid; position: fixed; z-index:1000;}
+
+/*个人信息*/
+.main_info { width: 500px; padding: 10px; margin: 0 auto;}
+.save_info { width: 114px; height: 40px; margin: 10px auto;}
+.save_info_btn { width: 114px; height: 40px; background: url(/assets/member_info_btn.png) no-repeat; border: none;}
+
+.rcf_box { color: #333; font-size: 14px;clear: both; background: #F5F5F5; width: 500px; border: 1px #D9D9DA solid; border-bottom: none; overflow: hidden;}
+.rcf_box label { width: 100px; display: block; padding: 20px 0; text-align: right; float: left; line-height: 30px;}
+.setting-item-main { width: 400px; padding: 20px 0; float: left; background: #FFF;}
+.setting-item-main input { width: 216px; height: 30px; margin: 0 10px; border: 1px #d2d2d2 solid;}
+.setting-item-vip { height: 30px; line-height: 30px; width: 400px; padding: 20px 0; float: left; background: #FFF;}
+.setting-item-vip a {color: #F00; text-decoration: underline;}
+.rcf_box_bottom { border-bottom:1px #D9D9DA solid;}
+
+.userMess_h1 { font-size: 16px; text-align: center;}

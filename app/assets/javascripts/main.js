@@ -217,6 +217,9 @@ function end_exam(category_id) {
 //重做模拟考试
 function reset_exam() {
     var sim_id = $("#sim_id").val();
+    $('#error_p').hide();
+    $('.tab_box').hide();
+    $('.zhezhao').hide();
     window.open("/simulations/" + sim_id + "/reset_exam");
 }
 

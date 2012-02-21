@@ -48,14 +48,15 @@ class ExamRatersController < ApplicationController
 
   def check_paper  #选择要批阅的答卷
     @exam_user=RaterUserRelation.find_by_sql("select * from rater_user_relations
-      where exam_rater_id=#{cookies[:rater_id].to_i} and is_marked=0")
+      where exam_rater_id=#{cookies[:rater_id].to_i} and is_marked=#{RaterUserRelation::IS_MARKED[:NO]}")
     if @exam_user.blank?||@exam_user==[]
       examination=params[:examination_id].to_i
       @exam_user= ExamUser.find_by_sql("select eu.id from exam_users eu left join rater_user_relations r
         on r.exam_user_id = eu.id inner join orders o on o.user_id = eu.user_id 
         inner join examinations ex on ex.id = eu.examination_id
         where eu.answer_sheet_url is not null and
-        eu.is_submited=1 and eu.examination_id = #{examination} and o.category_id = ex.category_id and
+        eu.is_submited=#{ExamUser::IS_SUBMITED[:YES]} and eu.examination_id = #{examination}
+        and o.category_id = ex.category_id and
         o.types in (#{Order::TYPES[:CHARGE]},#{Order::TYPES[:OTHER]},#{Order::TYPES[:ACCREDIT]})        
         and o.status=#{Order::STATUS[:NOMAL]} and r.exam_user_id is null order by rand() limit 1")
       id=@exam_user[0].id
@@ -78,13 +79,15 @@ class ExamRatersController < ApplicationController
       doc=open_file(Constant::PUBLIC_PATH + @exam_user.answer_sheet_url)
       xml=open_file(Constant::BACK_PUBLIC_PATH + @exam_user.paper.paper_url)
       @xml=ExamRater.answer_questions(xml,doc)
-      @reading= RaterUserRelation.find(:first, :conditions => ["exam_rater_id=#{cookies[:rater_id]} and is_marked=0 and exam_user_id=#{@exam_user.id}"])
+      @reading= RaterUserRelation.find(:first, 
+        :conditions => ["exam_rater_id=#{cookies[:rater_id]}
+          and is_marked=#{RaterUserRelation::IS_MARKED[:NO]} and exam_user_id=#{@exam_user.id}"])
       if @xml[0].blank?
         flash[:notice] = "感谢您的参与，当前试卷没有需要批改的试卷。"
       else
         if @reading.nil?
           @reading=RaterUserRelation.create(:exam_rater_id => cookies[:rater_id],
-            :exam_user_id => @exam_user.id, :started_at =>Time.now,:is_marked=>0)
+            :exam_user_id => @exam_user.id, :started_at =>Time.now,:is_marked=>RaterUserRelation::IS_MARKED[:NO])
         end
       end
     end
@@ -107,7 +110,7 @@ class ExamRatersController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        data={:examination_id=>@exam_user.examination_id,:rater_id=>@exam_relation.exam_rater_id,:notice=>notice}
+        data={:examination_id => @exam_user.examination_id, :rater_id => @exam_relation.exam_rater_id, :notice => notice}
         render :json=>data
       }
     end

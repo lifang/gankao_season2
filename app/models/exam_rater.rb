@@ -13,9 +13,10 @@ class ExamRater < ActiveRecord::Base
         r.exam_rater_id from exam_users e inner join orders o on o.user_id = e.user_id
         inner join examinations ex on ex.id = e.examination_id
         left join rater_user_relations r on r.exam_user_id = e.id
-        where e.examination_id=#{examination} and e.answer_sheet_url is not null and e.is_submited=1 and
-        o.category_id = ex.category_id and
-        o.types in (#{Order::TYPES[:CHARGE]},#{Order::TYPES[:OTHER]},#{Order::TYPES[:ACCREDIT]}) and o.status=#{Order::STATUS[:NOMAL]}")
+        where e.examination_id=#{examination} and e.answer_sheet_url is not null
+        and e.is_submited=#{ExamUser::IS_SUBMITED[:YES]} and o.category_id = ex.category_id and
+        o.types in (#{Order::TYPES[:CHARGE]},#{Order::TYPES[:OTHER]},#{Order::TYPES[:ACCREDIT]})
+        and o.status=#{Order::STATUS[:NOMAL]}")
     return exam_users
   end
 
