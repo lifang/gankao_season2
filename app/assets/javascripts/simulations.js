@@ -191,6 +191,7 @@ function create_block(bocks_div, block) {
         open_block_nav(block.id);
         block_block_flag = 1;
     }
+    
 }
 
 //上一部分、下一部分
@@ -1343,11 +1344,11 @@ function generate_jplayer(mp3_url, block_id) {
             ended: function(){
                 add_audio_cookies(block_id);
             },
-            swfPath: "/javascripts/jplayer",
+            swfPath: "/assets/jplayer",
             supplied: "mp3",
             wmode: "window"
         });
-    })(jQuery)
+    })(jQuery)    
 }
 
 //替换问题中隐藏的span，变为可拖动

@@ -6,7 +6,8 @@ class Word < ActiveRecord::Base
   has_many :word_question_relations,:dependent=>:destroy
   has_many :questions,:through=>:word_question_relations, :source => :question
   has_many :word_discriminate_relations,:dependent => :destroy
-  has_many :discriminates,:through=>:word_discriminate_relations, :source => :discriminate  
+  has_many :discriminates,:through=>:word_discriminate_relations, :source => :discriminate
+  has_many :user_word_relations
 
   TYPES = {0 => "n.", 1 => "v.", 2 => "pron.", 3 => "adj.", 4 => "adv.",
     5 => "num.", 6 => "art.", 7 => "prep.", 8 => "conj.", 9 => "interj.", 10 => "u = ", 11 => "c = ", 12 => "pl = "}
@@ -16,8 +17,8 @@ class Word < ActiveRecord::Base
   LEVEL = {1 => "一", 2 => "二", 3 => "三", 4 => "四", 5 => "五", 6 => "六",
     7 => "七", 8 => "八", 9 => "九", 10 => "十"}  #单词的等级
 
-  def self.recite_words
-    return Word.count('id', :conditions => "level < #{WORD_LEVEL[:THIRD]}")
+  def self.recite_words(category_id)
+    return Word.count('id', :conditions => "level < #{WORD_LEVEL[:THIRD]} and category_id = #{category_id}")
   end
 
   def self.current_recite_words(user_id, category_id, start_column, type)
@@ -31,7 +32,7 @@ class Word < ActiveRecord::Base
         other_length = 20 - words.length
         other_words = Word.find(:all,
           :conditions => ["id not in (select uwr.word_id from user_word_relations uwr where uwr.user_id = ?)
-         and category_id = ? and level < #{Word::WORD_LEVEL[:THIRD]} ",category_id, user_id],
+         and category_id = ? and level < #{Word::WORD_LEVEL[:THIRD]} ", user_id, category_id],
           :limit => other_length, :order => "id", :offset => start_column)
       end
       return_word = other_words.nil? ? words : (words + other_words)
@@ -42,7 +43,7 @@ class Word < ActiveRecord::Base
       and uwr.user_id = ?", category_id, user_id])
       other_words = Word.find(:all,
         :conditions => ["id not in (select uwr.word_id from user_word_relations uwr where uwr.user_id = ?)
-         and category_id = ? and level < #{Word::WORD_LEVEL[:THIRD]} ",category_id, user_id],
+         and category_id = ? and level < #{Word::WORD_LEVEL[:THIRD]} ", user_id, category_id],
         :limit => start_column, :order => "id")
       all_word = words.nil? ? other_words : (words + other_words)
       if all_word.length > 20

@@ -1,15 +1,6 @@
 <%= javascript_include_tag 'jquery' %>
 <div class="main">
   <%= render :partial=>"/common/flowplayer" %>
-  <div class="m_top">
-    <h1 class="ex_paper_h"><%= (@xml.elements["base_info/title"].nil? or @xml.elements["base_info/title"].text.nil?) ? "":@xml.elements["base_info/title"].text %></h1>
-    <div class="icon_func">
-      <div class="float_right">
-        <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:prev_problem();">上一题</a></span>
-        <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:next_problem();" >下一题</a></span>
-      </div>
-    </div>
-  </div>
   <% xml=@xml.get_elements("/paper/blocks//problems//problem") %>
   <script type="text/javascript" >
     //初始化题目号
@@ -18,12 +9,21 @@
       setCookie("show_problem","0");
     }
   </script>
+  <div class="m_top">
+    <h1 class="ex_paper_h"><%= (@xml.elements["base_info/title"].nil? or @xml.elements["base_info/title"].text.nil?) ? "":@xml.elements["base_info/title"].text %></h1>
+    <div class="icon_func">
+      <div class="float_right">
+        <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:prev_problem();">上一题</a></span>
+        <span class="problem_title"><font id="global_problem_index"></font>/<font id="global_problem_sum"><%= xml.size %></font></span>
+        <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:next_problem();" >下一题</a></span>
+      </div>
+    </div>
+  </div>
   <% str="" %>
   <% xml.each_with_index do |problem,pro_index|  %>
     <div id="single_problem_<%= pro_index %>" style="display:none">
       <div class="m_side m_problem_bg">
         <div class="problem_box">
-          <div class="problem_title">第<%=pro_index +1%>题/共<%= xml.size %>题</div>
           <div id='jplayer_location_<%= pro_index %>'></div>
           <div class="problem_text">
             <% audio_title = (problem.elements["title"].nil? or problem.elements["title"].text.nil?) ? [] : problem.elements["title"].text.split("((mp3))")  %>
@@ -88,6 +88,8 @@
 <script type="text/javascript">
   $("#single_problem_"+getCookie("show_problem")).css("display","");
   $(function(){
+    $("#global_problem_index").html(parseInt(getCookie("show_problem"))+1);
+    $(".pro_qu_t").first().trigger("click");
     $(".drag_tk_box").each(function(){
       $("#"+this.id).css("height",$("#drag_tk_"+this.id).height()+20);
     })

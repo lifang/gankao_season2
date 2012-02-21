@@ -1,0 +1,30 @@
+<%= javascript_include_tag "update_user_info.js" %>
+<div class="zhezhao" id="first_zhez" style="display: none"></div>
+<div class="userMess_tab_box border_radius" id="complete_info">
+  <span class="xx_x"><img src="/assets/x.png" /></span>
+  <div class="tab_con">
+    <div class="userMess_h1">首次登录请补充完整个人信息</div>
+    <div class="main_info">
+      <div class="rcf_box">
+        <label>昵称：</label>
+        <div class="setting-item-main">
+          <input name="username" id="username" type="text" />
+        </div>
+      </div>
+      <div class="rcf_box">
+        <label>E-MAIL：</label>
+        <div class="setting-item-main">
+          <input name="email" id="email" type="text" />
+        </div>
+      </div>
+      <div class="rcf_box rcf_box_bottom">
+        <label>学校：</label>
+        <div class="setting-item-main">
+          <input name="school" id="school" type="text" />
+        </div>
+      </div>
+      <div class="save_info"><button class="save_info_btn" onclick="javascript:update_users();"></button></div>
+      <div class="clear"></div>
+    </div>
+  </div>
+</div>

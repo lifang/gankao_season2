@@ -272,7 +272,8 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             var u_answer =  questions[q_index].user_answer[0];
             var pro_question_list = $("#questions_resource")[0].appendChild(create_element("div", null, "pro_question_list_"+problem_index+"_"+q_index, "pro_question_list border_rb  p_q_line", null, "innerHTML"));
             var pql_left = pro_question_list.appendChild(create_element("div", null, null, "pql_left", null, "innerHTML"));
-            pql_left.appendChild(create_element("div", null, "color_"+q_index, "un_white", null, "innerHTML"));
+            var un_white=pql_left.appendChild(create_element("div", null, "color_"+q_index, "un_white", null, "innerHTML"));
+            un_white.style.display="none";
             pql_left.innerHTML=pql_left.innerHTML+(q_index+1)+".";
             var pql_right = pro_question_list.appendChild(create_element("div", null, null, "pql_right", null, "innerHTML"));
             var pro_qu_t = pql_right.appendChild(create_element("div", null, "pro_qu_t_"+q_index, "pro_qu_t pro_qu_k pro_qu_h", null, "innerHTML"));
@@ -323,6 +324,7 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             if(valid_words[0]!=null){
                 var single_word=word_in_problem[valid_words[0]];
                 jiexi_word.appendChild(create_element("input", null, "enunciate_url_"+q_index, "", "hidden",single_word[0].enunciate_url ))
+                jiexi_word.appendChild(create_element("input", null, "word_id_"+q_index, "", "hidden",single_word[0].id ))
                 var xg_word_ny=jiexi_word.appendChild(create_element("div", null, null, "xg_words_ny", null, "innerHTML"));
                 var ch_text=xg_word_ny.appendChild(create_element("div", null, null, "ch_text", null, "innerHTML"));
                 var ch_words_line_1=ch_text.appendChild(create_element("div", null, "ch_words_line", "ch_words_line", null, "innerHTML"));
@@ -330,7 +332,7 @@ function load_questions_collection(questions,problem_index,tag,question_type){
                 var ch_words_line_3=ch_text.appendChild(create_element("div", null, "ch_words_line_"+q_index, "ch_words_line", null, "innerHTML"));
                 ch_words_line_1.innerHTML="<span class='font_size_24' id='name_"+q_index +"'>"+single_word[0].name +"</span><span id='types_"+q_index +"'>"+
                 types[single_word[0].types] +"</span><span id='phonetic_"+q_index +"'>"+single_word[0].phonetic +"</span>\n\
-                <a href='#'onclick=javascript:jplayer_play("+q_index +");><img src='/assets/icon_fy.png' /></a>"
+                <a href='#'onclick=javascript:jplayer_play("+q_index +");><img src='/assets/icon_fy.png' /></a> <a href='javascript:void(0);' title='加入背诵单词' onclick=\"javascript:ajax_add_word('"+ q_index+"');\"><img src='/assets/join_bs.png' /></a>"
                 ch_words_line_2.innerHTML="<p class='font_size_16' id='en_mean_"+ q_index+"'>"+single_word[0].en_mean +"</p><p id='ch_mean_"+q_index +"'>"+single_word[0].ch_mean +"</p>";
                 var sentence=single_word[1];
                 if(sentence.length!=0){
@@ -348,25 +350,31 @@ function load_questions_collection(questions,problem_index,tag,question_type){
                 if(pro_qu_div.is(":visible")){
                     pro_qu_div.hide();
                     $(this).parent().parent().addClass("p_q_line");
-                    $(this).parent().parent().removeClass("backg_blue");
                     $(this).addClass("pro_qu_h");
-                    var ids=this.id.split("_");
-                    var id=ids[ids.length-1];
-                    $("#"+id).removeClass("backg_blue");
+                    if(question_type=='1'){
+                        $(this).parent().parent().removeClass("backg_blue");
+                        var ids=this.id.split("_");
+                        var id=ids[ids.length-1];
+                        $("#"+id).removeClass("backg_blue");
+                    }
                     last_open_question=null;
                 }else{
                     if(last_open_question!=null){
-                        var question=(last_open_question[0].id).split("_");
-                        var question_id=question[question.length-1];
-                        $("#"+question_id).removeClass("backg_blue");
+                        if(question_type=='1'){
+                            var question=(last_open_question[0].id).split("_");
+                            var question_id=question[question.length-1];
+                            $("#"+question_id).removeClass("backg_blue");
+                        }
                         last_open_question.trigger("click");
                     }
                     pro_qu_div.show();
-                    var open_ids=this.id.split("_");
-                    var open_id=open_ids[open_ids.length-1];
-                    $("#"+open_id).addClass("backg_blue");
+                    if(question_type=='1'){
+                        var open_ids=this.id.split("_");
+                        var open_id=open_ids[open_ids.length-1];
+                        $("#"+open_id).addClass("backg_blue");
+                        $(this).parent().parent().addClass("backg_blue");
+                    }
                     $(this).parent().parent().removeClass("p_q_line");
-                    $(this).parent().parent().addClass("backg_blue");
                     $(this).parent().removeClass("p_q_line");
                     $(this).removeClass("pro_qu_h");
                     last_open_question=$(this);
@@ -385,9 +393,26 @@ function load_questions_collection(questions,problem_index,tag,question_type){
     }
 }
 
+//添加背诵单词
+function ajax_add_word(word_index){
+    var word_id=$("#word_id_"+word_index).val();
+    $.ajax({
+        type: "POST",
+        url: "/exam_users/ajax_add_word.json",
+        dataType: "json",
+        data : {
+            "word_id" : word_id
+        },
+        success : function(data){
+            tishi_alert(data.message);
+        }
+    });
+}
+
 function show_words(index,li_index){
     var name=$("#li_value_"+ index+"_"+li_index).val();
     $("#enunciate_url_"+index).val(word_in_problem[name][0].enunciate_url);
+    $("#word_id_"+index).val(word_in_problem[name][0].id);
     $("#name_"+index).html(word_in_problem[name][0].name);
     $("#types_"+index).html(types[word_in_problem[name][0].types]);
     $("#phonetic_"+index).html(word_in_problem[name][0].phonetic);
@@ -517,6 +542,7 @@ function click_next_problem(){
     $("#draggable_list").html("");
     $("#upErrorTo_tab").hide();
     $("#flowplayer_hidden_position").append($("#flowplayer_loader"));
+    $(".tk_zuoda").css("display","none");
     load_problem_collection(problem_init,tag_types);
     $("#jplayer_play").trigger("onclick");
 }
@@ -532,6 +558,7 @@ function click_prev_problem(){
     $("#draggable_list").html("");
     $("#upErrorTo_tab").hide();
     $("#flowplayer_hidden_position").append($("#flowplayer_loader"));
+    $(".tk_zuoda").css("display","none");
     load_problem_collection(problem_init,tag_types);
     $("#jplayer_play").trigger("onclick");
 }
@@ -556,6 +583,10 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         user_answer = unescape($("#drag_answer_"+drag_answer_index).val());
     }else{
         user_answer = $("#user_answer_"+question_index).val();
+    }
+    if (user_answer==""||user_answer==null||user_answer.length==0){
+        tishi_alert("请选择试题答案");
+        return false;
     }
     if(user_answer!=null&&user_answer!=""&&user_answer==answer){
         $("#green_dui_"+problem_question_index).show();
@@ -593,14 +624,18 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         $("#pro_qu_div_"+ question_index+" .pro_btn #check").bind("click",function(){
             if(($(".pro_qu_t").index($("#pro_qu_t_"+question_index))+1)==$(".pro_qu_t").length){
                 $(".icon_next a").trigger("onclick");
-                $(".pro_qu_t").first().trigger("click");
             }else{
+                if(last_open_question!=null){
+                    last_open_question.trigger("click");
+                }
                 $($(".pro_qu_t")[$(".pro_qu_t").index($("#pro_qu_t_"+question_index))+1]).trigger("click");
+                last_open_question=$($(".pro_qu_t")[$(".pro_qu_t").index($("#pro_qu_t_"+question_index))+1]);
             }
             
         })
         $("#display_jiexi_"+problem_question_index).show();
     }else{
+        $(".tk_zuoda").css("display","none");
         if(last_open_question!=null){
             var question=(last_open_question[0].id).split("_");
             var que_id=question[question.length-1];
@@ -608,6 +643,8 @@ function check_question(question_index,problem_question_index,answer,problem_ind
             last_open_question.trigger("click");
         }
         $("#"+question_index).addClass("backg_blue");
+        $("#"+question_index).parent().attr("onmouseover","");
+        $("#"+question_index).parent().attr("onmouseout","");
         $("#pro_question_list_"+problem_question_index).css("display","");
         $("#pro_question_list_"+problem_question_index).removeClass("p_q_line");
         //        $("#pro_question_list_"+problem_question_index+" .pql_right").removeClass("p_q_line");
@@ -617,8 +654,6 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         $("#check_"+question_index).css("display","none");
         last_open_question=$("#pro_question_list_"+problem_question_index).children().find(".pro_qu_t");
     }
-   
-  
 }
 
 //字体放大、缩小
@@ -685,6 +720,7 @@ function test_again(){
     var problem=get_array(collections.problems.problem)[problems_tags[problem_init]]
     var question_type=problem.question_type;
     var questions=problem.questions.question;
+    $(".un_white").css("display","");
     last_open_question=null;
     if(question_type=='0'){
         for(var q_index=0;q_index<questions.length;q_index++){
@@ -704,6 +740,7 @@ function test_again(){
             }
         }
     }else{
+        $(".tk_zuoda").css("display","");
         $(".pro_question_list").css('display','none');
         $("#draggable_list").html("");
         var audio_title =problem.title==null ? [] : problem.title.split("((mp3))");
@@ -720,7 +757,7 @@ function test_again(){
                 var element_str="<span class='span_tk' onmouseover=\"javascript:$('#check_"+sign_index +"').css('display','');\" onmouseout=\"javascript:$('#check_"+sign_index +"').css('display','none');\" >";
                 if (inner_correct_type=="0"){
                     $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                    element_str += "<select class='select_tk' id='"+sign_index +"' onfocus=javascript:$('#check_"+sign_index +"').css('display','');  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +");><option></option>";
+                    element_str += "<select class='select_tk' id='"+sign_index +"'  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +");><option></option>";
                     var question_attrs=questions[sign_index].questionattrs.split(";-;");
                     for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
                         element_str += "<option>"+question_attrs[attr_index]+"</option>";
@@ -742,7 +779,7 @@ function test_again(){
                 }
                 if(inner_correct_type=="3"){
                     $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                    element_str += "<input class='input_tk' id='"+ sign_index+"' onfocus=javascript:$('#check_"+sign_index +"').css('display','');  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +"); />";
+                    element_str += "<input class='input_tk' id='"+ sign_index+"'  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +"); />";
                     element_str += "<span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+problem_init +"_"+sign_index +"','"+ escape(answer)+"',"+problem_init +",'') >核对</button></span></span>";
                 }
            

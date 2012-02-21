@@ -29,8 +29,8 @@
   <div class="icon_func">
     <div class="float_right">
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
-      <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();">下一题</a></span>
       <span class="problem_title"><font id="global_problem_index"></font>/<font id="global_problem_sum"></font></span>
+      <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();">下一题</a></span>
       <span class="icon_big"><a href="javascript:void(0);" class="tooltip" name="缩小" onclick="javascript:ts('body',-1);">缩小</a></span>
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" name="放大" onclick="javascript:ts('body',1);">放大</a></span>
       <span class="icon_shanchu"><a href="javascript:void(0);" class="tooltip" name="删除" onclick="javascript:delete_this()">删除</a></span>
@@ -43,7 +43,7 @@
 <input type="hidden" value="<%= category_id %>" id="category_id" />
 <div class="upErrorTo_tab border_radius" id="upErrorTo_tab">
   <input type="hidden" value="" id="question_id"/>
-  <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('.upErrorTo_tab').css('display','none');"/></span>
+  <span class="xx_x"><img src="/assets/xx.png" onclick="javascript:$('.upErrorTo_tab').css('display','none');"/></span>
   <ul>
     <li><input name="error" type="radio" value="1" />题目错误</li>
     <li><input name="error" type="radio" value="2" />答案错误</li>
@@ -67,5 +67,6 @@
 </div>
 <div id="jplayer_one"></div>
 <div class="m_side">
+  <div class="tk_zuoda" style="display:none">请在左侧作答!</div>
   <div class="problem_box" id="questions_resource"></div>
 </div>

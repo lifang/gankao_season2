@@ -856,7 +856,7 @@ function generate_jplayer(mp3_url, block_id) {
                     mp3:""+back_server_path + mp3_url
                 });
             },
-            swfPath: "/javascripts/jplayer",
+            swfPath: "/assets/jplayer",
             supplied: "mp3",
             wmode: "window",
             preload: "none"

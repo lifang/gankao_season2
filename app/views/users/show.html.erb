@@ -1,7 +1,14 @@
+<%= javascript_include_tag "update_user_info.js" %>
 <div class="rcf_box">
   <label>昵称：</label>
   <div class="setting-item-main">
-    <input id="name" type="text" value="<%= @user.name %>" />
+    <input id="username" type="text" value="<%= @user.username %>" />
+  </div>
+</div>
+<div class="rcf_box">
+  <label>E-MAIL：</label>
+  <div class="setting-item-main">
+    <input id="email" type="text" value="<%=@user.email  %>"/>
   </div>
 </div>
 <div class="rcf_box">
@@ -17,7 +24,7 @@
       &nbsp;&nbsp;普通会员&nbsp;&nbsp;&nbsp;&nbsp;
       <a href="/users/<%= cookies[:user_id] %>/record?vip=1">开通VIP</a>
     <% else %>
-      &nbsp;&nbsp;<img src="/assets/users/V.png"/>
+      &nbsp;&nbsp;<img src="/assets/V.png"/>
     <% end %>
   </div>
 </div>
