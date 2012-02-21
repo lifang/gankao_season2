@@ -272,7 +272,8 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             var u_answer =  questions[q_index].user_answer[0];
             var pro_question_list = $("#questions_resource")[0].appendChild(create_element("div", null, "pro_question_list_"+problem_index+"_"+q_index, "pro_question_list border_rb  p_q_line", null, "innerHTML"));
             var pql_left = pro_question_list.appendChild(create_element("div", null, null, "pql_left", null, "innerHTML"));
-            pql_left.appendChild(create_element("div", null, "color_"+q_index, "un_white", null, "innerHTML"));
+            var un_white=pql_left.appendChild(create_element("div", null, "color_"+q_index, "un_white", null, "innerHTML"));
+            un_white.style.display="none";
             pql_left.innerHTML=pql_left.innerHTML+(q_index+1)+".";
             var pql_right = pro_question_list.appendChild(create_element("div", null, null, "pql_right", null, "innerHTML"));
             var pro_qu_t = pql_right.appendChild(create_element("div", null, "pro_qu_t_"+q_index, "pro_qu_t pro_qu_k pro_qu_h", null, "innerHTML"));
@@ -638,6 +639,8 @@ function check_question(question_index,problem_question_index,answer,problem_ind
             last_open_question.trigger("click");
         }
         $("#"+question_index).addClass("backg_blue");
+        $("#"+question_index).parent().attr("onmouseover","");
+        $("#"+question_index).parent().attr("onmouseout","");
         $("#pro_question_list_"+problem_question_index).css("display","");
         $("#pro_question_list_"+problem_question_index).removeClass("p_q_line");
         //        $("#pro_question_list_"+problem_question_index+" .pql_right").removeClass("p_q_line");
@@ -713,6 +716,7 @@ function test_again(){
     var problem=get_array(collections.problems.problem)[problems_tags[problem_init]]
     var question_type=problem.question_type;
     var questions=problem.questions.question;
+    $(".un_white").css("display","");
     last_open_question=null;
     if(question_type=='0'){
         for(var q_index=0;q_index<questions.length;q_index++){
@@ -749,7 +753,7 @@ function test_again(){
                 var element_str="<span class='span_tk' onmouseover=\"javascript:$('#check_"+sign_index +"').css('display','');\" onmouseout=\"javascript:$('#check_"+sign_index +"').css('display','none');\" >";
                 if (inner_correct_type=="0"){
                     $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                    element_str += "<select class='select_tk' id='"+sign_index +"' onfocus=javascript:$('#check_"+sign_index +"').css('display','');  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +");><option></option>";
+                    element_str += "<select class='select_tk' id='"+sign_index +"'  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +");><option></option>";
                     var question_attrs=questions[sign_index].questionattrs.split(";-;");
                     for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
                         element_str += "<option>"+question_attrs[attr_index]+"</option>";
@@ -771,7 +775,7 @@ function test_again(){
                 }
                 if(inner_correct_type=="3"){
                     $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                    element_str += "<input class='input_tk' id='"+ sign_index+"' onfocus=javascript:$('#check_"+sign_index +"').css('display','');  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +"); />";
+                    element_str += "<input class='input_tk' id='"+ sign_index+"'  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +"); />";
                     element_str += "<span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+problem_init +"_"+sign_index +"','"+ escape(answer)+"',"+problem_init +",'') >核对</button></span></span>";
                 }
            
