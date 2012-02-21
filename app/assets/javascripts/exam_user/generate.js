@@ -34,7 +34,6 @@ for(i=0;i<problems.length;i++){
 var problem_resource; //题目的最外层元素
 var questions_resource; //小题列表最外层元素
 var question_resource; //单个小题细节最外层元素
-var only = 0; //第一次进入默认打开第一个小题
 
 $(function(){
     load_problem(init_problem);
@@ -44,7 +43,8 @@ $(function(){
 function load_problem(problem_index){
     has_drag = false;
     drag_attrs=[];
-    problem_resource = create_element("div",init_problem,null,"problem_resource",null,"innerHTML");
+    problem_resource = create_element("div",null,null,"problem_resource",null,"innerHTML");
+    $(problem_resource).attr("name",init_problem);
     if(finish_index<=init_problem){
         $("#generate").append(problem_resource);
     }else{
@@ -79,11 +79,7 @@ function afterload(){
     if($("#drag_tk_"+init_problem).length>0){
         $("#drag_tk_box_"+init_problem).css("height",$("#drag_tk_"+init_problem).height()+20);
     }
-    // 展开题目的第一题
-    if(only == 0){
-        $("#pro_qu_t_"+init_problem+"_0").trigger("click");
-        only ++;
-    }
+    $("#pro_qu_t_"+init_problem+"_0").trigger("click");
     tooltip();
 }
 
@@ -184,7 +180,7 @@ function question_box(questions_resource,question_index){
     $(element2).append(element3);
     element3 = create_element("span",null,null,"icon_shoucang",null,"innerHTML");
     $(element2).append(element3);
-    if(collection.indexOf(problems[init_problem].questions[question_index]["id"])==-1){
+    if(collection == "" || collection == [] || collection.indexOf(problems[init_problem].questions[question_index]["id"])==-1){
         if(problems[init_problem]["question_type"]==null || problems[init_problem]["question_type"]=="0"){
             $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions[question_index]["id"]+"' class='tooltip' name='收藏' onclick=\"javascript:normal_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
         }else{
@@ -197,10 +193,13 @@ function question_box(questions_resource,question_index){
     element2 = create_element("div",null,null,"pql_right",null,"innerHTML");
     $(element1).append(element2);
     element3 = create_element("div",null,"pro_qu_t_"+init_problem+"_"+question_index,"pro_qu_t pro_qu_t_"+init_problem,null,"innerHTML");
+    $(element3).attr("name",question_index);
     $(element2).append(element3);
-    element1 = create_element("div",null,null,"question_tx",null,"innerHTML");
-    $(element1).html(q_type[correct_type]);
-    $(element3).append(element1);
+    if(problems[init_problem]["question_type"]==null || problems[init_problem]["question_type"]=="0"){
+        element1 = create_element("div",null,null,"question_tx",null,"innerHTML");
+        $(element1).html(q_type[correct_type]);
+        $(element3).append(element1);
+    }
     if(problems[init_problem].questions[question_index]["description"]&&problems[init_problem].questions[question_index]["description"]!=""){
         element1 = create_element("div",null,null,"pro_t_con",null,"innerHTML");
     }else{
@@ -274,7 +273,7 @@ function inner_question(correct_type,question_index){
     str1 = "<span class='span_tk' id='inner_span_tk_"+init_problem+"_"+question_index+"' onmouseover='javascript:show_hedui("+init_problem+","+question_index+");' onmouseout='javascript:hide_hedui("+init_problem+","+question_index+");'>";
     switch(correct_type){
         case "0":{
-            str1 += "<select class='select_tk' id='input_inner_answer_"+init_problem+"_"+question_index+"' onchange='javascript:do_inner_question(0,"+init_problem+","+question_index+");'><option value=''></option>";
+            str1 += "<select class='select_tk inner_backg_blue_"+init_problem+"_"+question_index+"' id='input_inner_answer_"+init_problem+"_"+question_index+"' onchange='javascript:do_inner_question(0,"+init_problem+","+question_index+");'><option value=''></option>";
             question_attrs = store3[question_index].questionattrs.split(";-;");
             for(j=0;j<question_attrs.length;j++){
                 str1 += "<option value=\""+question_attrs[j]+"\">"+question_attrs[j]+"</option>";
@@ -288,11 +287,11 @@ function inner_question(correct_type,question_index){
             for(j=0;j<question_attrs.length;j++){
                 drag_attrs.push(question_attrs[j]);
             }
-            str1 += "<span class='dragDrop_box' id='droppable_"+init_problem+"_"+question_index+"'></span>";
+            str1 += "<span class='dragDrop_box inner_backg_blue_"+init_problem+"_"+question_index+"' id='droppable_"+init_problem+"_"+question_index+"'></span>";
             break;
         }
         case "3":{
-            str1 += "<input class='input_tk' type='text' id='input_inner_answer_"+init_problem+"_"+question_index+"' onfocus='javascript:show_hedui("+init_problem+","+question_index+");' onchange='javascript:do_inner_question(3,"+init_problem+","+question_index+");'></input>";
+            str1 += "<input class='input_tk inner_backg_blue_"+init_problem+"_"+question_index+"' type='text' id='input_inner_answer_"+init_problem+"_"+question_index+"' onfocus='javascript:show_hedui("+init_problem+","+question_index+");' onchange='javascript:do_inner_question(3,"+init_problem+","+question_index+");'></input>";
             break;
         }
         
