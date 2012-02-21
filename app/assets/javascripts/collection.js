@@ -584,6 +584,10 @@ function check_question(question_index,problem_question_index,answer,problem_ind
     }else{
         user_answer = $("#user_answer_"+question_index).val();
     }
+    if (user_answer==""||user_answer==null||user_answer.length==0){
+        tishi_alert("请选择试题答案");
+        return false;
+    }
     if(user_answer!=null&&user_answer!=""&&user_answer==answer){
         $("#green_dui_"+problem_question_index).show();
         $("#red_cuo_"+problem_question_index).hide();
