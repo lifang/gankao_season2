@@ -15,6 +15,8 @@ module Constant
   #赶考网官方微博
   TENCENT_WEIBO_NAME = "gankao2011"
 
+  #人人账号
+  RENREN_ID = 600942099
 
   #请求服务器ip
   IP="116.255.179.206:3001"
