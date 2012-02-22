@@ -37,7 +37,7 @@ $(document).ready(function(){
                                         tag_problems[tags[k]].push(i)
                                     }
                                 }
-                                if(tag_list.indexOf(tags[k])==-1){
+                                if(tag_list.indexOf(tags[k])==-1){ 
                                     tag_list.push(tags[k]);
                                 }
                             }

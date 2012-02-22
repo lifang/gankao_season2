@@ -75,21 +75,16 @@ class UsersController < ApplicationController
         data="邀请码已被使用"
       else
         data="升级成功"
-        code.update_attributes(:use_time=>Time.now, :user_id=>cookies[:user_id])
-        order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{code.category_id}")
+        order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{code.category_id} and status=#{Order::STATUS[:NOMAL]}")
         if order.nil? || order.types==Order::TYPES[:COMPETE] || order.types==Order::TYPES[:TRIAL_SEVEN]
+          code.update_attributes(:use_time=>Time.now, :user_id=>cookies[:user_id])
           Order.create(:user_id=>cookies[:user_id],:category_id=>code.category_id,:types=>Order::TYPES[:ACCREDIT],
             :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",
             :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,
             :end_time=>Time.now+Constant::DATE_LONG[:vip].days)
-
+          order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
         else
-          if order.status
-            data="您已是vip用户，截止日期是#{order.end_time.strftime("%Y-%m-%d")}"
-          else
-            Order.update_attributes(:types=>Order::TYPES[:ACCREDIT],:out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",
-              :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].days)
-          end
+          data="您已是vip用户，截止日期是#{order.end_time.strftime("%Y-%m-%d")}"
         end        
       end
     end
@@ -122,7 +117,7 @@ class UsersController < ApplicationController
     category = Category.find(params[:category].to_s)
     options ={
       :service=>"create_direct_pay_by_user",
-      :notify_url=>Constant::SERVER_PATH+"/competes/alipay_compete?category=>#{params[:category]}",
+      :notify_url=>Constant::SERVER_PATH+"/users/alipay_compete?category=>#{params[:category]}",
       :subject=>"会员购买#{category.name}产品",
       :payment_type=>Constant::VIP_TYPE[:good],
       :total_fee=>Constant::SIMULATION_FEE
@@ -165,15 +160,11 @@ class UsersController < ApplicationController
           @@m.synchronize {
             begin
               Order.transaction do
-                order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{params[:category]}")
+                order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{params[:category]} and status=#{Order::STATUS[:NOMAL]}")
                 if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
                   Order.create(:user_id=>cookies[:user_id],:category_id=>params[:category],:types=>Order::TYPES[:CHARGE],
                     :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
-                else
-                  unless order.status
-                    Order.update_attributes(:user_id=>cookies[:user_id],:category_id=>params[:category],:types=>Order::TYPES[:CHARGE],
-                      :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
-                  end
+                  order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
                 end
               end
               render :text=>"success"
