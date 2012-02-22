@@ -122,7 +122,7 @@ class UsersController < ApplicationController
       :payment_type=>Constant::VIP_TYPE[:good],
       :total_fee=>Constant::SIMULATION_FEE
     }
-    out_trade_no="#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}"
+    out_trade_no="#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}_#{params[:category]}"
     options.merge!(:seller_email =>AlipaysHelper::SELLER_EMAIL, :partner =>AlipaysHelper::PARTNER, :_input_charset=>"utf-8", :out_trade_no=>out_trade_no)
     options.merge!(:sign_type => "MD5", :sign =>Digest::MD5.hexdigest(options.sort.map{|k,v|"#{k}=#{v}"}.join("&")+AlipaysHelper::PARTNER_KEY))
     redirect_to "#{AlipaysHelper::PAGE_WAY}?#{options.sort.map{|k, v| "#{CGI::escape(k.to_s)}=#{CGI::escape(v.to_s)}"}.join('&')}"
@@ -160,10 +160,10 @@ class UsersController < ApplicationController
           @@m.synchronize {
             begin
               Order.transaction do
-                order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{params[:category]} and status=#{Order::STATUS[:NOMAL]}")
+                order=Order.first(:conditions=>"user_id=#{trade_nu[0]} and category_id=#{trade_nu[2]} and status=#{Order::STATUS[:NOMAL]}")
                 if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
-                  Order.create(:user_id=>cookies[:user_id],:category_id=>params[:category],:types=>Order::TYPES[:CHARGE],
-                    :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
+                  Order.create(:user_id=>trade_nu[0],:category_id=>trade_nu[2].to_i,:types=>Order::TYPES[:CHARGE],
+                    :out_trade_no=>"#{trade_nu[0]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
                   order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
                 end
               end
