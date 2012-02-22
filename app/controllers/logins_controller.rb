@@ -126,7 +126,7 @@ class LoginsController < ApplicationController
   end
 
   def  renren_like
-    redirect_to "http://widget.renren.com/dialog/friends?target_id=600942099&app_id=163813&redirect_uri=http%3A%2F%2Fwww.gankao.co"
+    redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Constant::RENREN_ID}&app_id=163813&redirect_uri=http%3A%2F%2Fwww.gankao.co"
   end
 
    #退出

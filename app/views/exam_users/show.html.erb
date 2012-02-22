@@ -15,11 +15,6 @@
 <% end %>
   var collection = <%= array_or_string_for_javascript(@collection) %>;
 </script>
-<%= javascript_include_tag "/assets/jquery.ui.core.min.js" %>
-<%= javascript_include_tag "/assets/jquery.ui.widget.min.js" %>
-<%= javascript_include_tag "/assets/jquery.ui.mouse.min.js" %>
-<%= javascript_include_tag "/assets/jquery.ui.draggable.min.js" %>
-<%= javascript_include_tag "/assets/jquery.ui.droppable.min.js" %>
 <%= javascript_include_tag "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}" %>
 <%= javascript_include_tag "#{@answer_url}" %>
 <%= javascript_include_tag "/assets/exam_user/init.js" %>
