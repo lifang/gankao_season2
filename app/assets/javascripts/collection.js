@@ -16,7 +16,6 @@ $(document).ready(function(){
                 window.location.href='/collections/error'
             }else{
                 var problem=get_array(collections.problems.problem);
-                var word_list=[];
                 for(var i=0;i<problem.length;i++){
                     var questions=get_array(problem[i].questions.question);
                     problem[i].questions.question=questions;
@@ -28,16 +27,8 @@ $(document).ready(function(){
                             "string"==(typeof problem[i].questions.question[n].user_answer)?answer_array.push(problem[i].questions.question[n].user_answer):answer_array=problem[i].questions.question[n].user_answer
                         }
                         problem[i].questions.question[n].user_answer=answer_array;
-                        if(questions[n].words!=null){
-                            var words= questions[n].words.split(";");
-                            for(var m=0;m<words.length;m++){
-                                if(word_list.indexOf(words[m])==-1){
-                                    word_list.push(""+words[m]);
-                                }
-                            }
-                        }
                         if(questions[n].tags!=null){
-                            var tags= questions[n].tags.split(",");
+                            var tags= questions[n].tags.split(" ");
                             for(var k=0;k<tags.length;k++){
                                 if(tag_problems[tags[k]]==null){
                                     tag_problems[tags[k]]=[i]
@@ -56,32 +47,11 @@ $(document).ready(function(){
                 }
                 tag_problems[tag_types]=problems;
                 $("#global_problem_sum").html(problems.length);
-                if(word_list.length!=0){
-                    //准备数据，为problems加载词汇
-                    $.ajax({
-                        async:true,
-                        type: "POST",
-                        url: "/collections/load_words.json",
-                        dataType: "json",
-                        data : {
-                            words :word_list
-                        },
-                        success : function(data) {
-                            word_in_problem=data.words;
-                            if (problem_init>(tag_problems[tag_types].length-1)){
-                                problem_init=tag_problems[tag_types].length-1;
-                                setCookie("collection_problem_init",tag_problems[tag_types].length-1);
-                            }
-                            load_problem_collection(problem_init,tag_types);
-                        }
-                    });
-                }else{
-                    if (problem_init>(tag_problems[tag_types].length-1)){
-                        problem_init=tag_problems[tag_types].length-1;
-                        setCookie("collection_problem_init",tag_problems[tag_types].length-1);
-                    }
-                    load_problem_collection(problem_init,tag_types);
+                if (problem_init>(tag_problems[tag_types].length-1)){
+                    problem_init=tag_problems[tag_types].length-1;
+                    setCookie("collection_problem_init",tag_problems[tag_types].length-1);
                 }
+                load_problem_collection(problem_init,tag_types);
                 var frag = document.createDocumentFragment();
                 for(var i=0;i<tag_list.length;i++){
                     var option=create_element("option", null, "options", null, null, "innerHTML");
@@ -155,8 +125,19 @@ function flowplayer_mp3(audio_src){
 function load_problem_collection(problem_index,tag){
     var total_problem=get_array(collections.problems.problem);
     var problems_tags=tag_problems[tag];
+    var word_list=[];
     var question_type=total_problem[problems_tags[problem_index]].question_type;
     var questions=total_problem[problems_tags[problem_index]].questions.question;
+    for(var n=0;n<questions.length;n++){
+        if(questions[n].words!=null){
+            var words= questions[n].words.split(";");
+            for(var m=0;m<words.length;m++){
+                if(word_list.indexOf(words[m])==-1){
+                    word_list.push(""+words[m]);
+                }
+            }
+        }
+    }
     $("#global_problem_sum").html(problems_tags.length);
     $("#global_problem_index").html(problem_index+1);
     var audio_title = total_problem[problems_tags[problem_index]].title==null ? [] : total_problem[problems_tags[problem_index]].title.split("((mp3))");
@@ -170,7 +151,6 @@ function load_problem_collection(problem_index,tag){
         for(var sign_index=0;sign_index<title_arr.length;sign_index++){
             result_title.push(title_arr[sign_index]);
             if(questions[sign_index]!=undefined){
-                var q_answer = questions[sign_index].answer==undefined ? "" : questions[sign_index].answer;
                 var u_answer =  questions[sign_index].user_answer[0];
                 var flag=questions[sign_index].c_flag;
                 var correct_type=questions[sign_index].correct_type;
@@ -222,9 +202,26 @@ function load_problem_collection(problem_index,tag){
         $("#drag_tk_box").css("display","none");
     }
     $("#global_problem_title").html(title);
-
     $("#jplayer_play").trigger("onclick");
-    load_questions_collection(questions,problem_index,tag,question_type);
+    if(word_list.length!=0){
+        //准备数据，为problems加载词汇
+        $.ajax({
+            async:true,
+            type: "POST",
+            url: "/collections/load_words.json",
+            dataType: "json",
+            data : {
+                words :word_list
+            },
+            success : function(data) {
+                word_in_problem=data.words;
+                load_questions_collection(questions,problem_index,tag,question_type);
+            }
+        });
+    }else{
+        load_questions_collection(questions,problem_index,tag,question_type);
+    }
+    
 }
 
 //显示右侧对应的试题

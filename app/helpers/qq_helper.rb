@@ -7,7 +7,7 @@ module QqHelper
   GRAPY_URL="http://openapi.qzone.qq.com/user/get_user_info"
   REQUEST_URL="http://openapi.qzone.qq.com/oauth/qzoneoauth_request_token"
   AUTHOTIZE_URL="http://openapi.qzone.qq.com/oauth/qzoneoauth_authorize"
-  CALLBACK_URL=Constant::SERVER_PATH+"/pages/qq_index"
+  CALLBACK_URL=Constant::SERVER_PATH+"/logins/qq_index"
   QQ_ACCESS_URL="http://openapi.qzone.qq.com/oauth/qzoneoauth_access_token"
   COMSUMER_KEY="oauth_consumer_key=223448"
   COMSUMER_SECRECT="64d7ddfe7e483dd51b2b14cf2ec0ec27"
