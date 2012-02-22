@@ -117,7 +117,7 @@ class UsersController < ApplicationController
     category = Category.find(params[:category].to_s)
     options ={
       :service=>"create_direct_pay_by_user",
-      :notify_url=>Constant::SERVER_PATH+"/users/alipay_compete?category=>#{params[:category]}",
+      :notify_url=>Constant::SERVER_PATH+"/users/alipay_compete",
       :subject=>"会员购买#{category.name}产品",
       :payment_type=>Constant::VIP_TYPE[:good],
       :total_fee=>Constant::SIMULATION_FEE
