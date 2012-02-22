@@ -69,7 +69,7 @@ class LoginsController < ApplicationController
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
       ActionLog.login_log(cookies[:user_id])
-      render :inline => "<script>window.opener.location.href='/';window.close();</script>"
+      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
     end
@@ -103,7 +103,7 @@ class LoginsController < ApplicationController
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
       ActionLog.login_log(cookies[:user_id])
-      render :inline => "<script>window.opener.location.href='/collections';window.close();</script>"
+      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
     end
