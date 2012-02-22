@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   layout 'user'
   respond_to :html, :xml, :json
   include AlipaysHelper
+  @@m = Mutex.new
 
   def delete_user
     cookies.delete(:user_id)
@@ -132,7 +133,7 @@ class UsersController < ApplicationController
   def alipay_compete
     out_trade_no=params[:out_trade_no]
     trade_nu =out_trade_no.to_s.split("_")
-    order=Order.find(:first, :conditions => ["user_id=?",trade_nu[0]])
+    order=Order.find(:first, :conditions => ["out_trade_no=?",params[:out_trade_no]])
     if order.nil?
       alipay_notify_url = "#{AlipaysHelper::NOTIFY_URL}?partner=#{AlipaysHelper::PARTNER}&notify_id=#{params[:notify_id]}"
       response_txt =Net::HTTP.get(URI.parse(alipay_notify_url))
@@ -163,7 +164,8 @@ class UsersController < ApplicationController
                 order=Order.first(:conditions=>"user_id=#{trade_nu[0]} and category_id=#{trade_nu[2]} and status=#{Order::STATUS[:NOMAL]}")
                 if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
                   Order.create(:user_id=>trade_nu[0],:category_id=>trade_nu[2].to_i,:types=>Order::TYPES[:CHARGE],
-                    :out_trade_no=>"#{trade_nu[0]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",:start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].weeks)
+                    :out_trade_no=>"#{params[:out_trade_no]}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",
+                    :start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].days)
                   order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
                 end
               end
@@ -176,7 +178,7 @@ class UsersController < ApplicationController
           render :text=>"fail" + "<br>"
         end
       else
-        redirect_to "/users/#{cookies[:user_id]}/record?vip=1"
+        redirect_to "/users/#{trade_nu[0]}/record?vip=1"
       end
     else
       render :text=>"success"
