@@ -79,7 +79,10 @@ function afterload(){
     if($("#drag_tk_"+init_problem).length>0){
         $("#drag_tk_box_"+init_problem).css("height",$("#drag_tk_"+init_problem).height()+20);
     }
-    $("#pro_qu_t_"+init_problem+"_0").trigger("click");
+    // 展开题目的第一题
+    if(problems[init_problem].question_type!="1"){
+        $("#pro_qu_t_"+init_problem+"_0").trigger("click");
+    }
     tooltip();
 }
 
@@ -291,7 +294,7 @@ function inner_question(correct_type,question_index){
             break;
         }
         case "3":{
-            str1 += "<input class='input_tk inner_backg_blue_"+init_problem+"_"+question_index+"' type='text' id='input_inner_answer_"+init_problem+"_"+question_index+"' onfocus='javascript:show_hedui("+init_problem+","+question_index+");' onchange='javascript:do_inner_question(3,"+init_problem+","+question_index+");'></input>";
+            str1 += "<input class='input_tk inner_backg_blue_"+init_problem+"_"+question_index+"' type='text' id='input_inner_answer_"+init_problem+"_"+question_index+"' onchange='javascript:do_inner_question(3,"+init_problem+","+question_index+");'></input>";
             break;
         }
         

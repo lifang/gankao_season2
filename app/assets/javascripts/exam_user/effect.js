@@ -48,8 +48,6 @@ function click_prev_problem(){
 
 function active(this_problem,old_problem){
     $("#report_error").hide();
-    $f("audio-word").stop();
-    $f("flowplayer").stop();
     $("#global_problem_index").html(init_problem+1);
     if(old_problem.length>0){
         old_problem.show();
@@ -95,14 +93,12 @@ function pro_qu_t(problem_index){
             if(last_opened_question!=null){
                 last_opened_question.parent().find(".pro_qu_div").hide();
                 last_opened_question.parent().parent().addClass("p_q_line");
-                if(last_backg_blue!=null){
+                if(last_backg_blue!=null && last_backg_blue.length>0 ){
                     last_backg_blue.removeClass("backg_blue");
                     last_opened_question.parent().parent().removeClass("backg_blue");
                 }
             }
-            if($(".inner_backg_blue_"+problem_index+"_"+q_index).length>0){
-                last_backg_blue = $(".inner_backg_blue_"+problem_index+"_"+q_index+":eq(0)");
-            }
+            last_backg_blue = $(".inner_backg_blue_"+problem_index+"_"+q_index+":eq(0)");
             last_opened_question = $(this);
         }
     })
