@@ -28,7 +28,7 @@ $(document).ready(function(){
                         }
                         problem[i].questions.question[n].user_answer=answer_array;
                         if(questions[n].tags!=null){
-                            var tags= questions[n].tags.split(" ");
+                            var tags= questions[n].tags.replace(/(^\s*)|(\s*$)/g, "").split(" ");
                             for(var k=0;k<tags.length;k++){
                                 if(tag_problems[tags[k]]==null){
                                     tag_problems[tags[k]]=[i]

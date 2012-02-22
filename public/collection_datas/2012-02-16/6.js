@@ -274,7 +274,7 @@ collections = {
             "answer":" the appropriate media",
             "analysis":"\u9996\u5148\u7406\u89e3\u53e5\u5b50\u610f\u601d\uff0c\u95ee\u7684\u662f\u6574\u7bc7\u6587\u7ae0\u6240\u8bf4\u7684\u5185\u5bb9\u662f\u5e7f\u544a\u4e3b\u5982\u4f55\u9009\u62e9\u5e7f\u544a\u7684\uff08   \uff09\u3002\u5982\u679c\u8981\u5bfb\u627e\u8fd9\u79cd\u6709\u5173\u4e3b\u65e8\u7684\u4fe1\u606f\uff0c\u4e00\u822c\u5c31\u5728\u6587\u7ae0\u5f00\u59cb\u6216\u7ed3\u675f\u7684\u5730\u65b9\u3002\u8fd9\u7bc7\u6587\u7ae0\u7684\u5f00\u5934\u8bf4\u9053\uff1aAfter determining the target audience for a product or service, advertising agencies must select the appropriate media for the advertisement. ",
             "questionattrs":null,
-            "tags":"\u5feb\u901f\u9605\u8bfb",
+            "tags":" \u5feb\u901f\u9605\u8bfb \u5199\u4f5c \u5feb\u901f\u9605\u8bfb",
             "repeat_num":11,
             "error_percent":0
         },{
@@ -285,7 +285,7 @@ collections = {
             "answer":"B)love breeds love.",
             "analysis":"\u540e\u6bcd\u901a\u8fc7\u81ea\u5df1\u5bf9\u5b69\u5b50\u7684\u7231\uff0c\u83b7\u5f97\u4e86\u5b69\u5b50\u4eec\u5bf9\u5979\u7684\u7231\uff0c\u7231\u4f1a\u5e26\u6765\u7231\uff0c\u56e0\u6b64\u6211\u4eec\u9009\u62e9B\u9879\u3002\u5176\u5b9e\u6587\u7ae0\u7684\u5f00\u5934\u4e5f\u8868\u8fbe\u4e86\u8fd9\u4e00\u89c2\u70b9\u3002\u8fd9\u79cd\u5927\u610f\u6982\u62ec\u7d2f\u7684\u9898\u76ee\u5e94\u8be5\u6293\u4f4f\u6587\u7ae0\u7684\u5f00\u5934\u548c\u7ed3\u5c3e\u3002\n                            ",
             "questionattrs":"A)love is blind.;-;B)love breeds love.;-;C)divorce often has disastrous consequences.;-;D)happiness is hard to find in blended families.",
-            "tags":"\u542c\u529b"
+            "tags":"\u542c\u529b \u5feb\u901f\u9605\u8bfb"
         }]
         }
     },{
