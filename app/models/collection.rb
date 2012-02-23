@@ -66,7 +66,8 @@ class Collection < ActiveRecord::Base
       new_col_questions = new_col_problem["questions"]["question"]
       if new_col_questions.class.to_s == "Hash"
         if new_col_questions["id"].to_i == question_id
-          new_col_questions.merge!({"c_flag" => "1", "answer" => answer, "analysis" => analysis, "user_answer" => user_answer})
+          new_col_questions.merge!({"c_flag" => "1", "answer" => answer,
+              "analysis" => analysis, "user_answer" => user_answer})
         end
       else
         new_col_questions.each do |question|

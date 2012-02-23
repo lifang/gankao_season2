@@ -324,8 +324,18 @@ function next_task(word_id, category_id, current_index, current_step, flag, type
     if (flag == 1) {
         is_right(word_id, rem_word, current_index, current_step);
     }
+    if (next_index != -1) {
+        no_sentence_words(current_step, rem_word, next_index);
+    }
     show_re_word(current_step, current_index, next_index);
     is_recollection_pass(word_id, rem_word, next_index, category_id, current_step, type);
+}
+
+//如果没有例句则直接跳过当前词并将对于的词设置对于的基本
+function no_sentence_words(current_step, rem_word, current_index) {
+    if ($("#word_info_current_index").length == 0) {
+        
+    }
 }
 
 //回归释义是否全部通过

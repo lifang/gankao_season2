@@ -368,7 +368,7 @@ function create_problem_json(problem, block_id) {
 function create_drag_question(problem, question_id_input, question, drag_li_arr) {
     question_id_input.value += "" + question.id + ",";
     var question_str = "";
-    var bk_color = "correctWrong_bg";
+    var bk_color = "correctWrong_bg";    
     if (answer_hash != null && answer_hash.get(question.id) != null
         && parseFloat(answer_hash.get(question.id)[1]) == parseFloat(question.score)) {
         bk_color = "correctRight_bg";
