@@ -306,8 +306,8 @@ class Collection < ActiveRecord::Base
 
 
   #错误核对，记录错误答案
-  def self.record_user_answer(user_id,problem_id,question_id,user_answer)
-    collection = Collection.find_or_create_by_user_id_and_category_id(user_id)
+  def self.record_user_answer(user_id,problem_id,question_id,user_answer,category_id)
+    collection = Collection.find_or_create_by_user_id_and_category_id(user_id,category_id)
     path =  COLLECTION_PATH + "/" + Time.now.to_date.to_s
     collection_url = path + "/#{collection.id}.js"
     collection.set_collection_url(path, collection_url)
