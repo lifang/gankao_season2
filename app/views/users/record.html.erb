@@ -24,7 +24,7 @@ order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::
     <div class="vip_box vip_zfb"><div class="zfb_con"><img src="/assets/zfb_pic.png" /><select name="" id="vip_style">
           <option value="">产品类型</option>
           <% Category.all.each do |c| %>
-          <option value="<%= c.id %>"><%= c.name %></option>
+            <option value="<%= c.id %>"><%= c.name %></option>
           <% end %>
         </select>
         <button class="t_btn" onclick="check_vip()">确定</button></div></div>

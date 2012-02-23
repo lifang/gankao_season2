@@ -15,9 +15,9 @@ class UsersController < ApplicationController
   def show
     @title = "个人信息 - 赶考网"
     @user=User.find(cookies[:user_id])
-    @order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and TO_DAYS(end_time)>TO_DAYS('#{Time.now}') and status=#{Order::STATUS[:NOMAL]}")
   end
 
+  #更新个人信息
   def update_users
     user = User.find(cookies[:user_id].to_i)
     user.update_attributes(params[:info]) if user
@@ -30,6 +30,7 @@ class UsersController < ApplicationController
     end
   end
 
+  #查询信息
   def mess_info
     mess_sql="select * from notices where send_types=#{Notice::SEND_TYPE[:SYSTEM]} and TO_DAYS(ended_at)>TO_DAYS('#{Time.now}')"
     @mess=Notice.paginate_by_sql(mess_sql,:per_page =>5, :page => params[:page])
@@ -38,6 +39,7 @@ class UsersController < ApplicationController
     end
   end
 
+  #查询邮件
   def email_info
     e_sql="select * from notices where send_types=#{Notice::SEND_TYPE[:SINGLE]} and target_id=#{cookies[:user_id]}"
     @email=Notice.paginate_by_sql(e_sql,:per_page =>5, :page => params[:page])
@@ -46,7 +48,7 @@ class UsersController < ApplicationController
     end
   end
 
-
+  #查询消费记录
   def record_info
     sql = "(select o.created_at created_at, c.name name, o.remark remark, o.total_price total_price,o.out_trade_no from orders o join categories c on c.id = o.category_id
            where o.user_id =#{cookies[:user_id]})"
@@ -56,6 +58,7 @@ class UsersController < ApplicationController
     end
   end
 
+  #删除消息
   def delete_mess
     Notice.delete(params[:ids])
     data="删除成功"
@@ -66,7 +69,7 @@ class UsersController < ApplicationController
     end
   end
 
-
+  #邀请码升级vip
   def accredit_check
     code=InviteCode.first(:conditions=>"code='#{params[:info].strip}'")
     if code.nil?
@@ -96,7 +99,7 @@ class UsersController < ApplicationController
     end
   end
 
-
+  #检查是否需要充值vip
   def check_vip
     order = Order.first(
       :conditions => "user_id = #{cookies[:user_id]} and category_id = #{params[:category]} and status = #{Order::STATUS[:NOMAL]}")
@@ -114,6 +117,7 @@ class UsersController < ApplicationController
     end
   end
 
+  #发送充值请求
   def alipay_exercise
     category = Category.find(params[:category].to_s)
     options ={
@@ -129,7 +133,7 @@ class UsersController < ApplicationController
     redirect_to "#{AlipaysHelper::PAGE_WAY}?#{options.sort.map{|k, v| "#{CGI::escape(k.to_s)}=#{CGI::escape(v.to_s)}"}.join('&')}"
   end
 
-
+  #充值异步回调
   def alipay_compete
     out_trade_no=params[:out_trade_no]
     trade_nu =out_trade_no.to_s.split("_")

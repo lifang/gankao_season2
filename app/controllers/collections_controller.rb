@@ -55,7 +55,7 @@ class CollectionsController < ApplicationController
   end
 
   def add_collection
-    collection = Collection.find_or_create_by_user_id(cookies[:user_id].to_i)
+    collection = Collection.find_or_create_by_user_id_and_category_id(cookies[:user_id].to_i)
     path = Collection::COLLECTION_PATH + "/" + Time.now.to_date.to_s
     url = path + "/#{collection.id}.js"
     collection.set_collection_url(path, url)

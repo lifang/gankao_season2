@@ -58,7 +58,7 @@ GankaoSeason2::Application.routes.draw do
   end
   resources :logins do
     collection do
-      get :friend_add_request,:renren_like,:sina_index,:add_user
+      get :friend_add_request,:renren_like,:sina_index,:add_user,:charge_vip
       get :renren_index,:follow_me,:login_from_qq,:qq_index,:get_code,:user_code
       get :sina_login,:friend_add
       get :renren_login,:logout

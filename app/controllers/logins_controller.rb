@@ -129,12 +129,19 @@ class LoginsController < ApplicationController
     redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Constant::RENREN_ID}&app_id=163813&redirect_uri=http%3A%2F%2Fwww.gankao.co"
   end
 
-   #退出
+  #退出
   def logout
     cookies.delete(:user_id)
     cookies.delete(:user_name)
-    session.delete(:user_role)
+    cookies.delete(:user_role)
     redirect_to root_path
+  end
+
+  #查看是否充值成功
+  def charge_vip
+    cookies.delete(:user_role)
+    user_role?(cookies[:user_id])
+    redirect_to "/users/#{cookies[:user_id]}"
   end
 
 end
