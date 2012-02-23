@@ -4,7 +4,7 @@ class ExamUsersController < ApplicationController
   before_filter :sign? ,:except=>["preview","ajax_load_about_words"]
   def show
     #读取试题
-    begin
+#    begin
       eu = ExamUser.find(params[:id])
       @paper_id = eu.paper_id
       @paper = Paper.find(@paper_id)
@@ -22,10 +22,10 @@ class ExamUsersController < ApplicationController
       collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
       @collection = collection.nil? ? [] : collection.question_ids.split(",")
       close_file("#{sheet_url}")
-    rescue
-      flash[:warn] = "试卷加载错误，请您重新尝试。"
-      redirect_to request.referer
-    end
+#    rescue
+#      flash[:warn] = "试卷加载错误，请您重新尝试。"
+#      redirect_to request.referer
+#    end
   end
 
   #将变量转化为数组

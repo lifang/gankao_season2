@@ -357,7 +357,7 @@ function imitate_action(question_type,correct_type,user_answer,problem_index,que
             var attrs = problems[problem_index].questions.question[question_index]["questionattrs"];
             var split_attrs = attrs.split(";-;");
             for(var i=0;i<split_attrs.length;i++){
-                if(user_answer==split_attrs[i]){
+                if(user_answer.trim()==split_attrs[i].trim()){
                     $(".single_choose_li_"+problem_index+"_"+question_index+":eq("+i+")").addClass("hover");
                 }
             }
@@ -368,7 +368,7 @@ function imitate_action(question_type,correct_type,user_answer,problem_index,que
             var user_answer_arr = user_answer.split(";|;");
             for(var ii=0;ii<user_answer_arr.length;ii++){
                 for(var j=0;j<split_attrs.length;j++){
-                    if(user_answer_arr[ii]==split_attrs[j]){
+                    if(user_answer_arr[ii].trim()==split_attrs[j].trim()){
                         $(".multi_choose_li_"+problem_index+"_"+question_index+":eq("+j+")").addClass("hover");
                     }
                 }

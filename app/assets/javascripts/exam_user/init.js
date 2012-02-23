@@ -43,6 +43,15 @@ $(function(){
     $("#global_problem_sum").html(problems.length);
 })
 
+function rp(str){
+    str = str.replace(/&amp;/g,"&");
+    str = str.replace(/&lt;/g,"<");
+    str = str.replace(/&gt;/g,">");
+    str = str.replace(/&acute;/g,"'");
+    str = str.replace(/&quot;/g, '"');
+    str = str.replace(/&brvbar;/g, '|');
+    return str;
+}
 
 
 

@@ -9,7 +9,7 @@
         <li>
           <% if cookies[:user_id].nil? %>
             <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>">
-              <% unless similarity.is_free %><span><img src="/assets/icon_tx.png" /></span><% end %>
+              <% unless similarity.is_free %><span><img title="仅供正式用户使用" src="/assets/icon_tx.png" /></span><% end %>
               <h2><%= similarity.title %></h2>
             </a>
           <% else %>

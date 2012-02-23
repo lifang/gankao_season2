@@ -232,10 +232,6 @@ function question_box(questions_resource,question_index){
     element1 = create_element("div",null,"display_jiexi_"+init_problem+"_"+question_index,"jiexi",null,"innerHTML");
     $(element1).css("display","none");
     $(question_resource).append(element1);
-    element2 = create_element("span",null,null,"xx_x",null,"innerHTML");
-    $(element2).attr("onclick","javascript:close_display_answer("+init_problem+","+question_index+");");
-    $(element2).html("<img src='/assets/x.gif'>");
-    $(element1).append(element2);
     element2 = create_element("div",null,null,null,null,"innerHTML");
     $(element1).append(element2);
     $(element2).html("正确答案：");
@@ -268,7 +264,6 @@ function question_box(questions_resource,question_index){
     if(problems[init_problem].questions.question[question_index]["words"]!=null && problems[init_problem].questions.question[question_index]["words"]!=""){
         $(element1).html($(element1).html()+"<a href='javascript:void(0);' onclick=\"javascript:ajax_load_about_words('"+problems[init_problem].questions.question[question_index]["words"]+"',"+init_problem+","+question_index+");\">相关词汇</a>");
     }
-    $(element1).html($(element1).html()+"<a href='javascript:void(0);' style='display:none;' id='open_display_answer_"+init_problem+"_"+question_index+"' onclick=\"javascript:open_display_answer("+init_problem+","+question_index+");\">答案解析</a>");
 }   
 
 //题面中小题细节

@@ -48,6 +48,6 @@
     }
   });
   function play_audio(src){
-    $f("audio-word").play(src);
+    $f("audio-word").play("<%= Constant::BACK_SERVER_PATH %>"+src);
   }
 </script>
