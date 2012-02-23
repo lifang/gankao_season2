@@ -63,6 +63,7 @@ class CollectionsController < ApplicationController
     last_problems = ""
     file = File.open(Constant::PUBLIC_PATH + collection.collection_url)
     last_problems = file.read
+    file.close
     unless last_problems.nil? or last_problems.strip == ""
       already_hash = JSON(last_problems.gsub("collections = ", ""))
     else

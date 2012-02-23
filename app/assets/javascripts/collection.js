@@ -171,8 +171,7 @@ function load_problem_collection(problem_index,tag){
                     }
                     element_str +="</select>"
                 } else if(correct_type=="1"){
-                    var answers=u_answer==null?[]:u_answer.split(")");
-                    var answer=answers[1]==null? " ":answers[1]
+                    var answer=u_answer==null?[]:u_answer;
                     element_str += "<span class='dragDrop_box'"
                     if(question_type=='1'&&flag!=null&&parseInt(flag)==1){
                         element_str +="onclick=\"javascript:show_question('"+sign_index +"', this);\""
@@ -196,6 +195,7 @@ function load_problem_collection(problem_index,tag){
                 result_title.push(element_str);
             }
         }
+        result_title.push("<div style='height:20px;'></div>");
         title=result_title.join("");
         $("#drag_tk_box").css("height",$("#drag_tk").height());
     }else{
@@ -465,7 +465,7 @@ function collection_correct_type(correct_type,ele,problem_index,question_index,q
         if(correct_type=='1'){
             var attrs =  question_detail.questionattrs.split(";-;");
             var ul = ele.appendChild(create_element("ul", null, null, null, null, "innerHTML"));
-            var u_answers= u_answer==null?[]:u_answer.split(";-;")
+            var u_answers= u_answer==null?[]:u_answer.split(";|;")
             for(var i=0;i<attrs.length;i++){
                 var li = ul.appendChild(create_element("li", null, null, null, null, "innerHTML"));
                 span_li = "<span class='multi_choose_li";
@@ -770,6 +770,7 @@ function test_again(){
                 result_title.push(element_str);
             }
         }
+        result_title.push("<div style='height:20px;'></div>");
         title=result_title.join("");
         $("#global_problem_title").html(title);
         $(".dragDrop_box").droppable({
