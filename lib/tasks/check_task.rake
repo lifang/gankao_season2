@@ -9,14 +9,15 @@ namespace :check do
       month_action={}
       tasks=PlanTask.find_by_sql("select task_types,num, study_plan_id
           from plan_tasks where period_types=#{PlanTask::PERIOD_TYPES[:EVERYDAY]}
-          and study_plan_id=#{user_plan.study_plan_id}  and
-          task_types in (#{PlanTask::TASK_TYPES[:PRACTICE]},#{PlanTask::TASK_TYPES[:RECITE]}) group by task_types")
+          and task_types in (#{PlanTask::TASK_TYPES[:PRACTICE]},#{PlanTask::TASK_TYPES[:RECITE]}) 
+          and study_plan_id=#{user_plan.study_plan_id} group by task_types")
       tasks.each do |task|
         task_num["#{task.task_types}"]=task.num
       end unless tasks.blank?
-      actions=ActionLog.find_by_sql("select total_num,created_at,types from action_logs where user_id=#{user_plan.user_id}
-           and types in (#{ActionLog::TYPES[:PRACTICE]},#{ActionLog::TYPES[:RECITE]}) and category_id=#{user_plan.category_id} and
-                        TO_DAYS(NOW())-TO_DAYS(created_at)=1 ")
+      actions=ActionLog.find_by_sql("select total_num,created_at,types from action_logs where
+             types in (#{ActionLog::TYPES[:PRACTICE]},#{ActionLog::TYPES[:RECITE]})
+             and category_id=#{user_plan.category_id} and user_id=#{user_plan.user_id}
+             and TO_DAYS(NOW())-TO_DAYS(created_at)=1 ")
       actions.each do |action|
         month_action["#{action.types}"]=action.total_num
       end unless actions.blank?
