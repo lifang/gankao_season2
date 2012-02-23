@@ -119,8 +119,8 @@ function change_color(value,problem_index,question_index){
 }
 
 //单选题,做题
-function do_single_choose(ele,attrs,problem_index,question_index){
-    attrs=attrs.split(";-;");
+function do_single_choose(ele,problem_index,question_index){
+    attrs=problems[problem_index].questions.question[question_index].questionattrs.split(";-;");
     $(".single_choose_li_"+problem_index+"_"+question_index).removeClass("hover");
     $(ele).addClass("hover");
     var n=0;
@@ -134,8 +134,8 @@ function do_single_choose(ele,attrs,problem_index,question_index){
 }
 
 //多选题，做题
-function do_multi_choose(ele,attrs,problem_index,question_index){
-    attrs=attrs.split(";-;");
+function do_multi_choose(ele,problem_index,question_index){
+    attrs=problems[problem_index].questions.question[question_index].questionattrs.split(";-;");
     $(ele).toggleClass("hover");
     var n = 0;
     var user_answer = [];

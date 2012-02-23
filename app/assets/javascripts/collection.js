@@ -9,6 +9,9 @@ $(document).ready(function(){
         async:true,
         type: "POST",
         url: "/collections/get_collections.json",
+        data:{
+          category:$("#category_id").val()
+        },
         dataType: "json",
         success : function(data) {
             collections=data.message;
@@ -90,7 +93,7 @@ function delete_this(){
         dataType: "json",
         data : {
             problem_id :problem_init,
-            category_id:$("#category_id").val()
+            category:$("#category_id").val()
         },
         success : function(data) {
             window.location.href="/collections?category="+data.category
@@ -594,7 +597,8 @@ function check_question(question_index,problem_question_index,answer,problem_ind
                 data : {
                     problem_id :one_problem.id,
                     question_id :question_id,
-                    user_answer : user_answer
+                    user_answer : user_answer,
+                    category:$("#category_id").val()
                 }
             });
         }

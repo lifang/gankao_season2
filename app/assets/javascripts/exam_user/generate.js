@@ -318,7 +318,7 @@ function outter_question(question_index){
                 element3 = create_element("li",null,null,null,null,"innerHTML");
                 $(element2).append(element3);
                 store1 = create_element("span",null,null,"single_choose_li single_choose_li_"+init_problem+"_"+question_index,null,"innerHTML");
-                $(store1).attr("onclick","javascript:do_single_choose(this,\""+question_attrs.join(";-;")+"\","+init_problem+","+question_index+");");
+                $(store1).attr("onclick","javascript:do_single_choose(this,"+init_problem+","+question_index+");");
                 attr = question_attrs[i].split(") ");
                 if(attr.length>1){
                     sign = attr[0];
@@ -342,7 +342,7 @@ function outter_question(question_index){
                 element3 = create_element("li",null,null,null,null,"innerHTML");
                 $(element2).append(element3);
                 store1 = create_element("span",null,null,"multi_choose_li multi_choose_li_"+init_problem+"_"+question_index,null,"innerHTML");
-                $(store1).attr("onclick","javascript:do_multi_choose(this,\""+question_attrs.join(";-;")+"\","+init_problem+","+question_index+");");
+                $(store1).attr("onclick","javascript:do_multi_choose(this,"+init_problem+","+question_index+");");
                 attr = question_attrs[i].split(") ");
                 if(attr.length>1){
                     sign = attr[0];
