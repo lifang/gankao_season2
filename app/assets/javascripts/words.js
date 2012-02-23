@@ -1,3 +1,10 @@
+Array.prototype.indexOf=function(el, index){
+    var n = this.length>>>0, i = ~~index;
+    if(i < 0) i += n;
+    for(; i < n; i++) if(i in this && this[i] === el) return i;
+    return -1;
+};
+
 //预加载MP3
 $(document).ready(function(){
     if (word_ids == null) {

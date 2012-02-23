@@ -69,7 +69,7 @@ class LoginsController < ApplicationController
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
       ActionLog.login_log(cookies[:user_id])
-      render :inline => "<script>window.opener.location.href='/';window.close();</script>"
+      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
     end
@@ -103,7 +103,7 @@ class LoginsController < ApplicationController
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
       ActionLog.login_log(cookies[:user_id])
-      render :inline => "<script>window.opener.location.href='/collections';window.close();</script>"
+      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
     end
@@ -126,15 +126,22 @@ class LoginsController < ApplicationController
   end
 
   def  renren_like
-    redirect_to "http://widget.renren.com/dialog/friends?target_id=600942099&app_id=163813&redirect_uri=http%3A%2F%2Fwww.gankao.co"
+    redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Constant::RENREN_ID}&app_id=163813&redirect_uri=http%3A%2F%2Fwww.gankao.co"
   end
 
-   #退出
+  #退出
   def logout
     cookies.delete(:user_id)
     cookies.delete(:user_name)
-    session.delete(:user_role)
+    cookies.delete(:user_role)
     redirect_to root_path
+  end
+
+  #查看是否充值成功
+  def charge_vip
+    cookies.delete(:user_role)
+    user_role?(cookies[:user_id])
+    redirect_to "/users/#{cookies[:user_id]}"
   end
 
 end

@@ -7,7 +7,7 @@ module Constant
   PUBLIC_PATH = "#{Rails.root}/public"
 
   #后台项目文件目录
-  BACK_PUBLIC_PATH = "f:/exam_season2/public"
+  BACK_PUBLIC_PATH = "e:/exam_season2/public"
 
   #weibo账号
   WEIBO_ID = 2359288352
@@ -15,6 +15,8 @@ module Constant
   #赶考网官方微博
   TENCENT_WEIBO_NAME = "gankao2011"
 
+  #人人账号
+  RENREN_ID = 600942099
 
   #请求服务器ip
   IP="116.255.179.206:3001"

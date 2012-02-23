@@ -619,7 +619,8 @@ function normal_add_collect(problem_index,question_index){
                 "question_index" : question_index,
                 "problem" : problems[problem_index],
                 "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
-                "addition" : answers[problem_index][question_index]
+                "addition" : answers[problem_index][question_index],
+                "category_id" :category
             },
             success : function(data){
                 $("#shoucang_"+problems[problem_index].questions.question[question_index].id).addClass("hover");
@@ -653,7 +654,8 @@ function special_add_collect(problem_index,question_index){
                 "question_answer" : answers[problem_index][question_index]["answer"],
                 "question_analysis" : answers[problem_index][question_index]["analysis"],
                 "problem_id" : problems[problem_index].id,
-                "question_id" : problems[problem_index].questions.question[question_index].id
+                "question_id" : problems[problem_index].questions.question[question_index].id,
+                "category_id" :category
             },
             success : function(data){
                 $("#shoucang_"+problems[problem_index].questions.question[question_index].id).addClass("hover");

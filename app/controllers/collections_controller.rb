@@ -55,7 +55,7 @@ class CollectionsController < ApplicationController
   end
 
   def add_collection
-    collection = Collection.find_or_create_by_user_id(cookies[:user_id].to_i)
+    collection = Collection.find_or_create_by_user_id_and_category_id(cookies[:user_id].to_i, params[:category_id].to_i)
     path = Collection::COLLECTION_PATH + "/" + Time.now.to_date.to_s
     url = path + "/#{collection.id}.js"
     collection.set_collection_url(path, url)
@@ -110,7 +110,8 @@ class CollectionsController < ApplicationController
     end
     Collection.update_collection(cookies[:user_id].to_i, this_problem,
       params[:problem_id], this_question, params[:question_id],
-      params[:paper_id], params[:question_answer], params[:question_analysis], params[:user_answer])
+      params[:paper_id], params[:question_answer], params[:question_analysis],
+     params[:user_answer], params[:category_id].to_i)
 
     CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id]])
     

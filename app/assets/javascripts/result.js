@@ -460,7 +460,7 @@ function create_review(problem_id, problem_type, question_id) {
 //创建收藏
 function create_collection(problem_id, question_id, problem_type) {
     var user_answer = ($("#u_answer_"+question_id).attr("value") != undefined)
-    ? $("#u_answer_"+question_id).val() : null;
+    ? $("#u_answer_"+question_id).val() : null;    
     if (problem_type == "1") {
         $.ajax({
             type: "POST",
@@ -474,7 +474,8 @@ function create_collection(problem_id, question_id, problem_type) {
                 "question_analysis":$("#q_analysis_"+question_id).val(),
                 "user_answer":user_answer,
                 "paper_id":$("#paper_id").val(),
-                "exam_user_id":$("#exam_user_id").val()
+                "exam_user_id":$("#exam_user_id").val(),
+                "category_id":$("#category_id").val()
             },
             success : function(data) {
                 tishi_alert(data["message"]);
@@ -495,7 +496,8 @@ function create_collection(problem_id, question_id, problem_type) {
                 "question_analysis":$("#q_analysis_"+question_id).val(),
                 "user_answer":user_answer,
                 "paper_id":$("#paper_id").val(),
-                "exam_user_id":$("#exam_user_id").val()
+                "exam_user_id":$("#exam_user_id").val(),
+                "category_id":$("#category_id").val()
             },
             success : function(data) {
                 tishi_alert(data["message"]);

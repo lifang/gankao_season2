@@ -1,6 +1,6 @@
 @charset "utf-8";
 * { padding: 0; margin: 0;}
-body { font-family: "宋体", "微软雅黑", Arial; font-size: 12px; color: #333; background: url(/assets/body_bg.png) repeat-x  #FFF;}
+body { font-family: "宋体", "微软雅黑", Arial; font-size: 12px; color: #333; background: url(/assets/body_bg_user.png) repeat-x  #FFF;}
 a { text-decoration: none; color: #333;}
 button { cursor: pointer;}
 ul { list-style: none;}
@@ -46,7 +46,8 @@ img { border:none;}
 .rcf_box label { width: 100px; display: block; padding: 20px 0; text-align: right; float: left; line-height: 30px;}
 .setting-item-main { width: 400px; padding: 20px 0; float: left; background: #FFF;}
 .setting-item-main input { width: 216px; height: 30px; margin: 0 10px; border: 1px #d2d2d2 solid;}
-.setting-item-vip { height: 30px; line-height: 30px; width: 400px; padding: 20px 0; float: left; background: #FFF;}
+.setting-item-vip { height: 60px; padding: 5px 0; width: 400px; float: left; background: #FFF;}
+.setting-item-vip div { height: 30px; line-height: 30px; padding-left: 10px;}
 .setting-item-vip a {color: #F00; text-decoration: underline;}
 .rcf_box_bottom { border-bottom:1px #D9D9DA solid;}
 
@@ -95,7 +96,7 @@ img { border:none;}
 .vip_zfb { background: url(/assets/vip_bg.png) no-repeat 0 bottom;}
 .sq_con{ width: 360px; margin: 47px 0 0 143px;}
 .sq_con input { height: 22px;}
-.zfb_con { width: 425px; margin: 29px 0 0 143px;}
+.zfb_con { width: 450px; margin: 29px 0 0 143px;}
 .zfb_con img { float: left;}
 .zfb_con select  { height: 24px; line-height: 24px; float: left; margin: 20px 0 0 5px;}
 .zfb_con button { margin-top: 20px;}
@@ -123,6 +124,16 @@ img { border:none;}
 .pagination em { border: #289FDB 1px solid;  padding: 6px 10px; font-weight: bold; color: #289FDB; margin-right: 4px; background: #d0e7ee;}
 .pagination span.disabled { border: #c1c1c1 1px solid; padding: 6px 10px; color: #929292; margin-right: 4px;}
 
+
+/*充值提示*/
+.zhezhao { width:100%; height: 100%; left:0; position:absolute; top:0; background:#000; opacity:0.5; filter:alpha(opacity=50); z-index:888;}
+.cz_tishi { width: 400px; height: 180px; border: 1px #CCC solid; background: url(/assets/cz_tishi_bg.png) no-repeat; position: fixed; z-index: 900;}
+.cz_tishi_h { height: 32px; line-height: 32px; font-size: 14px; padding-left: 10px; color: #FFF;}
+.cz_tishi_h a { float: right; margin: 5px 5px 0 0;}
+.cz_tishi_text { width: 400px; padding: 10px; line-height: 24px; padding-left: 30px; color: #333;}
+.cz_tishi_btn { width: 300px; margin: 10px 100px;}
+.wanc_btn { width: 88px; height: 31px; background: url(/assets/wanc_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
+.chongx_btn { width: 88px; height: 31px; background: url(/assets/chongx_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
 /* 提示弹出层*/
 .tishi_tab {width: 288px; height: 82px; padding:30px 10px 10px 10px; background: url(/assets/tishi_tab_bg.png) no-repeat; position: fixed; display: none;z-index: 9999;}
 .tishi_tab p  { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; font-weight:bold; color: #ffffff;}
