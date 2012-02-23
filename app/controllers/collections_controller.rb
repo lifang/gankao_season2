@@ -9,14 +9,14 @@ class CollectionsController < ApplicationController
     if is_nomal?(params[:category])
       redirect_to "/collections/not_vip?category=#{params[:category]}"
     else
-      user = User.find(cookies[:user_id])
-      if user.collection
+      collection=Collection.find_by_user_id_and_category_id(cookies[:user_id],params[:category].to_i)
+      unless collection.nil?
         category_id = "#{params[:category]}"=="" ? 2 : params[:category]
         @category = Category.find_by_id(category_id.to_i)
         @title = "#{@category.name}真题收藏"
         @meta_keywords = "自动收藏做错的#{@category.name}真题"
         @meta_description = "自动收藏做错的#{@category.name}真题"
-        @collection_js="#{user.collection.collection_url}"
+        @collection_js="#{collection.collection_url}"
       else
         redirect_to "/collections/error?category=#{params[:category]}"
       end
@@ -46,7 +46,7 @@ class CollectionsController < ApplicationController
   end
 
   def write_file
-    Collection.record_user_answer(cookies[:user_id],params[:problem_id].to_i,params[:question_id].to_i,params[:user_answer])
+    Collection.record_user_answer(cookies[:user_id],params[:problem_id].to_i,params[:question_id].to_i,params[:user_answer],params[:category].to_i)
     respond_to do |format|
       format.json {
         render :json=>"成功"
@@ -63,6 +63,7 @@ class CollectionsController < ApplicationController
     last_problems = ""
     file = File.open(Constant::PUBLIC_PATH + collection.collection_url)
     last_problems = file.read
+    file.close
     unless last_problems.nil? or last_problems.strip == ""
       already_hash = JSON(last_problems.gsub("collections = ", ""))
     else
@@ -110,7 +111,7 @@ class CollectionsController < ApplicationController
     Collection.update_collection(cookies[:user_id].to_i, this_problem,
       params[:problem_id], this_question, params[:question_id],
       params[:paper_id], params[:question_answer], params[:question_analysis],
-     params[:user_answer], params[:category_id].to_i)
+      params[:user_answer], params[:category_id].to_i)
 
     CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id]])
     
@@ -122,59 +123,14 @@ class CollectionsController < ApplicationController
   end
 
   def error
+
   end
 
-
-  #收藏主页
-  def index1
-    begin
-      if cookies[:user_id]
-        user = User.find(cookies[:user_id])
-        if user.collection
-          category_id = "#{params[:category]}"=="" ? 2 : params[:category]
-          @category = Category.find_by_id(category_id.to_i)
-          @title = "#{@category.name}真题收藏"
-          @meta_keywords = "自动收藏做错的#{@category.name}真题"
-          @meta_description = "自动收藏做错的#{@category.name}真题"
-          @collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
-          f = File.open(@collection_url)
-          @problems = (JSON (f.read)[13..-1])["problems"]["problem"]
-          @problems_sum = @problems.length #总大题数
-          @group_sum = 5 #设置每组大题数
-          @group_index = params[:init_problem].nil? ? 0 : ((params[:init_problem].to_i)/@group_sum)  #设置载入第几组
-          @problems = @problems[(@group_index*@group_sum),@group_sum]
-          f.close
-        else
-          redirect_to "/collections/error"
-          return false
-        end
-      else
-        redirect_to "/collections/error"
-        return false
-      end
-    rescue
-      redirect_to "/collections/error"
-      return false
-    end
-  end
-
-  #读取题目资源
-  def ajax_load_problems
-    user = User.find(cookies[:user_id])
-    collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
-    f = File.open(collection_url)
-    @problems = (JSON (f.read)[13..-1])["problems"]["problem"]
-    @problems_sum = @problems.length #总大题数
-    @problems = @problems[params[:group_index].to_i*params[:group_sum].to_i,params[:group_sum].to_i]
-    f.close
-    object={:group_index=>params[:group_index].to_i,:group_sum=>params[:group_sum].to_i,:problems=>@problems,:problems_sum=>@problems_sum,:init_problem=>params[:init_problem].to_i}
-    render :partial=>"/collections/problems",:object=>object
-  end
 
 
   def get_collections
-    user = User.find(cookies[:user_id])
-    @collection_url = "#{Rails.root}/public#{user.collection.collection_url}"
+    collection=Collection.find_by_user_id_and_category_id(cookies[:user_id],params[:category].to_i)
+    @collection_url = "#{Rails.root}/public#{collection.collection_url}"
     f = File.open(@collection_url)
     @problems = (JSON (f.read)[13..-1])
     f.close
@@ -186,8 +142,7 @@ class CollectionsController < ApplicationController
   end
 
   def delete_problem
-    user = User.find(cookies[:user_id])
-    collection=user.collection
+    collection=Collection.find_by_user_id_and_category_id(cookies[:user_id],params[:category].to_i)
     collection_url = "#{Rails.root}/public#{collection.collection_url}"
     f = File.open(collection_url)
     problems = (JSON (f.read)[13..-1])
@@ -210,7 +165,7 @@ class CollectionsController < ApplicationController
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
     respond_to do |format|
       format.json {
-        render :json=>{:category=>params[:category_id]}
+        render :json=>{:category=>params[:category]}
       }
     end
   end

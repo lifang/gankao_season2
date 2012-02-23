@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+<<<<<<< HEAD
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1">
+        <file>
+            <url>app/assets/javascripts/exam_user/generate.js</url>
+            <line>266</line>
+        </file>
+    </editor-bookmarks>
+=======
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+>>>>>>> a59693644776154f0538af775f288b0fb3b182f6
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1"/>
 </project-private>

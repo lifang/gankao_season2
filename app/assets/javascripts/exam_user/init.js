@@ -31,7 +31,7 @@ for(var i=0;i<b.length;i++){
         var b1 = transform_array(b[i].problems.problem);
         for(var j=0;j<b1.length;j++){
             if(b1[j].questions!=null){
-                b1[j].questions =  transform_array(b1[j].questions.question);
+                b1[j].questions.question =  transform_array(b1[j].questions.question);
                 problems.push(b1[j]);
             }
         }

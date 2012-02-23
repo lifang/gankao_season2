@@ -82,8 +82,7 @@ class Collection < ActiveRecord::Base
     return  new_col_problem
   end
   
-  def self.update_collection(user_id, this_problem,problem_id,
-      this_question,question_id, paper_id, answer, analysis, user_answer, category_id)
+  def self.update_collection(user_id, this_problem, problem_id, this_question, question_id, paper_id, answer, analysis, user_answer, category_id)
     #读取collection.js文件
     collection = Collection.find_or_create_by_user_id_and_category_id(user_id, category_id)
     path = Collection::COLLECTION_PATH + "/" + Time.now.to_date.to_s
@@ -113,10 +112,11 @@ class Collection < ActiveRecord::Base
         break
       end
     end
-
+    this_problem["paper_id"]=paper_id
     this_question["answer"]=answer
     this_question["analysis"]=analysis
     this_question["user_answer"]=user_answer
+    this_problem["questions"]["question"]=[this_question]
     #收藏新题
     if problem_exist
       unless question_exist        
@@ -127,17 +127,7 @@ class Collection < ActiveRecord::Base
         end        
       end
     else
-      problem={}
-      problem["id"]=this_problem["id"]
-      p_question_type = (this_problem["question_type"].nil? || this_problem["question_type"]=="") ? "0" : this_problem["question_type"]
-      problem["question_type"]=p_question_type
-      problem["description"]=this_problem["description"]
-      problem["title"]=this_problem["title"]
-      problem["category"]=this_problem["category"]
-      problem["paper_id"] = paper_id
-      problem["questions"]={}
-      problem["questions"]["question"]=[this_question]
-      problems << problem
+      problems << this_problem
     end
 
     #更新collection.js内容
@@ -307,8 +297,8 @@ class Collection < ActiveRecord::Base
 
 
   #错误核对，记录错误答案
-  def self.record_user_answer(user_id,problem_id,question_id,user_answer)
-    collection = Collection.find_or_create_by_user_id_and_category_id(user_id)
+  def self.record_user_answer(user_id,problem_id,question_id,user_answer,category_id)
+    collection = Collection.find_or_create_by_user_id_and_category_id(user_id,category_id)
     path =  COLLECTION_PATH + "/" + Time.now.to_date.to_s
     collection_url = path + "/#{collection.id}.js"
     collection.set_collection_url(path, collection_url)

@@ -1,5 +1,5 @@
 <exam id='81'>
-    <paper id='27' score='88.0'>
+    <paper id='27' score='16.0'>
         <questions>
             <question id='112' is_sure='1' score='0'>
                 <answer>等待</answer>
@@ -13,13 +13,13 @@
             <question id='114' is_sure='1' score='0.0' score_reason=''>
                 <answer>休息休息</answer>
             </question>
-            <question id='115' is_sure='1' score='11.0' score_reason=''>
+            <question id='115' is_sure='1' score='0.0' score_reason=''>
                 <answer>共发放日</answer>
             </question>
-            <question id='116' is_sure='1' score='12.0' score_reason=''>
+            <question id='116' is_sure='1' score='0.0' score_reason=''>
                 <answer>得得得得</answer>
             </question>
-            <question id='117' is_sure='1' score='8.0' score_reason=''>
+            <question id='117' is_sure='1' score='0.0' score_reason=''>
                 <answer>得得得得</answer>
             </question>
             <question id='118' is_sure='1' score='0'>
@@ -28,10 +28,10 @@
             <question id='23' is_sure='1' score='0.0' score_reason=''>
                 <answer>得得得得</answer>
             </question>
-            <question id='24' is_sure='1' score='5.0' score_reason=''>
+            <question id='24' is_sure='1' score='0.0' score_reason=''>
                 <answer>得得得得</answer>
             </question>
-            <question id='25' is_sure='1' score='5.0' score_reason=''>
+            <question id='25' is_sure='1' score='0.0' score_reason=''>
                 <answer>得得得得</answer>
             </question>
             <question id='26' is_sure='1' score='0'>
@@ -40,7 +40,7 @@
             <question id='119' is_sure='1' score='0'>
                 <answer>得得得得</answer>
             </question>
-            <question id='128' is_sure='1' score='12.0' score_reason=''>
+            <question id='128' is_sure='1' score='0.0' score_reason=''>
                 <answer>得得得得</answer>
             </question>
             <question id='94' is_sure='1' score='0'>
@@ -52,13 +52,13 @@
             <question id='129' is_sure='1' score='0.0' score_reason=''>
                 <answer>得得得得</answer>
             </question>
-            <question id='132' is_sure='1' score='6.0' score_reason=''>
+            <question id='132' is_sure='1' score='0.0' score_reason=''>
                 <answer>得得得得</answer>
             </question>
-            <question id='133' is_sure='1' score='1.0' score_reason=''>
+            <question id='133' is_sure='1' score='0.0' score_reason=''>
                 <answer>得得得得</answer>
             </question>
-            <question id='134' is_sure='1' score='12.0' score_reason=''>
+            <question id='134' is_sure='1' score='0.0' score_reason=''>
                 <answer>得得得得</answer>
             </question>
             <question id='135' is_sure='1' score='0.0' score_reason=''>
@@ -66,12 +66,12 @@
             </question>
         </questions>
         <auto_score>16.0</auto_score>
-        <rate_score>72.0</rate_score>
+        <rate_score>0.0</rate_score>
         <blocks>
-            <block id='33' score='58.0'/>
-            <block id='34' score='20.0'/>
+            <block id='33' score='16.0'/>
+            <block id='34' score='0.0'/>
             <block id='35' score='0.0'/>
-            <block id='36' score='10.0'/>
+            <block id='36' score='0.0'/>
         </blocks>
     </paper>
 </exam>

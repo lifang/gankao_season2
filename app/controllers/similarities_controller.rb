@@ -3,8 +3,8 @@ class SimilaritiesController < ApplicationController
   before_filter :sign?, :except => "index"
   
   def index
-    user_order(params[:category].to_i, cookies[:user_id].to_i) unless cookies[:user_id].nil?
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    user_order(category_id.to_i, cookies[:user_id].to_i) unless cookies[:user_id].nil?
     @category = Category.find_by_id(category_id.to_i)
     @title="#{@category.name}真题"
     @meta_keywords="#{@category.name}真题打包下载"

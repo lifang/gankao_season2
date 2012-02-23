@@ -7,7 +7,7 @@
         <li>
           <% if cookies[:user_id].nil? %>
             <a href="/specials/<%= special.examination_id %>/join?category=<%= category_id %>">
-              <span><img src="/assets/icon_tx.png" /></span>
+              <span><img title="仅供正式用户使用"  src="/assets/icon_tx.png" /></span>
               <h2><%= special.name %></h2>
             </a>
           <% else %>
@@ -19,9 +19,9 @@
                 <h2><%= special.name %></h2>
               </a>
             <% else %>
-              <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
+              <a href="javascript:void(0);" class="tooltip_vip"
                  onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>
-                <span><img src="/assets/icon_tx.png" /></span>
+                <span><img title="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
                 <h2><%= special.name %></h2>
               </a>
             <% end %>
