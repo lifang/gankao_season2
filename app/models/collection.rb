@@ -81,8 +81,7 @@ class Collection < ActiveRecord::Base
     return  new_col_problem
   end
   
-  def self.update_collection(user_id, this_problem,problem_id,
-      this_question,question_id, paper_id, answer, analysis, user_answer, category_id)
+  def self.update_collection(user_id, this_problem,problem_id, this_question,question_id, paper_id, answer, analysis, user_answer, category_id)
     #读取collection.js文件
     collection = Collection.find_or_create_by_user_id_and_category_id(user_id, category_id)
     path = Collection::COLLECTION_PATH + "/" + Time.now.to_date.to_s

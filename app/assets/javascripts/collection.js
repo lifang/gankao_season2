@@ -191,7 +191,7 @@ function load_problem_collection(problem_index,tag){
                     var single_answer= u_answer==null? " ":u_answer
                     element_str = "<input class='input_tk' type='text' id='"+ sign_index+"' value='"+single_answer +"'"
                     if(question_type=='1'&&flag!=null&&parseInt(flag)==1){
-                        element_str += "onclick=\"javascript:show_question('"+sign_index +"', this);\" onblur=\"javascript:$(this).removeClass('backg_blue');\""
+                        element_str += "onclick=\"javascript:show_question('"+sign_index +"', this);\" onblur=\"javascript:$(this).removeClass('borde_blue');\""
                     }
                     element_str +=" readonly /> "
                 }
@@ -236,8 +236,8 @@ function show_question(question_index,sel){
     $("#pro_question_list_"+index).css("display","");
     $("#pro_question_list_"+index).removeClass("p_q_line");
     $("#pro_question_list_"+index).removeClass("pro_qu_h");
-    $(sel).addClass("backg_blue");
-    $("#pro_question_list_"+index).addClass("backg_blue");
+    $(sel).addClass("borde_blue");
+    $("#pro_question_list_"+index).addClass("borde_blue");
     $("#pro_qu_div_"+question_index).css("display","");
     $("#check_"+question_index).css("display","none");
     last_open_question=$("#pro_question_list_"+index).children().find(".pro_qu_t");
@@ -338,10 +338,10 @@ function load_questions_collection(questions,problem_index,tag,question_type){
                     $(this).parent().parent().addClass("p_q_line");
                     $(this).addClass("pro_qu_h");
                     if(question_type=='1'){
-                        $(this).parent().parent().removeClass("backg_blue");
+                        $(this).parent().parent().removeClass("borde_blue");
                         var ids=this.id.split("_");
                         var id=ids[ids.length-1];
-                        $("#"+id).removeClass("backg_blue");
+                        $("#"+id).removeClass("borde_blue");
                     }
                     last_open_question=null;
                 }else{
@@ -349,7 +349,7 @@ function load_questions_collection(questions,problem_index,tag,question_type){
                         if(question_type=='1'){
                             var question=(last_open_question[0].id).split("_");
                             var question_id=question[question.length-1];
-                            $("#"+question_id).removeClass("backg_blue");
+                            $("#"+question_id).removeClass("borde_blue");
                         }
                         last_open_question.trigger("click");
                     }
@@ -357,8 +357,8 @@ function load_questions_collection(questions,problem_index,tag,question_type){
                     if(question_type=='1'){
                         var open_ids=this.id.split("_");
                         var open_id=open_ids[open_ids.length-1];
-                        $("#"+open_id).addClass("backg_blue");
-                        $(this).parent().parent().addClass("backg_blue");
+                        $("#"+open_id).addClass("borde_blue");
+                        $(this).parent().parent().addClass("borde_blue");
                     }
                     $(this).parent().parent().removeClass("p_q_line");
                     $(this).parent().removeClass("p_q_line");
@@ -626,18 +626,18 @@ function check_question(question_index,problem_question_index,answer,problem_ind
         if(last_open_question!=null){
             var question=(last_open_question[0].id).split("_");
             var que_id=question[question.length-1];
-            $("#"+que_id).removeClass("backg_blue");
+            $("#"+que_id).removeClass("borde_blue");
             last_open_question.trigger("click");
         }
         $("#"+question_index).attr("onclick","javascript:show_question('"+question_index +"', this);")
-        $("#"+question_index).addClass("backg_blue");
+        $("#"+question_index).addClass("borde_blue");
         $("#"+question_index).parent().attr("onmouseover","");
         $("#"+question_index).parent().attr("onmouseout","");
         $("#pro_question_list_"+problem_question_index).css("display","");
         $("#pro_question_list_"+problem_question_index).removeClass("p_q_line");
         //        $("#pro_question_list_"+problem_question_index+" .pql_right").removeClass("p_q_line");
         $("#pro_question_list_"+problem_question_index).removeClass("pro_qu_h");
-        $("#pro_question_list_"+problem_question_index).addClass("backg_blue");
+        $("#pro_question_list_"+problem_question_index).addClass("borde_blue");
         $("#pro_qu_div_"+question_index).css("display","");
         $("#check_"+question_index).css("display","none");
         last_open_question=$("#pro_question_list_"+problem_question_index).children().find(".pro_qu_t");
