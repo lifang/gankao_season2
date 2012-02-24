@@ -11,10 +11,11 @@ button { cursor: pointer;}
 .red { color: #F00;}
 .orange { color: #ff6c00;}
 .gray { color: #999;}
-button.green { color:#009900;}
-.blue { color: #2875AE;}
 .span_right {background: #EEFFEE;}
 .span_error {background: #FFEAEA;}
+
+button.green { color:#009900;}
+.blue { color: #2875AE;}
 .xx_x { cursor: pointer; position: absolute; top: 5px; right: 5px;}
 .t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none;}
 .btn_box { width: 81px; height: 27px; margin: 0 auto;}
@@ -202,7 +203,7 @@ background: url(/assets/li.png) no-repeat 0 0;
 .green_dui { color: #090; margin-top: 10px;}
 .red_cuo { color: #F00; margin-top: 10px;}
 
-.pro_btn { padding: 10px 0 5px 0;}
+.pro_btn { padding: 10px 0;overflow: hidden;}
 .pro_btn button { margin: 0 10px 0 0;}
 .pro_btn a { margin: 0 10px;}
 
@@ -239,11 +240,14 @@ background: url(/assets/li.png) no-repeat 0 0;
 
 /*拖拽---*/
 .drag_tk {
-    padding: 10px;
-    background: #c4c4c4;
+        padding: 10px;
+	background: #c4c4c4;
+	position: relative;
 }
+.drag_tk ul { display: block; position: fixed;}
 
-.drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; float: left; margin: 5px; cursor:move;}
+.drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; display: inline-block; margin: 5px; cursor:move;}
+
 
 .dragDrop_box {
     display: inline-block; 

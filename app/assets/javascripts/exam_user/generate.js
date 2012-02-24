@@ -37,17 +37,14 @@ var question_resource; //单个小题细节最外层元素
 
 
 $(function(){
-    var loading = window.setInterval(function(){
-        if(sheet!=null){
-            window.clearInterval(loading);
-            sheet = sheet.getElementsByTagName("sheet")[0];
-            init_problem = parseInt(sheet.getAttribute("init"));
-            finish_index = init_problem ;
-            $("#global_problem_sum").html(problems.length);
-            $("#global_problem_index").html(init_problem+1);
-            load_problem(init_problem);
-        }
-    }, 200);
+    if(sheet!=null){
+        sheet = sheet.getElementsByTagName("sheet")[0];
+        init_problem = parseInt(sheet.getAttribute("init"));
+    }
+    finish_index = init_problem;
+    $("#global_problem_sum").html(problems.length);
+    $("#global_problem_index").html(init_problem+1);
+    load_problem(init_problem);
 })
 
 
@@ -72,13 +69,14 @@ function load_problem(problem_index){
     pro_qu_t(init_problem); //小题列表展开关闭功能
     check_answer(init_problem); //载入存储的答案
     afterload(); //其它需要的细节
+    tooltip();
     finish_index = init_problem;
 }
 
 
 function check_answer(problem_index){
     for(i=0;i<problems[problem_index].questions.question.length;i++){
-        if(sheet.getElementsByTagName("_"+problem_index+"_"+i).length>0){
+        if(sheet!=null && sheet.getElementsByTagName("_"+problem_index+"_"+i).length>0){
             $("#refer_btn_"+problem_index+"_"+i).trigger("click");
         }
     }
@@ -88,23 +86,21 @@ function check_answer(problem_index){
 function afterload(){
     // 拖选框，预留高度
     if($("#drag_tk_"+init_problem).length>0){
-        var drag_tk_height = $("#drag_tk_"+init_problem).height();
+	var m_side_width = $("#m_side_"+init_problem).width();
+	$("#draggable_list_"+init_problem).css("width",m_side_width-20-20);
+        var drag_tk_height = $("#drag_tk_"+init_problem+" ul").height();
         var m_side_height = $("#m_side_"+init_problem).height();
         var pbl_height = m_side_height-drag_tk_height-40;//padding的高度
-	$("#problem_box_"+init_problem).css("height",pbl_height);
+        $("#problem_box_"+init_problem).css("height",pbl_height);
+        $("#drag_tk_"+init_problem).css("height",drag_tk_height);
     }
-    // 展开题目的第一题
-    if(problems[init_problem].question_type!="1"){
-        $("#pro_qu_t_"+init_problem+"_0").trigger("click");
-    }
-    tooltip();
 }
 
 //鼠标移动提示
 function tooltip(){
     var x = -20;
     var y = 15;
-    $(".tooltip").mouseover(function(e){
+    $(".tooltip_"+init_problem).mouseover(function(e){
         var tooltip = "<div class='tooltip_box'><div class='tooltip_next'>"+this.name+"</div></div>";
         $("body").append(tooltip);
         $(".tooltip_box").css({
@@ -136,11 +132,13 @@ function left_side(){
     element1 = create_element("div",null,null,"problem_text",null,"innerHTML");
     element1.innerHTML=problem_title();
     $(element2).append(element1);
+    element1 = create_element("div",null,null,null,null,"innerHTML");
+    $(element1).attr("style","height:20px;");
     $(element2).append(element1);
     if(has_drag){
         $(element2).addClass("tuozhuai_box");
         element1 = create_element("div",null,"drag_tk_"+init_problem,"drag_tk border_radius",null,"innerHTML");
-        $(element2).append(element1);
+        $("#m_side_"+init_problem).append(element1);
         element3 = create_element("ul",null,"draggable_list_"+init_problem,null,null,"innerHTML");
         $(element1).append(element3);
         drag_attrs = drag_attrs.sort();
@@ -196,12 +194,12 @@ function question_box(questions_resource,question_index){
     $(element2).append(element3);
     if(collection == "" || collection == [] || collection.indexOf(problems[init_problem].questions.question[question_index]["id"])==-1){
         if(problems[init_problem]["question_type"]==null || problems[init_problem]["question_type"]=="0"){
-            $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions.question[question_index]["id"]+"' class='tooltip' name='收藏' onclick=\"javascript:normal_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
+            $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions.question[question_index]["id"]+"' class='tooltip tooltip_"+init_problem+"' name='收藏' onclick=\"javascript:normal_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
         }else{
-            $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions.question[question_index]["id"]+"' class='tooltip' name='收藏' onclick=\"javascript:special_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
+            $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions.question[question_index]["id"]+"' class='tooltip tooltip_"+init_problem+"' name='收藏' onclick=\"javascript:special_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
         }
     }else{
-        $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions.question[question_index]["id"]+"' class='tooltip hover' name='已收藏'>收藏</a>");
+        $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions.question[question_index]["id"]+"' class='tooltip tooltip_"+init_problem+" hover' name='已收藏'>收藏</a>");
     }
     
     element2 = create_element("div",null,null,"pql_right",null,"innerHTML");
@@ -325,7 +323,7 @@ function outter_question(question_index){
                 $(element2).append(element3);
                 store1 = create_element("span",null,null,"single_choose_li single_choose_li_"+init_problem+"_"+question_index,null,"innerHTML");
                 $(store1).attr("onclick","javascript:do_single_choose(this,"+init_problem+","+question_index+");");
-                attr = question_attrs[i].split(") ");
+                attr = question_attrs[i].split(")");
                 if(attr.length>1){
                     sign = attr[0];
                     attr.shift();
@@ -349,7 +347,7 @@ function outter_question(question_index){
                 $(element2).append(element3);
                 store1 = create_element("span",null,null,"multi_choose_li multi_choose_li_"+init_problem+"_"+question_index,null,"innerHTML");
                 $(store1).attr("onclick","javascript:do_multi_choose(this,"+init_problem+","+question_index+");");
-                attr = question_attrs[i].split(") ");
+                attr = question_attrs[i].split(")");
                 if(attr.length>1){
                     sign = attr[0];
                     attr.shift();
