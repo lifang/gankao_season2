@@ -186,6 +186,7 @@ function load_problem_collection(problem_index,tag){
                         new_attrs += "<li name='"+escape(attrs[i])+"'>"+attrs[i]+"</li>"
                     }
                     $("#draggable_list").html($("#draggable_list").html()+new_attrs);
+                    $("#pro_title").addClass("tuozhuai_box");
                 } else if(correct_type=="3"){
                     var single_answer= u_answer==null? " ":u_answer
                     element_str = "<input class='input_tk' type='text' id='"+ sign_index+"' value='"+single_answer +"'"
@@ -203,6 +204,8 @@ function load_problem_collection(problem_index,tag){
     }else{
         $("#drag_tk_box").css("display","none");
     }
+    $(".drag_tk").css("height",$(".drag_tk").height()+$("#draggable_list").height());
+    $("#pro_title").css("height",$(".m_side").first().height()-$(".drag_tk").height());
     $("#global_problem_title").html(title);
     $("#jplayer_play").trigger("onclick");
     if(word_list.length!=0){
@@ -774,6 +777,7 @@ function test_again(){
                         new_attrs += "<li name='"+attrs[i]+"' class='drag_li_"+sign_index +"'>"+attrs[i]+"</li>"
                     }
                     $("#draggable_list").html($("#draggable_list").html()+new_attrs);
+                    $("#pro_title").addClass("tuozhuai_box");
                     element_str += "<span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+problem_init+"_"+ sign_index +"','"+ escape(answer)+"',"+problem_init +",'"+drag_index +"') >核对</button></span></span>";
                 }
                 if(inner_correct_type=="3"){
@@ -788,6 +792,8 @@ function test_again(){
         result_title.push("<div style='height:20px;'></div>");
         title=result_title.join("");
         $("#global_problem_title").html(title);
+        $(".drag_tk").css("height",$(".drag_tk").height()+$("#draggable_list").height());
+        $("#pro_title").css("height",$(".m_side").first().height()-$(".drag_tk").height());
         $(".dragDrop_box").droppable({
             drop: function( event, ui ) {
                 $(this).html(ui.draggable.attr("name"));
