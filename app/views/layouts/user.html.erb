@@ -28,7 +28,7 @@
           <% if is_trial?(category_id)%>
             <%= unless order.nil?
               day_end=((order.end_time - Time.now.to_datetime)/1.day).to_i
-              if day_end==0
+              if day_end!=0
                 "试用剩#{day_end}天"
               else
                 "试用即将到期"
