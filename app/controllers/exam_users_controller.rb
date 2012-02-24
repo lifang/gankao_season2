@@ -4,7 +4,7 @@ class ExamUsersController < ApplicationController
   before_filter :sign? ,:except=>["preview","ajax_load_about_words"]
   def show
     #读取试题
-    begin
+#    begin
       eu = ExamUser.find(params[:id])
       @paper_id = eu.paper_id
       @paper = Paper.find(@paper_id)
@@ -22,10 +22,10 @@ class ExamUsersController < ApplicationController
       collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
       @collection = collection.nil? ? [] : collection.question_ids.split(",")
       close_file("#{sheet_url}")
-    rescue
-      flash[:warn] = "试卷加载错误，请您重新尝试。"
-      redirect_to request.referer
-    end
+#    rescue
+#      flash[:warn] = "试卷加载错误，请您重新尝试。"
+#      redirect_to request.referer
+#    end
   end
 
   #将变量转化为数组
@@ -172,14 +172,17 @@ class ExamUsersController < ApplicationController
     if params[:sheet_url]!="" && params[:sheet_url]!=nil
       #解析参数
       this_problem = params["problem"]
+      this_question = this_problem["questions"]["question"][params["question_index"]]
+      puts "this_problem = #{this_problem}"
+      puts "this_question = #{this_question}"
+      puts "params['addition'] = #{params["addition"]}"
+      puts "params['user_answer'] = #{params["user_answer"]}"
       problem_id = this_problem["id"]
-      this_question = this_problem["questions"]["#{params["question_index"]}"]
       question_id = this_question["id"]
-      Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id,
-        params["paper_id"], params["addition"]["answer"], params["addition"]["analysis"], params["user_answer"])
+      Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id ,params["paper_id"], params["addition"]["answer"],params["addition"]["analysis"], params["user_answer"], params["category_id"])
       CollectionInfo.update_collection_infos(params["paper_id"].to_i, cookies[:user_id].to_i, [question_id])
     end
-    
+
     respond_to do |format|
       format.json {
         render :json=>""

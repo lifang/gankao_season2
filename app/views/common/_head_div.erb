@@ -6,11 +6,10 @@
         <a href="#" class="h_email email_u">邮件</a>
         <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %></a>
         <% if is_trial?(category_id)
-          order = Order.first(:conditions=>"user_id = #{cookies[:user_id]}
-      and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}")
+          order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}")
           day=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
           <%= unless order.nil?
-            if day==0
+            if day!=0
               "试用剩#{day}天"
             else
               "试用即将到期"
