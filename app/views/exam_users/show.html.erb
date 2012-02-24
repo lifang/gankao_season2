@@ -3,7 +3,7 @@
 <%= javascript_include_tag "#{@answer_js_url}" %>
 <%= javascript_include_tag "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}" %>
 <%= javascript_include_tag "#{@answer_url}" %>
-<%= javascript_include_tag "/assets/exam_user/init.js" %>
+
 
 <script type="text/javascript" >
   //初始化参数
@@ -12,11 +12,11 @@
   var init_exam_user_id ='<%= params[:id] %>';
   var init_paper_id = "<%= @paper_id %>";
   var sheet_url = "<%= @sheet_url %>";
-  var sheet = loadxml("<%= @xmlload_url %>");
+  var sheet = loadxml("<%= @xmlload_url %>?"+Math.random());
   var init_problem = 0;
   var collection = <%= array_or_string_for_javascript(@collection) %>;
 </script>
-<%= javascript_include_tag "/assets/exam_user/effect.js" %>
+
 <!-- 初始化播放器  -->
 <%= render :partial=>"/common/flowplayer" %>
 <div id="log"></div>
@@ -89,4 +89,4 @@
   <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
 </div>
 
-<%= javascript_include_tag "/assets/exam_user/generate.js" %>
+<%= javascript_include_tag "/assets/exam_user/init.js" %>
