@@ -265,9 +265,35 @@ $(function(){
     }    
 })
 
-  Array.prototype.indexOf=function(el, index){
+Array.prototype.indexOf=function(el, index){
     var n = this.length>>>0, i = ~~index;
     if(i < 0) i += n;
     for(; i < n; i++) if(i in this && this[i] === el) return i;
     return -1;
-  }
+}
+
+//loadxml文件
+function loadxml(xmlFile) {
+    var xmlDoc;
+    try {
+        if(window.ActiveXObject) {
+            xmlDoc = new ActiveXObject('MSXML2.DOMDocument');
+            xmlDoc.async = true;
+            xmlDoc.load(xmlFile);
+        }else if (document.implementation&&document.implementation.createDocument) {
+            var xmlhttp = new window.XMLHttpRequest();
+            xmlhttp.open("GET", xmlFile, false);
+            xmlhttp.send(null);
+            xmlDoc = xmlhttp.responseXML;
+        }else{
+            return null;
+        }
+        return xmlDoc;
+    } catch (e) {
+        var flash_div = create_element("div", null, "flash_notice", "tishi_tab", null, "innerHTML");
+        flash_div.innerHTML = "<p>您的操作记录载入失败，当前页面将不能显示您的答案。若有需要，您可以刷新页面重新载入。</p>";
+        document.body.appendChild(flash_div);
+        show_flash_div();
+        return null;
+    }
+}
