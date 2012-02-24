@@ -190,7 +190,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 }
 
 .single_choose_li {
-background: url(/assets/li.png) no-repeat 0 0;
+    background: url(/assets/li.png) no-repeat 0 0;
 }
 .single_choose_li.hover { background: url(/assets/li.png) no-repeat 0 -17px;}
 
@@ -215,7 +215,8 @@ background: url(/assets/li.png) no-repeat 0 0;
 .input_xz { width: 90%; height: 20px;}
 
 .span_tk {min-width: 150px; display: inline-block; height: 15px; position: relative;}
-.input_tk { min-width: 148px; height: 20px; line-height: 20px; border: 1px #e2e2e2 solid; float: left;}
+.input_tk { min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left; background: none;}
+.select_tk { min-width: 148px; height: 20px; line-height: 20px;  border: none; border-bottom: 1px #000 solid; background: none;}
 .button_tk {
     width: 81px;
     height: 27px;
@@ -226,7 +227,6 @@ background: url(/assets/li.png) no-repeat 0 0;
     color: #333;
 }
 
-.select_tk { min-width: 148px; height: 22px; line-height: 22px; border: 1px #e2e2e2 solid;}
 
 .button_span {
     position: absolute;
@@ -240,13 +240,14 @@ background: url(/assets/li.png) no-repeat 0 0;
 
 /*拖拽---*/
 .drag_tk {
-        padding: 10px;
-	background: #c4c4c4;
-	position: relative;
+    padding: 10px;
+    background: #c4c4c4;
+    position: relative;
 }
 .drag_tk ul { display: block; position: fixed;}
 
 .drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; display: inline-block; margin: 5px; cursor:move;}
+.tuozhuai_box { overflow-y: auto;}
 
 
 .dragDrop_box {
@@ -256,7 +257,7 @@ background: url(/assets/li.png) no-repeat 0 0;
     height: 20px;
     line-height: 20px;
     padding-left: 4px;
-    border: 1px #e2e2e2 solid; 
+    border: 1px #000 solid;
     cursor: move;}
 
 /*相关词汇---------------*/
