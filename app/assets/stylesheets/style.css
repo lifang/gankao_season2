@@ -215,7 +215,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 
 .span_tk {min-width: 150px; display: inline-block; height: 15px; position: relative;}
 .input_tk { min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left; background: none;}
-.select_tk { min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; background: none;}
+.select_tk { min-width: 148px; height: 20px; line-height: 20px;  border: none; border-bottom: 1px #000 solid; background: none;}
 .button_tk {
     width: 81px;
     height: 27px;
@@ -241,10 +241,11 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 .drag_tk {
     padding: 10px;
     background: #c4c4c4;
-    overflow: hidden;
+    position: relative;
 }
+.drag_tk ul { display: block; position: fixed;}
 
-.drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; float: left; margin: 5px; cursor:move;}
+.drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; display: inline-block; margin: 5px; cursor:move;}
 .tuozhuai_box { overflow-y: auto;}
 .dragDrop_box {
     display: inline-block; 
@@ -253,7 +254,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     height: 20px;
     line-height: 20px;
     padding-left: 4px;
-    border: 1px #e2e2e2 solid; 
+    border: 1px #000 solid;
     cursor: move;}
 
 /*相关词汇---------------*/

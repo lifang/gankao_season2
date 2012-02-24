@@ -204,8 +204,10 @@ function load_problem_collection(problem_index,tag){
     }else{
         $("#drag_tk_box").css("display","none");
     }
-    $(".drag_tk").css("height",$(".drag_tk").height()+$("#draggable_list").height());
-    $("#pro_title").css("height",$(".m_side").first().height()-$(".drag_tk").height());
+    $("#draggable_list").css("width",$(".m_side").first().width()-20);
+    $(".drag_tk").css("height",$("#draggable_list").height());
+    $(".drag_tk").css("width",$(".m_side").first().width()-40);
+    $("#pro_title").css("height",$(".m_side").first().height()-$("#draggable_list").height()-40);
     $("#global_problem_title").html(title);
     $("#jplayer_play").trigger("onclick");
     if(word_list.length!=0){
@@ -226,8 +228,8 @@ function load_problem_collection(problem_index,tag){
     }else{
         load_questions_collection(questions,problem_index,tag,question_type);
     }
-    
 }
+
 
 //显示右侧对应的试题
 function show_question(question_index,sel){
@@ -792,8 +794,10 @@ function test_again(){
         result_title.push("<div style='height:20px;'></div>");
         title=result_title.join("");
         $("#global_problem_title").html(title);
-        $(".drag_tk").css("height",$(".drag_tk").height()+$("#draggable_list").height());
-        $("#pro_title").css("height",$(".m_side").first().height()-$(".drag_tk").height());
+        $("#draggable_list").css("width",$(".m_side").first().width()-20);
+        $(".drag_tk").css("height",$("#draggable_list").height());
+        $(".drag_tk").css("width",$(".m_side").first().width()-40);
+        $("#pro_title").css("height",$(".m_side").first().height()-$("#draggable_list").height()-40);
         $(".dragDrop_box").droppable({
             drop: function( event, ui ) {
                 $(this).html(ui.draggable.attr("name"));
