@@ -48,7 +48,7 @@ GankaoSeason2::Application.routes.draw do
   end
   resources :exam_users do
     collection do
-      post :ajax_load_about_words,:ajax_report_error,:ajax_add_collect,:ajax_add_word
+      post :ajax_load_about_words,:ajax_report_error,:ajax_add_collect,:ajax_add_word,:ajax_load_sheets
       get :preview
     end
     member do

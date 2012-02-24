@@ -1,4 +1,4 @@
-//  init.js  
+//  init.js   start
 
 var attrs = []; //拖拽题选项临时保存。
 //将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
@@ -48,9 +48,9 @@ function rp(str){
     return str;
 }
 
+//  init.js   end
 
-
-//effect.js
+//effect.js  start
 
 //字体放大、缩小
 var tgs = new Array( 'div','td','tr');
@@ -340,9 +340,9 @@ function check_question(question_type,correct_type,problem_index,question_index)
     }
     $("#display_answer_"+problem_index+"_"+question_index).empty();
     $("#display_analysis_"+problem_index+"_"+question_index).empty();
-    var answer = answers[problem_index][question_index].answer.trim();
+    var answer = $.trim(answers[problem_index][question_index].answer);
     var analysis = answers[problem_index][question_index].analysis;
-    var user_answer = $("#exam_user_answer_"+problem_index+"_"+question_index).val().trim();
+    var user_answer = $.trim($("#exam_user_answer_"+problem_index+"_"+question_index).val());
     if(sheet_url!=""){
         //保存用户答案
         $.ajax({
@@ -388,9 +388,9 @@ function refer_question(question_type,correct_type,problem_index,question_index)
     if(question_type!="0" && question_type!="1"){
         question_type="0";
     }
-    var answer = answers[problem_index][question_index].answer.trim();
+    var answer = $.trim(answers[problem_index][question_index].answer);
     var analysis = answers[problem_index][question_index].analysis;
-    var user_answer = sheet.getElementsByTagName("_"+problem_index+"_"+question_index)[0].firstChild.data.trim();
+    var user_answer = $.trim(sheet["_"+problem_index+"_"+question_index]);
     //直接改变小题的背景颜色
     if(user_answer==answer){
         change_color("1",problem_index,question_index);
@@ -415,7 +415,7 @@ function imitate_action(question_type,correct_type,user_answer,problem_index,que
             var attrs = problems[problem_index].questions.question[question_index]["questionattrs"];
             var split_attrs = attrs.split(";-;");
             for(var i=0;i<split_attrs.length;i++){
-                if(user_answer.trim()==split_attrs[i].trim()){
+                if($.trim(user_answer)==$.trim(split_attrs[i])){
                     $(".single_choose_li_"+problem_index+"_"+question_index+":eq("+i+")").addClass("hover");
                 }
             }
@@ -426,7 +426,7 @@ function imitate_action(question_type,correct_type,user_answer,problem_index,que
             var user_answer_arr = user_answer.split(";|;");
             for(var ii=0;ii<user_answer_arr.length;ii++){
                 for(var j=0;j<split_attrs.length;j++){
-                    if(user_answer_arr[ii].trim()==split_attrs[j].trim()){
+                    if($.trim(user_answer_arr[ii])==$.trim(split_attrs[j])){
                         $(".multi_choose_li_"+problem_index+"_"+question_index+":eq("+j+")").addClass("hover");
                     }
                 }
@@ -750,10 +750,9 @@ function ajax_add_word(word_id){
         }
     });
 }
+//effect.js  end
 
-
-
-//generate.js
+//generate.js  start
 
 var q_type = {
     "0":"单选题",
@@ -792,16 +791,34 @@ var question_resource; //单个小题细节最外层元素
 
 
 $(function(){
+    $.ajax({
+        type: "POST",
+        url: "/exam_users/ajax_load_sheets.json",
+        dataType: "json",
+        data : {
+            "sheet_url" : sheet_url
+        },
+        failure : function(){
+            sheet = null;
+            tishi_alert("用户答案记录载入失败");
+            init_paper();
+        },
+        success : function(data) {
+            sheet = data["sheet"];
+            init_paper();
+        }
+    });
+})
+
+function init_paper(){
     if(sheet!=null){
-        sheet = sheet.getElementsByTagName("sheet")[0];
-        init_problem = parseInt(sheet.getAttribute("init"));
+        init_problem = parseInt(sheet["init"]);
     }
     finish_index = init_problem;
     $("#global_problem_sum").html(problems.length);
     $("#global_problem_index").html(init_problem+1);
     load_problem(init_problem);
-})
-
+}
 
 function load_problem(problem_index){
     has_drag = false;
@@ -831,7 +848,7 @@ function load_problem(problem_index){
 
 function check_answer(problem_index){
     for(i=0;i<problems[problem_index].questions.question.length;i++){
-        if(sheet!=null && sheet.getElementsByTagName("_"+problem_index+"_"+i).length>0){
+        if(sheet!=null && sheet["_"+problem_index+"_"+i]){
             $("#refer_btn_"+problem_index+"_"+i).trigger("click");
         }
     }
@@ -1188,7 +1205,7 @@ function main_height(){
     $(".main").css('height',main_height-12+30);//34是m_top的高度，
 }
 
-
+//generate.js  end
 
 
 

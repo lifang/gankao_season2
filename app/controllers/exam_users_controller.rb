@@ -5,15 +5,15 @@ class ExamUsersController < ApplicationController
   def show
     #读取试题
     begin
-    eu = ExamUser.find(params[:id])
-    @paper_id = eu.paper_id
-    @paper = Paper.find(@paper_id)
-    @answer_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
-    s_url = ExamUser.find(params[:id]).answer_sheet_url
-    @xmlload_url = "#{Constant::SERVER_PATH}#{s_url}"
-    @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
-    collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
-    @collection = collection.nil? ? [] : collection.question_ids.split(",")
+      eu = ExamUser.find(params[:id])
+      @paper_id = eu.paper_id
+      @paper = Paper.find(@paper_id)
+      @answer_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
+      s_url = ExamUser.find(params[:id]).answer_sheet_url
+      @xmlload_url = "#{Constant::SERVER_PATH}#{s_url}"
+      @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+      collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
+      @collection = collection.nil? ? [] : collection.question_ids.split(",")
     rescue
       flash[:warn] = "试卷加载错误，请您重新尝试。"
       redirect_to request.referer
@@ -217,5 +217,19 @@ class ExamUsersController < ApplicationController
       }
     end
   end
+
+  #载入用户答案
+  def ajax_load_sheets
+
+    doc = get_doc(params[:sheet_url])
+    data = Hash.from_xml(doc.to_s).to_json
+    puts data
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+  
 
 end
