@@ -55,7 +55,10 @@ function active(this_problem,old_problem){
             $("#flowplayer_location_"+init_problem).attr("href","http://test.mp3");
             clone_flowplayer(("#flowplayer_location_"+init_problem),mp3s[init_problem]);
         }
-        afterload();
+        // 展开题目的第一题
+        if(problems[init_problem].question_type!="1"){
+            $("#pro_qu_t_"+init_problem+"_0").trigger("click");
+        }
     }else{
         load_problem(init_problem);
     }
@@ -253,13 +256,13 @@ function right_or_error_effect(user_answer,answer,analysis,problem_index,questio
 //根据题目类型，设置最终显示的答案效果
 function change_display_answer(correct_type,answer){
     if(correct_type=="0"){
-        answer=answer.split(") ")[0];
+        answer=answer.split(")")[0];
     }
     if(correct_type=="1"){
         var split_answer = answer.split(";|;");
         var answer_arr=[];
         for(var i=0;i<split_answer.length;i++){
-            answer_arr.push(split_answer[i].split(") ")[0]);
+            answer_arr.push(split_answer[i].split(")")[0]);
         }
         answer=answer_arr.join(",");
     }
@@ -307,8 +310,7 @@ function check_question(question_type,correct_type,problem_index,question_index)
     }
     //改变答题正误的显示效果细节
     right_or_error_effect(user_answer,answer,analysis,problem_index,question_index,question_type,correct_type);
-    //改变最终显示答案的内容，如单选题可以只显示"A"
-
+    
     if($("#exam_user_answer_"+problem_index+"_"+question_index).val()!="" && question_type=="1"){
         $("#tk_zuoda_"+problem_index).hide();
         $(".pro_question_list_"+problem_index+":eq("+question_index+")").show();
@@ -336,7 +338,7 @@ function refer_question(question_type,correct_type,problem_index,question_index)
     }
     var answer = answers[problem_index][question_index].answer.trim();
     var analysis = answers[problem_index][question_index].analysis;
-    var user_answer = sheet.getElementsByTagName("_"+problem_index+"_"+question_index)[0].firstChild.data;
+    var user_answer = sheet.getElementsByTagName("_"+problem_index+"_"+question_index)[0].firstChild.data.trim();
     //直接改变小题的背景颜色
     if(user_answer==answer){
         change_color("1",problem_index,question_index);
@@ -568,7 +570,8 @@ function setSel(str,select,types){
 //确认是否重做试卷
 function confirm_redo(type){
     if(confirm("如果您选择重做此卷，所有已保存的答案都将被清空。\n您确认要重做么？")){
-        var category_id = category ? category : "2" ;
+        var category_id = (category!=null) ? category : "2" ;
+        alert(sheet_url);
         window.location.href="/exam_users/"+init_exam_user_id+"/redo_paper?category="+category_id+"&sheet_url="+sheet_url+"&type="+type;
     }
 }

@@ -39,7 +39,7 @@ class ExamUsersController < ApplicationController
     word_index=0
     data={}
     words.each do |word|
-      @word = Word.find_by_sql("select * from words where name = '#{word}'")
+      @word = Word.find_by_sql(["select * from words where name like ?","#{word}"])
       if @word.length>0
         @word = @word[0]
         sentences=[]
