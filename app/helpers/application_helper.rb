@@ -1,3 +1,4 @@
+# encoding: utf-8
 module ApplicationHelper
 
   def deny_access
@@ -82,6 +83,34 @@ module ApplicationHelper
   #是否普通用户
   def is_nomal?(category_id)
     return category_role(category_id) == Order::USER_ORDER[:NOMAL]
+  end
+
+  #判断句子中是否有当前单词
+  def is_word_in_sentence(sentences, word)
+    is_in = false
+    sentences.each do |sentence|
+      if sentence =~/#{word}/ or sentence =~/#{word.capitalize}/ or
+          sentence =~/#{word[0, word.length-1]}/ or sentence =~/#{word[0, word.length-2]}/
+        is_in = true
+        break
+      end
+    end
+    return is_in
+  end
+
+  def leving_word(sentence, word)
+    lev_word = case 
+    when sentence =~/#{word}/
+      word
+    when sentence =~/#{word.capitalize}/
+      word
+    when sentence =~/#{word[0, word.length-1]}/
+      word[0, word.length-1]
+    when sentence =~/#{word[0, word.length-2]}/
+      word[0, word.length-2]
+    else word
+    end
+    return lev_word
   end
   
 end

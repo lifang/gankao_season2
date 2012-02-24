@@ -19,32 +19,32 @@
     <input type="hidden" name="all_words" id="all_words" value="<%= (all_words.collect { |word| word.id }).join(",") %>"/>
     <input type="hidden" name="step_page" id="step_page" value="3" />
     <% all_words.each_with_index do |word, index| %>
-      <% leving_word = word.name.gsub(" ", "") %>
-      <div class="ch_text" id="word_info_<%= index %>" style="display: none;">
-        <input type="hidden" name="<%= index %>" id="<%= word.id %>" value="<%= leving_word %>"/>
-        <input type="hidden" name="error_num" id="error_num" value="0"/>
-        <div class="ch_words_shu">(<%= (index + 1) %>)</div>
-        <div class="ch_words_line">
-          <p class="font_size_16">
-            <% @sentence_hash[word.id].each do |sentence| %>
-              <% if sentence =~ /#{word.name}/ or sentence =~ /#{word.name.capitalize}/
-                str = ""
-                (0..(leving_word.length-1)).each do |i|
-                  str += " <input id='letter_#{i}' readonly type='text' class='words_input' value=''/> "
-                end %>
-                <%= sentence.gsub("#{word.name}", str).gsub("#{word.name.capitalize}", str).html_safe %>
-              <% else %>
-                <% (0..(leving_word.length-1)).each do |i| %>
-                  <input id="letter_<%= i %>" readonly type="text" class="words_input" value="" />
+      <% unless @sentence_hash[word.id].nil? or @sentence_hash[word.id].blank? %>
+        <% if is_word_in_sentence(@sentence_hash[word.id], word.name.strip) %>
+          <% leving_word = leving_word(@sentence_hash[word.id][0], word.name.strip) %>
+          <div class="ch_text" id="word_info_<%= index %>" style="display: none;">
+            <input type="hidden" name="<%= index %>" id="<%= word.id %>" value="<%= leving_word.gsub(" ", "") %>"/>
+            <input type="hidden" name="error_num" id="error_num" value="0"/>
+            <div class="ch_words_shu">(<%= (index + 1) %>)</div>
+            <div class="ch_words_line">
+              <p class="font_size_16">
+                <% @sentence_hash[word.id].each do |sentence| %>
+                  <% str = ""
+                  (0..(leving_word.gsub(" ", "").length-1)).each do |i|
+                    str += " <input id='letter_#{i}' readonly type='text' class='words_input' value=''/> "
+                  end %>
+                  <%= sentence.gsub("#{leving_word}", str).gsub("#{leving_word.capitalize}", str).html_safe %>
                 <% end %>
-              <% end %>
-            <% end unless @sentence_hash[word.id].nil? %>
-          </p>
-        </div>
-        <div class="ch_words_line">
-          <div class="xiaoren" id="man_<%= index %>">请从如下字母列表中选择您觉得在这个词中的字母。</div>
-        </div>
-      </div>
+              </p>
+            </div>
+            <div class="ch_words_line">
+              <div class="xiaoren" id="man_<%= index %>">请从如下字母列表中选择您觉得在这个词中的字母。</div>
+            </div>
+          </div>
+        <% else %>
+          <input type="hidden" id="no_s_<%= index %>" value="<%= word.id %>" />
+        <% end %>
+      <% end %>
     <% end %>
     <div class="ch_words_line">
       <ul class="words_letter">

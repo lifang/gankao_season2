@@ -17,17 +17,21 @@
     <input type="hidden" name="all_words" id="all_words" value="<%= (all_words.collect { |word| word.id }).join(",") %>"/>
     <input type="hidden" name="step_page" id="step_page" value="2" />
     <% all_words.each_with_index do |word, index| %>
-      <div class="ch_text" id="word_info_<%= index %>" style="display: none;">
-        <div class="ch_words_shu">(<%= (index + 1) %>)</div>
-          <div id="sentence_<%= index %>">
-            <div class="ch_words_line">
-              <p class="font_size_16">
-                <% @sentence_hash[word.id].each do |sentence| %>
-                  <%= sentence.gsub("#{word.name}", "_______").gsub("#{word.name.capitalize}", "_______") %>
-                <% end unless @sentence_hash[word.id].nil? %>
-              </p>
-            </div>
-            <div class="ch_words_line">
+      <% unless @sentence_hash[word.id].nil? or @sentence_hash[word.id].blank? %>
+        <% if is_word_in_sentence(@sentence_hash[word.id], word.name.strip) %>
+          <% leving_word = leving_word(@sentence_hash[word.id][0], word.name.strip) %>
+          <div class="ch_text" id="word_info_<%= index %>" style="display: none;">
+            <div class="ch_words_shu">(<%= (index + 1) %>)</div>
+            <div id="sentence_<%= index %>">
+              <div class="ch_words_line">
+                <p class="font_size_16">
+                  <% @sentence_hash[word.id].each do |sentence| %>
+                    <%= sentence.gsub("#{leving_word}", "_______").
+                      gsub("#{leving_word.capitalize}", "_______") %>
+                  <% end %>
+                </p>
+              </div>
+              <div class="ch_words_line">
                 <% (((@words.to_a - [word])[0,3] + [word]).sort_by{ rand }).each do |w| %>
                   <div class="words_btn font_size_16">
                     <a href="javascript:void(0);"
@@ -36,9 +40,13 @@
                     </a>
                   </div>
                 <% end %>
+              </div>
             </div>
           </div>
-      </div>
+        <% else %>
+          <input type="hidden" id="no_s_<%= index %>" value="<%= word.id %>" />
+        <% end %>
+      <% end %>
     <% end unless @words.blank? %>
     <div class="box_bottom_bg"></div>
   </div>
