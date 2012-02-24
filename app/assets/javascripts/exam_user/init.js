@@ -54,7 +54,7 @@ function loadxml(xmlFile) {
     try {
         if(window.ActiveXObject) {
             xmlDoc = new ActiveXObject('MSXML2.DOMDocument');
-            xmlDoc.async = true;
+            xmlDoc.async = false;
             xmlDoc.load(xmlFile);
         }else if (document.implementation&&document.implementation.createDocument) {
             var xmlhttp = new window.XMLHttpRequest();
@@ -67,7 +67,7 @@ function loadxml(xmlFile) {
         return xmlDoc;
     } catch (e) {
         var flash_div = create_element("div", null, "flash_notice", "tishi_tab", null, "innerHTML");
-        flash_div.innerHTML = "<p>您的浏览器安全级别设置过高，屏蔽了一些功能，请您重新设置您的浏览器安全级别。</p>";
+        flash_div.innerHTML = "<p>您的操作记录载入失败，当前页面将不能显示您的答案。若有需要，您可以刷新页面重新载入。</p>";
         document.body.appendChild(flash_div);
         show_flash_div();
         return null;
