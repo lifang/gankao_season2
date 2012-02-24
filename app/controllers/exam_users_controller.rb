@@ -4,28 +4,20 @@ class ExamUsersController < ApplicationController
   before_filter :sign? ,:except=>["preview","ajax_load_about_words"]
   def show
     #读取试题
-#    begin
-      eu = ExamUser.find(params[:id])
-      @paper_id = eu.paper_id
-      @paper = Paper.find(@paper_id)
-      @answer_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
-      s_url = ExamUser.find(params[:id]).answer_sheet_url
-      sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
-      sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
-      @sheet_url = sheet_url
-      sheet = get_doc("#{sheet_url}")
-      @init_problem = sheet.attributes["init"]
-      @sheet = {}
-      sheet.each_element do |ele|
-        @sheet["#{ele.name}"]="#{ele.text}"
-      end
-      collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
-      @collection = collection.nil? ? [] : collection.question_ids.split(",")
-      close_file("#{sheet_url}")
-#    rescue
-#      flash[:warn] = "试卷加载错误，请您重新尝试。"
-#      redirect_to request.referer
-#    end
+    begin
+    eu = ExamUser.find(params[:id])
+    @paper_id = eu.paper_id
+    @paper = Paper.find(@paper_id)
+    @answer_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
+    s_url = ExamUser.find(params[:id]).answer_sheet_url
+    @xmlload_url = "#{Constant::SERVER_PATH}#{s_url}"
+    @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+    collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
+    @collection = collection.nil? ? [] : collection.question_ids.split(",")
+    rescue
+      flash[:warn] = "试卷加载错误，请您重新尝试。"
+      redirect_to request.referer
+    end
   end
 
   #将变量转化为数组

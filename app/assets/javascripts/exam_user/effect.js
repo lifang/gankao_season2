@@ -1,6 +1,5 @@
 //此JS记录了考试页面相关的方法
 
-
 //字体放大、缩小
 var tgs = new Array( 'div','td','tr');
 var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
@@ -65,7 +64,7 @@ function active(this_problem,old_problem){
 
 
 last_opened_question = null;
-last_backg_blue = null;
+last_borde_blue = null;
 //初始化显示、隐藏小题功能
 function pro_qu_t(problem_index){
     $(".pro_qu_t_"+problem_index).bind("click",function(){
@@ -73,32 +72,36 @@ function pro_qu_t(problem_index){
             return false;
         }
         var pro_qu_div = $(this).parent().find(".pro_qu_div");
+        var replace_answer_span = $(this).children(".replace_description_span");
         var q_index =$(this).attr("name");
         if(pro_qu_div.is(":visible")){
             pro_qu_div.hide();
+            replace_answer_span.show();
             $(this).parent().parent().addClass("p_q_line");
             if(problems[problem_index]["question_type"]=="1"){
-                $(".inner_backg_blue_"+problem_index+"_"+q_index+":eq(0)").removeClass("backg_blue");
-                $(this).parent().parent().removeClass("backg_blue");
-                last_backg_blue = null;
+                $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)").removeClass("borde_blue");
+                $(this).parent().parent().removeClass("borde_blue");
+                last_borde_blue = null;
             }
             last_opened_question = null;
         }else{
             pro_qu_div.show();
+            replace_answer_span.hide();
             $(this).parent().parent().removeClass("p_q_line");
             if(problems[problem_index]["question_type"]=="1"){
-                $(".inner_backg_blue_"+problem_index+"_"+q_index+":eq(0)").addClass("backg_blue");
-                $(this).parent().parent().addClass("backg_blue");
+                $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)").addClass("borde_blue");
+                $(this).parent().parent().addClass("borde_blue");
             }
             if(last_opened_question!=null){
                 last_opened_question.parent().find(".pro_qu_div").hide();
+                last_opened_question.children(".replace_description_span").show();
                 last_opened_question.parent().parent().addClass("p_q_line");
-                if(last_backg_blue!=null && last_backg_blue.length>0 ){
-                    last_backg_blue.removeClass("backg_blue");
-                    last_opened_question.parent().parent().removeClass("backg_blue");
+                if(last_borde_blue!=null && last_borde_blue.length>0 ){
+                    last_borde_blue.removeClass("borde_blue");
+                    last_opened_question.parent().parent().removeClass("borde_blue");
                 }
             }
-            last_backg_blue = $(".inner_backg_blue_"+problem_index+"_"+q_index+":eq(0)");
+            last_borde_blue = $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)");
             last_opened_question = $(this);
         }
     })
@@ -160,8 +163,8 @@ function do_fill_blank(ele,answer,problem_index,question_index){
 }
 
 //小题做对或者做错的效果显示
-function right_or_error_effect(user_answer,correct_answer,analysis,problem_index,question_index,question_type,correct_type){
-    if(user_answer==correct_answer){
+function right_or_error_effect(user_answer,answer,analysis,problem_index,question_index,question_type,correct_type){
+    if(user_answer==answer){
         $("#pass_check_"+problem_index+"_"+question_index).val(1);
         $("#green_dui_"+problem_index+"_"+question_index).show();
         $("#red_cuo_"+problem_index+"_"+question_index).hide();
@@ -239,6 +242,12 @@ function right_or_error_effect(user_answer,correct_answer,analysis,problem_index
             }
         })
     }
+    if(problems[problem_index].questions.question[question_index]["description"]==null || problems[init_problem].questions.question[question_index]["description"]==""){
+        $("#replace_description_span_"+init_problem+"_"+question_index).html(user_answer.replace(/;|;/g," "));
+    }
+    //改变最终显示答案的内容，如单选题可以只显示"A"
+    answer = change_display_answer(correct_type,answer);
+    $("#display_answer_"+problem_index+"_"+question_index).html(answer);
 }
 
 //根据题目类型，设置最终显示的答案效果
@@ -299,8 +308,6 @@ function check_question(question_type,correct_type,problem_index,question_index)
     //改变答题正误的显示效果细节
     right_or_error_effect(user_answer,answer,analysis,problem_index,question_index,question_type,correct_type);
     //改变最终显示答案的内容，如单选题可以只显示"A"
-    answer = change_display_answer(correct_type,answer);
-    $("#display_answer_"+problem_index+"_"+question_index).html(answer);
 
     if($("#exam_user_answer_"+problem_index+"_"+question_index).val()!="" && question_type=="1"){
         $("#tk_zuoda_"+problem_index).hide();
@@ -329,7 +336,7 @@ function refer_question(question_type,correct_type,problem_index,question_index)
     }
     var answer = answers[problem_index][question_index].answer.trim();
     var analysis = answers[problem_index][question_index].analysis;
-    var user_answer = sheet["_"+problem_index+"_"+question_index].trim();
+    var user_answer = sheet.getElementsByTagName("_"+problem_index+"_"+question_index)[0].firstChild.data;
     //直接改变小题的背景颜色
     if(user_answer==answer){
         change_color("1",problem_index,question_index);
@@ -342,9 +349,6 @@ function refer_question(question_type,correct_type,problem_index,question_index)
     }
     //改变答题正误的显示效果细节
     right_or_error_effect(user_answer,answer,analysis,problem_index,question_index,question_type,correct_type);
-    //改变最终显示答案的内容，如单选题可以只显示"A"
-    answer = change_display_answer(correct_type,answer);
-    $("#display_answer_"+problem_index+"_"+question_index).html(answer);
     //模拟用户操作，如单选题选择了哪个，selector选中哪个
     imitate_action(question_type,correct_type,user_answer,problem_index,question_index);
 }
