@@ -64,7 +64,7 @@ function active(this_problem,old_problem){
 
 
 last_opened_question = null;
-last_backg_blue = null;
+last_borde_blue = null;
 //初始化显示、隐藏小题功能
 function pro_qu_t(problem_index){
     $(".pro_qu_t_"+problem_index).bind("click",function(){
@@ -79,9 +79,9 @@ function pro_qu_t(problem_index){
             replace_answer_span.show();
             $(this).parent().parent().addClass("p_q_line");
             if(problems[problem_index]["question_type"]=="1"){
-                $(".inner_backg_blue_"+problem_index+"_"+q_index+":eq(0)").removeClass("backg_blue");
-                $(this).parent().parent().removeClass("backg_blue");
-                last_backg_blue = null;
+                $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)").removeClass("borde_blue");
+                $(this).parent().parent().removeClass("borde_blue");
+                last_borde_blue = null;
             }
             last_opened_question = null;
         }else{
@@ -89,19 +89,19 @@ function pro_qu_t(problem_index){
             replace_answer_span.hide();
             $(this).parent().parent().removeClass("p_q_line");
             if(problems[problem_index]["question_type"]=="1"){
-                $(".inner_backg_blue_"+problem_index+"_"+q_index+":eq(0)").addClass("backg_blue");
-                $(this).parent().parent().addClass("backg_blue");
+                $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)").addClass("borde_blue");
+                $(this).parent().parent().addClass("borde_blue");
             }
             if(last_opened_question!=null){
                 last_opened_question.parent().find(".pro_qu_div").hide();
                 last_opened_question.children(".replace_description_span").show();
                 last_opened_question.parent().parent().addClass("p_q_line");
-                if(last_backg_blue!=null && last_backg_blue.length>0 ){
-                    last_backg_blue.removeClass("backg_blue");
-                    last_opened_question.parent().parent().removeClass("backg_blue");
+                if(last_borde_blue!=null && last_borde_blue.length>0 ){
+                    last_borde_blue.removeClass("borde_blue");
+                    last_opened_question.parent().parent().removeClass("borde_blue");
                 }
             }
-            last_backg_blue = $(".inner_backg_blue_"+problem_index+"_"+q_index+":eq(0)");
+            last_borde_blue = $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)");
             last_opened_question = $(this);
         }
     })
@@ -243,7 +243,7 @@ function right_or_error_effect(user_answer,answer,analysis,problem_index,questio
         })
     }
     if(problems[problem_index].questions.question[question_index]["description"]==null || problems[init_problem].questions.question[question_index]["description"]==""){
-        $("#replace_description_span_"+init_problem+"_"+question_index).html(user_answer);
+        $("#replace_description_span_"+init_problem+"_"+question_index).html(user_answer.replace(/;|;/g," "));
     }
     //改变最终显示答案的内容，如单选题可以只显示"A"
     answer = change_display_answer(correct_type,answer);

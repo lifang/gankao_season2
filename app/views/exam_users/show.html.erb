@@ -16,7 +16,6 @@
   var collection = <%= array_or_string_for_javascript(@collection) %>;
 </script>
 <%= javascript_include_tag "/assets/exam_user/effect.js" %>
-<%= javascript_include_tag "/assets/exam_user/generate.js" %>
 <!-- 初始化播放器  -->
 <%= render :partial=>"/common/flowplayer" %>
 <div id="log"></div>
@@ -86,3 +85,5 @@
   <textarea name="" id='report_error_description' cols="" rows="5"></textarea>
   <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
 </div>
+
+<%= javascript_include_tag "/assets/exam_user/generate.js" %>
