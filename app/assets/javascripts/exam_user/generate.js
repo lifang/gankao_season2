@@ -7,7 +7,7 @@ var q_type = {
     "3":"填空题",
     "5":"简答题"
 };
-var finish_index = init_problem;  //记录前一题的序号，区别“上一题”，“下一题”效果
+var finish_index;  //记录前一题的序号，区别“上一题”，“下一题”效果
 var element1;
 var element2;
 var elememt3;
@@ -35,8 +35,19 @@ var problem_resource; //题目的最外层元素
 var questions_resource; //小题列表最外层元素
 var question_resource; //单个小题细节最外层元素
 
+
 $(function(){
-    load_problem(init_problem);
+    var loading = window.setInterval(function(){
+        if(sheet!=null){
+            window.clearInterval(loading);
+            sheet = sheet.getElementsByTagName("sheet")[0];
+            init_problem = parseInt(sheet.getAttribute("init"));
+            finish_index = init_problem ;
+            $("#global_problem_sum").html(problems.length);
+            $("#global_problem_index").html(init_problem+1);
+            load_problem(init_problem);
+        }
+    }, 20);
 })
 
 
@@ -67,7 +78,7 @@ function load_problem(problem_index){
 
 function check_answer(problem_index){
     for(i=0;i<problems[problem_index].questions.question.length;i++){
-        if(sheet["_"+problem_index+"_"+i]){
+        if(sheet.getElementsByTagName("_"+problem_index+"_"+i).length>0){
             $("#refer_btn_"+problem_index+"_"+i).trigger("click");
         }
     }
@@ -205,10 +216,10 @@ function question_box(questions_resource,question_index){
     }
     if(problems[init_problem].questions.question[question_index]["description"]&&problems[init_problem].questions.question[question_index]["description"]!=""){
         element1 = create_element("div",null,null,"pro_t_con",null,"innerHTML");
+        $(element1).html(problems[init_problem].questions.question[question_index]["description"]);
     }else{
-        element1 = create_element("div",null,null,null,null,"innerHTML");
+        element1 = create_element("div",null,"replace_description_span_"+init_problem+"_"+question_index,"replace_description_span",null,"innerHTML");
     }
-    $(element1).html(problems[init_problem].questions.question[question_index]["description"]);
     $(element3).append(element1);
     element3 = create_element("input",null,"exam_user_answer_"+init_problem+"_"+question_index,"exam_user_answer","hidden","");
     $(element2).append(element3);

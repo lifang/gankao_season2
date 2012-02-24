@@ -37,11 +37,6 @@ for(var i=0;i<b.length;i++){
         }
     }
 }
-//alert(JSON.encode(problems));
-$(function(){
-    //写入总题数
-    $("#global_problem_sum").html(problems.length);
-})
 
 function rp(str){
     str = str.replace(/&amp;/g,"&");
@@ -53,7 +48,32 @@ function rp(str){
     return str;
 }
 
+//loadxml文件
+function loadxml(xmlFile) {
+    var xmlDoc;
+    try {
+        if(window.ActiveXObject) {
+            xmlDoc = new ActiveXObject('MSXML2.DOMDocument');
+            xmlDoc.async = true;
+            xmlDoc.load(xmlFile);
+        }else if (document.implementation&&document.implementation.createDocument) {
+            var xmlhttp = new window.XMLHttpRequest();
+            xmlhttp.open("GET", xmlFile, false);
+            xmlhttp.send(null);
+            xmlDoc = xmlhttp.responseXML;
+        }else{
+            return null;
+        }
+        return xmlDoc;
+    } catch (e) {
+        var flash_div = create_element("div", null, "flash_notice", "tishi_tab", null, "innerHTML");
+        flash_div.innerHTML = "<p>您的浏览器安全级别设置过高，屏蔽了一些功能，请您重新设置您的浏览器安全级别。</p>";
+        document.body.appendChild(flash_div);
+        show_flash_div();
+        return null;
+    }
 
+}
 
 
 
