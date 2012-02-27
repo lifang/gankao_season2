@@ -25,7 +25,6 @@
             <li><a href="/users/<%= cookies[:user_id] %>/info?target=1&category=<%= category_id %>">通&nbsp;&nbsp;知:<span class="orange"><%= Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SYSTEM]} and TO_DAYS(ended_at)>TO_DAYS('#{Time.now}')") %></span></a></li>
           </ul>
         </div>
-
       </div>
     <% else %>
       <div class="h_user"><a href="/logins">登录</a></div>
