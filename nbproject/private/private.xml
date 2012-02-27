@@ -5,5 +5,12 @@
             <url>app/assets/javascripts/exam_user/generate.js</url>
             <line>0</line>
         </file>
+        <file>
+            <url>app/assets/javascripts/exam_user/init.js</url>
+            <line>516</line>
+            <line>523</line>
+            <line>528</line>
+            <line>1169</line>
+        </file>
     </editor-bookmarks>
 </project-private>

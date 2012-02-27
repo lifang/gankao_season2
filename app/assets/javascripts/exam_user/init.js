@@ -207,6 +207,7 @@ function stop_bunble(){
             //e.preventDefault();
             e.stopPropagation();
         }
+        alert("function");
     }
     );
 }
@@ -1148,8 +1149,7 @@ function inner_question(correct_type,question_index){
     switch(correct_type){
         case "0":{
             str1 += "<span class='select_span inner_borde_blue_"+init_problem+"_"+question_index+"' id='input_inner_answer_"+init_problem+"_"+question_index+"' onclick='javascript:toggle_select_ul("+init_problem+","+question_index+");'></span>";
-            str1 += "<span class='select_ul' id='select_ul_"+init_problem+"_"+question_index+"' style='display:none;'>";
-            //  onmouseout=\"javascript:stop_bunble();close_select_ul("+init_problem+","+question_index+");\"
+            str1 += "<span class='select_ul' id='select_ul_"+init_problem+"_"+question_index+"' onmouseout=\"javascript:stop_bunble();close_select_ul("+init_problem+","+question_index+");\" style='display:none;'>";
             question_attrs = store3[question_index].questionattrs.split(";-;");
             for(j=0;j<question_attrs.length;j++){
                 str1 += "<span class='select_li select_li_"+init_problem+"_"+question_index+"' onclick=\"javascript:do_inner_select('"+question_attrs[j]+"',"+init_problem+","+question_index+");\">"+question_attrs[j]+"</span>";
