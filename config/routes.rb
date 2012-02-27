@@ -48,7 +48,7 @@ GankaoSeason2::Application.routes.draw do
   end
   resources :exam_users do
     collection do
-      post :ajax_load_about_words,:ajax_report_error,:ajax_add_collect,:ajax_add_word
+      post :ajax_load_about_words,:ajax_report_error,:ajax_add_collect,:ajax_add_word,:ajax_load_sheets
       get :preview
     end
     member do
@@ -86,7 +86,7 @@ GankaoSeason2::Application.routes.draw do
   end
   resources :users do
     collection do
-      get :delete_user,:email_info,:mess_info,:record_info,:record,:alipay_exercise
+      get :delete_user,:email_info,:mess_info,:record_info,:record,:alipay_exercise,:charge_vip
       post :delete_mess,:update_users,:alipay_compete,:accredit_check,:check_vip
     end
     member do

@@ -44,6 +44,24 @@
         <div class="main_box border_radius">
           <div class="left">
             <div class="message_box">
+              <% category_id = params[:category].nil? ? 2 : params[:category]
+              order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
+              <div class="tishi_vip">
+                <% unless order.nil? %>
+                  <% if order.types==Order::TYPES[:TRIAL_SEVEN]||order.types==Order::TYPES[:COMPETE] %>
+                    <%day=((order.end_time-Time.now.to_datetime)/1.day).to_i%>
+                    <% if day>=1%>
+                      您还有 <span class="red"><%= day %></span> 天试用的时间
+                    <% else %>
+                      您的试用即将到期
+                    <% end %>
+                    <a href="/users/charge_vip?category=<%= category_id %>">升级为高级用户</a>
+                  <% end %>
+                <%else%>
+                  您的试用期限已到期
+                  <a href="/users/charge_vip?category=<%= category_id %>">升级为高级用户</a>
+                <% end %>
+              </div>
               <%= yield %>
             </div>
           </div>
@@ -63,17 +81,6 @@
         <p><a href="http://www.comdosoft.com/" target="_blank">公司信息</a> |   <a href="#">官方微博</a>   |   <a href="http://www.comdosoft.com/pages/aboutcon.html" target="_blank">联系我们</a>    |   <a href="#">用户协议</a></p>
         <p>Copyright © 2011-2012 &nbsp;&nbsp;苏州协创软件有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>
         <p>建议使用IE6以上版本、firefox、Chrome等浏览器</p>
-      </div>
-    </div>
-    <div class="zhezhao" style="display: none"></div>
-    <div class="cz_tishi" style="display: none;">
-      <div class="cz_tishi_h"><a onclick="javascript:$('.zhezhao,.cz_tishi').css('display','none')" href="#"><img src="/assets/x.gif" /></a>充值提示</div>
-      <div class="cz_tishi_text"><p>*支付完成后，系统需要1-5分钟处理您的请求，请耐心等待</p>
-        <p>付款完成前请不要关闭此窗口，完成付款后请根据你的情况点击
-        </p><h4>下面的按钮：请在完成付款后再选择</h4></div>
-      <div class="cz_tishi_btn">
-        <button class="wanc_btn" onclick="window.location.href='/logins/charge_vip'"></button>
-        <button class="chongx_btn" onclick="window.open('/users/alipay_exercise?category=<%=category_id  %>', '_blank', 'height=750,width=1000,left=200,top=50');"></button>
       </div>
     </div>
   </body>

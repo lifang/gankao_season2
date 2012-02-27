@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title><%= @title.nil? ? "会员升级-赶考网" : @title %></title>
+    <%= stylesheet_link_tag    "users.css" %>
+    <%= javascript_include_tag "application.js" %>
+    <%= javascript_include_tag "users.js" %>
+    <!--[if IE 6]>
+    <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>
+      /* EXAMPLE */
+      DD_belatedPNG.fix('*');
+
+      /* string argument can be any CSS selector */
+      /* .png_bg example is unnecessary */
+      /* change it to what suits you! */
+    </script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="head">
+        <% category_id = params[:category].nil? ? 2 : params[:category] %>
+        <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}") %>
+        <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>?category=<%=category_id  %>'" class="red"><%= cookies[:user_name] %></a>
+          <% if is_trial?(category_id)%>
+            <%= unless order.nil?
+              day_end=((order.end_time - Time.now.to_datetime)/1.day).to_i
+              if day_end!=0
+                "试用剩#{day_end}天"
+              else
+                "试用即将到期"
+              end
+            end
+          %>
+          <%  elsif is_nomal?(category_id) %>
+            试用结束
+          <% end %>|<a href="/">首页</a>|<a href="/users/delete_user">退出</a></div>
+        <div class="logo"><a href="/"><img src="/assets/logo_user.png" /></a></div>
+      </div>
+      <div class="main">
+        <div class="vip_main border_radius">
+          <div class="message_vip_box">
+            <% category_id = params[:category].nil? ? 2 : params[:category]
+            order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]} and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
+            <div class="tishi_vip">
+              <% unless order.nil? %>
+                <% if order.types==Order::TYPES[:TRIAL_SEVEN]||order.types==Order::TYPES[:COMPETE] %>
+                  <%day=((order.end_time-Time.now.to_datetime)/1.day).to_i%>
+                  <% if day>=1%>
+                    您还有 <span class="red"><%= day %></span> 天试用的时间
+                  <% else %>
+                    您的试用即将到期
+                  <% end %>
+                <% end %>
+              <%else%>
+                您的试用期限已到期
+              <% end %>
+            </div>
+            <% category_id = params[:category].nil? ? 2 : params[:category].to_i %>
+            <h1 class="vip_h1">升级为正式用户</h1>
+            <h2 class="vip_h2"><%= Category.find(category_id).name %></h2>
+            <input type="hidden" value="<%=category_id  %>" id="category"/>
+            <div class="tab_box">
+              <h3 class="vip_h3">方法一：</h3>
+              <div class="vip_box sq_code"><div class="sq_con"><input id="invit_code" type="text" />
+                  <button class="t_btn" onclick="accredit()">确定</button></div></div>
+              <h3 class="vip_h3">方法二：</h3>
+              <div class="vip_box vip_zfb">
+                <div class="zfb_con"><a href="#" title="会员充值" onclick="check_vip()"><img src="/assets/zfb_pic.png" /></a></div>
+              </div>
+            </div>
+          </div>
+          <div class="side_ying"></div>
+        </div>
+      </div>
+      <div class="foot">
+        <p><a href="http://www.comdosoft.com/" target="_blank">公司信息</a> |   <a href="#">官方微博</a>   |   <a href="http://www.comdosoft.com/pages/aboutcon.html" target="_blank">联系我们</a>    |   <a href="#">用户协议</a></p>
+        <p>Copyright © 2011-2012 &nbsp;&nbsp;苏州协创软件有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>
+        <p>建议使用IE6以上版本、firefox、Chrome等浏览器</p>
+      </div>
+    </div>
+    <div class="zhezhao" style="display: none"></div>
+    <div class="cz_tishi" style="display: none;">
+      <div class="cz_tishi_h"><a onclick="javascript:$('.zhezhao,.cz_tishi').css('display','none')" href="#"><img src="/assets/x.gif" /></a>充值提示</div>
+      <div class="cz_tishi_text"><p>*支付完成后，系统需要1-5分钟处理您的请求，请耐心等待</p>
+        <p>付款完成前请不要关闭此窗口，完成付款后请根据你的情况点击
+        </p><h4>下面的按钮：请在完成付款后再选择</h4></div>
+      <div class="cz_tishi_btn">
+        <button class="wanc_btn" onclick="window.location.href='/logins/charge_vip'"></button>
+        <button class="chongx_btn" onclick="window.open('/users/alipay_exercise?category=<%=category_id  %>', '_blank', 'height=750,width=1000,left=200,top=50');"></button>
+      </div>
+    </div>
+  </body>
+</html>
