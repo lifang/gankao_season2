@@ -298,8 +298,6 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             pro_btn.innerHTML += "<button class='t_btn'  onclick=javascript:$('.word_"+problem_index+"_"+q_index+"').css('display','');>相关词汇</button>";
             pro_btn.innerHTML += "<a href='#' class='upErrorTo_btn' onclick=javascript:$('#question_id').val("+questions[q_index].id +");show_div('.upErrorTo_tab');>报告错误</a>";
             var jiexi = pro_qu_div.appendChild(create_element("div", null, "display_jiexi_"+problem_index+"_"+q_index, "jiexi", null, "innerHTML"));
-            var xx_x = jiexi.appendChild(create_element("div", null, null, "xx_x", null, "innerHTML"));
-            xx_x.innerHTML="<img onclick=\"javascript:close_display_answer("+problem_index+","+q_index+");\" src='/assets/x.gif' />";
             jiexi.innerHTML +="<div>正确答案：<span id='display_answer_"+problem_index+"_"+q_index+"' class='red'>"+ show_answer(q_correct_type,q_answer)+"</span></div>";
             jiexi.innerHTML +="<div id='display_analysis_"+problem_index+"_"+q_index+"'><em>"+q_analysis  +"</em></div>";
             var jiexi_word = pro_qu_div.appendChild(create_element("div", null, null, "jiexi word_"+problem_index+"_"+q_index, null, "innerHTML"));

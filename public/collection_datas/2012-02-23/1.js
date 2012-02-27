@@ -122,6 +122,7 @@ collections = {
             "id":"113",
             "inner":"1",
             "score":"0.0",
+            "c_flag":"1",
             "description":"Television is an attractive advertising medium in that_____________.",
             "answer":"A) it has large audiences ",
             "analysis":"\u6587\u7ae0\u4e2d\u7684\u5c0f\u6807\u9898\u53ef\u4ee5\u5e2e\u52a9\u6211\u4eec\u5feb\u901f\u5b9a\u4f4d\u3002\u8fd9\u91ccTelevision\u90e8\u5206\u7684\u7b2c\u4e00\u53e5\u8bdd\u5c31\u56de\u7b54\u4e86\u8fd9\u4e2a\u95ee\u9898\uff1aTelevision is an attractive medium for advertising because it delivers mass audiences to advertisers. ",
@@ -178,6 +179,7 @@ collections = {
             "analysis":"\u627e\u5230\u8fd9\u53e5\u8bdd\u5c31\u57fa\u672c\u53ef\u4ee5\u786e\u5b9a\u7b54\u6848\u4e86More consumers travel longer distances to and from work, which also makes out-of-home advertising effective. <br>\n\u5176\u4e2dto and from work\u662f\u6307\u4e0a\u4e0b\u73ed\uff0c\u4ed6\u4eectravel longer distance\uff0c\u8def\u7a0b\u66f4\u957f\u3002\n                            ",
             "questionattrs":"billboards can be replaced within two hours ;-;consumers travel more now than ever before ;-;such ads have been made much more attractive ;-;the pace of urban life is much faster nowadays ",
             "tags":"\u5feb\u901f\u9605\u8bfb",
+            "c_flag":"1",
             "user_answer":["C) easy to remember "]
             },{
             "correct_type":"1",
@@ -189,6 +191,7 @@ collections = {
             "analysis":"Internet\u90e8\u5206\u7b2c\u4e00\u6bb5\u4e2d\u6700\u540e\u4e00\u53e5\uff1a The challenge to Internet advertisers is to create ads that audience members remember.  ",
             "questionattrs":"A) quick to update ;-;B) pleasant to look at ;-;C) easy to remember ;-;D) convenient to access ",
             "tags":"\u5feb\u901f\u9605\u8bfb",
+            "c_flag":"1",
             "user_answer":["B) pleasant to look at "]
             },{
             "correct_type":"3",
