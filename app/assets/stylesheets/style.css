@@ -11,8 +11,8 @@ button { cursor: pointer;}
 .red { color: #F00;}
 .orange { color: #ff6c00;}
 .gray { color: #999;}
-.span_right {background: #EEFFEE;}
-.span_error {background: #FFEAEA;}
+.span_right, span.span_right, input.span_right {background: #EEFFEE;}
+.span_error, span.span_error, input.span_error {background: #FFEAEA;}
 
 button.green { color:#009900;}
 .blue { color: #2875AE;}
@@ -215,7 +215,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 .input_xz { width: 90%; height: 20px;}
 
 .span_tk {min-width: 150px; display: inline-block; height: 15px; position: relative;}
-.input_tk { min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left;}
+.input_tk { min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left;background: #EFEDE7;}
 .select_tk { min-width: 148px; height: 20px; line-height: 20px;  border: none; border-bottom: 1px #000 solid;}
 
 .select_span {
@@ -270,8 +270,8 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     min-width: 148px; 
     height: 20px;
     line-height: 20px;
-    padding-left: 4px;
-    border: 1px #000 solid;
+    text-align: center;
+    border-bottom: 1px #000 solid;
     cursor: move;}
 
 /*相关词汇---------------*/
