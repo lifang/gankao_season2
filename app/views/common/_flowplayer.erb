@@ -6,27 +6,28 @@
   </div>
 </div>
 <script type="text/javascript">
-    $f("flowplayer", "/assets/flowplayer/flowplayer-3.2.7.swf", {
-        plugins: {
-            controls: {
-                fullscreen: false,
-                height: 30,
-                autoHide: false
-            }
-        },
-        clip: {
-            autoPlay: false,
-            onBeforeBegin: function() {
-                this.close();
-            }
-        },
-        onLoad: function() {
-            this.setVolume(90);
-        }
-    });
+  $f("flowplayer", "/assets/flowplayer/flowplayer-3.2.7.swf", {
+    plugins: {
+      controls: {
+        fullscreen: false,
+        height: 30,
+        autoHide: false
+      }
+    },
+    clip: {
+      autoPlay: false,
+      onBeforeBegin: function() {
+        this.close();
+      }
+    },
+    onLoad: function() {
+      this.setVolume(90);
+    }
+  });
 </script>
-
-<div id="audio-word" style="display:block;width:1px;height:1px;" href="http://test.mp3"></div>
+<div>
+  <div id="audio-word" style="display:block;width:1px;height:1px;" href="http://test.mp3"></div>
+</div>
 <script type="text/javascript">
   $f("audio-word", "/assets/flowplayer/flowplayer-3.2.7.swf", {
     plugins: {

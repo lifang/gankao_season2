@@ -175,6 +175,33 @@ function json_to_str(o) {
     }
 }
 
+//按照设置的最大长度，控制对象的输入中英文长度
+//maxlength="50" onKeyPress="subObjMaxlength(this)" onBlur="subObjMaxlength(this)"
+//function subObjMaxlength(obj)
+//{
+//    var maxlen =obj.maxLength;
+//    var strValue = obj.value;
+//    var strTemp ="";
+//    var i,sum;
+//    sum=0;
+//    for(i=0;i<strValue.length;i++)
+//    {
+//        if ((strValue.charCodeAt(i)>=0) && (strValue.charCodeAt(i)<=255))
+//            sum=sum+1;
+//        else
+//            sum=sum+2;
+//        if(sum <=maxlen){
+//            strTemp +=strValue.charAt(i);
+//            if(obj.style.width<sum){
+//
+//            }
+//        }else {
+//            obj.value = strTemp;
+//            break;
+//        }
+//    }
+//}
+
 //题面后小题列表改变颜色
 function change_color(value,problem_index,question_index){
     if(value=="1"){
@@ -469,6 +496,7 @@ function imitate_action(question_type,correct_type,user_answer,problem_index,que
             }
             if(correct_type=="3"){
                 $("#input_inner_answer_"+problem_index+"_"+question_index).val(user_answer);
+                call_me(problem_index,question_index);
             }
         }
     }
@@ -490,6 +518,11 @@ function do_inner_question(correct_type,problem_index,question_index){
     var this_answer = $("#input_inner_answer_"+problem_index+"_"+question_index).val();
     $("#exam_user_answer_"+problem_index+"_"+question_index).val(this_answer);
 //show_hedui(problem_index,question_index);
+}
+
+//题面内单选题选项显示和隐藏
+function toggle_select_ul(problem_index,question_index){
+    $("#select_ul_"+problem_index+"_"+question_index).toggle();
 }
 
 function show_hedui(problem_index,question_index){
@@ -772,7 +805,34 @@ function ajax_add_word(word_id){
         });
     }
 }
+
+//根据字符长度改变文本域的长和宽
+function call_me(problem_index,question_index) {
+    var id = ""+problem_index+"_"+question_index;
+    var max_length = 900;
+    if(($("#input_inner_answer_" + id).length>0) || ($("#input_inner_answer_" + id).val() != "" )) {
+        if(($("#input_inner_answer_" + id).val().length >= 11) && ($("#input_inner_answer_" + id).val().length < max_length)) {
+            $("#input_inner_answer_" + id).css("width", $("#input_inner_answer_" + id).val().length*10 + "px");
+        } else if ($("#input_inner_answer_" + id).val().length == max_length) {
+            $("#qinput_inner_answer_" + id).css("width", max_length*10 + "px");
+        } else if ($("#input_inner_answer_" + id).val().length > max_length) {
+            $("#input_inner_answer_" + id).css("width", max_length*10 + 130 + "px");
+            if ($("#input_inner_answer_" + id).css("height") == "120px") {
+                $("input_inner_answer_" + id).css("height", "120px");
+            } else if ($("#input_inner_answer_" + id).val().length > 80 && $("#input_inner_answer_" + id).val().length < 160
+                && $("#input_inner_answer_" + id).css("height") == "20px") {
+                $("#input_inner_answer_" + id).css("height", 48 + "px");
+            } else if ($("#input_inner_answer_" + id).val().length >= 160 && $("#input_inner_answer_" + id).val().length%80 == 0
+                && $("#input_inner_answer_" + id).css("height") != "22px") {
+                $("#input_inner_answer_" + id).css("height", 24*($("#input_inner_answer_" + id).val().length/70 + 1) + "px");
+            }
+        }
+    }
+}
+
+
 //effect.js  end
+
 
 //generate.js  start
 
@@ -1073,12 +1133,19 @@ function inner_question(correct_type,question_index){
     str1 = "<span class='span_tk' id='inner_span_tk_"+init_problem+"_"+question_index+"' onmouseover='javascript:show_hedui("+init_problem+","+question_index+");' onmouseout='javascript:hide_hedui("+init_problem+","+question_index+");'>";
     switch(correct_type){
         case "0":{
-            str1 += "<select class='select_tk inner_borde_blue_"+init_problem+"_"+question_index+"' id='input_inner_answer_"+init_problem+"_"+question_index+"' onchange='javascript:do_inner_question(0,"+init_problem+","+question_index+");'><option value=''></option>";
+            str1 += "<select class='select_tk inner_borde_blue_"+init_problem+"_"+question_index+"' style='display:none;' id='input_inner_answer_"+init_problem+"_"+question_index+"' onchange='javascript:do_inner_question(0,"+init_problem+","+question_index+");'><option value=''></option>";
             question_attrs = store3[question_index].questionattrs.split(";-;");
             for(j=0;j<question_attrs.length;j++){
                 str1 += "<option value=\""+question_attrs[j]+"\">"+question_attrs[j]+"</option>";
             }
             str1 += "</select>";
+            str1 += "<span class='select_span inner_borde_blue_"+init_problem+"_"+question_index+"' id='input_inner_answer_"+init_problem+"_"+question_index+"' onclick='javascript:toggle_select_ul("+init_problem+","+question_index+");'></span>";
+            str1 += "<span class='select_ul' id='select_ul_"+init_problem+"_"+question_index+"' style='display:none;'>";
+            question_attrs = store3[question_index].questionattrs.split(";-;");
+            for(j=0;j<question_attrs.length;j++){
+                str1 += "<span class='select_li'>"+question_attrs[j]+"</span>";
+            }
+            str1 += "</span>";
             break;
         }
         case "1":{
@@ -1091,7 +1158,7 @@ function inner_question(correct_type,question_index){
             break;
         }
         case "3":{
-            str1 += "<input class='input_tk inner_borde_blue_"+init_problem+"_"+question_index+"' type='text' id='input_inner_answer_"+init_problem+"_"+question_index+"' onchange='javascript:do_inner_question(3,"+init_problem+","+question_index+");'></input>";
+            str1 += "<input class='input_tk inner_borde_blue_"+init_problem+"_"+question_index+"' type='text' id='input_inner_answer_"+init_problem+"_"+question_index+"' onkeydown='call_me("+init_problem+","+question_index+");' onchange='javascript:do_inner_question(3,"+init_problem+","+question_index+");'></input>";
             break;
         }
 

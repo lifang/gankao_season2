@@ -215,8 +215,23 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 .input_xz { width: 90%; height: 20px;}
 
 .span_tk {min-width: 150px; display: inline-block; height: 15px; position: relative;}
-.input_tk { min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left; background: none;}
-.select_tk { min-width: 148px; height: 20px; line-height: 20px;  border: none; border-bottom: 1px #000 solid; background: none;}
+.input_tk { min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left;}
+.select_tk { min-width: 148px; height: 20px; line-height: 20px;  border: none; border-bottom: 1px #000 solid;}
+
+.select_span {
+    display: inline-block;
+    float: left;
+    min-width: 150px;
+    height: 20px; 
+    line-height: 20px;
+    text-align: center;
+    border-bottom: 1px #000 solid;
+}
+
+.select_ul {position: absolute; top: 21px; left: 0; z-index: 200; border: 1px #999 solid;}
+.select_li { min-width: 138px; display: inline-block; padding: 0 5px; height: 24px; line-height: 24px; cursor: pointer; background: #EFEDE7;}
+.select_li:hover { background: #c7c5bf;}
+
 .button_tk {
     width: 81px;
     height: 27px;
