@@ -91,7 +91,12 @@ class Word < ActiveRecord::Base
         word_list=word_list|word_list2
       end
     end
-    return word_list
+    load_words={}
+    word_list.each do |word|
+      words_sentence=WordSentence.find_by_sql("select w.description from word_sentences w where w.word_id=#{word.id}")
+      load_words[word.id]=[word,words_sentence]
+    end unless word_list.blank?
+    return load_words
   end
 
 end

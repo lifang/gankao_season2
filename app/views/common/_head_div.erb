@@ -9,13 +9,13 @@
           day=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
           <% unless order.nil? %>
             <% if day!=0 %>
-              <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %><%=  "(试用剩#{day}天)" %></a><a href="/users/charge_vip">升级</a>
+              <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %><%=  "(试用剩#{day}天)" %></a><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
             <%else%>
-              <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %><%=  "(试用即将到期)" %></a><a href="/users/charge_vip">升级</a>
+              <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %><%=  "(试用即将到期)" %></a><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
             <% end %>
           <% end %>
         <%  elsif is_nomal?(category_id) %>
-          <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %><%= " (试用结束)" %></a><a href="/users/charge_vip">升级</a>
+          <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %><%= " (试用结束)" %></a><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
         <% end %>
         |<a href="/users/delete_user">退出</a>
         <div class="email_tab" style="display: none; ">
