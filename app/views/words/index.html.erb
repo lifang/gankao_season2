@@ -8,7 +8,7 @@
     <% else %>
       <% if is_nomal?(params[:category]) %>
         <a href="javascript:void(0);"  class="danci_hg tooltip_vip" title="仅供正式用户使用" 
-           onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>回顾</a>
+           onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>回顾</a>
       <% else %>
         <% if @already_recited.total_num > 0 %>
           <a href="javascript:void(0);"
@@ -28,7 +28,7 @@
     <% else %>
       <% if is_nomal?(params[:category]) %>
         <a href="javascript:void(0);"  class="danci_bc tooltip_vip" title="仅供正式用户使用" 
-           onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>背词</a>
+           onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>背词</a>
       <% else %>
         <% if @leaving_count > 0 %>
           <a href="javascript:void(0);"

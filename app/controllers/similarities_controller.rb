@@ -51,9 +51,9 @@ class SimilaritiesController < ApplicationController
       end
     else
       if is_nomal?(category_id)
-        flash[:notice]="您的试用期已结束。[<a class='link_c' href='/users/#{cookies[:user_id]}/record?vip=1'>升级为正式用户</a>]"
+        flash[:notice]="您的试用期已结束。[<a class='link_c' href='/users/charge_vip?category=#{params[:category]}'>升级为正式用户</a>]"
       else
-        flash[:notice]="本试卷仅供正式用户使用。[<a class='link_c' href='/users/#{cookies[:user_id]}/record?vip=1'>升级为正式用户</a>]"
+        flash[:notice]="本试卷仅供正式用户使用。[<a class='link_c' href='/users/charge_vip?category=#{params[:category]}'>升级为正式用户</a>]"
       end
       redirect_to "/similarities?category=#{category_id}"
     end

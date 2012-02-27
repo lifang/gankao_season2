@@ -24,7 +24,7 @@
                     </button>
                   <% else %>
                     <button type="button" class="tooltip_vip" title="仅供正式用户使用"
-                            onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>
+                            onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>
                       立即参加
                     </button>
                   <% end %>
@@ -41,9 +41,9 @@
                   <a href="/simulations/<%= @exam_user_hash[simulation.id][0].id %>/show_result" target="_blank">查看试卷</a>
                 <% else %>
                   <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
-                     onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>查看分数</a>
+                     onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>查看分数</a>
                   <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
-                     href='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>查看试卷</a>
+                     onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>查看试卷</a>
                 <% end %>
               <% end %>
             <% else %>
