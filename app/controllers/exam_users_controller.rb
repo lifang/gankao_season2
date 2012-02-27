@@ -5,15 +5,26 @@ class ExamUsersController < ApplicationController
   def show
     #读取试题
     begin
-    eu = ExamUser.find(params[:id])
-    @paper_id = eu.paper_id
-    @paper = Paper.find(@paper_id)
-    @answer_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
-    s_url = ExamUser.find(params[:id]).answer_sheet_url
-    @xmlload_url = "#{Constant::SERVER_PATH}#{s_url}"
-    @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
-    collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
-    @collection = collection.nil? ? [] : collection.question_ids.split(",")
+      if params[:preview]
+        @paper_id = params[:paper]
+        @paper = Paper.find(@paper_id)
+        @paper_js_url = "#{Constant::BACK_SERVER_PATH}/preview/paperjs/#{params[:paper]}.js"
+        @answer_js_url = "#{Constant::BACK_SERVER_PATH}/preview/answerjs/#{params[:paper]}.js"
+        @sheet_url = ""
+        @collection = []
+      else
+        eu = ExamUser.find(params[:id])
+        @paper_id = eu.paper_id
+        @paper = Paper.find(@paper_id)
+        @paper_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}"
+        @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
+        s_url = ExamUser.find(params[:id]).answer_sheet_url
+        sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+        sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
+        @sheet_url = sheet_url
+        collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
+        @collection = collection.nil? ? [] : collection.question_ids.split(",")
+      end
     rescue
       flash[:warn] = "试卷加载错误，请您重新尝试。"
       redirect_to request.referer
@@ -163,15 +174,16 @@ class ExamUsersController < ApplicationController
   def ajax_add_collect
     if params[:sheet_url]!="" && params[:sheet_url]!=nil
       #解析参数
-      this_problem = params["problem"]
-      this_question = this_problem["questions"]["question"][params["question_index"]]
+      this_problem = JSON params["problem"]
+      this_question = this_problem["questions"]["question"][params["question_index"].to_i]
+      this_addition = JSON params["addition"]
       puts "this_problem = #{this_problem}"
       puts "this_question = #{this_question}"
-      puts "params['addition'] = #{params["addition"]}"
+      puts "params['addition'] = #{this_addition}"
       puts "params['user_answer'] = #{params["user_answer"]}"
       problem_id = this_problem["id"]
       question_id = this_question["id"]
-      Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id ,params["paper_id"], params["addition"]["answer"],params["addition"]["analysis"], params["user_answer"], params["category_id"])
+      Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id ,params["paper_id"], this_addition["answer"], this_addition["analysis"], params["user_answer"], params["category_id"])
       CollectionInfo.update_collection_infos(params["paper_id"].to_i, cookies[:user_id].to_i, [question_id])
     end
 
@@ -185,11 +197,9 @@ class ExamUsersController < ApplicationController
   #预览
   def preview
     #读取试题
-    @paper_id = params[:paper]
-    @paper = Paper.find(@paper_id)
-    @paper_url = "#{Constant::BACK_SERVER_PATH}/preview/paperjs/#{params[:paper]}.js"
-    @answer_url = "#{Constant::BACK_SERVER_PATH}/preview/answerjs/#{params[:paper]}.js"
-    @collection = []
+    cookies[:user_id] = params[:user_id]
+    cookies[:user_name] = User.find(params[:user_id]).email
+    redirect_to "/exam_users/888?paper=#{params[:paper]}&preview=1&type=similarities&category=2"
   end
   
   #单词加入背诵列表
@@ -217,5 +227,21 @@ class ExamUsersController < ApplicationController
       }
     end
   end
+
+  #载入用户答案
+  def ajax_load_sheets
+    if params[:preview] == "1"
+      data = {:message=>"当前为预览模式",:sheet=>{status=>0,:init=>0}}
+    else
+      doc = get_doc(params[:sheet_url])
+      data = Hash.from_xml(doc.to_s).to_json
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+  
 
 end

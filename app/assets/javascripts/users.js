@@ -239,7 +239,7 @@ function check_vip(){
         dataType:'json',
         url:"/users/check_vip",
         data:{
-            category:$("#vip_style option:selected").val()
+            category:$("#category").val()
         },
         type:'post',
         success : function(data) {

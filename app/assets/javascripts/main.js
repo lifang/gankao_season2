@@ -12,7 +12,7 @@ $(function(){
     var foot_height = $(".foot").height();
     var main_height = win_height-(head_height+mainTop_height+foot_height);
     $(".m_side").css('height',main_height-12);//12为head的padding的12px
-    $(".main").css('height',main_height-12+30);//34是m_top的高度，
+    $(".main").css('height',main_height-12+34);//34是m_top的高度，
 })
 
 //控制其他页面主体高度
@@ -272,28 +272,15 @@ Array.prototype.indexOf=function(el, index){
     return -1;
 }
 
-//loadxml文件
-function loadxml(xmlFile) {
-    var xmlDoc;
-    try {
-        if(window.ActiveXObject) {
-            xmlDoc = new ActiveXObject('MSXML2.DOMDocument');
-            xmlDoc.async = true;
-            xmlDoc.load(xmlFile);
-        }else if (document.implementation&&document.implementation.createDocument) {
-            var xmlhttp = new window.XMLHttpRequest();
-            xmlhttp.open("GET", xmlFile, false);
-            xmlhttp.send(null);
-            xmlDoc = xmlhttp.responseXML;
-        }else{
-            return null;
-        }
-        return xmlDoc;
-    } catch (e) {
-        var flash_div = create_element("div", null, "flash_notice", "tishi_tab", null, "innerHTML");
-        flash_div.innerHTML = "<p>您的操作记录载入失败，当前页面将不能显示您的答案。若有需要，您可以刷新页面重新载入。</p>";
-        document.body.appendChild(flash_div);
-        show_flash_div();
-        return null;
-    }
+function precal(){
+    // var doc_height = $(document).height();
+    //var doc_width = $(document).width();
+    var win_height = $(window).height();
+    //var win_width = $(window).width();
+    var head_height = $(".head").height();
+    var mainTop_height = $(".m_top").height();
+    var foot_height = $(".foot").height();
+    var main_height = win_height-(head_height+mainTop_height+foot_height);
+    $(".m_side").css('height',main_height-12);//12为head的padding的12px
+    $(".main").css('height',main_height-12+34);//34是m_top的高度，
 }

@@ -1,3 +1,4 @@
+<% category_id = params[:category].nil? ? 2 : params[:category].to_i %>
 <div class="tab_ul">
   <ul>
     <li class="hover" id="email">收 件</li>
@@ -24,7 +25,7 @@
   </script>
 <% end %>
 <div class="mess_tab border_radius" style="display:none">
-<span class="xx_x"><img src="/assets/xx.png" onclick="javascript:$('.mess_tab').css('display','none')"/></span>
+  <span class="xx_x"><img src="/assets/xx.png" onclick="javascript:$('.mess_tab').css('display','none')"/></span>
   <div class="mess_tab_con">
 
   </div>
