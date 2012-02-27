@@ -135,7 +135,6 @@ function pro_qu_t(problem_index){
             $(this).parent().parent().addClass("p_q_line");
             if(problems[problem_index]["question_type"]=="1"){
                 $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)").removeClass("borde_blue");
-                $(this).parent().parent().removeClass("borde_blue");
                 last_borde_blue = null;
             }
             last_opened_question = null;
@@ -145,7 +144,6 @@ function pro_qu_t(problem_index){
             $(this).parent().parent().removeClass("p_q_line");
             if(problems[problem_index]["question_type"]=="1"){
                 $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)").addClass("borde_blue");
-                $(this).parent().parent().addClass("borde_blue");
             }
             if(last_opened_question!=null){
                 last_opened_question.parent().find(".pro_qu_div").hide();
@@ -153,13 +151,28 @@ function pro_qu_t(problem_index){
                 last_opened_question.parent().parent().addClass("p_q_line");
                 if(last_borde_blue!=null && last_borde_blue.length>0 ){
                     last_borde_blue.removeClass("borde_blue");
-                    last_opened_question.parent().parent().removeClass("borde_blue");
                 }
             }
             last_borde_blue = $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)");
             last_opened_question = $(this);
         }
     })
+}
+
+//json对象转字符串形式
+function json_to_str(o) {
+    var arr = [];
+    var fmt = function(s) {
+        if (typeof s == 'object' && s != null) return json_to_str(s);
+        return /^(string|number)$/.test(typeof s) ? "\"" + s + "\"" : s;
+    }
+    if (!o.sort) {
+        for (var i in o) arr.push("\"" + i + "\":" + fmt(o[i]));
+        return "{" + arr.join(",") + "}";
+    } else {
+        for (var j = 0; j < o.length; j++) arr.push(fmt(o[j]));
+        return "[" + arr.join(",") + "]";
+    }
 }
 
 //题面后小题列表改变颜色
@@ -298,7 +311,8 @@ function right_or_error_effect(user_answer,answer,analysis,problem_index,questio
         })
     }
     if(problems[problem_index].questions.question[question_index]["description"]==null || problems[init_problem].questions.question[question_index]["description"]==""){
-        $("#replace_description_span_"+init_problem+"_"+question_index).html(user_answer.replace(/;|;/g," "));
+        user_answer = (user_answer == "1" ? "对/是" : (user_answer == "0" ? "错/否" : user_answer.replace(/;\|;/g," , ")));
+        $("#replace_description_span_"+init_problem+"_"+question_index).html(user_answer);
     }
     //改变最终显示答案的内容，如单选题可以只显示"A"
     answer = change_display_answer(correct_type,answer);
@@ -371,15 +385,16 @@ function check_question(question_type,correct_type,problem_index,question_index)
 
     //判断是否最后一小题，若是，则改变答卷状态 status="1"
     if((question_index+1)>=answers[problem_index].length && (problem_index+1)>=problems.length){
-        $.ajax({
-            type: "POST",
-            url: "/exam_users/"+init_exam_user_id+"/ajax_change_status.json",
-            dataType: "json",
-            data : {
-                "sheet_url":sheet_url
-            }
-        });
-        return false;
+        if(sheet_url!=""){
+            $.ajax({
+                type: "POST",
+                url: "/exam_users/"+init_exam_user_id+"/ajax_change_status.json",
+                dataType: "json",
+                data : {
+                    "sheet_url":sheet_url
+                }
+            });
+        }
     }
 }
 
@@ -556,26 +571,31 @@ function ajax_report_error(){
         tishi_alert("请选择错误类型");
         return false;
     }
-    $.ajax({
-        type: "POST",
-        url: "/exam_users/ajax_report_error.json",
-        dataType: "json",
-        data : {
-            "post":{
-                "paper_id":$("#report_error_paper_id").val(),
-                "paper_title":$("#report_error_paper_title").val(),
-                "user_id":$("#report_error_user_id").val(),
-                "user_name":$("#report_error_user_name").val(),
-                "description":$("#report_error_description").val(),
-                "error_type":$(".report_error_radio:checked").val(),
-                "question_id":$("#report_error_question_id").val()
+    if(sheet_url!=""){
+        $.ajax({
+            type: "POST",
+            url: "/exam_users/ajax_report_error.json",
+            dataType: "json",
+            data : {
+                "post":{
+                    "paper_id":$("#report_error_paper_id").val(),
+                    "paper_title":$("#report_error_paper_title").val(),
+                    "user_id":$("#report_error_user_id").val(),
+                    "user_name":$("#report_error_user_name").val(),
+                    "description":$("#report_error_description").val(),
+                    "error_type":$(".report_error_radio:checked").val(),
+                    "question_id":$("#report_error_question_id").val()
+                }
+            },
+            success : function(data) {
+                tishi_alert(data["message"]);
+                close_report_error();
             }
-        },
-        success : function(data) {
-            tishi_alert(data["message"]);
-            close_report_error();
-        }
-    });
+        });
+    }else{
+        tishi_alert("错误报告提交成功（预览）");
+        close_report_error();
+    }
 }
 
 //关闭报告错误框
@@ -675,9 +695,9 @@ function normal_add_collect(problem_index,question_index){
                 "paper_id" : init_paper_id,
                 "problem_index" : problem_index,
                 "question_index" : question_index,
-                "problem" : problems[problem_index],
+                "problem" : JSON.stringify(problems[problem_index]),
                 "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
-                "addition" : answers[problem_index][question_index],
+                "addition" : json_to_str(answers[problem_index][question_index]),
                 "category_id" :category
             },
             success : function(data){
@@ -709,8 +729,8 @@ function special_add_collect(problem_index,question_index){
                 "paper_id" : init_paper_id,
                 "problem_json" : JSON.stringify(problems[problem_index]),
                 "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
-                "question_answer" : answers[problem_index][question_index]["answer"],
-                "question_analysis" : answers[problem_index][question_index]["analysis"],
+                "question_answer" : answers[problem_index][question_index]["answer"]==null ? "" : answers[problem_index][question_index]["answer"],
+                "question_analysis" : answers[problem_index][question_index]["analysis"]==null ? "" : answers[problem_index][question_index]["analysis"],
                 "problem_id" : problems[problem_index].id,
                 "question_id" : problems[problem_index].questions.question[question_index].id,
                 "category_id" :category
@@ -738,17 +758,19 @@ function play_word_enunciate(url){
 
 //添加背诵单词
 function ajax_add_word(word_id){
-    $.ajax({
-        type: "POST",
-        url: "/exam_users/ajax_add_word.json",
-        dataType: "json",
-        data : {
-            "word_id" : word_id
-        },
-        success : function(data){
-            tishi_alert(data.message);
-        }
-    });
+    if(preview==0){
+        $.ajax({
+            type: "POST",
+            url: "/exam_users/ajax_add_word.json",
+            dataType: "json",
+            data : {
+                "word_id" : word_id
+            },
+            success : function(data){
+                tishi_alert(data.message);
+            }
+        });
+    }
 }
 //effect.js  end
 
@@ -796,14 +818,13 @@ $(function(){
         url: "/exam_users/ajax_load_sheets.json",
         dataType: "json",
         data : {
-            "sheet_url" : sheet_url
-        },
-        failure : function(){
-            sheet = null;
-            tishi_alert("用户答案记录载入失败");
-            init_paper();
+            "sheet_url" : sheet_url,
+            "preview" : preview
         },
         success : function(data) {
+            if(data["message"]){
+                tishi_alert(data["message"]);
+            }
             sheet = data["sheet"];
             init_paper();
         }
@@ -858,8 +879,8 @@ function check_answer(problem_index){
 function afterload(){
     // 拖选框，预留高度
     if($("#drag_tk_"+init_problem).length>0){
-	var m_side_width = $("#m_side_"+init_problem).width();
-	$("#draggable_list_"+init_problem).css("width",m_side_width-20-20);
+        var m_side_width = $("#m_side_"+init_problem).width();
+        $("#draggable_list_"+init_problem).css("width",m_side_width-20-20);
         var drag_tk_height = $("#drag_tk_"+init_problem+" ul").height();
         var m_side_height = $("#m_side_"+init_problem).height();
         var pbl_height = m_side_height-drag_tk_height-40;//padding的高度

@@ -1,12 +1,14 @@
 
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 <%= javascript_include_tag "#{@answer_js_url}" %>
-<%= javascript_include_tag "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}" %>
-<%= javascript_include_tag "#{@answer_url}" %>
-
+<%= javascript_include_tag "#{@paper_js_url}" %>
 
 <script type="text/javascript" >
   //初始化参数
+  var preview = 0;
+<% if params[:preview] %>
+    preview = 1;
+<% end %>
   var sheet = null;
   var back_server_path = '<%= Constant::BACK_SERVER_PATH %>';
   var category = '<%= category_id %>';
@@ -31,7 +33,7 @@
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
       <span class="icon_return"><a href="/<%= (params["type"].nil?||(params["type"]!="similarities"&&params["type"]!="specials")) ? "similarities" : params["type"]  %>?category=<%= category_id %>" class="tooltip" name="返回">返回</a></span>
     </div>
-    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo('<%= params["type"] %>');">重做</a></span>
+    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" <% if params[:preview] %> onclick="javascript:window.location.reload();" <% else %>onclick="javascript:confirm_redo('<%= params["type"] %>');" <% end %>>重做</a></span>
   </div>
 </div>
 
