@@ -351,7 +351,7 @@ function drag_problem(title_div, problem, block_nav_div, drag_li_arr, question_i
 //隐藏problem的json
 function create_problem_json(problem, block_id) {
     var problem_json = create_element("input", null, "p_json_"+problem.id, null, "hidden", "value");
-    var json_arr = json_to_str(problem).split(",");
+    var json_arr = JSON.stringify(problem).split(",");
     if ($("#jquery_jplayer_" + block_id).attr("id") !== undefined) {
         if (problem.title.indexOf("((mp3))") == -1) {
             var new_title = json_arr[3].split("\"title\":\"");
@@ -382,37 +382,35 @@ function create_drag_question(problem, question_id_input, question, drag_li_arr)
     ? true_answers.get(question.id)[1] : "";
     question_str += "<input type='hidden' id='q_analysis_"+ question.id +"' value='"+ analysis +"' />";
     var user_answer = (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "")
-        ? answer_hash.get(question.id)[0] : "";
+    ? answer_hash.get(question.id)[0] : "";
     question_str += "<input type='hidden' id='u_answer_"+ question.id +"' value='"+ user_answer +"' />";
     if ((parseFloat(question.correct_type) == 0) || (parseFloat(question.correct_type) == 2)) {
         if (question.questionattrs != undefined && question.questionattrs != null) {
-            
-            question_str += "<select class='select_tk "+ bk_color +"' name='question_attr_"+ question.id +"' id='question_attr_"
-            + question.id +"' onclick=\"javascript:show_question_review("
+            question_str += "<span class='select_span "+ bk_color +"' name='question_attr_"+ question.id +"' id='question_attr_"
+            + question.id +"' onclick=\"javascript:show_select("
             + problem.id +", '"+ question.id +"', '"+ question.correct_type +"', '"
-            + problem.question_type +"')\"><option value='-1'></option>";
+            + problem.question_type +"')\">" + user_answer +"</span>";
             var que_attrs = question.questionattrs.split(";-;");
+            question_str += "<span class='select_ul' id='select_ul_"+ question.id
+            +"' onmouseover=\"javascript:$('#select_ul_"+ question.id
+            +"').css('display','');\" onmouseout=\"javascript:$('#select_ul_"+ question.id
+            +"').css('display','none');\" style='display:none;'>";
             for (var i=0; i<que_attrs.length; i++) {
-                if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != ""
-                    && $.trim(answer_hash.get(question.id)[0]) == $.trim(que_attrs[i])) {
-                    question_str += "<option selected>"+ que_attrs[i] +"</option>";
-                } else {
-                    question_str += "<option>"+ que_attrs[i] +"</option>";
-                }
+                question_str += "<span class='select_li'>"+ que_attrs[i] +"</span>";
             }
-            question_str += "</select>";
+            question_str += "</span>";
             $("#que_out_" + question.id).html(question_str);
         }
     } else if ((parseFloat(question.correct_type) == 3) || (parseFloat(question.correct_type) == 5)) {
         if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "") {
             question_str += "<textarea cols='' readonly rows='' class='input_tk "+ bk_color +"'"
-            + " id='question_answer_"+ question.id +"' onclick=\"javascript:show_question_review("
+            + " id='question_answer_"+ question.id +"' onclick=\"javascript:show_select_color("
             + problem.id +", '"+ question.id +"', '"+ question.correct_type +"', '"
             + problem.question_type +"')\" name='question_answer_"
             + question.id +"' style='width:" + erea_with(answer_hash.get(question.id)[0]) +";height:22px;' >"
             + answer_hash.get(question.id)[0] +"</textarea>";
         } else {
-            question_str += "<textarea cols='' readonly rows='' onclick=\"javascript:show_question_review("
+            question_str += "<textarea cols='' readonly rows='' onclick=\"javascript:show_select_color("
             + problem.id +", '"+ question.id +"', '"+ question.correct_type
             +"', '" + problem.question_type +"')\" class='input_tk "+ bk_color +"' id='question_answer_"+ question.id
             +"' name='question_answer_" + question.id +"'></textarea>";
@@ -427,12 +425,12 @@ function create_drag_question(problem, question_id_input, question, drag_li_arr)
             }
         }        
         if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "") {
-            question_str += "<span id='question_answer_"+question.id+"' onclick=\"javascript:show_question_review("
+            question_str += "<span id='question_answer_"+question.id+"' onclick=\"javascript:show_select_color("
             + problem.id +", '"+ question.id +"', '"+ question.correct_type +"', '"
             + problem.question_type +"')\" class='dragDrop_box "+bk_color+"'>"
             + answer_hash.get(question.id)[0]+"</span>";
         } else {
-            question_str += "<span id='question_answer_"+question.id+"' onclick=\"javascript:show_question_review("
+            question_str += "<span id='question_answer_"+question.id+"' onclick=\"javascript:show_select_color("
             + problem.id +", '"+ question.id +"', '"+ question.correct_type +"', '"
             + problem.question_type +"')\" class='dragDrop_box "+bk_color+"'></span>";
         }
@@ -508,6 +506,21 @@ function create_collection(problem_id, question_id, problem_type) {
     }    
 }
 
+//显示ul，以及显示解析
+function show_select(problem_id, question_id, correct_type, problem_type) {
+    $(".borde_blue").removeClass("borde_blue");
+    $("#question_attr_" + question_id).addClass("borde_blue");
+    $("#select_ul_" + question_id).css("display", "");
+    show_question_review(problem_id, question_id, correct_type, problem_type);
+}
+
+//清除前面的选中，并选中当前框
+function show_select_color(problem_id, question_id, correct_type, problem_type) {
+    $(".borde_blue").removeClass("borde_blue");
+    $("#question_answer_" + question_id).addClass("borde_blue");
+    show_question_review(problem_id, question_id, correct_type, problem_type);
+}
+
 //显示可拖动题的解析按钮
 function show_question_review(problem_id, question_id, correct_type, problem_type) {
     $("#problem_title_" + problem_id + " .review_btn").remove();
@@ -566,7 +579,7 @@ function create_question(problem, question_id_input, parent_div, question, inner
     ? true_answers.get(question.id)[1] : "";
     hidden_text += "<input type='hidden' id='q_analysis_"+ question.id +"' value='"+ analysis +"' />";
     var user_answer = (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "")
-        ? answer_hash.get(question.id)[0] : "";
+    ? answer_hash.get(question.id)[0] : "";
     hidden_text += "<input type='hidden' id='u_answer_"+ question.id +"' value='"+ user_answer +"' />";
     var que_out_div = create_element("div", null, "que_out_" + question.id, "question_area", null, "innerHTML");
     que_out_div.innerHTML = hidden_text + "<div class='area_left'>" + innerHTML + ".</div>";
@@ -716,8 +729,8 @@ function create_single_question(que_div, question, drag_li_arr) {
                 }
             } else {
                 if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "") {
-                    answer_text = "<textarea cols='' rows='' class='answer_textarea "+ bk_color +"' id='question_answer_"+ question.id
-                    +"' name='question_answer_"+ question.id +"' readonly>"
+                    answer_text = "<textarea cols='' rows='' class='answer_textarea "+ bk_color
+                    +"' id='question_answer_"+ question.id +"' name='question_answer_"+ question.id +"' readonly>"
                     + answer_hash.get(question.id)[0] +"</textarea>";
                 } else {
                     answer_text = "<textarea cols=''  rows='' class='answer_textarea' id='question_answer_"+ question.id
@@ -810,10 +823,10 @@ function answer_xml() {
                     [answer, questions[i].getAttribute("score"), questions[i].getAttribute("score_reason")]);
             }
         }
-//            var collections = xmlDom.getElementsByTagName("collections");
-//            if (collections.length > 0 && collections[0].firstChild != undefined) {
-//                user_collection = collections[0].firstChild.data.split(",");
-//            }
+    //            var collections = xmlDom.getElementsByTagName("collections");
+    //            if (collections.length > 0 && collections[0].firstChild != undefined) {
+    //                user_collection = collections[0].firstChild.data.split(",");
+    //            }
     }
 }
 
@@ -870,7 +883,7 @@ function generate_jplayer(mp3_url, block_id) {
 function erea_with(str) {
     var width = "";
     if (str.length > 20 && str.length <= 48) {
-        width = (str.length * 10).to_s + "px";
+        width = (str.length * 10) + "px";
     }else if (str.length > 48) {
         width = "610px";
     }
@@ -921,20 +934,4 @@ function ajax_report_error(){
             $('.upErrorTo_tab').css('display', 'none');
         }
     });
-}
-
-//json对象转字符串形式
-function json_to_str(o) {
-    var arr = [];
-    var fmt = function(s) {
-        if (typeof s == 'object' && s != null) return json_to_str(s);
-        return /^(string|number)$/.test(typeof s) ? "\"" + s + "\"" : s;
-    }
-    if (!o.sort) {
-        for (var i in o) arr.push("\"" + i + "\":" + fmt(o[i]));        
-        return "{" + arr.join(",") + "}";
-    } else {
-        for (var j = 0; j < o.length; j++) arr.push(fmt(o[j]));
-        return "[" + arr.join(",") + "]";
-    }
 }
