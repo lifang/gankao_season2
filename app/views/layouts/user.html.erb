@@ -46,22 +46,24 @@
             <div class="message_box">
               <% category_id = params[:category].nil? ? 2 : params[:category]
               order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
-              <div class="tishi_vip">
-                <% unless order.nil? %>
-                  <% if order.types==Order::TYPES[:TRIAL_SEVEN]||order.types==Order::TYPES[:COMPETE] %>
-                    <%day=((order.end_time-Time.now.to_datetime)/1.day).to_i%>
-                    <% if day>=1%>
-                      您还有 <span class="red"><%= day %></span> 天试用的时间
-                    <% else %>
-                      您的试用即将到期
+              <% if !order.nil? and order.types==Order::TYPES[:CHARGE]||order.types==Order::TYPES[:OTHER]|| order.types==Order::TYPES[:RENREN]%>
+                <div class="tishi_vip">
+                  <% unless order.nil? %>
+                    <% if order.types==Order::TYPES[:TRIAL_SEVEN]||order.types==Order::TYPES[:COMPETE] %>
+                      <%day=((order.end_time-Time.now.to_datetime)/1.day).to_i%>
+                      <% if day>=1%>
+                        您还有 <span class="red"><%= day %></span> 天试用的时间
+                      <% else %>
+                        您的试用即将到期
+                      <% end %>
+                      <a href="/users/charge_vip?category=<%= category_id %>">升级为高级用户</a>
                     <% end %>
+                  <%else%>
+                    您的试用期限已到期
                     <a href="/users/charge_vip?category=<%= category_id %>">升级为高级用户</a>
                   <% end %>
-                <%else%>
-                  您的试用期限已到期
-                  <a href="/users/charge_vip?category=<%= category_id %>">升级为高级用户</a>
-                <% end %>
-              </div>
+                </div>
+              <% end %>
               <%= yield %>
             </div>
           </div>
