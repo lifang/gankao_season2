@@ -259,8 +259,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     background: #c4c4c4;
     position: relative;
 }
-.drag_tk ul { display: block; position: fixed;}
-
+.drag_tk ul { display: block; position: absolute;}
 .drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; display: inline-block; margin: 5px; cursor:move;}
 .tuozhuai_box { overflow-y: auto;}
 

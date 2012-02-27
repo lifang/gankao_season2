@@ -4,21 +4,21 @@
     <% if cookies[:user_id] %>
       <div class="h_user">
         <a href="#" class="h_email email_u">邮件</a>
-        <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %></a>
-        <% if is_trial?(category_id)
-          order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}")
-          day=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
-          <%= unless order.nil?
-            if day!=0
-              "试用剩#{day}天"
-            else
-              "试用即将到期"
-            end
-          end
-        %>
-        <%  elsif is_nomal?(category_id) %>
-          试用结束
-        <% end %>|<a href="/users/delete_user">退出</a>
+        <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %>
+          <% if is_trial?(category_id)
+            order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}")
+            day=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
+            <% unless order.nil? %>
+              <% if day!=0 %>
+                <%=  "(试用剩#{day}天)" %>
+              <%else%>
+                <%=  "(试用即将到期)" %>
+              <% end %>
+            <% end %>
+          <%  elsif is_nomal?(category_id) %>
+            <%= " (试用结束)" %>
+          <% end %></a>
+        <a href="#">升级</a>|<a href="/users/delete_user">退出</a>
         <div class="email_tab" style="display: none; ">
           <ul>
             <li><a href="/users/<%= cookies[:user_id] %>/info?target=0&category=<%= category_id %>">收件箱:<span class="orange"><%=Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SINGLE]} and target_id=#{cookies[:user_id]}")  %></span></a></li>

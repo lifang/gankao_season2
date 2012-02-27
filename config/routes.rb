@@ -86,7 +86,7 @@ GankaoSeason2::Application.routes.draw do
   end
   resources :users do
     collection do
-      get :delete_user,:email_info,:mess_info,:record_info,:record,:alipay_exercise
+      get :delete_user,:email_info,:mess_info,:record_info,:record,:alipay_exercise,:charge_vip
       post :delete_mess,:update_users,:alipay_compete,:accredit_check,:check_vip
     end
     member do

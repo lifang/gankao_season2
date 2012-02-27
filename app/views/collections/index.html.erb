@@ -1,8 +1,6 @@
 <%= javascript_include_tag "cookie.js" %>
 <%= javascript_include_tag "collection.js" %>
 <%= javascript_include_tag "/assets/jplayer/jquery.jplayer.min.js" %>
-<div id="textDiv" >
-</div>
 <script type="text/javascript" >
   //初始化题目号
   if(!(getCookie("collection_problem_init")!= null)){
@@ -56,12 +54,8 @@
 <div class="m_side m_problem_bg">
   <div class="problem_box" id="pro_title">
     <div id='flowplayer_postion'></div>
-    <div class="problem_text" id="global_problem_title">
-    </div>
+    <div class="problem_text" id="global_problem_title"></div>
   </div>
-    <div class="drag_tk" id="drag_tk">
-      <ul id="draggable_list"></ul>
-    </div>
 </div>
 <div id="jplayer_one"></div>
 <div class="m_side">

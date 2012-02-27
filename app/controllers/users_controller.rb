@@ -1,6 +1,6 @@
 # encoding: utf-8
 class UsersController < ApplicationController
-  layout 'user'
+  layout 'user',:except=>["charge_vip"]
   respond_to :html, :xml, :json
   include AlipaysHelper
   @@m = Mutex.new
