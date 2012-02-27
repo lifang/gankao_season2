@@ -175,32 +175,41 @@ function json_to_str(o) {
     }
 }
 
-//按照设置的最大长度，控制对象的输入中英文长度
-//maxlength="50" onKeyPress="subObjMaxlength(this)" onBlur="subObjMaxlength(this)"
-//function subObjMaxlength(obj)
-//{
-//    var maxlen =obj.maxLength;
-//    var strValue = obj.value;
-//    var strTemp ="";
-//    var i,sum;
-//    sum=0;
-//    for(i=0;i<strValue.length;i++)
-//    {
-//        if ((strValue.charCodeAt(i)>=0) && (strValue.charCodeAt(i)<=255))
-//            sum=sum+1;
-//        else
-//            sum=sum+2;
-//        if(sum <=maxlen){
-//            strTemp +=strValue.charAt(i);
-//            if(obj.style.width<sum){
-//
-//            }
-//        }else {
-//            obj.value = strTemp;
-//            break;
-//        }
-//    }
-//}
+//在火狐和Ie下取event事件
+function getEvent(){
+    if(window.event)    {
+        return window.event;
+    }
+    func=getEvent.caller;
+    while(func!=null){
+        var arg0=func.arguments[0];
+        if(arg0){
+            if((arg0.constructor==Event || arg0.constructor ==MouseEvent
+                || arg0.constructor==KeyboardEvent)
+            ||(typeof(arg0)=="object" && arg0.preventDefault
+                && arg0.stopPropagation)){
+                return arg0;
+            }
+        }
+        func=func.caller;
+    }
+    return null;
+}
+
+//停止事件冒泡
+function stop_bunble(){
+    $(function() {
+        var e = getEvent();
+        if (window.event) {
+            //e.returnValue=false;
+            e.cancelBubble=true;
+        }else{
+            //e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+    );
+}
 
 //题面后小题列表改变颜色
 function change_color(value,problem_index,question_index){
@@ -310,16 +319,8 @@ function right_or_error_effect(user_answer,answer,analysis,problem_index,questio
         $("#inner_span_tk_"+problem_index+"_"+question_index).attr("onmouseover","");
         $("#inner_span_tk_"+problem_index+"_"+question_index).attr("onmouseout","");
         if(correct_type=="0"){
-            if(!$("#input_inner_answer_"+problem_index+"_"+question_index).attr("name")){
-                $("#input_inner_answer_"+problem_index+"_"+question_index).attr("name",user_answer);
-                //$("#input_inner_answer_"+problem_index+"_"+question_index).attr("onfocus","");
-                $("#input_inner_answer_"+problem_index+"_"+question_index).attr("onchange","");
-                $("#input_inner_answer_"+problem_index+"_"+question_index).bind("change",function(){
-                    setSel($("#input_inner_answer_"+problem_index+"_"+question_index).attr("name"),$("#input_inner_answer_"+problem_index+"_"+question_index)[0],1);
-                    //tishi_alert("此小题已经核对");
-                    return false;
-                });
-            }
+            $(".select_li_"+problem_index+"_"+question_index).attr("onclick","javascript:$(\"#select_ul_"+problem_index+"_"+question_index+"\").hide();");
+            $("#select_ul_"+problem_index+"_"+question_index).attr("onclick","javascript:$(\"#select_ul_"+problem_index+"_"+question_index+"\").hide();");
         }
         if(correct_type=="1"){
             $("#droppable_"+problem_index+"_"+question_index).droppable({
@@ -489,7 +490,7 @@ function imitate_action(question_type,correct_type,user_answer,problem_index,que
     }else{
         if(question_type=="1"){
             if(correct_type=="0"){
-                setSel(user_answer,$("#input_inner_answer_"+problem_index+"_"+question_index)[0],1);
+                $("#input_inner_answer_"+problem_index+"_"+question_index).html(user_answer);
             }
             if(correct_type=="1"){
                 $("#droppable_"+problem_index+"_"+question_index).html(user_answer);
@@ -512,12 +513,16 @@ function open_display_answer(problem_index,question_index){
     $("#display_jiexi_"+problem_index+"_"+question_index).show();
 }
 
+function do_inner_select(answer,problem_index,question_index){
+    $("#input_inner_answer_"+problem_index+"_"+question_index).html(answer);
+    $("#exam_user_answer_"+problem_index+"_"+question_index).val(answer);
+    $("#select_ul_"+problem_index+"_"+question_index).hide();
+}
 
 //用户操作题目内小题
 function do_inner_question(correct_type,problem_index,question_index){
     var this_answer = $("#input_inner_answer_"+problem_index+"_"+question_index).val();
     $("#exam_user_answer_"+problem_index+"_"+question_index).val(this_answer);
-//show_hedui(problem_index,question_index);
 }
 
 //题面内单选题选项显示和隐藏
@@ -543,46 +548,51 @@ function jplayer_play(src){
 
 //ajax载入相关词汇
 function ajax_load_about_words(words,problem_index,question_index){
-    $.ajax({
-        type: "POST",
-        url: "/exam_users/ajax_load_about_words.json",
-        dataType: "json",
-        data : {
-            "words":words
-        },
-        success : function(data) {
-            var words_arr = words.split(";");
-            $("#about_words_list").empty();
-            var html_str="";
-            n=0;
-            for(var i=0;i<words_arr.length;i++){
-                if(data[i]!=null){
-                    html_str +="<li>";
-                    html_str +="<a class='single_word_li' href='javascript:void(0);' onclick='javascript:show_single_word(this,"+n+");'>"+data[n].name+"</a>";
-                    html_str +="<input type='hidden' id='about_word_id_"+n+"' value='"+data[n].id+"' />";
-                    html_str +="<input type='hidden' id='about_word_name_"+n+"' value='"+data[n].name+"' />";
-                    html_str +="<input type='hidden' id='about_word_category_id_"+n+"' value='"+data[n].category_id+"' />";
-                    html_str +="<input type='hidden' id='about_word_en_mean_"+n+"' value='"+data[n].en_mean+"' />";
-                    html_str +="<input type='hidden' id='about_word_ch_mean_"+n+"' value='"+data[n].ch_mean+"' />";
-                    html_str +="<input type='hidden' id='about_word_types_"+n+"' value='"+data[n].types+"' />";
-                    html_str +="<input type='hidden' id='about_word_phonetic_"+n+"' value=\""+data[n].phonetic+"\" />";
-                    html_str +="<input type='hidden' id='about_word_enunciate_url_"+n+"' value='"+data[n].enunciate_url+"' />";
-                    html_str +="<input type='hidden' id='about_word_sentences_"+n+"' value='"+data[n].sentences+"' />";
-                    html_str +="</li>";
-                    n++;
+    var about_words_div = $("#about_words_position_"+problem_index+"_"+question_index).find("#about_words");
+    if(about_words_div.length>0){
+        about_words_div.show();
+    }else{
+        $.ajax({
+            type: "POST",
+            url: "/exam_users/ajax_load_about_words.json",
+            dataType: "json",
+            data : {
+                "words":words
+            },
+            success : function(data) {
+                var words_arr = words.split(";");
+                $("#about_words_list").empty();
+                var html_str="";
+                n=0;
+                for(var i=0;i<words_arr.length;i++){
+                    if(data[i]!=null){
+                        html_str +="<li>";
+                        html_str +="<a class='single_word_li' href='javascript:void(0);' onclick='javascript:show_single_word(this,"+n+");'>"+data[n].name+"</a>";
+                        html_str +="<input type='hidden' id='about_word_id_"+n+"' value='"+data[n].id+"' />";
+                        html_str +="<input type='hidden' id='about_word_name_"+n+"' value='"+data[n].name+"' />";
+                        html_str +="<input type='hidden' id='about_word_category_id_"+n+"' value='"+data[n].category_id+"' />";
+                        html_str +="<input type='hidden' id='about_word_en_mean_"+n+"' value='"+data[n].en_mean+"' />";
+                        html_str +="<input type='hidden' id='about_word_ch_mean_"+n+"' value='"+data[n].ch_mean+"' />";
+                        html_str +="<input type='hidden' id='about_word_types_"+n+"' value='"+data[n].types+"' />";
+                        html_str +="<input type='hidden' id='about_word_phonetic_"+n+"' value=\""+data[n].phonetic+"\" />";
+                        html_str +="<input type='hidden' id='about_word_enunciate_url_"+n+"' value='"+data[n].enunciate_url+"' />";
+                        html_str +="<input type='hidden' id='about_word_sentences_"+n+"' value='"+data[n].sentences+"' />";
+                        html_str +="</li>";
+                        n++;
 
+                    }
                 }
-            }
-            $("#about_words_list").html(html_str);
-            $(".single_word_li:eq(0)").trigger("click");
-            if(data["error"]==null){
-                $("#about_words_position_"+problem_index+"_"+question_index).append($("#about_words"));
-            }else{
-                tishi_alert(data["error"]);
-            }
+                $("#about_words_list").html(html_str);
+                $(".single_word_li:eq(0)").trigger("click");
+                if(data["error"]==null){
+                    $("#about_words_position_"+problem_index+"_"+question_index).append($("#about_words"));
+                }else{
+                    tishi_alert(data["error"]);
+                }
 
-        }
-    });
+            }
+        });
+    }
 }
 
 //关闭相关词汇框
@@ -657,19 +667,23 @@ function show_single_word(ele,i){
 }
 
 //设置select的默认值
-function setSel(str,select,types){
-    var setinfo=false;
-    for(var i=0;i<select.options.length;i++){
-        if (types==0 && select.options[i].text==str){
-            setinfo=true;
-        }else if (types==1 && select.options[i].value==str){
-            setinfo=true;
-        }
-        if (setinfo==true){
-            select.selectedIndex=i;
-            break;
-        }
-    }
+//function setSel(str,select,types){
+//    var setinfo=false;
+//    for(var i=0;i<select.options.length;i++){
+//        if (types==0 && select.options[i].text==str){
+//            setinfo=true;
+//        }else if (types==1 && select.options[i].value==str){
+//            setinfo=true;
+//        }
+//        if (setinfo==true){
+//            select.selectedIndex=i;
+//            break;
+//        }
+//    }
+//}
+
+function close_select_ul(problem_index,question_index){
+    $("#select_ul_"+problem_index+"_"+question_index).hide();
 }
 
 //确认是否重做试卷
@@ -1133,18 +1147,13 @@ function inner_question(correct_type,question_index){
     str1 = "<span class='span_tk' id='inner_span_tk_"+init_problem+"_"+question_index+"' onmouseover='javascript:show_hedui("+init_problem+","+question_index+");' onmouseout='javascript:hide_hedui("+init_problem+","+question_index+");'>";
     switch(correct_type){
         case "0":{
-            str1 += "<select class='select_tk inner_borde_blue_"+init_problem+"_"+question_index+"' style='display:none;' id='input_inner_answer_"+init_problem+"_"+question_index+"' onchange='javascript:do_inner_question(0,"+init_problem+","+question_index+");'><option value=''></option>";
-            question_attrs = store3[question_index].questionattrs.split(";-;");
-            for(j=0;j<question_attrs.length;j++){
-                str1 += "<option value=\""+question_attrs[j]+"\">"+question_attrs[j]+"</option>";
-            }
-            str1 += "</select>";
             str1 += "<span class='select_span inner_borde_blue_"+init_problem+"_"+question_index+"' id='input_inner_answer_"+init_problem+"_"+question_index+"' onclick='javascript:toggle_select_ul("+init_problem+","+question_index+");'></span>";
             str1 += "<span class='select_ul' id='select_ul_"+init_problem+"_"+question_index+"' style='display:none;'>";
+            //  onmouseout=\"javascript:stop_bunble();close_select_ul("+init_problem+","+question_index+");\"
             question_attrs = store3[question_index].questionattrs.split(";-;");
             for(j=0;j<question_attrs.length;j++){
-                str1 += "<span class='select_li'>"+question_attrs[j]+"</span>";
-            }
+                str1 += "<span class='select_li select_li_"+init_problem+"_"+question_index+"' onclick=\"javascript:do_inner_select('"+question_attrs[j]+"',"+init_problem+","+question_index+");\">"+question_attrs[j]+"</span>";
+            };
             str1 += "</span>";
             break;
         }
