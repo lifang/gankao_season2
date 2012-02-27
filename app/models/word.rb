@@ -70,4 +70,16 @@ class Word < ActiveRecord::Base
     return sentence_hash
   end
 
+  #显示关于小题的所有的单词
+  def self.question_words(words)
+    word_list = Word.find(:all, :conditions => ["name in (?)", words])
+    unless word_list.blank? or word_list.size != words.length
+      already_w = []
+      word_list.each {|w| already_w << w.name}
+      leving_w = words - already_w
+
+    end
+    return word_list
+  end
+
 end
