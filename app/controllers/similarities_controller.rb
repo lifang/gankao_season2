@@ -72,6 +72,4 @@ class SimilaritiesController < ApplicationController
     redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}&type=#{params[:type]}"
   end
 
-
-
 end
