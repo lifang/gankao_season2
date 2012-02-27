@@ -548,18 +548,20 @@ function create_drag_question(problem_id, question_id_input, question, drag_li_a
     + "<input type='hidden' name='question_sure' id='question_sure_"+ question.id + "' value='' />";
     if ((parseFloat(question.correct_type) == 0) || (parseFloat(question.correct_type) == 2)) {
         if (question.questionattrs != undefined && question.questionattrs != null) {
-            question_str += "<select class='select_tk' name='question_attr_"+ question.id +"' id='question_attr_"
-            + question.id +"' onclick='javascript:show_que_save_button(\""+question.id+"\")'><option value='-1'></option>";
+            var user_answer = (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "")
+            ? answer_hash.get(question.id)[0] : "";
+            question_str += "<span class='select_span' name='question_attr_"+ question.id +"' id='question_attr_"
+            + question.id +"' onclick='javascript:select_ul(\""+question.id+"\")'>"+ user_answer +"</span>";
             var que_attrs = question.questionattrs.split(";-;");
+            question_str += "<span class='select_ul' id='select_ul_"+ question.id
+            +"' onmouseover=\"javascript:$('#select_ul_"+ question.id
+            +"').css('display','');\" onmouseout=\"javascript:$('#select_ul_"+ question.id
+            +"').css('display','none');\" style='display:none;'>";
             for (var i=0; i<que_attrs.length; i++) {
-                if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != ""
-                    && $.trim(answer_hash.get(question.id)[0]) == $.trim(que_attrs[i])) {
-                    question_str += "<option selected>"+ que_attrs[i] +"</option>";
-                } else {
-                    question_str += "<option>"+ que_attrs[i] +"</option>";
-                }
+                question_str += "<span class='select_li' onclick='javascript:select_li(this, \""+question.id+"\");'>"
+                    + que_attrs[i] +"</span>";
             }
-            question_str += "</select>";
+            question_str += "</span>";
             $("#que_out_" + question.id).html(question_str);
         } 
     } else if ((parseFloat(question.correct_type) == 3) || (parseFloat(question.correct_type) == 5)) {
@@ -604,7 +606,20 @@ function create_drag_question(problem_id, question_id_input, question, drag_li_a
     buttons_div.appendChild(answer_input);
 }
 
+//显示select ul
+function select_ul(question_id) {
+    $('#select_ul_'+question_id).css("display", "block");
+    show_que_save_button(question_id);
+}
 
+//根据li选择的单词填写答案
+function select_li(li, question_id) {
+    var li_value = $(li).html();
+    if (li_value != null) {
+        $("#question_attr_"+question_id).html(li_value);
+        $("#select_ul_"+question_id).css("display", "none");
+    }
+}
 
 //添加question所需div
 function create_question(problem_id, question_id_input, parent_div, question, innerHTML, drag_li_arr) {
@@ -1045,19 +1060,20 @@ function question_color(question_id, is_nomal) {
         }
     } else {
         if ($("#question_sure_"+question_id).val() == "1") {
+
             if ($("#que_out_" + question_id + " .dragDrop_box").attr("id") != undefined) {
                 $("#que_out_" + question_id + " .dragDrop_box").removeClass("q_no").addClass("q_yes");
-            } else if ($("#que_out_" + question_id + " select").attr("id") != undefined) {
-                $("#que_out_" + question_id + " select").removeClass("q_no").addClass("q_yes");
             } else if ($("#que_out_" + question_id + " textarea").attr("id") != undefined) {
                 $("#que_out_" + question_id + " textarea").removeClass("q_no").addClass("q_yes");
+            } else if ($("#que_out_" + question_id + " .select_span").attr("id") != undefined) {
+                $("#que_out_" + question_id + " .select_span").removeClass("q_no").addClass("q_yes");
             }
             $("#a_que_nav_" + question_id).removeClass("pink").addClass("lvse");
         } else {
             if ($("#que_out_" + question_id + " .dragDrop_box").attr("id") != undefined) {
                 $("#que_out_" + question_id + " .dragDrop_box").removeClass("q_yes").addClass("q_no");
-            } else if ($("#que_out_" + question_id + " select").attr("id") != undefined) {
-                $("#que_out_" + question_id + " select").removeClass("q_yes").addClass("q_no");
+            } else if ($("#que_out_" + question_id + " .select_span").attr("id") != undefined) {
+                $("#que_out_" + question_id + " .select_span").removeClass("q_yes").addClass("q_no");
             } else if ($("#que_out_" + question_id + " textarea").attr("id") != undefined) {
                 $("#que_out_" + question_id + " textarea").removeClass("q_yes").addClass("q_no");
             }
@@ -1099,12 +1115,11 @@ function question_value(question_id, is_nomal) {
         if (attr != null) {
             if (is_nomal == 1) {
                 if (correct_type == "0") {
-                    if (attr[0].value != null && attr[0].value != "-1") {
-                        $("#answer_" + question_id).attr("value", attr[0].value);
+                    if (attr[0].innerHTML != null && attr[0].innerHTML != "-1") {
+                        $("#answer_" + question_id).attr("value", attr[0].innerHTML);
                     }
                 } else if (correct_type == "1") {
                     $("#answer_" + question_id).attr("value", $("#question_answer_" + question_id).html());
-                    
                 }
             }else {
                 for (var i=0; i<attr.length; i++) {
@@ -1509,7 +1524,7 @@ function call_me(max_length, id) {
 function erea_with(str) {
     var width = "";
     if (str.length > 20 && str.length <= 48) {
-        width = (str.length * 10).to_s + "px";
+        width = (str.length * 10) + "px";
     }else if (str.length > 48) {
         width = "610px";
         

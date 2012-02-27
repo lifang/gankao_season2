@@ -99,7 +99,7 @@ div.q_no, span.q_no, select.q_no, textarea.q_no { border: 2px #FF6C00 solid;}
 
 
 /*拖拽题*/
-.span_tk { min-width: 150px; display: inline-block; height: 15px; position: relative;}
+.span_tk { min-width: 150px; display: inline-block; height: 24px; position: relative;}
 .input_tk { min-width: 148px; height: 22px; line-height: 22px; border: 1px #e2e2e2 solid; float: left;}
 .button_tk { margin: 3px 6px 0 6px;}
 .button_span {
@@ -134,6 +134,22 @@ div.q_no, span.q_no, select.q_no, textarea.q_no { border: 2px #FF6C00 solid;}
 	border: 1px #e2e2e2 solid;
 	background: #FFF;
 }
+
+.select_span {
+	display: inline-block;
+	float: left;
+	min-width: 148px;
+	height: 24px;
+	line-height: 20px;
+	text-align: center;
+	border: 1px #E2E2E2 solid;
+}
+
+.select_ul { position: absolute; top: 21px; left: 0; z-index: 200; border: 1px #E2E2E2 solid; border-top: none;}
+.select_li { min-width: 140px; display: inline-block;  padding: 0 5px; height: 24px; line-height: 24px; background: #EFEDE7; cursor: pointer;}
+.select_li:hover { background: #c7c5bf;}
+
+input.borde_blue, textarea.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033ff solid;}
 
 /*审查-----*/
 .review_btn {font-family: "微软雅黑"; text-align: right;}

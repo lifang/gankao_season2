@@ -324,8 +324,33 @@ function next_task(word_id, category_id, current_index, current_step, flag, type
     if (flag == 1) {
         is_right(word_id, rem_word, current_index, current_step);
     }
+    if (next_index != -1) {
+       var no_sen_index = no_sentence_words(word_id, current_step, rem_word, next_index);
+       if (no_sen_index != -2) {
+           next_index = no_sen_index;
+       }
+    }
     show_re_word(current_step, current_index, next_index);
     is_recollection_pass(word_id, rem_word, next_index, category_id, current_step, type);
+}
+
+//如果没有例句则直接跳过当前词并将对于的词设置对于的基本
+function no_sentence_words(word_id, current_step, rem_word, current_index) {
+    var return_index = -2;
+    if ($("#word_info_" + current_index).length == 0) {
+        //直接置当前的单词正确
+        var next_word_id = $("#no_s_"+current_index).val();
+        is_right(next_word_id, rem_word, current_index, current_step);
+        var next_index = -1;
+        for (var m=new Number(current_index)+1; m<rem_word.length; m++) {
+            if (new Number(rem_word[m]) < current_step) {
+                next_index = m;
+                break;
+            }
+        }
+        return_index = next_index;
+    }
+    return return_index;
 }
 
 //回归释义是否全部通过
