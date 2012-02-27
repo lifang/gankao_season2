@@ -204,11 +204,11 @@ function load_problem_collection(problem_index,tag){
     }else{
         $("#drag_tk_box").css("display","none");
     }
+    $("#global_problem_title").html(title);
     $("#draggable_list").css("width",$(".m_side").first().width()-20);
-    $(".drag_tk").css("height",$("#draggable_list").height());
     $(".drag_tk").css("width",$(".m_side").first().width()-40);
     $("#pro_title").css("height",$(".m_side").first().height()-$("#draggable_list").height()-40);
-    $("#global_problem_title").html(title);
+    $(".drag_tk").css("height",$("#draggable_list").height()); 
     $("#jplayer_play").trigger("onclick");
     if(word_list.length!=0){
         //准备数据，为problems加载词汇
