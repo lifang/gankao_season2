@@ -86,6 +86,8 @@ class UsersController < ApplicationController
             :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",
             :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,
             :end_time=>Time.now+Constant::DATE_LONG[:vip].days)
+          cookies.delete(:user_role)
+          user_role?(cookies[:user_id])
           order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
         else
           data="您已是vip用户，截止日期是#{order.end_time.strftime("%Y-%m-%d")}"

@@ -73,7 +73,7 @@ class Word < ActiveRecord::Base
   #显示关于小题的所有的单词
   def self.question_words(words)
     word_list = Word.find(:all, :conditions => ["name in (?)", words])
-    unless word_list.blank? or word_list.size != words.length
+    if word_list.blank? or word_list.size != words.length
       already_w = []
       word_list.each {|w| already_w << w.name}
       leving_w = words - already_w
@@ -81,7 +81,7 @@ class Word < ActiveRecord::Base
       leving_w.each {|l_w| new_words << l_w.chop }
       word_list1 = Word.find(:all, :conditions => ["name in (?)", new_words])
       word_list=word_list|word_list1
-      unless word_list1.blank? or word_list1.size != new_words.length
+      if word_list1.blank? or word_list1.size != new_words.length
         new_w=[]
         word_list1.each {|w| new_w << w.name}
         leving = new_words - new_w
@@ -91,7 +91,12 @@ class Word < ActiveRecord::Base
         word_list=word_list|word_list2
       end
     end
-    return word_list
+    load_words=[]
+    word_list.each do |word|
+      words_sentence=WordSentence.find_by_sql("select w.description from word_sentences w where w.word_id=#{word.id}")
+      load_words << [word,words_sentence]
+    end unless word_list.blank?
+    return load_words
   end
 
 end

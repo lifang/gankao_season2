@@ -70,7 +70,8 @@ class StudyPlansController < ApplicationController
       day_status={}
       end_time=params[:end].to_datetime
       unless day_all["#{end_time.strftime("%Y_%m")}"].blank?
-        which_day=day_index.index(Time.now.strftime("%Y_%m_%d"))+1
+        ind=day_index.index(Time.now.strftime("%Y_%m_%d"))
+        which_day=ind.nil? ? 0 : ind+1
         day_all["#{end_time.strftime("%Y_%m")}"].each do |day_task|
           day_task= day_task<10 ? "0#{day_task}" : "#{day_task}"
           status=false
