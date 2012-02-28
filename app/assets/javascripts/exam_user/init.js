@@ -8,7 +8,8 @@ function transform_array(object){
     if(resource){
         if(resource.length){
             result = resource;
-        }else{
+        }
+        else{
             result.push(resource);
         }
     }
@@ -899,12 +900,19 @@ function afterload(){
     // 拖选框，预留高度
     if($("#drag_tk_"+init_problem).length>0){
         var m_side_width = $("#m_side_"+init_problem).width();
-        $("#draggable_list_"+init_problem).css("width",m_side_width-20-20);
-        var drag_tk_height = $("#drag_tk_"+init_problem+" ul").height();
+        // alert("m_side_width = "+m_side_width);
+        $("#draggable_list_"+init_problem).css("width",m_side_width-20);
+        var drag_ul_height = $("#draggable_list_"+init_problem).height();
+        // alert("drag_ul_height = "+drag_ul_height);
         var m_side_height = $("#m_side_"+init_problem).height();
-        var pbl_height = m_side_height-drag_tk_height-40;//padding的高度
+        // alert("m_side_height = "+m_side_height);
+        var pbl_height = m_side_height-drag_ul_height-40;//padding的高度
         $("#problem_box_"+init_problem).css("height",pbl_height);
-        $("#drag_tk_"+init_problem).css("height",drag_tk_height);
+        $("#drag_tk_"+init_problem).css("height",drag_ul_height);
+        $("#drag_tk_"+init_problem).css("visibility","visible"); //显示div
+    }
+    if(problems[init_problem].question_type!="1"){
+        $("#pro_qu_t_"+init_problem+"_0").trigger("click");
     }
 }
 
@@ -950,6 +958,7 @@ function left_side(){
     if(has_drag){
         $(element2).addClass("tuozhuai_box");
         element1 = create_element("div",null,"drag_tk_"+init_problem,"drag_tk border_radius",null,"innerHTML");
+        $(element1).css("visibility","hidden");
         $("#m_side_"+init_problem).append(element1);
         element3 = create_element("ul",null,"draggable_list_"+init_problem,null,null,"innerHTML");
         $(element1).append(element3);
@@ -1243,7 +1252,7 @@ function main_height(){
     var foot_height = $(".foot").height();
     var main_height = win_height-(head_height+mainTop_height+foot_height);
     $(".m_side").css('height',main_height-12);//12为head的padding的12px
-    $(".main").css('height',main_height-12+30);//34是m_top的高度，
+    $(".main").css('height',main_height-12+34);//34是m_top的高度，
 }
 
 //generate.js  end
