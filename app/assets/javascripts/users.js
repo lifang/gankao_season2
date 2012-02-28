@@ -215,15 +215,17 @@ function accredit(){
         async:true,
         dataType:'json',
         data:{
-            info:$("#invit_code").val()
+            info:$("#invit_code").val(),
+            category:$("#category").val()
         },
         url:"/users/accredit_check",
         type:'post',
         success : function(data) {
-            $("#invit_code").val("");
-            tishi_alert(data.message);
+            $("#invit_code").val("");            
             if (data.message=="升级成功"){
-                setTimeout(window.location.reload(),10000);
+                window.location.reload();
+            } else {
+                tishi_alert(data.message);
             }
         }
     });
@@ -249,7 +251,8 @@ function check_vip(){
                 vip_tishi();
                 window.open("/users/alipay_exercise?category="+data.category,'_blank','height=750,width=1000,left=200,top=50');
             }else{
-                tishi_alert("您已是vip用户，截止日期是"+data.time);
+                var str = (data.time == null || data.time == "") ? "" : "，截止日期是"+data.time;
+                tishi_alert("您已是vip用户"+str);
             }
         }
     });
@@ -258,7 +261,6 @@ function check_vip(){
 //充值弹出遮罩层及提示框
 function vip_tishi(){
     var doc_height = jQuery(document).height();
-    //var doc_width = $(document).width();
     var win_height = jQuery(window).height();
     var win_width = jQuery(window).width();
     var s_layer_height = jQuery('.cz_tishi').height();
