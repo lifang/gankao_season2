@@ -128,19 +128,8 @@ function flowplayer_mp3(audio_src){
 function load_problem_collection(problem_index,tag){
     var total_problem=get_array(collections.problems.problem);
     var problems_tags=tag_problems[tag];
-    var word_list=[];
     var question_type=total_problem[problems_tags[problem_index]].question_type;
     var questions=total_problem[problems_tags[problem_index]].questions.question;
-    for(var n=0;n<questions.length;n++){
-        if(questions[n].words!=null){
-            var words= questions[n].words.split(";");
-            for(var m=0;m<words.length;m++){
-                if(word_list.indexOf(words[m])==-1){
-                    word_list.push(""+words[m]);
-                }
-            }
-        }
-    }
     $("#global_problem_sum").html(problems_tags.length);
     $("#global_problem_index").html(problem_index+1);
     var audio_title = total_problem[problems_tags[problem_index]].title==null ? [] : total_problem[problems_tags[problem_index]].title.split("((mp3))");
@@ -217,24 +206,7 @@ function load_problem_collection(problem_index,tag){
     }
     $("#global_problem_title").html(title);
     $("#jplayer_play").trigger("onclick");
-    if(word_list.length!=0){
-        //准备数据，为problems加载词汇
-        $.ajax({
-            async:true,
-            type: "POST",
-            url: "/collections/load_words.json",
-            dataType: "json",
-            data : {
-                words :word_list
-            },
-            success : function(data) {
-                word_in_problem=data.words;
-                load_questions_collection(questions,problem_index,tag,question_type);
-            }
-        });
-    }else{
-        load_questions_collection(questions,problem_index,tag,question_type);
-    }
+    load_questions_collection(questions,problem_index,tag,question_type);
 }
 
 
@@ -295,52 +267,23 @@ function load_questions_collection(questions,problem_index,tag,question_type){
             collection_correct_type(q_correct_type,pro_qu_ul,problem_index,q_index,question_type,questions[q_index]);
             var pro_btn = pro_qu_div.appendChild(create_element("div", null, "pro_btn_"+q_index, "pro_btn", null, "innerHTML"));
             pro_btn.innerHTML +="<button class='t_btn hedui_t_btn' style='display:none'id='check' onclick=\"javascript:check_question("+q_index+",'"+problem_index+"_"+q_index+"','"+escape(q_answer) +"',"+problem_index+",'','"+question_type +"')\">核对</button>"
-            pro_btn.innerHTML += "<button class='t_btn'  onclick=javascript:$('.word_"+problem_index+"_"+q_index+"').css('display','');>相关词汇</button>";
-            pro_btn.innerHTML += "<a href='#' class='upErrorTo_btn' onclick=javascript:$('#question_id').val("+questions[q_index].id +");show_div('.upErrorTo_tab');>报告错误</a>";
             var jiexi = pro_qu_div.appendChild(create_element("div", null, "display_jiexi_"+problem_index+"_"+q_index, "jiexi", null, "innerHTML"));
             jiexi.innerHTML +="<div>正确答案：<span id='display_answer_"+problem_index+"_"+q_index+"' class='red'>"+ show_answer(q_correct_type,q_answer)+"</span></div>";
             jiexi.innerHTML +="<div id='display_analysis_"+problem_index+"_"+q_index+"'><em>"+q_analysis  +"</em></div>";
-            var jiexi_word = pro_qu_div.appendChild(create_element("div", null, null, "jiexi word_"+problem_index+"_"+q_index, null, "innerHTML"));
+            var jiexi_word = pro_qu_div.appendChild(create_element("div", null,"jiexi_word_"+q_index, "jiexi", null, "innerHTML"));
             jiexi_word.style.display="none";
             var xx_word = jiexi_word.appendChild(create_element("div", null, null, "xx_x", null, "innerHTML"));
-            xx_word.innerHTML="<img onclick=javascript:$('.word_"+problem_index+"_"+q_index+"').css('display','none'); src='/assets/x.gif' />";
-            var xg_word=jiexi_word.appendChild(create_element("div", null, null, "xg_words", null, "innerHTML"));
-            var words= questions[q_index].words==null ?[]:questions[q_index].words.split(";");
-            var word_ul=xg_word.appendChild(create_element("ul", null, null, null, null, "innerHTML"));
-            var valid_words=[];
-            for(var k=0;k<words.length;k++){
-                jiexi_word.appendChild(create_element("input", null, "li_value_"+ q_index+"_"+k, "", "hidden",words[k]))
-                if(word_in_problem[words[k]]!=null){
-                    valid_words.push(words[k]);
-                    var word_li=create_element("li", null, null, null, null, "innerHTML");
-                    var li_a="<a href='#' onclick=javascript:show_words("+q_index+","+k+")>"+words[k] +"</a>";
-                    word_li.innerHTML=li_a;
-                    word_ul.appendChild(word_li);
-                }
-            }
-            if(valid_words[0]!=null){
-                var single_word=word_in_problem[valid_words[0]];
-                jiexi_word.appendChild(create_element("input", null, "enunciate_url_"+q_index, "", "hidden",single_word[0].enunciate_url ))
-                jiexi_word.appendChild(create_element("input", null, "word_id_"+q_index, "", "hidden",single_word[0].id ))
-                var xg_word_ny=jiexi_word.appendChild(create_element("div", null, null, "xg_words_ny", null, "innerHTML"));
-                var ch_text=xg_word_ny.appendChild(create_element("div", null, null, "ch_text", null, "innerHTML"));
-                var ch_words_line_1=ch_text.appendChild(create_element("div", null, "ch_words_line", "ch_words_line", null, "innerHTML"));
-                var ch_words_line_2=ch_text.appendChild(create_element("div", null, "ch_words_line", "ch_words_line", null, "innerHTML"));
-                var ch_words_line_3=ch_text.appendChild(create_element("div", null, "ch_words_line_"+q_index, "ch_words_line", null, "innerHTML"));
-                ch_words_line_1.innerHTML="<span class='font_size_24' id='name_"+q_index +"'>"+single_word[0].name +"</span><span id='types_"+q_index +"'>"+
-                types[single_word[0].types] +"</span><span id='phonetic_"+q_index +"'>"+single_word[0].phonetic +"</span>\n\
-                <a href='#'onclick=javascript:jplayer_play("+q_index +");><img src='/assets/icon_fy.png' /></a> <a href='javascript:void(0);' title='加入背诵单词' onclick=\"javascript:ajax_add_word('"+ q_index+"');\"><img src='/assets/join_bs.png' /></a>"
-                ch_words_line_2.innerHTML="<p class='font_size_16' id='en_mean_"+ q_index+"'>"+single_word[0].en_mean +"</p><p id='ch_mean_"+q_index +"'>"+single_word[0].ch_mean +"</p>";
-                var sentence=single_word[1];
-                if(sentence.length!=0){
-                    for(var s=0;s<sentence.length;s++){
-                        var li=ch_words_line_3.appendChild(create_element("li", null, null, null, null, "innerHTML"));
-                        li.innerHTML=""+sentence[s].description;
-                    }
-                }
+            xx_word.innerHTML="<img onclick=javascript:$('#jiexi_word_"+q_index+"').css('display','none'); src='/assets/x.gif' />";
+            var xg_word=jiexi_word.appendChild(create_element("div", null,"xg_words_"+q_index, "xg_words", null, "innerHTML"));
+            xg_word.innerHTML="<center>没有相关词汇</center>";
+            var word_list= questions[q_index].words;
+            if(word_list!=""&&word_list!=null){
+                pro_btn.innerHTML += "<button class='t_btn' id='word_button_"+q_index +"' onclick=\"javascript:ajax_show_words('"+ word_list+"',"+q_index+")\">相关词汇</button>";
             }else{
-                xg_word.innerHTML="<center>没有相关词汇</center>"
+                pro_btn.innerHTML += "<button class='t_btn' id='word_button_"+q_index +"' onclick=\"javascript:$('#jiexi_word_"+q_index +"').css('display','')\">相关词汇</button>";
             }
+            pro_btn.innerHTML += "<a href='#' class='upErrorTo_btn' onclick=javascript:$('#question_id').val("+questions[q_index].id +");show_div('.upErrorTo_tab');>报告错误</a>";
+
             //绑定显示，隐藏事件
             $(pro_qu_t).bind("click",function(){
                 var pro_qu_div = $(this).parent().find(".pro_qu_div");
@@ -392,6 +335,67 @@ function load_questions_collection(questions,problem_index,tag,question_type){
     }
 }
 
+function ajax_show_words(word_list,q_index){
+    if($("#xg_words_"+q_index).html()!="<center>没有相关词汇</center>"){
+        $('#jiexi_word_'+q_index).css('display','');
+        $('#jiexi_word_'+q_index+" .xg_words_ny").css('display','none');
+        $('#jiexi_word_'+q_index+" .xg_words_ny").first().css('display','');
+        return false;
+    }
+    $.ajax({
+        async:true,
+        type: "POST",
+        url: "/collections/load_words.json",
+        dataType: "json",
+        data : {
+            words :word_list,
+            question_index:q_index
+        },
+        success : function(data) {
+            add_words(data.words,data.q_index)
+        }
+    });
+}
+
+
+function add_words(words_sentences,q_index){
+    if(words_sentences==[]||words_sentences.length==0){
+        return false;
+    }
+    var jiexi_word=$("#jiexi_word_"+q_index)[0];
+    var xg_word=$("#xg_words_"+q_index)[0];
+    xg_word.innerHTML=null;
+    for(var i=0;i<words_sentences.length;i++){
+        var single_word=words_sentences[i];
+        var word_ul=xg_word.appendChild(create_element("ul", null, null, null, null, "innerHTML"));
+        var word_li=create_element("li", null, null, null, null, "innerHTML");
+        word_li.innerHTML="<a href='#' onclick=javascript:show_words('"+q_index+"_"+i+"') >"+single_word[0].name +"</a>";
+        word_ul.appendChild(word_li);
+        jiexi_word.appendChild(create_element("input", null, "enunciate_url_"+q_index, "", "hidden",single_word[0].enunciate_url ))
+        jiexi_word.appendChild(create_element("input", null, "word_id_"+q_index+"_"+i, "", "hidden",single_word[0].id ))
+        var xg_word_ny=jiexi_word.appendChild(create_element("div", null, "xg_words_ny_"+q_index+"_"+i, "xg_words_ny", null, "innerHTML"));
+        xg_word_ny.style.display="none";
+        var ch_text=xg_word_ny.appendChild(create_element("div", null, null, "ch_text", null, "innerHTML"));
+        var ch_words_line_1=ch_text.appendChild(create_element("div", null, "ch_words_line", "ch_words_line", null, "innerHTML"));
+        var ch_words_line_2=ch_text.appendChild(create_element("div", null, "ch_words_line", "ch_words_line", null, "innerHTML"));
+        var ch_words_line_3=ch_text.appendChild(create_element("div", null, "ch_words_line_"+q_index, "ch_words_line", null, "innerHTML"));
+        ch_words_line_1.innerHTML="<span class='font_size_24' id='name_"+q_index +"'>"+single_word[0].name +"</span><span id='types_"+q_index +"'>"+
+        types[single_word[0].types] +"</span><span id='phonetic_"+q_index +"'>"+single_word[0].phonetic +"</span>\n\
+                <a href='#'onclick=javascript:jplayer_play("+q_index +");><img src='/assets/icon_fy.png' /></a> <a href='javascript:void(0);' title='加入背诵单词' onclick=\"javascript:ajax_add_word('"+ q_index+"_"+i+"');\"><img src='/assets/join_bs.png' /></a>"
+        ch_words_line_2.innerHTML="<p class='font_size_16' id='en_mean_"+ q_index+"'>"+single_word[0].en_mean +"</p><p id='ch_mean_"+q_index +"'>"+single_word[0].ch_mean +"</p>";
+        var sentence=single_word[1];
+        if(sentence.length!=0){
+            for(var s=0;s<sentence.length;s++){
+                var li=ch_words_line_3.appendChild(create_element("li", null, null, null, null, "innerHTML"));
+                li.innerHTML=""+sentence[s].description;
+            }
+        }
+    }
+    $('#jiexi_word_'+q_index).css('display','');
+    $('#jiexi_word_'+q_index+" .xg_words_ny").first().css('display','');
+
+}
+
 //添加背诵单词
 function ajax_add_word(word_index){
     var word_id=$("#word_id_"+word_index).val();
@@ -408,26 +412,9 @@ function ajax_add_word(word_index){
     });
 }
 
-function show_words(index,li_index){
-    var name=$("#li_value_"+ index+"_"+li_index).val();
-    $("#enunciate_url_"+index).val(word_in_problem[name][0].enunciate_url);
-    $("#word_id_"+index).val(word_in_problem[name][0].id);
-    $("#name_"+index).html(word_in_problem[name][0].name);
-    $("#types_"+index).html(types[word_in_problem[name][0].types]);
-    $("#phonetic_"+index).html(word_in_problem[name][0].phonetic);
-    $("#en_mean_"+index).html(word_in_problem[name][0].en_mean);
-    $("#ch_mean_"+index).html(word_in_problem[name][0].ch_mean);
-    var sentences=word_in_problem[name][1];
-    var  words_line=$("#ch_words_line_"+index);
-    words_line.html(null);
-    var frag = document.createDocumentFragment();
-    if(sentences.length!=0){
-        for(var s=0;s<sentences.length;s++){
-            var li=frag.appendChild(create_element("li", null, null, null, null, "innerHTML"));
-            li.innerHTML=""+sentences[s].description;
-        }
-        words_line.html(frag);
-    }
+function show_words(index){
+    $(".xg_words_ny").css("display","none");
+    $("#xg_words_ny_"+index).css("display","");
 }
 function jplayer_play(index){
     var src=$('#enunciate_url_'+index).val();

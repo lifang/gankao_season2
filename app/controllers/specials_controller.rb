@@ -1,6 +1,7 @@
 # encoding: utf-8
 class SpecialsController < ApplicationController
   before_filter :sign?, :except => "index"
+  before_filter :get_role, :only => ["index", "join"]
   
   def index
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
@@ -44,7 +45,7 @@ class SpecialsController < ApplicationController
         redirect_to "/specials?category=#{category_id}"
       end
     else
-      flash[:notice]="本试卷仅供正式用户使用。[<a class='link_c' href='/users/#{cookies[:user_id]}/record?vip=1'>升级为正式用户</a>]"
+      flash[:notice]="本试卷仅供正式用户使用。[<a class='link_c' href='/users/charge_vip?category=#{params[:category]}'>升级为正式用户</a>]"
       redirect_to "/specials?category=#{category_id}"
     end
   end

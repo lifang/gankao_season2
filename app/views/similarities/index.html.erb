@@ -24,7 +24,7 @@
               </a>
             <% elsif is_nomal?(params[:category]) %>
               <a href="javascript:void(0);"
-                 onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>
+                 onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>
                 <% unless similarity.is_free %><span><img title="仅供正式用户使用" src="/assets/icon_tx.png" /></span><% end %>
                 <h2><%= similarity.title %></h2>
               </a>
@@ -37,7 +37,7 @@
                 </a>
               <% else %>
                 <a href="javascript:void(0);"
-                   onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>
+                   onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>
                   <span><img title="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
                   <h2><%= similarity.title %></h2>
                 </a>

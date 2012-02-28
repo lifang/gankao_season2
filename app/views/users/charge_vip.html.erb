@@ -23,41 +23,38 @@
       <div class="head">
         <% category_id = params[:category].nil? ? 2 : params[:category] %>
         <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}") %>
-        <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>?category=<%=category_id  %>'" class="red"><%= cookies[:user_name] %></a>
+        <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>?category=<%=category_id  %>'" class="red"><%= cookies[:user_name] %>
           <% if is_trial?(category_id)%>
-            <%= unless order.nil?
-              day_end=((order.end_time - Time.now.to_datetime)/1.day).to_i
-              if day_end!=0
-                "试用剩#{day_end}天"
-              else
-                "试用即将到期"
-              end
-            end
-          %>
+            <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
+            day_end=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
+            <% if day_end>=1%>
+              <%="(试用剩#{day_end}天)"%>
+            <%  elsif day_end==0 %>
+              <%= "(试用即将到期)" %>
+            <% end %>
           <%  elsif is_nomal?(category_id) %>
-            试用结束
-          <% end %>|<a href="/">首页</a>|<a href="/users/delete_user">退出</a></div>
+            <%= "(试用结束)" %>
+          <% end %></a>|<a href="/">首页</a>|<a href="/users/delete_user">退出</a></div>
         <div class="logo"><a href="/"><img src="/assets/logo_user.png" /></a></div>
       </div>
       <div class="main">
         <div class="vip_main border_radius">
           <div class="message_vip_box">
-            <% category_id = params[:category].nil? ? 2 : params[:category]
-            order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]} and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
-            <div class="tishi_vip">
-              <% unless order.nil? %>
-                <% if order.types==Order::TYPES[:TRIAL_SEVEN]||order.types==Order::TYPES[:COMPETE] %>
+            <%  order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
+            <% if order.nil? or order.types==Order::TYPES[:TRIAL_SEVEN] or order.types==Order::TYPES[:COMPETE] %>
+              <div class="tishi_vip">
+                <% unless order.nil? or ((order.end_time-Time.now.to_datetime)/1.day).to_i>0%>
                   <%day=((order.end_time-Time.now.to_datetime)/1.day).to_i%>
                   <% if day>=1%>
                     您还有 <span class="red"><%= day %></span> 天试用的时间
                   <% else %>
                     您的试用即将到期
                   <% end %>
+                <%else%>
+                  您的试用期限已到期
                 <% end %>
-              <%else%>
-                您的试用期限已到期
-              <% end %>
-            </div>
+              </div>
+            <% end %>
             <% category_id = params[:category].nil? ? 2 : params[:category].to_i %>
             <h1 class="vip_h1">升级为正式用户</h1>
             <h2 class="vip_h2"><%= Category.find(category_id).name %></h2>
