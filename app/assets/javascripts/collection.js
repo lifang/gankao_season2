@@ -148,20 +148,16 @@ function load_problem_collection(problem_index,tag){
                 var correct_type=questions[sign_index].correct_type;
                 var element_str="<span class='span_tk'>";
                 if (correct_type=="0"){
-                    element_str += "<select class='select_tk' id='"+sign_index+"'";
+                    element_str += "<span class='select_span' id='"+sign_index+"' onclick=\"$('#select_"+ sign_index+"').css('display','');"
                     if(question_type=='1'&&flag!=null&&parseInt(flag)==1){
-                        element_str += "onclick=\"javascript:show_question('"+sign_index +"', this)\";"
+                        element_str += "show_question('"+sign_index +"', this)\";"
                     }
-                    element_str += "><option></option>"
+                    element_str += "\">"+u_answer+"</span><span class='select_ul' style='display:none' id='select_"+sign_index +"' onmouseout=\"javacript:$(this).css('display','none')\" onmouseover=\"javacript:$(this).css('display','')\">" ;
                     var question_attrs=questions[sign_index].questionattrs.split(";-;");
                     for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
-                        element_str += "<option ";
-                        if(u_answer!=null&&question_attrs[attr_index]==u_answer){
-                            element_str += "selected";
-                        }
-                        element_str += ">"+question_attrs[attr_index]+"</option>";
+                        element_str += "<span class='select_li' onclick=\"$('#"+ sign_index+"').html('"+question_attrs[attr_index] +"');$('#select_"+ sign_index+"').css('display','none')\" >"+question_attrs[attr_index]+"</span>";
                     }
-                    element_str +="</select>"
+                    element_str +="</span>"
                 } else if(correct_type=="1"){
                     var answer=u_answer==null?[]:u_answer;
                     element_str += "<span class='dragDrop_box'"
@@ -371,7 +367,7 @@ function add_words(words_sentences,q_index){
         var word_li=create_element("li", null, null, null, null, "innerHTML");
         word_li.innerHTML="<a href='#' onclick=javascript:show_words('"+q_index+"_"+i+"') >"+single_word[0].name +"</a>";
         word_ul.appendChild(word_li);
-        jiexi_word.appendChild(create_element("input", null, "enunciate_url_"+q_index, "", "hidden",single_word[0].enunciate_url ))
+        jiexi_word.appendChild(create_element("input", null, "enunciate_url_"+q_index+"_"+i, "", "hidden",single_word[0].enunciate_url ))
         jiexi_word.appendChild(create_element("input", null, "word_id_"+q_index+"_"+i, "", "hidden",single_word[0].id ))
         var xg_word_ny=jiexi_word.appendChild(create_element("div", null, "xg_words_ny_"+q_index+"_"+i, "xg_words_ny", null, "innerHTML"));
         xg_word_ny.style.display="none";
@@ -381,7 +377,7 @@ function add_words(words_sentences,q_index){
         var ch_words_line_3=ch_text.appendChild(create_element("div", null, "ch_words_line_"+q_index, "ch_words_line", null, "innerHTML"));
         ch_words_line_1.innerHTML="<span class='font_size_24' id='name_"+q_index +"'>"+single_word[0].name +"</span><span id='types_"+q_index +"'>"+
         types[single_word[0].types] +"</span><span id='phonetic_"+q_index +"'>"+single_word[0].phonetic +"</span>\n\
-                <a href='#'onclick=javascript:jplayer_play("+q_index +");><img src='/assets/icon_fy.png' /></a> <a href='javascript:void(0);' title='加入背诵单词' onclick=\"javascript:ajax_add_word('"+ q_index+"_"+i+"');\"><img src='/assets/join_bs.png' /></a>"
+                <a href='#'onclick=javascript:jplayer_play('"+ q_index+"_"+i+"');><img src='/assets/icon_fy.png' /></a> <a href='javascript:void(0);' title='加入背诵单词' onclick=\"javascript:ajax_add_word('"+ q_index+"_"+i+"');\"><img src='/assets/join_bs.png' /></a>"
         ch_words_line_2.innerHTML="<p class='font_size_16' id='en_mean_"+ q_index+"'>"+single_word[0].en_mean +"</p><p id='ch_mean_"+q_index +"'>"+single_word[0].ch_mean +"</p>";
         var sentence=single_word[1];
         if(sentence.length!=0){
@@ -634,11 +630,14 @@ function check_question(question_index,problem_question_index,answer,problem_ind
             last_open_question.find(".pro_answer").css("display","");
             last_open_question.trigger("click");
         }
-        $("#"+question_index).attr("onclick","javascript:show_question('"+question_index +"', this);")
+        var onclick=$("#"+question_index).attr("onclick")==undefined ? "" : $("#"+question_index).attr("onclick")
+        $("#"+question_index).attr("onclick",onclick+"show_question('"+question_index +"', this);")
         $("#"+question_index).addClass("borde_blue");
         $("#"+question_index).parent().attr("onmouseover","");
         $("#"+question_index).parent().attr("onmouseout","");
         $("#pro_question_list_"+problem_question_index).css("display","");
+        $("#"+question_index).attr("keydown","")
+        $("#"+question_index).attr("readonly","readonly")
         $("#pro_question_list_"+problem_question_index).removeClass("p_q_line");
         //        $("#pro_question_list_"+problem_question_index+" .pql_right").removeClass("p_q_line");
         $("#pro_question_list_"+problem_question_index).removeClass("pro_qu_h");
@@ -723,7 +722,6 @@ function test_again(){
                 $("#green_dui_"+problem_init+"_"+q_index).hide();
                 $("#red_cuo_"+problem_init+"_"+q_index).hide();
                 $(".pro_btn a").css("display","none");
-                //                $(".pro_btn button").css("display","");
                 $(".jiexi").css("display","none");
                 var ele=$("#pro_qu_ul_"+q_index);
                 ele.html("");
@@ -751,13 +749,16 @@ function test_again(){
                 var element_str="<span class='span_tk' onmouseover=\"javascript:$('#check_"+sign_index +"').css('display','');\" onmouseout=\"javascript:$('#check_"+sign_index +"').css('display','none');\" >";
                 if (inner_correct_type=="0"){
                     $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                    element_str += "<select class='select_tk' id='"+sign_index +"'  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +");><option></option>";
+                    element_str += "<span class='select_span' id='"+sign_index+"' onclick=\"$('#select_"+ sign_index+"').css('display','');";
+                    element_str += "\"></span><span class='select_ul' style='display:none' id='select_"+sign_index +"' onmouseout=\"javacript:$(this).css('display','none')\" onmouseover=\"javacript:$(this).css('display','')\">" ;
                     var question_attrs=questions[sign_index].questionattrs.split(";-;");
                     for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
-                        element_str += "<option>"+question_attrs[attr_index]+"</option>";
+                        element_str += "<span class='select_li' onclick=\"$('#"+ sign_index+"').html('"+question_attrs[attr_index] +"');"
+                        element_str += "inner_value("+inner_correct_type+","+sign_index +");$('#select_"+ sign_index+"').css('display','none')\" >"+question_attrs[attr_index]+"</span>";
                     }
-                    element_str +="</select>"
-                    element_str += " <span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+problem_init +"_"+sign_index +"','"+ escape(answer)+"',"+problem_init +",'',"+question_type +") >核对</button></span></span>";
+                    element_str +="</span><span class='button_span' id='check_"+sign_index +"' style='display:none'>"
+                    element_str += "<button class='button_tk' id='check_button_"+sign_index +"'"
+                    element_str += "onclick=check_question("+sign_index +",'"+problem_init +"_"+sign_index +"','"+ escape(answer)+"',"+problem_init +",'',"+question_type +") >核对</button></span></span>";
                 }
                 if(inner_correct_type=="1"){
                     drag_index++;
@@ -771,10 +772,9 @@ function test_again(){
                 }
                 if(inner_correct_type=="3"){
                     $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                    element_str += "<input class='input_tk' id='"+ sign_index+"'  onchange=javascript:inner_value("+inner_correct_type+","+sign_index +"); />";
+                    element_str += "<input class='input_tk' id='"+ sign_index+"'  onchange=\"javascript:inner_value("+inner_correct_type+","+sign_index +");\" onkeydown=\"javascript:start_change_length("+sign_index +");\" />";
                     element_str += "<span class='button_span' id='check_"+sign_index +"' style='display:none'><button class='button_tk' id='check_button_"+sign_index +"' onclick=check_question("+sign_index +",'"+problem_init +"_"+sign_index +"','"+ escape(answer)+"',"+problem_init +",'') >核对</button></span></span>";
                 }
-           
                 result_title.push(element_str);
             }
         }
@@ -800,7 +800,7 @@ function test_again(){
 
 function inner_value(correct_type,question_index){
     if(correct_type=="0"){
-        $("#user_answer_"+question_index).val($("#"+question_index +" option:selected").html());
+        $("#user_answer_"+question_index).val($("#"+question_index).html());
     }
     if(correct_type=="3"){
         $("#user_answer_"+question_index).val($("#"+question_index).val());
@@ -927,29 +927,18 @@ function for_error(){
 
 //更改文本域的长度
 function start_change_length(id) {
-    show_que_save_button(id);
-    change_length = window.setInterval("call_me(48, " + id + ")", 1);
+    window.setInterval("call_me(48, " + id + ")", 1);
 }
 
 //根据字符长度改变文本域的长和宽
 function call_me(max_length, id) {
-    if(($("#question_answer_" + id).val() != null ) || ($("#question_answer_" + id).val() != "" )) {
-        if(($("#question_answer_" + id).val().length >= 20) && ($("#question_answer_" + id).val().length < max_length)) {
-            $("#question_answer_" + id).css("width", $("#question_answer_" + id).val().length*10 + "px");
-        } else if ($("#question_answer_" + id).val().length == max_length) {
-            $("#question_answer_" + id).css("width", max_length*10 + "px");
-        } else if ($("#question_answer_" + id).val().length > max_length) {
-            $("#question_answer_" + id).css("width", max_length*10 + 130 + "px");
-            if ($("#question_answer_" + id).css("height") == "120px") {
-                $("question_answer_" + id).css("height", "120px");
-            } else if ($("#question_answer_" + id).val().length > 80 && $("#question_answer_" + id).val().length < 160
-                && $("#question_answer_" + id).css("height") == "20px") {
-                $("#question_answer_" + id).css("height", 48 + "px");
-            } else if ($("#question_answer_" + id).val().length >= 160 && $("#question_answer_" + id).val().length%80 == 0
-                && $("#question_answer_" + id).css("height") != "22px") {
-                $("#question_answer_" + id).css("height", 24*($("#question_answer_" + id).val().length/70 + 1) + "px");
-
-            }
+    if(($("#" + id).val() != null ) || ($("#" + id).val() != "" )) {
+        if(($("#" + id).val().length >= 20) && ($("#" + id).val().length < max_length)) {
+            $("#" + id).css("width", $("#" + id).val().length*10 + "px");
+        } else if ($("#" + id).val().length == max_length) {
+            $("#" + id).css("width", max_length*10 + "px");
+        } else if ($("#" + id).val().length > max_length) {
+            $("#" + id).css("width", max_length*10 + 130 + "px");
         }
     }
 }
