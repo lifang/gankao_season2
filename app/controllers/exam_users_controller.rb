@@ -1,30 +1,21 @@
 # encoding: utf-8
 class ExamUsersController < ApplicationController
   layout "exam_user"
-  before_filter :sign? ,:except=>["preview","ajax_load_about_words"]
+  before_filter :sign? ,:except=>["preview","ajax_load_about_words","ajax_load_sheets"]
   def show
     #读取试题
     begin
-      if params[:preview]
-        @paper_id = params[:paper]
-        @paper = Paper.find(@paper_id)
-        @paper_js_url = "#{Constant::BACK_SERVER_PATH}/preview/paperjs/#{params[:paper]}.js"
-        @answer_js_url = "#{Constant::BACK_SERVER_PATH}/preview/answerjs/#{params[:paper]}.js"
-        @sheet_url = ""
-        @collection = []
-      else
-        eu = ExamUser.find(params[:id])
-        @paper_id = eu.paper_id
-        @paper = Paper.find(@paper_id)
-        @paper_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}"
-        @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
-        s_url = ExamUser.find(params[:id]).answer_sheet_url
-        sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
-        sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
-        @sheet_url = sheet_url
-        collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
-        @collection = collection.nil? ? [] : collection.question_ids.split(",")
-      end
+      eu = ExamUser.find(params[:id])
+      @paper_id = eu.paper_id
+      @paper = Paper.find(@paper_id)
+      @paper_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}"
+      @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
+      s_url = ExamUser.find(params[:id]).answer_sheet_url
+      sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+      sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
+      @sheet_url = sheet_url
+      collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
+      @collection = collection.nil? ? [] : collection.question_ids.split(",")
     rescue
       flash[:warn] = "试卷加载错误，请您重新尝试。"
       redirect_to request.referer
@@ -142,14 +133,15 @@ class ExamUsersController < ApplicationController
 
   #重做卷子
   def redo_paper
-    url=params[:sheet_url]
+    exam_user = ExamUser.find(params[:id])
+    url="#{Constant::PUBLIC_PATH}#{exam_user.answer_sheet_url}"
     doc = get_doc(url)
     collection = ""
     collection = doc.root.elements["collection"].text if doc.root.elements["collection"]
     f=File.new(url,"w+")
     f.write("#{sheet_outline.force_encoding('UTF-8')}")
     f.close
-    ExamUser.find(params[:id]).update_attribute("is_submited",false)
+    exam_user.update_attribute("is_submited",false)
     redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}&type=#{params[:type]}"
   end
 
@@ -196,10 +188,12 @@ class ExamUsersController < ApplicationController
 
   #预览
   def preview
-    #读取试题
-    cookies[:user_id] = params[:user_id]
-    cookies[:user_name] = User.find(params[:user_id]).email
-    redirect_to "/exam_users/888?paper=#{params[:paper]}&preview=1&type=similarities&category=2"
+    @paper_id = params[:paper]
+    @paper = Paper.find(@paper_id)
+    @paper_js_url = "#{Constant::BACK_SERVER_PATH}/preview/paperjs/#{params[:paper]}.js"
+    @answer_js_url = "#{Constant::BACK_SERVER_PATH}/preview/answerjs/#{params[:paper]}.js"
+    @sheet_url = ""
+    @collection = []
   end
   
   #单词加入背诵列表
@@ -231,7 +225,7 @@ class ExamUsersController < ApplicationController
   #载入用户答案
   def ajax_load_sheets
     if params[:preview] == "1"
-      data = {:message=>"当前为预览模式",:sheet=>{status=>0,:init=>0}}
+      data = {:message=>"当前为预览模式",:sheet=>{:status=>0,:init=>0}}
     else
       doc = get_doc(params[:sheet_url])
       data = Hash.from_xml(doc.to_s).to_json
