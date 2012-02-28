@@ -159,59 +159,6 @@ function pro_qu_t(problem_index){
     })
 }
 
-//json对象转字符串形式
-function json_to_str(o) {
-    var arr = [];
-    var fmt = function(s) {
-        if (typeof s == 'object' && s != null) return json_to_str(s);
-        return /^(string|number)$/.test(typeof s) ? "\"" + s + "\"" : s;
-    }
-    if (!o.sort) {
-        for (var i in o) arr.push("\"" + i + "\":" + fmt(o[i]));
-        return "{" + arr.join(",") + "}";
-    } else {
-        for (var j = 0; j < o.length; j++) arr.push(fmt(o[j]));
-        return "[" + arr.join(",") + "]";
-    }
-}
-
-//在火狐和Ie下取event事件
-function getEvent(){
-    if(window.event)    {
-        return window.event;
-    }
-    func=getEvent.caller;
-    while(func!=null){
-        var arg0=func.arguments[0];
-        if(arg0){
-            if((arg0.constructor==Event || arg0.constructor ==MouseEvent
-                || arg0.constructor==KeyboardEvent)
-            ||(typeof(arg0)=="object" && arg0.preventDefault
-                && arg0.stopPropagation)){
-                return arg0;
-            }
-        }
-        func=func.caller;
-    }
-    return null;
-}
-
-//停止事件冒泡
-function stop_bunble(){
-    $(function() {
-        var e = getEvent();
-        if (window.event) {
-            //e.returnValue=false;
-            e.cancelBubble=true;
-        }else{
-            //e.preventDefault();
-            e.stopPropagation();
-        }
-        alert("function");
-    }
-    );
-}
-
 //题面后小题列表改变颜色
 function change_color(value,problem_index,question_index){
     if(value=="1"){
@@ -528,7 +475,12 @@ function do_inner_question(correct_type,problem_index,question_index){
 
 //题面内单选题选项显示和隐藏
 function toggle_select_ul(problem_index,question_index){
-    $("#select_ul_"+problem_index+"_"+question_index).toggle();
+    if($("#select_ul_"+problem_index+"_"+question_index).is(":visible")){
+        $("#select_ul_"+problem_index+"_"+question_index).hide();
+    }else{
+        $(".select_ul_"+problem_index).hide();
+        $("#select_ul_"+problem_index+"_"+question_index).show();
+    }
 }
 
 function show_hedui(problem_index,question_index){
@@ -691,7 +643,7 @@ function close_select_ul(problem_index,question_index){
 function confirm_redo(type){
     if(confirm("如果您选择重做此卷，所有已保存的答案都将被清空。\n您确认要重做么？")){
         var category_id = (category!=null) ? category : "2" ;
-        window.location.href="/exam_users/"+init_exam_user_id+"/redo_paper?category="+category_id+"&sheet_url="+sheet_url+"&type="+type;
+        window.location.href="/exam_users/"+init_exam_user_id+"/redo_paper?category="+category_id+"&type="+type;
     }
 }
 
@@ -745,7 +697,7 @@ function normal_add_collect(problem_index,question_index){
                 "question_index" : question_index,
                 "problem" : JSON.stringify(problems[problem_index]),
                 "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
-                "addition" : json_to_str(answers[problem_index][question_index]),
+                "addition" : JSON.stringify(answers[problem_index][question_index]),
                 "category_id" :category
             },
             success : function(data){
@@ -824,7 +776,7 @@ function ajax_add_word(word_id){
 //根据字符长度改变文本域的长和宽
 function call_me(problem_index,question_index) {
     var id = ""+problem_index+"_"+question_index;
-    var max_length = 900;
+    var max_length = 48;
     if(($("#input_inner_answer_" + id).length>0) || ($("#input_inner_answer_" + id).val() != "" )) {
         if(($("#input_inner_answer_" + id).val().length >= 11) && ($("#input_inner_answer_" + id).val().length < max_length)) {
             $("#input_inner_answer_" + id).css("width", $("#input_inner_answer_" + id).val().length*10 + "px");
@@ -832,15 +784,6 @@ function call_me(problem_index,question_index) {
             $("#qinput_inner_answer_" + id).css("width", max_length*10 + "px");
         } else if ($("#input_inner_answer_" + id).val().length > max_length) {
             $("#input_inner_answer_" + id).css("width", max_length*10 + 130 + "px");
-            if ($("#input_inner_answer_" + id).css("height") == "120px") {
-                $("input_inner_answer_" + id).css("height", "120px");
-            } else if ($("#input_inner_answer_" + id).val().length > 80 && $("#input_inner_answer_" + id).val().length < 160
-                && $("#input_inner_answer_" + id).css("height") == "20px") {
-                $("#input_inner_answer_" + id).css("height", 48 + "px");
-            } else if ($("#input_inner_answer_" + id).val().length >= 160 && $("#input_inner_answer_" + id).val().length%80 == 0
-                && $("#input_inner_answer_" + id).css("height") != "22px") {
-                $("#input_inner_answer_" + id).css("height", 24*($("#input_inner_answer_" + id).val().length/70 + 1) + "px");
-            }
         }
     }
 }
@@ -907,6 +850,7 @@ $(function(){
 })
 
 function init_paper(){
+    $("#generate").empty();
     if(sheet!=null){
         init_problem = parseInt(sheet["init"]);
     }
@@ -1149,7 +1093,7 @@ function inner_question(correct_type,question_index){
     switch(correct_type){
         case "0":{
             str1 += "<span class='select_span inner_borde_blue_"+init_problem+"_"+question_index+"' id='input_inner_answer_"+init_problem+"_"+question_index+"' onclick='javascript:toggle_select_ul("+init_problem+","+question_index+");'></span>";
-            str1 += "<span class='select_ul' id='select_ul_"+init_problem+"_"+question_index+"' style='display:none;' onmouseover=\"javascript:$(this).css('display', 'block');\" onmouseout=\"javascript:$(this).css('display', 'none');close_select_ul("+init_problem+","+question_index+");\">";
+            str1 += "<span class='select_ul select_ul_"+init_problem+"' id='select_ul_"+init_problem+"_"+question_index+"' style='display:none;' onmouseover=\"javascript:$(this).css('display', 'block');\" onmouseout=\"javascript:$(this).css('display', 'none');close_select_ul("+init_problem+","+question_index+");\">";
             question_attrs = store3[question_index].questionattrs.split(";-;");
             for(j=0;j<question_attrs.length;j++){
                 str1 += "<span class='select_li select_li_"+init_problem+"_"+question_index+"' onclick=\"javascript:do_inner_select('"+question_attrs[j]+"',"+init_problem+","+question_index+");\">"+question_attrs[j]+"</span>";

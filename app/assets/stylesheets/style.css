@@ -75,7 +75,7 @@ button.green { color:#009900;}
 .icon_func span { padding: 0 5px; overflow: hidden; width: 25px; height: 25px; display: block; float: left; }
 .icon_func span a { width: 25px; height: 25px; display: block; text-indent: -999px; overflow: hidden;}
 
-span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inline-block; color: #CCC; text-align: center;}
+span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inline-block; color: #CCC; text-align: center;}
 
 .icon_again {}
 .icon_again a { background: url(/assets/icon_func.png) no-repeat 0 0;}
@@ -110,6 +110,16 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 
 /*题面-------------------*/
 .problem_box { padding: 10px; font-family:Arial;}
+.problem_title {
+    height: 24px;
+    line-height: 24px;
+    font-family: "微软雅黑";
+    display: block;
+    padding: 0 2px;
+    float: left;
+    color: #CCC;
+    text-align: center;
+}
 .problem_text { line-height: 24px; padding: 10px; text-align:justify;}
 .problem_text div { padding: 5px 0; width:100%}
 .problem_text p { padding: 5px 0; width: 100%}
@@ -224,7 +234,6 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     min-width: 150px;
     height: 20px; 
     line-height: 20px;
-    text-align: center;
     border-bottom: 1px #000 solid;
 }
 
@@ -270,7 +279,6 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     min-width: 148px; 
     height: 20px;
     line-height: 20px;
-    text-align: center;
     border-bottom: 1px #000 solid;
     cursor: move;}
 
@@ -406,8 +414,8 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 
 
 /*words_tishi---------------*/
-.words_tishi { width: 150px; height: 450px; border: 1px #000 solid; overflow-y: auto; background: url(/assets/black_bg.png) repeat; padding: 2px; position: absolute; top: 100px; left: 0px;}
-.words_ts_box { padding: 10px 0; height: 430px; background: url(/assets/black01_bg.png) repeat;}
+.words_tishi { width: 150px; border: 1px #000 solid; overflow-y: auto; background: url(/assets/black_bg.png) repeat; padding: 2px; position: absolute; top: 100px; left: 0px;}
+.words_ts_box { padding: 10px 0; min-height: 300px; background: url(/assets/black01_bg.png) repeat;}
 .words_ts_box p {
     text-align: left;
     padding-left: 20px;

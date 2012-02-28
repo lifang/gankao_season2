@@ -20,7 +20,7 @@
               </a>
             <% else %>
               <a href="javascript:void(0);" class="tooltip_vip"
-                 onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/<%= cookies[:user_id] %>/record?vip=1\">升级为正式用户</a>]");'>
+                 onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>
                 <span><img title="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
                 <h2><%= special.name %></h2>
               </a>
@@ -40,7 +40,7 @@
   function already_submit(eu_id,sheet_url){
     if(confirm("你已经做完了该专项练习，你想重做该练习么？\n 点击\"确定\"重做，点击\"取消\"只浏览试题")){
       sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
-      window.location.href="/exam_users/"+eu_id+"/redo_paper?category="+<%= category_id %>+"&sheet_url="+sheet_url+"&type=specials";
+      window.location.href="/exam_users/"+eu_id+"/redo_paper?category="+<%= category_id %>+"&type=specials";
       return false;
     }else{
       return true;

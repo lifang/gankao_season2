@@ -2,6 +2,7 @@
 class WordsController < ApplicationController
   layout "words", :except => "index"
   before_filter :sign?, :except => "index"
+  before_filter :get_role, :only => ["index", "recite_word"]
   
   def index
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
@@ -26,7 +27,7 @@ class WordsController < ApplicationController
     @category = Category.find_by_id(category_id.to_i)
     @title = "#{@category.name}词汇训练"
     if is_nomal?(params[:category])
-      flash[:notice] = "您的试用期已结束。[<a class='link_c' href='/users/#{cookies[:user_id]}/record?vip=1'>升级为正式用户</a>]"
+      flash[:notice] = "您的试用期已结束。[<a class='link_c' href='/users/charge_vip?category=#{params[:category]}'>升级为正式用户</a>]"
       redirect_to "/words?category=#{params[:category]}"
     else
       @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
@@ -85,8 +86,10 @@ class WordsController < ApplicationController
   def word_log
     word_ids = params[:word_id].split(",")
     wrong_ids = (params[:wrong_id].nil? or params[:wrong_id].empty?) ? [] : params[:wrong_id].split(",")
-    unless (word_ids - wrong_ids).nil? or (word_ids - wrong_ids).blank?
-      user_word_relation = UserWordRelation.find(:all, :conditions => ["word_id in (?)", (word_ids - wrong_ids)])
+    right_ids = (params[:right_id].nil? or params[:right_id].empty?) ? [] : params[:right_id].split(",")
+    leving_ids = (word_ids - wrong_ids)&right_ids
+    unless leving_ids.nil? or leving_ids.blank?
+      user_word_relation = UserWordRelation.find(:all, :conditions => ["word_id in (?)", leving_ids])
       user_word_relation.each do |relation|
         relation.update_attributes(:status => UserWordRelation::STATUS[:RECITE])
       end unless user_word_relation.blank?
@@ -94,11 +97,11 @@ class WordsController < ApplicationController
         :conditions => ["category_id = ? and TO_DAYS(NOW())=TO_DAYS(created_at) and types = ? and user_id = ?",
           params[:category_id].to_i, ActionLog::TYPES[:RECITE], cookies[:user_id].to_i])
       if action_log
-        total_num = (word_ids - wrong_ids).length + action_log.total_num
+        total_num = leving_ids.length + action_log.total_num
         action_log.update_attributes(:total_num => total_num)
       else
         ActionLog.create(:category_id => params[:category_id].to_i, :user_id => cookies[:user_id].to_i,
-          :types => ActionLog::TYPES[:RECITE], :created_at => Time.now.to_date, :total_num => (word_ids - wrong_ids).length)
+          :types => ActionLog::TYPES[:RECITE], :created_at => Time.now.to_date, :total_num => leving_ids.length)
       end
     end
     render :text => ""

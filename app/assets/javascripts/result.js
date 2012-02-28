@@ -407,7 +407,7 @@ function create_drag_question(problem, question_id_input, question, drag_li_arr)
             + " id='question_answer_"+ question.id +"' onclick=\"javascript:show_select_color("
             + problem.id +", '"+ question.id +"', '"+ question.correct_type +"', '"
             + problem.question_type +"')\" name='question_answer_"
-            + question.id +"' style='width:" + erea_with(answer_hash.get(question.id)[0]) +";height:22px;' >"
+            + question.id +"' style='width:" + erea_with(answer_hash.get(question.id)[0]) +";height:20px;' >"
             + answer_hash.get(question.id)[0] +"</textarea>";
         } else {
             question_str += "<textarea cols='' readonly rows='' onclick=\"javascript:show_select_color("
@@ -721,7 +721,7 @@ function create_single_question(que_div, question, drag_li_arr) {
                     answer_text = "<textarea cols='' rows='' class='answer_input "+ bk_color +"'"
                     + " id='question_answer_"+ question.id +"' name='question_answer_"
                     + question.id +"' style='width:" + erea_with(answer_hash.get(question.id)[0]) +";height:"
-                    + erea_height("22px;", answer_hash.get(question.id)[0]) +";' readonly>"
+                    + erea_height("20px;", answer_hash.get(question.id)[0]) +";' readonly>"
                     + answer_hash.get(question.id)[0] +"</textarea>";
                 } else {
                     answer_text = "<textarea cols='' rows='' class='answer_input' id='question_answer_"+ question.id
@@ -894,7 +894,7 @@ function erea_with(str) {
 function erea_height(h, str) {
     var height = h;
     if (str.length > 80) {
-        height = (24 * (str.length/70 + 1)) + "px";
+        height = (20 * (str.length/70 + 1)) + "px";
     }
     return height;
 }
