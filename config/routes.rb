@@ -53,7 +53,7 @@ GankaoSeason2::Application.routes.draw do
     end
     member do
       post :ajax_save_question_answer,:ajax_change_status
-      get :redo_paper,:show_js
+      get :show_js,:redo_paper
     end
   end
   resources :logins do

@@ -40,7 +40,7 @@
   function already_submit(eu_id,sheet_url){
     if(confirm("你已经做完了该专项练习，你想重做该练习么？\n 点击\"确定\"重做，点击\"取消\"只浏览试题")){
       sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
-      window.location.href="/exam_users/"+eu_id+"/redo_paper?category="+<%= category_id %>+"&sheet_url="+sheet_url+"&type=specials";
+      window.location.href="/exam_users/"+eu_id+"/redo_paper?category="+<%= category_id %>+"&type=specials";
       return false;
     }else{
       return true;
