@@ -356,6 +356,7 @@ function ajax_show_words(word_list,q_index){
 
 function add_words(words_sentences,q_index){
     if(words_sentences==[]||words_sentences.length==0){
+        $('#jiexi_word_"+q_index +"').css('display','');
         return false;
     }
     var jiexi_word=$("#jiexi_word_"+q_index)[0];
