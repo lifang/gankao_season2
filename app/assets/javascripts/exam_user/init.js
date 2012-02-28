@@ -8,7 +8,8 @@ function transform_array(object){
     if(resource){
         if(resource.length){
             result = resource;
-        }else{
+        }
+        else{
             result.push(resource);
         }
     }
@@ -505,46 +506,55 @@ function ajax_load_about_words(words,problem_index,question_index){
     if(about_words_div.length>0){
         about_words_div.show();
     }else{
-        $.ajax({
-            type: "POST",
-            url: "/exam_users/ajax_load_about_words.json",
-            dataType: "json",
-            data : {
-                "words":words
-            },
-            success : function(data) {
-                var words_arr = words.split(";");
+        if($("#about_words_resource_"+problem_index+"_"+question_index).val()!=""){
+            if($("#about_words_resource_"+problem_index+"_"+question_index).val()!="error"){
                 $("#about_words_list").empty();
-                var html_str="";
-                n=0;
-                for(var i=0;i<words_arr.length;i++){
-                    if(data[i]!=null){
-                        html_str +="<li>";
-                        html_str +="<a class='single_word_li' href='javascript:void(0);' onclick='javascript:show_single_word(this,"+n+");'>"+data[n].name+"</a>";
-                        html_str +="<input type='hidden' id='about_word_id_"+n+"' value='"+data[n].id+"' />";
-                        html_str +="<input type='hidden' id='about_word_name_"+n+"' value='"+data[n].name+"' />";
-                        html_str +="<input type='hidden' id='about_word_category_id_"+n+"' value='"+data[n].category_id+"' />";
-                        html_str +="<input type='hidden' id='about_word_en_mean_"+n+"' value='"+data[n].en_mean+"' />";
-                        html_str +="<input type='hidden' id='about_word_ch_mean_"+n+"' value='"+data[n].ch_mean+"' />";
-                        html_str +="<input type='hidden' id='about_word_types_"+n+"' value='"+data[n].types+"' />";
-                        html_str +="<input type='hidden' id='about_word_phonetic_"+n+"' value=\""+data[n].phonetic+"\" />";
-                        html_str +="<input type='hidden' id='about_word_enunciate_url_"+n+"' value='"+data[n].enunciate_url+"' />";
-                        html_str +="<input type='hidden' id='about_word_sentences_"+n+"' value='"+data[n].sentences+"' />";
-                        html_str +="</li>";
-                        n++;
-
+                $("#about_words_list").html($("#about_words_resource_"+problem_index+"_"+question_index).val());
+                $(".single_word_li:eq(0)").trigger("click");
+                $("#about_words_position_"+problem_index+"_"+question_index).append($("#about_words"));
+            }else{
+                tishi_alert("抱歉，未查询到相关词汇信息");
+            }
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "/exam_users/ajax_load_about_words.json",
+                dataType: "json",
+                data : {
+                    "words":words
+                },
+                success : function(data) {
+                    $("#about_words_list").empty();
+                    var html_str="";
+                    var words_str = "";
+                    for(var i=0;i<data["words"].length;i++){
+                        if(data["words"][i]!=null){
+                            html_str +="<li>";
+                            html_str +="<a class='single_word_li' href='javascript:void(0);' onclick='javascript:show_single_word(this,"+i+");'>"+data["words"][i][0].name+"</a>";
+                            html_str +="<input type='hidden' id='about_word_id_"+i+"' value='"+data["words"][i][0].id+"' />";
+                            html_str +="<input type='hidden' id='about_word_name_"+i+"' value='"+data["words"][i][0].name+"' />";
+                            html_str +="<input type='hidden' id='about_word_category_id_"+i+"' value='"+data["words"][i][0].category_id+"' />";
+                            html_str +="<input type='hidden' id='about_word_en_mean_"+i+"' value='"+data["words"][i][0].en_mean+"' />";
+                            html_str +="<input type='hidden' id='about_word_ch_mean_"+i+"' value='"+data["words"][i][0].ch_mean+"' />";
+                            html_str +="<input type='hidden' id='about_word_types_"+i+"' value='"+data["words"][i][0].types+"' />";
+                            html_str +="<input type='hidden' id='about_word_phonetic_"+i+"' value=\""+data["words"][i][0].phonetic+"\" />";
+                            html_str +="<input type='hidden' id='about_word_enunciate_url_"+i+"' value='"+data["words"][i][0].enunciate_url+"' />";
+                            html_str +="<input type='hidden' id='about_word_sentences_"+i+"' value='"+data["words"][i][1]+"' />";
+                            html_str +="</li>";
+                        }
+                    }
+                    if(data["words"].length>0){
+                        $("#about_words_resource_"+problem_index+"_"+question_index).val(html_str);
+                        $("#about_words_list").html(html_str);
+                        $(".single_word_li:eq(0)").trigger("click");
+                        $("#about_words_position_"+problem_index+"_"+question_index).append($("#about_words"));
+                    }else{
+                        $("#about_words_resource_"+problem_index+"_"+question_index).val("error");
+                        tishi_alert("抱歉，未查询到相关词汇信息");
                     }
                 }
-                $("#about_words_list").html(html_str);
-                $(".single_word_li:eq(0)").trigger("click");
-                if(data["error"]==null){
-                    $("#about_words_position_"+problem_index+"_"+question_index).append($("#about_words"));
-                }else{
-                    tishi_alert(data["error"]);
-                }
-
-            }
-        });
+            });
+        }
     }
 }
 
@@ -609,7 +619,7 @@ function show_single_word(ele,i){
     $("#about_word_phonetic").html($("#about_word_phonetic_"+i).val());
     $("#about_word_enunciate_url").val($("#about_word_enunciate_url_"+i).val());
     $("#about_word_id").val($("#about_word_id_"+i).val());
-    var sentences = $("#about_word_sentences_"+i).val().split(";");
+    var sentences = $("#about_word_sentences_"+i).val().split("|+|");
     var sentences_html = "";
     for(var i=0;i<sentences.length;i++){
         if(sentences[i]!=""){
@@ -899,12 +909,15 @@ function afterload(){
     // 拖选框，预留高度
     if($("#drag_tk_"+init_problem).length>0){
         var m_side_width = $("#m_side_"+init_problem).width();
-        $("#draggable_list_"+init_problem).css("width",m_side_width-20-20);
-        var drag_tk_height = $("#drag_tk_"+init_problem+" ul").height();
+        $("#draggable_list_"+init_problem).css("width",m_side_width-20);
+        var drag_ul_height = $("#draggable_list_"+init_problem).height();
         var m_side_height = $("#m_side_"+init_problem).height();
-        var pbl_height = m_side_height-drag_tk_height-40;//padding的高度
+        var pbl_height = m_side_height-drag_ul_height-40;//padding的高度
         $("#problem_box_"+init_problem).css("height",pbl_height);
-        $("#drag_tk_"+init_problem).css("height",drag_tk_height);
+        $("#drag_tk_"+init_problem).css("height",drag_ul_height);
+    }
+    if(problems[init_problem].question_type!="1"){
+        $("#pro_qu_t_"+init_problem+"_0").trigger("click");
     }
 }
 
@@ -949,7 +962,7 @@ function left_side(){
     $(element2).append(element1);
     if(has_drag){
         $(element2).addClass("tuozhuai_box");
-        element1 = create_element("div",null,"drag_tk_"+init_problem,"drag_tk border_radius",null,"innerHTML");
+        element1 = create_element("div",null,"drag_tk_"+init_problem,"drag_tk",null,"innerHTML");
         $("#m_side_"+init_problem).append(element1);
         element3 = create_element("ul",null,"draggable_list_"+init_problem,null,null,"innerHTML");
         $(element1).append(element3);
@@ -1085,6 +1098,7 @@ function question_box(questions_resource,question_index){
     $(element1).append(element2);
     element1 = create_element("div",null,"about_words_position_"+init_problem+"_"+question_index,null,null,"innerHTML");
     $(question_resource).append(element1);
+    $(element1).html("<input type='hidden' value='' id='about_words_resource_"+init_problem+"_"+question_index+"'></input>");
 }
 
 //题面中小题细节
@@ -1243,7 +1257,7 @@ function main_height(){
     var foot_height = $(".foot").height();
     var main_height = win_height-(head_height+mainTop_height+foot_height);
     $(".m_side").css('height',main_height-12);//12为head的padding的12px
-    $(".main").css('height',main_height-12+30);//34是m_top的高度，
+    $(".main").css('height',main_height-12+34);//34是m_top的高度，
 }
 
 //generate.js  end

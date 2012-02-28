@@ -124,8 +124,6 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
 .problem_text div { padding: 5px 0; width:100%}
 .problem_text p { padding: 5px 0; width: 100%}
 
-/*拖拽*/
-.tuozhuai_box { overflow-y: auto;}
 
 /*选择题小题------------------*/
 
@@ -268,7 +266,7 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
     background: #c4c4c4;
     position: relative;
 }
-.drag_tk ul { display: block; position: absolute;}
+.drag_tk ul { display: block; position: fixed;z-index: 1000; bottom: 15px;}
 .drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; display: inline-block; margin: 5px; cursor:move;}
 .tuozhuai_box { overflow-y: auto;}
 
@@ -280,7 +278,8 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
     height: 20px;
     line-height: 20px;
     border-bottom: 1px #000 solid;
-    cursor: move;}
+    cursor: move;
+}
 
 /*相关词汇---------------*/
 .xg_words { float: left; width: 15%; overflow: hidden;}

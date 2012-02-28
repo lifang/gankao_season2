@@ -37,30 +37,22 @@ class ExamUsersController < ApplicationController
 
   #ajax载入相关词汇
   def ajax_load_about_words
-    words = params["words"].split(";")
-    word_index=0
-    data={}
-    words.each do |word|
-      @word = Word.find_by_sql(["select * from words where name like ?","#{word}"])
-      if @word.length>0
-        @word = @word[0]
-        sentences=[]
-        @word.word_sentences.each do |sentence|
-          sentences << sentence.description
-        end
-        sentences = sentences.join(";")
-        data[word_index]={:id=>@word.id,:name=>@word.name,:category_id=>@word.category_id,:en_mean=>@word.en_mean,:ch_mean=>@word.ch_mean,:types=>Word::TYPES[@word.types],:phonetic=>@word.phonetic,:enunciate_url=>@word.enunciate_url,:sentences=>sentences}
-        word_index += 1
+    words=params[:words].split(";")
+    load_words=Word.question_words(words)
+    load_words.each do |word|
+      arr = []
+      word[1].each do |sentence|
+        arr << sentence.description
       end
-    end
-    if word_index==0
-      data={"error"=>"抱歉，无法查询到相关词汇信息"}
+      word[1] = arr.join("|+|")
     end
     respond_to do |format|
       format.json {
+        data={:words=>load_words}
         render :json=>data
       }
     end
+
   end
 
   def ajax_report_error
