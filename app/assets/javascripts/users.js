@@ -222,7 +222,9 @@ function accredit(){
         success : function(data) {
             $("#invit_code").val("");
             tishi_alert(data.message);
-            get_record();
+            if (data.message=="升级成功"){
+                setTimeout(window.location.reload(),10000);
+            }
         }
     });
     return false;

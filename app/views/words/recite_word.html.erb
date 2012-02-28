@@ -39,18 +39,20 @@
           <p class="font_size_16"><%= word.en_mean %></p>
           <p><%= word.ch_mean %></p>
         </div>
-        <div class="ch_words_line" id="sentence_next_<%= word.id %>" style="display:none;">
-          <a href="javascript:void(0);" class="next_down" onclick="javascript:show_sentence(<%= word.id %>);" >
-            <img src="/assets/next_down.png" title="显示单词例句" />
-          </a>
-        </div>
-        <div class="ch_words_line" id="sentence_<%= word.id %>" style="display:none;">
-          <ul class="words_ul_font14">
-            <% @sentence_hash[word.id].each do |description| %>
-              <li><%= description %></li>
-            <% end unless @sentence_hash[word.id].nil? %>
-          </ul>
-        </div>
+        <% unless @sentence_hash[word.id].nil? or @sentence_hash[word.id].blank? %>
+          <div class="ch_words_line" id="sentence_next_<%= word.id %>" style="display:none;">
+            <a href="javascript:void(0);" class="next_down" onclick="javascript:show_sentence(<%= word.id %>);" >
+              <img src="/assets/next_down.png" title="显示单词例句" />
+            </a>
+          </div>
+          <div class="ch_words_line" id="sentence_<%= word.id %>" style="display:none;">
+            <ul class="words_ul_font14">
+              <% @sentence_hash[word.id].each do |description| %>
+                <li><%= description %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
         <div class="ch_words_line" id="btn_<%= word.id %>" style="display:none;">
           <button class="t_btn"
                   onclick="javascript:remember_word(<%= word.id %>, <%= index %>, <%= params[:category] %>, 1, '<%= params[:type] %>');">

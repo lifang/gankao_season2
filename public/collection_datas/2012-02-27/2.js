@@ -1,4 +1,3 @@
-
 collections = {
     "problems":{
         "problem":[{
@@ -31,7 +30,7 @@ collections = {
                     "c_flag":"1",
                     "questionattrs":"sss;-;ddd;-;fbbb;-;ccc",
                     "tags":null,
-                    "words":null,
+                    "words":"kills",
                     "user_answer":["sss"]
                 },{
                     "correct_type":"3",

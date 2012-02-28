@@ -25,10 +25,11 @@ class CollectionsController < ApplicationController
   end
 
   def load_words
-    load_words=Word.question_words(params[:words])
+    words=params[:words].split(";")
+    load_words=Word.question_words(words)
     respond_to do |format|
       format.json {
-        data={:words=>load_words=={} ? [] :load_words}
+        data={:words=>load_words,:q_index=>params[:question_index].to_i}
         render :json=>data
       }
     end
@@ -62,8 +63,7 @@ class CollectionsController < ApplicationController
       params[:problem_id].to_i, params[:question_id].to_i,
       params[:question_answer], params[:question_analysis], params[:user_answer])
     if is_problem_in == false
-      problem_json = params[:problem_json].class.to_s == "String" ?
-        JSON(params[:problem_json]) : params[:problem_json]
+      problem_json = JSON(params[:problem_json])
       new_col_problem = collection.update_problem_hash(problem_json, params[:paper_id],
         params[:question_answer], params[:question_analysis], params[:user_answer], params[:question_id].to_i)
       already_hash["problems"]["problem"] << new_col_problem
