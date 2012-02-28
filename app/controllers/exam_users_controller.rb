@@ -227,8 +227,12 @@ class ExamUsersController < ApplicationController
     if params[:preview] == "1"
       data = {:message=>"当前为预览模式",:sheet=>{:status=>0,:init=>0}}
     else
-      doc = get_doc(params[:sheet_url])
-      data = Hash.from_xml(doc.to_s).to_json
+      if File.exist?(params[:sheet_url])
+        doc = get_doc(params[:sheet_url])
+        data = Hash.from_xml(doc.to_s).to_json
+      else
+        data = {:message=>"用户答卷载入失败，自动忽略答卷记录",:sheet=>{:status=>0,:init=>0}}
+      end
     end
     respond_to do |format|
       format.json {

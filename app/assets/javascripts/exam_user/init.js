@@ -697,7 +697,7 @@ function normal_add_collect(problem_index,question_index){
                 "question_index" : question_index,
                 "problem" : JSON.stringify(problems[problem_index]),
                 "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
-                "addition" : json_to_str(answers[problem_index][question_index]),
+                "addition" : JSON.stringify(answers[problem_index][question_index]),
                 "category_id" :category
             },
             success : function(data){
