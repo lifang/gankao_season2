@@ -108,9 +108,13 @@ function load_word() {
             $("#word_info_0").css("display", "block");
         }
     } else {
-        if ($("#word_info_0").attr("id") != null) {
-            $("#word_info_0").css("display", "block");
+        for (var i=0; i<word_ids.length; i++) {
+            if ($("#word_info_" + i).attr("id") != null) {
+                $("#word_info_" + i).css("display", "block");
+                break;
+            }
         }
+        
     }
     if (getCookie("right_word") != null) {
         var current_order = getCookie("rem_word").split(",");
@@ -156,7 +160,12 @@ function generate_flash_div(style) {
 //显示单词的意思
 function show_mean(word_id){
     $("#mean_" + word_id).fadeIn("slow");
-    $("#sentence_next_" + word_id).fadeIn("slow");
+    if ($("#sentence_next_" + word_id).length > 0) {
+        $("#sentence_next_" + word_id).fadeIn("slow");
+    } else {
+        $("#btn_" + word_id).fadeIn("slow");
+    }
+    
 }
 
 //显示单词例句
@@ -317,19 +326,25 @@ function next_task(word_id, category_id, current_index, current_step, flag, type
     var next_index = -1;
     for (var m=new Number(current_index)+1; m<rem_word.length; m++) {
         if (new Number(rem_word[m]) < current_step) {
-            next_index = m;
-            break;
+            if ($("#word_info_" + m).length == 0) {
+                //直接置当前的单词正确
+                var next_word_id = $("#no_s_"+m).val();
+                is_right(next_word_id, rem_word, m, current_step);
+            } else {
+                next_index = m;
+                break;
+            }
         }
     }
     if (flag == 1) {
         is_right(word_id, rem_word, current_index, current_step);
     }
-    if (next_index != -1) {
-       var no_sen_index = no_sentence_words(word_id, current_step, rem_word, next_index);
-       if (no_sen_index != -2) {
-           next_index = no_sen_index;
-       }
-    }
+    //    if (next_index != -1) {
+    //        var no_sen_index = no_sentence_words(word_id, current_step, rem_word, next_index);
+    //        if (no_sen_index != -2) {
+    //            next_index = no_sen_index;
+    //        }
+    //    }
     show_re_word(current_step, current_index, next_index);
     is_recollection_pass(word_id, rem_word, next_index, category_id, current_step, type);
 }
@@ -343,7 +358,7 @@ function no_sentence_words(word_id, current_step, rem_word, current_index) {
         is_right(next_word_id, rem_word, current_index, current_step);
         var next_index = -1;
         for (var m=new Number(current_index)+1; m<rem_word.length; m++) {
-            if (new Number(rem_word[m]) < current_step) {
+            if (new Number(rem_word[m]) < current_step && ($("#word_info_" + m).length != 0)) {
                 next_index = m;
                 break;
             }
@@ -389,6 +404,14 @@ function recollection_next(category_id, current_step, type) {
     } else if (current_step == 3) {
         window.location.href = "/words/hand_man?category=" + category_id + "&type=" + type;
     } else if (current_step == 4 && type == "new") {
+        var right_ids = [];
+        var rights = getCookie("right_word").split("&");
+        for (var i=0; i<rights.length; i++) {
+            var id = rights[i].split("=");
+            if (new Number(id[1]) == current_step) {
+                right_ids.push(id[0]);
+            }
+        }
         $.ajax({
             async:true,
             complete:function(request){
@@ -401,7 +424,9 @@ function recollection_next(category_id, current_step, type) {
             data:{
                 category_id :category_id,
                 word_id :word_ids.join(","),
-                wrong_id :getCookie("wrong_word")
+                wrong_id :(getCookie("wrong_word") == null) ? "" : getCookie("wrong_word"),
+                right_id :right_ids.join(",")
+                
             },
             dataType:'script',
             url:"/words/word_log",

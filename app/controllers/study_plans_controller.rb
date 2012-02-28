@@ -30,6 +30,19 @@ class StudyPlansController < ApplicationController
     @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", params[:category].to_i])
     UserPlanRelation.create(:user_id => cookies[:user_id].to_i, :study_plan_id => @study_plan.id,
       :created_at => Time.now.to_date, :ended_at => Time.now.to_date + (@study_plan.study_date - 1).days )
+    
+    order=Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]}",
+        cookies[:user_id].to_i, params[:category].to_i])
+    if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
+      Order.create(:user_id => cookies[:user_id].to_i,:category_id => params[:category].to_i, :total_price => 0,
+        :types => Order::TYPES[:OTHER], :status => Order::STATUS[:NOMAL], :remark => "参加学习计划",
+        :start_time => Time.now,:end_time => (Time.now + Constant::DATE_LONG[:vip].days))
+      order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
+    end
+    cookies.delete(:user_role)
+    user_role?(cookies[:user_id])
+    
+    flash[:notice] = "感谢您参与学习计划，同时您也免费升级为网站的正式用户了！"
     redirect_to "/study_plans/done_plans?category=#{params[:category].to_i}"
   end
 

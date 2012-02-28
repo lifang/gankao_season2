@@ -68,8 +68,7 @@ span.correctWrong_bg, div.correctWrong_bg, .correctWrong_bg { background: #FFE8E
 .question_explain p {line-height: 22px; text-indent: 24px; text-align: justify; color: #999;}
 
 /*题目内容*/
-.question_text {padding: 10px; border: 1px #b9b9b9 solid; margin: 10px 0;}
-.question_text p {line-height: 24px; text-align: justify; padding: 5px 0;}
+.question_text {padding: 10px; border: 1px #b9b9b9 solid; margin: 10px 0; line-height: 24px; text-align: justify;}
 
 /*答题区域*/
 .question_area { padding: 10px; border: 1px #b9b9b9 solid; overflow: hidden; margin: 5px 0;}
@@ -99,8 +98,8 @@ div.q_no, span.q_no, select.q_no, textarea.q_no { border: 2px #FF6C00 solid;}
 
 
 /*拖拽题*/
-.span_tk { min-width: 150px; display: inline-block; height: 24px; position: relative;}
-.input_tk { min-width: 148px; height: 22px; line-height: 22px; border: 1px #e2e2e2 solid; float: left;}
+.span_tk { min-width: 150px; display: inline-block; height: 18px; position: relative;}
+.input_tk { min-width: 148px; height: 20px; line-height: 20px; border: 1px #e2e2e2 solid; float: left; padding: 0 2px;}
 .button_tk { margin: 3px 6px 0 6px;}
 .button_span {
     position: absolute;
@@ -128,25 +127,26 @@ div.q_no, span.q_no, select.q_no, textarea.q_no { border: 2px #FF6C00 solid;}
 	display: inline-block;
 	float: left;
 	min-width: 148px;
-	height: 22px;
-	line-height: 22px;
+	height: 20px;
+	line-height: 20px;
 	padding-left: 4px;
 	border: 1px #e2e2e2 solid;
 	background: #FFF;
+        padding: 0 2px;
 }
 
 .select_span {
 	display: inline-block;
 	float: left;
 	min-width: 148px;
-	height: 24px;
+	height: 20px;
 	line-height: 20px;
-	text-align: center;
 	border: 1px #E2E2E2 solid;
+        padding: 0 2px;
 }
 
 .select_ul { position: absolute; top: 21px; left: 0; z-index: 200; border: 1px #E2E2E2 solid; border-top: none;}
-.select_li { min-width: 140px; display: inline-block;  padding: 0 5px; height: 24px; line-height: 24px; background: #EFEDE7; cursor: pointer;}
+.select_li { min-width: 144px; display: inline-block;  padding: 0 5px; height: 24px; line-height: 24px; background: #EFEDE7; cursor: pointer;}
 .select_li:hover { background: #c7c5bf;}
 
 input.borde_blue, textarea.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033ff solid;}

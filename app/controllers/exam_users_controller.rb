@@ -197,9 +197,9 @@ class ExamUsersController < ApplicationController
   #预览
   def preview
     #读取试题
-    cookies[:user_id] = params[:user_id]
-    cookies[:user_name] = User.find(params[:user_id]).email
-    redirect_to "/exam_users/888?paper=#{params[:paper]}&preview=1&type=similarities&category=2"
+#    cookies[:user_id] = params[:user_id]
+#    cookies[:user_name] = User.find(params[:user_id]).email
+    redirect_to "/exam_users/#{params[:user_id]}?paper=#{params[:paper]}&preview=1&type=similarities&category=2"
   end
   
   #单词加入背诵列表

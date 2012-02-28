@@ -46,6 +46,8 @@
         <% else %>
           <input type="hidden" id="no_s_<%= index %>" value="<%= word.id %>" />
         <% end %>
+      <% else %>
+        <input type="hidden" id="no_s_<%= index %>" value="<%= word.id %>" />
       <% end %>
     <% end unless @words.blank? %>
     <div class="box_bottom_bg"></div>
