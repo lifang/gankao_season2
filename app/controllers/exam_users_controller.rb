@@ -161,10 +161,6 @@ class ExamUsersController < ApplicationController
       this_problem = JSON params["problem"]
       this_question = this_problem["questions"]["question"][params["question_index"].to_i]
       this_addition = JSON params["addition"]
-      puts "this_problem = #{this_problem}"
-      puts "this_question = #{this_question}"
-      puts "params['addition'] = #{this_addition}"
-      puts "params['user_answer'] = #{params["user_answer"]}"
       problem_id = this_problem["id"]
       question_id = this_question["id"]
       Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id ,params["paper_id"], this_addition["answer"], this_addition["analysis"], params["user_answer"], params["category_id"])

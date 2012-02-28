@@ -43,7 +43,7 @@
             <%  order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
             <% if order.nil? or order.types==Order::TYPES[:TRIAL_SEVEN] or order.types==Order::TYPES[:COMPETE] %>
               <div class="tishi_vip">
-                <% unless order.nil? or ((order.end_time-Time.now.to_datetime)/1.day).to_i>0%>
+                <% if !order.nil? and ((order.end_time-Time.now.to_datetime)/1.day).to_i>0%>
                   <%day=((order.end_time-Time.now.to_datetime)/1.day).to_i%>
                   <% if day>=1%>
                     您还有 <span class="red"><%= day %></span> 天试用的时间
