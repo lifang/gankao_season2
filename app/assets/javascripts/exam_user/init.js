@@ -946,7 +946,6 @@ function left_side(){
     element1 = create_element("div",null,"m_side_"+init_problem,"m_side m_problem_bg",null,"innerHTML");
     $(problem_resource).append(element1);
     element2 = create_element("div",null,"problem_box_"+init_problem,"problem_box",null,"innerHTML");
-    $(element2).css("height","1000px");
     $(element1).append(element2);
     element3 = create_element("div",null,"flowplayer_location_"+init_problem,null,null,"innerHTML");
     $(element2).append(element3);
@@ -963,7 +962,7 @@ function left_side(){
     $(element2).append(element1);
     if(has_drag){
         $(element2).addClass("tuozhuai_box");
-        element1 = create_element("div",null,"drag_tk_"+init_problem,"drag_tk border_radius",null,"innerHTML");
+        element1 = create_element("div",null,"drag_tk_"+init_problem,"drag_tk",null,"innerHTML");
         $("#m_side_"+init_problem).append(element1);
         element3 = create_element("ul",null,"draggable_list_"+init_problem,null,null,"innerHTML");
         $(element1).append(element3);
