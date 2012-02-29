@@ -24,7 +24,7 @@
   <div class="ch_f_line">
     <% if cookies[:user_id].nil? %>
       <a href="/words/recite_word?category=<%= params[:category] %>&type=new" class="danci_hg">背词</a>
-      <p>未掌握单词：<span class="orange"><%= @leaving_count %></span></p>
+      <p>未掌握单词：<span class="orange"><%= (@leaving_count > 0) ? @leaving_count : 0 %></span></p>
     <% else %>
       <% if is_nomal?(params[:category]) %>
         <a href="javascript:void(0);"  class="danci_bc tooltip_vip" title="仅供正式用户使用" 
@@ -37,7 +37,7 @@
           <a href="javascript:void(0);" title="您目已经没有未掌握的单词了" class="danci_hg">背词</a>
         <% end %>
       <% end %>
-      <p>未掌握单词：<span class="orange"><%= @leaving_count %></span></p>
+      <p>未掌握单词：<span class="orange"><%= (@leaving_count > 0) ? @leaving_count : 0 %></span></p>
     <% end %>
   </div>
   <div><span class="orange">*</span>会从需要学习的词语中随机选出对应数量的词汇进行练习。</div>

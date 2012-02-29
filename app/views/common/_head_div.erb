@@ -17,7 +17,7 @@
         <% else %>
           <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %></a>
         <% end %>
-        |<a href="/users/delete_user">退出</a>
+        |<a href="/logins/logout">退出</a>
         <div class="email_tab" style="display: none; ">
           <ul>
             <li><a href="/users/<%= cookies[:user_id] %>/info?target=0&category=<%= category_id %>">收件箱:<span class="orange"><%=Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SINGLE]} and target_id=#{cookies[:user_id]}")  %></span></a></li>

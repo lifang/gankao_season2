@@ -6,7 +6,7 @@
     <%= javascript_include_tag "application.js" %>
     <%= javascript_include_tag "users.js" %>
     <!--[if IE 6]>
-    <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>
       /* EXAMPLE */
       DD_belatedPNG.fix('*');
@@ -34,7 +34,7 @@
             <% end %>
           <%  elsif is_nomal?(category_id) %>
             <%= "(试用结束)" %>
-          <% end %></a>|<a href="/">首页</a>|<a href="/users/delete_user">退出</a></div>
+          <% end %></a>|<a href="/">首页</a>|<a href="/logins/logout">退出</a></div>
         <div class="logo"><a href="/"><img src="/assets/logo_user.png" /></a></div>
       </div>
       <div class="main">
@@ -43,7 +43,7 @@
             <%  order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
             <% if order.nil? or order.types==Order::TYPES[:TRIAL_SEVEN] or order.types==Order::TYPES[:COMPETE] %>
               <div class="tishi_vip">
-                <% unless order.nil? or ((order.end_time-Time.now.to_datetime)/1.day).to_i>0%>
+                <% if !order.nil? and ((order.end_time-Time.now.to_datetime)/1.day).to_i>0%>
                   <%day=((order.end_time-Time.now.to_datetime)/1.day).to_i%>
                   <% if day>=1%>
                     您还有 <span class="red"><%= day %></span> 天试用的时间
@@ -65,13 +65,16 @@
                   <button class="t_btn" onclick="accredit()">确定</button></div></div>
               <h3 class="vip_h3">方法二：</h3>
               <div class="vip_box vip_zfb">
-                <div class="zfb_con"><a href="#" title="会员充值" onclick="check_vip()"><img src="/assets/zfb_pic.png" /></a></div>
+                <div class="zfb_con">
+                  <a href="javascript:void(0);" title="会员充值" onclick="check_vip()"><img src="/assets/zfb_pic.png" /></a>
+                </div>
               </div>
             </div>
           </div>
           <div class="side_ying"></div>
         </div>
       </div>
+      <%= render :partial => "/common/flash_div" %>
       <div class="foot">
         <p><a href="http://www.comdosoft.com/" target="_blank">公司信息</a> |   <a href="#">官方微博</a>   |   <a href="http://www.comdosoft.com/pages/aboutcon.html" target="_blank">联系我们</a>    |   <a href="#">用户协议</a></p>
         <p>Copyright © 2011-2012 &nbsp;&nbsp;苏州协创软件有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>

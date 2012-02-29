@@ -1,16 +1,10 @@
 # encoding: utf-8
 class UsersController < ApplicationController
   layout 'user',:except=>["charge_vip"]
+  before_filter :sign?
   respond_to :html, :xml, :json
   include AlipaysHelper
   @@m = Mutex.new
-
-  def delete_user
-    cookies.delete(:user_id)
-    cookies.delete(:user_name)
-    cookies.delete(:user_role)
-    redirect_to "/"
-  end
 
   def show
     @title = "个人信息 - 赶考网"
@@ -71,7 +65,7 @@ class UsersController < ApplicationController
 
   #邀请码升级vip
   def accredit_check
-    code=InviteCode.first(:conditions=>"code='#{params[:info].strip}'")
+    code=InviteCode.first(:conditions=>["code = ? and category_id = ?", params[:info].strip, params[:category]])
     if code.nil?
       data="邀请码不存在"
     else
@@ -89,8 +83,10 @@ class UsersController < ApplicationController
           cookies.delete(:user_role)
           user_role?(cookies[:user_id])
           order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
+          flash[:notice] = "升级成功！"
         else
-          data="您已是vip用户，截止日期是#{order.end_time.strftime("%Y-%m-%d")}"
+          str = order.end_time.nil? ? "" : "，截止日期是#{order.end_time.strftime("%Y-%m-%d")}"
+          data = "您已是vip用户#{str}"
         end        
       end
     end
@@ -110,7 +106,7 @@ class UsersController < ApplicationController
     if !order.nil? and
         (order.types == Order::TYPES[:CHARGE] or order.types == Order::TYPES[:OTHER] or order.types == Order::TYPES[:ACCREDIT])
       is_not_vip = false
-      end_time = order.end_time.strftime("%Y-%m-%d")
+      end_time = (order.end_time.nil?) ? "" : order.end_time.strftime("%Y-%m-%d")
     end
     respond_to do |format|
       format.json {
