@@ -1,24 +1,22 @@
 <% category_id = params[:category].nil? ? 2 : params[:category].to_i %>
-<div class="tab_ul">
-  <ul>
-    <li class="hover" id="jilu">消费记录</li>
-  </ul>
-</div>
-<div class="tab_box">
-  <div id="record">
+<div class="message_box">
+  <h2 class="font_h2">消费记录</h2>
+  <div class="tab_box">
+    <div id="record">
+    </div>
+    <script type="text/javascript">
+      get_record();
+    </script>
+    <input type="hidden" value="<%=category_id  %>" id="category"/>
   </div>
-  <script type="text/javascript">
-    get_record();
-  </script>
-  <input type="hidden" value="<%=category_id  %>" id="category"/>
-</div>
-<div class="mess_tab border_radius" style="display:none">
-  <span class="xx_x"><img src="/assets/xx.png" onclick="javascript:$('.mess_tab').css('display','none')" /></span>
-  <div class="mess_tab_con">
-    <p class="mess_padding_left">日期：<span id="date"></span></p>
-    <p class="mess_padding_left">订单号：<span id="out_no"></span></p>
-    <p class="mess_padding_left"> 科目：<span id="name"></span></p>
-    <p class="mess_padding_left">商品名称：<span id="remark"></span></p>
-    <p class="mess_padding_left"> 付费金额：<span id="fee"></span></p>
+  <div class="mess_tab border_radius" style="display:none">
+    <span class="xx_x"><img src="/assets/xx.png" onclick="javascript:$('.mess_tab').css('display','none')" /></span>
+    <div class="mess_tab_con">
+      <p class="mess_padding_left">日期：<span id="date"></span></p>
+      <p class="mess_padding_left">订单号：<span id="out_no"></span></p>
+      <p class="mess_padding_left"> 科目：<span id="name"></span></p>
+      <p class="mess_padding_left">商品名称：<span id="remark"></span></p>
+      <p class="mess_padding_left"> 付费金额：<span id="fee"></span></p>
+    </div>
   </div>
 </div>

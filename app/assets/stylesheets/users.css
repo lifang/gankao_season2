@@ -14,7 +14,7 @@ img { border:none;}
     -o-border-radius: 5px;
     border-radius: 5px;
 }
-
+.font_h2 { font-size: 14px; color: #333; padding-left: 20px;}
 .t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none;}
 .wrap { width: 960px; margin: 0 auto;}
 
@@ -45,9 +45,9 @@ img { border:none;}
 .rcf_box { color: #333; font-size: 14px;clear: both; background: #F5F5F5; width: 500px; border: 1px #D9D9DA solid; border-bottom: none; overflow: hidden;}
 .rcf_box label { width: 100px; display: block; padding: 20px 0; text-align: right; float: left; line-height: 30px;}
 .setting-item-main { width: 400px; padding: 20px 0; float: left; background: #FFF;}
-.setting-item-main input { width: 216px; height: 30px; margin: 0 10px; border: 1px #d2d2d2 solid;}
+.setting-item-main input { width: 216px; height: 30px; line-height: 30px; margin: 0 10px; border: 1px #d2d2d2 solid;}
 .setting-item-vip { height: 60px; padding: 5px 0; width: 400px; float: left; background: #FFF;}
-.setting-item-vip div { height: 30px; line-height: 30px; padding-left: 10px;}
+.setting-item-main div { width: 216px; height: 30px; line-height: 30px; margin: 0 10px;}
 .setting-item-vip a {color: #F00; text-decoration: underline;}
 .rcf_box_bottom { border-bottom:1px #D9D9DA solid;}
 

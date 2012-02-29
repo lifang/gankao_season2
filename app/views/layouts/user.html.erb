@@ -38,13 +38,11 @@
             <% end %></a>|<a href="/">首页</a>|<a href="/logins/logout">退出</a></div>
         <div class="logo"><a href="/"><img src="/assets/logo_user.png" /></a></div>
       </div>
+      <% category_id = params[:category].nil? ? 2 : params[:category] %>
       <div class="main">
         <div class="main_box border_radius">
           <div class="left">
-            <div class="message_box">
-              <% category_id = params[:category].nil? ? 2 : params[:category] %>
-              <%= yield %>
-            </div>
+            <%= yield %>
           </div>
           <div class="right">
             <div class="tab_project">

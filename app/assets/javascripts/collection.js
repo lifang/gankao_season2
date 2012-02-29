@@ -149,6 +149,7 @@ function load_problem_collection(problem_index,tag){
                 var single_answer= u_answer==null? " ":u_answer
                 var element_str="<span class='span_tk'>";
                 if (correct_type=="0"){
+                    element_str += "<span onmouseout=\"close_span(event,this,'"+sign_index +"')\">";
                     element_str += "<span class='select_span' id='"+sign_index+"' onclick=\"$('#select_"+ sign_index+"').css('display','');"
                     if(question_type=='1'&&flag!=null&&parseInt(flag)==1){
                         element_str += "show_question('"+sign_index +"', this)\";"
@@ -158,7 +159,7 @@ function load_problem_collection(problem_index,tag){
                     for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
                         element_str += "<span class='select_li' onclick=\"$('#"+ sign_index+"').html('"+question_attrs[attr_index] +"');$('#select_"+ sign_index+"').css('display','none')\" >"+question_attrs[attr_index]+"</span>";
                     }
-                    element_str +="</span>"
+                    element_str +="</span></span>"
                 } else if(correct_type=="1"){
                     element_str += "<span class='dragDrop_box'"
                     if(question_type=='1'&&flag!=null&&parseInt(flag)==1){
@@ -750,14 +751,15 @@ function test_again(){
                 var element_str="<span class='span_tk' onmouseover=\"javascript:$('#check_"+sign_index +"').css('display','');\" onmouseout=\"javascript:$('#check_"+sign_index +"').css('display','none');\" >";
                 if (inner_correct_type=="0"){
                     $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                    element_str += "<span class='select_span' id='"+sign_index+"' onclick=\"$('#select_"+ sign_index+"').css('display','');";
+                   element_str += "<span onmouseout=\"close_span(event,this,'"+sign_index +"')\">"
+                   element_str += "<span class='select_span' id='"+sign_index+"' onclick=\"$('#select_"+ sign_index+"').css('display','');";
                     element_str += "\"></span><span class='select_ul' style='display:none' id='select_"+sign_index +"' onmouseout=\"javacript:$(this).css('display','none')\" onmouseover=\"javacript:$(this).css('display','')\">" ;
                     var question_attrs=questions[sign_index].questionattrs.split(";-;");
                     for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
                         element_str += "<span class='select_li' onclick=\"$('#"+ sign_index+"').html('"+question_attrs[attr_index] +"');"
                         element_str += "inner_value("+inner_correct_type+","+sign_index +");$('#select_"+ sign_index+"').css('display','none')\" >"+question_attrs[attr_index]+"</span>";
                     }
-                    element_str +="</span><span class='button_span' id='check_"+sign_index +"' style='display:none'>"
+                    element_str +="</span></span><span class='button_span' id='check_"+sign_index +"' style='display:none'>"
                     element_str += "<button class='button_tk' id='check_button_"+sign_index +"'"
                     element_str += "onclick=check_question("+sign_index +",'"+problem_init +"_"+sign_index +"','"+ escape(answer)+"',"+problem_init +",'',"+question_type +") >核对</button></span></span>";
                 }
@@ -938,4 +940,16 @@ function call_me(self) {
             $(self).css("width", max_length*8+ 30 + "px");
         }
     }
+}
+
+
+function close_span(theEvent,self,question_index){ //theEvent用来传入事件，Firefox的方式
+    var browser=navigator.userAgent;   //取得浏览器属性
+    if (browser.indexOf("MSIE")>0){ //如果是IE
+        if (self.contains(event.toElement)) return; // 如果是子元素则结束函数
+    }else{ //如果是Firefox
+        if (self.contains(theEvent.relatedTarget)) return; // 如果是子元素则结束函数
+    }
+    /*要执行的操作*/
+    $("#select_"+question_index).hide();
 }
