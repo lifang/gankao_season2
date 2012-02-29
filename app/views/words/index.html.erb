@@ -17,7 +17,7 @@
           <a href="javascript:void(0);" title="您目前还没有已经掌握的单词" class="danci_hg">回顾</a>
         <% end %>
       <% end %>
-      <p>已掌握单词：<span class="orange"><%= @already_recited.total_num %></span></p>
+      <p>已掌握单词：<span class="orange"><%= @already_recited.total_num + @user_words %></span></p>
     <% end %>
 
   </div>

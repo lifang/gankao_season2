@@ -13,6 +13,10 @@ class WordsController < ApplicationController
     if cookies[:user_id]
       @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
           "user_id" => cookies[:user_id].to_i, "category_id" => category_id.to_i})
+      @user_words = UserWordRelation.count_by_sql(["select count(uwr.id) from user_word_relations uwr
+      inner join words w on w.id = uwr.word_id where w.category_id = ?
+      and uwr.status = #{UserWordRelation::STATUS[:RECITE]}
+      and uwr.user_id = ?", category_id.to_i, cookies[:user_id].to_i])
       level_word_count = Word.recite_words(category_id.to_i)
       user_word_count = UserWordRelation.user_words(cookies[:user_id].to_i, category_id.to_i)
       @leaving_count = level_word_count + user_word_count - @already_recited.total_num
