@@ -183,6 +183,7 @@ function show_part_score(total_score, rank, part1_score, part2_score, part3_scor
 function show_exam_tishi(is_submited, simulation_id) {
     generate_flash_div("#mokao_tishi_tab");
     $("#sim_id").attr("value", simulation_id);
+    $("#mokao_tishi_tab .mk_wenti input").removeAttr("checked");
     if (is_submited == "false") {
         $("#not_join").hide();
         $("#already_join").show();

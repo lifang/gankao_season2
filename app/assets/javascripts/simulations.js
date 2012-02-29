@@ -550,18 +550,16 @@ function create_drag_question(problem_id, question_id_input, question, drag_li_a
         if (question.questionattrs != undefined && question.questionattrs != null) {
             var user_answer = (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id) != "")
             ? answer_hash.get(question.id)[0] : "";
-            question_str += "<span class='select_span' name='question_attr_"+ question.id +"' id='question_attr_"
+            question_str += "<span onmouseout=\"javascript:close_select_ul(event, this, '"+ question.id
+            +"');\"><span class='select_span' name='question_attr_"+ question.id +"' id='question_attr_"
             + question.id +"' onclick='javascript:select_ul(\""+question.id+"\")'>"+ user_answer +"</span>";
             var que_attrs = question.questionattrs.split(";-;");
-            question_str += "<span class='select_ul' id='select_ul_"+ question.id
-            +"' onmouseover=\"javascript:$('#select_ul_"+ question.id
-            +"').css('display','');\" onmouseout=\"javascript:$('#select_ul_"+ question.id
-            +"').css('display','none');\" style='display:none;'>";
+            question_str += "<span class='select_ul' id='select_ul_"+ question.id +"' style='display:none;'>";
             for (var i=0; i<que_attrs.length; i++) {
                 question_str += "<span class='select_li' onclick='javascript:select_li(this, \""+question.id+"\");'>"
                 + que_attrs[i] +"</span>";
             }
-            question_str += "</span>";
+            question_str += "</span></span>";
             $("#que_out_" + question.id).html(question_str);
         } 
     } else if ((parseFloat(question.correct_type) == 3) || (parseFloat(question.correct_type) == 5)) {
@@ -604,6 +602,17 @@ function create_drag_question(problem_id, question_id_input, question, drag_li_a
         answer_input.value = answer_hash.get(question.id)[0];
     }
     buttons_div.appendChild(answer_input);
+}
+
+//关闭select框
+function close_select_ul(theEvent, obj, question_id){
+    var browser=navigator.userAgent;
+    if (browser.indexOf("MSIE")>0){
+        if (obj.contains(event.toElement)) return;
+    }else{        
+        if (obj.contains(theEvent.relatedTarget)) return;
+    }
+    $("#select_ul_" + question_id).css("display", "none");
 }
 
 //显示select ul
