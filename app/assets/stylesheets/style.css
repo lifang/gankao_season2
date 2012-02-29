@@ -120,7 +120,7 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
     color: #CCC;
     text-align: center;
 }
-.problem_text { line-height: 24px; padding: 10px; text-align:justify;}
+.problem_text {font-size: 12px; line-height: 24px; padding: 10px; text-align:justify;}
 .problem_text div { padding: 5px 0; width:100%}
 .problem_text p { padding: 5px 0; width: 100%}
 
@@ -222,11 +222,14 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
 .textarea_xz1 { width: 90%; height: 150px;}
 .input_xz { width: 90%; height: 20px;}
 
-.span_tk {min-width: 150px; display: inline-block; height: 15px; position: relative;}
-.input_tk { min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left;background: #EFEDE7;}
-.select_tk { min-width: 148px; height: 20px; line-height: 20px;  border: none; border-bottom: 1px #000 solid;}
+.span_tk { min-width: 150px; display: inline-block; height: 15px; position: relative;}
+.input_tk { font-weight: bold; min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left;background: #EFEDE7;}
+.select_tk { font-weight: bold; min-width: 148px; height: 20px; line-height: 20px;  border: none; border-bottom: 1px #000 solid;}
+
+
 
 .select_span {
+    font-weight: bold;
     display: inline-block;
     float: left;
     min-width: 150px;
@@ -272,13 +275,13 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
 
 
 .dragDrop_box {
+    font-weight: bold;
     display: inline-block; 
     float: left; 
     min-width: 148px; 
     height: 20px;
     line-height: 20px;
     border-bottom: 1px #000 solid;
-    cursor: move;
 }
 
 /*相关词汇---------------*/
