@@ -121,7 +121,7 @@ function flowplayer_mp3(audio_src){
         },
         onLoad: function() {
             this.setVolume(90);
-            this.setClip(audio_src);
+            this.setClip($("#path_path").val()+audio_src);
         }
     });
 }
@@ -420,7 +420,7 @@ function show_words(index){
 function jplayer_play(index){
     var src=$('#enunciate_url_'+index).val();
     $("#jplayer_one").jPlayer("setMedia", {
-        mp3: "http://localhost:3000"+src
+        mp3: $("#path_path").val()+src
     });
     $("#jplayer_one").jPlayer("play");
 }
@@ -938,7 +938,7 @@ function for_error(){
 //根据字符长度改变文本域的长和宽
 function call_me(self) {
     if(($(self).val() != null ) || ($(self).val() != "" )) {
-       var max_chars=($(self).val().length*8)<($(".m_side").width()-40)? ($(self).val().length*8):($(".m_side").width()-40);
+        var max_chars=($(self).val().length*8)<($(".m_side").width()-40)? ($(self).val().length*8):($(".m_side").width()-40);
         $(self).css("width", max_chars + "px");
     }
 }
