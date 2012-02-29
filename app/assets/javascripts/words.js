@@ -246,8 +246,8 @@ function show_re_word(current_step, current_index, next_index) {
 
 //回答正确
 function answer_right(current_word, category_id, current_index, current_step, type) {
-    var innhtml = "<div class='tab_x'></div><div class='tab_con'>"
-    + "恭喜你，回答正确,进入下一题！</div>";
+    var innhtml = "<div class='tab_con1'>"
+    + "恭喜你，回答正确，进入下一题！</div>";
     $("#tab_box").removeClass("icon_false").addClass("icon_true");
     $("#tab_box").html(innhtml);
 }
@@ -268,8 +268,15 @@ function get_wrong_word(word_id) {
 function answer_wrong(current_word, category_id, current_index, current_step, str, type) {
     get_wrong_word(current_word);
     var error_str = (str == null) ? "答错了，继续努力哦。" : str ;
-    var innhtml = "<div class='tab_x'></div><div class='tab_con'>"
-    + error_str +"</div>";
+    var innhtml = "";
+    if (str == null) {
+        innhtml = "<div class='tab_con1'>" + error_str +"</div>";
+    } else {
+        innhtml = "<span class='xx_x' onclick=\"javascript:close_result_tab('"+ current_word +"', '"
+            + category_id +"', '"+ current_index +"', "+ current_step +", '"+ type +"');\">"
+            +"<img src='/assets/x.gif'></span><div class='tab_con1'>"
+            + error_str +"</div>";
+    }
     $("#tab_box").removeClass("icon_true").addClass("icon_false");
     $("#tab_box").html(innhtml);
 }
@@ -442,13 +449,18 @@ function recollection_next(category_id, current_step, type) {
     }
 }
 
+//关闭拼写游戏最后的错误框
+function close_result_tab(current_word, category_id, current_index, current_step, type) {
+    next_task(current_word, category_id, current_index, current_step, 0, type);
+}
+
 //拼写游戏
 function show_result(letter, category_id, current_step, type) {
     if ($("#li_letter_"+letter).css("display") != "none") {
         var word = $(".ch_text:visible input:hidden:first");
         var error_time = $(".ch_text:visible input:hidden:last").val();
         var inputs = $(".ch_text:visible .words_input");
-        var word_arr = word.val().split("");
+        var word_arr = word.val().replace(/ /g, "").split("");
         if ($.inArray(letter, word_arr) > -1) {
             for (var i=0; i<word_arr.length; i++) {
                 if (word_arr[i] == letter) {
@@ -489,10 +501,10 @@ function show_result(letter, category_id, current_step, type) {
                 answer_wrong(word.attr("id"), category_id, word.attr("name"), current_step, "拼字失败,正确答案为" + word.val(), type);
                 $("#tab_box").css('display','block');
                 $("#tab_box").css('opacity','100');
-                $('#tab_box').delay(1500).fadeTo("slow",0,function(){
-                    $(this).css("display", "none");
-                    next_task(word.attr("id"), category_id, word.attr("name"), current_step, 0, ""+type);
-                });
+                //                $('#tab_box').delay(1500).fadeTo("slow",0,function(){
+                //                    $(this).css("display", "none");
+//                next_task(word.attr("id"), category_id, word.attr("name"), current_step, 0, ""+type);
+            //                });
             }
         }
         $("#li_letter_"+letter).css("display", "none");

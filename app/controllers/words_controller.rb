@@ -75,12 +75,6 @@ class WordsController < ApplicationController
         "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
     @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
       @already_recited.total_num, params[:type])
-    @word_ids = []
-    @sentence_hash = []
-    unless @words.blank?
-      @words.collect { |word| @word_ids << word.id }
-      @sentence_hash = Word.all_sentences(@sentence_hash, @word_ids)
-    end
   end
 
   def word_log

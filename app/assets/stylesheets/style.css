@@ -399,7 +399,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .lx_ul li.hover a {background: url(/assets/lx_ul_li.png) no-repeat 30px bottom; color: #333;}
 
 .ch_box { width: 625px; margin: 20px auto; background: #efede7; border: 1px #c2bdae solid; position: relative;}
-.ch_text { padding: 20px; line-height: 24px;}
+.ch_text { padding: 10px 20px; line-height: 24px;}
 
 .ch_words_shu { color: #ff6c00; text-align: right;}
 .ch_words_line { padding: 10px;}
@@ -448,14 +448,14 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .words_btn a:hover { background: #e7e3d7;}
 
 /*拼写游戏-----------*/
-.words_input { width: 20px; font-size: 16px; font-family: Arial;}
+.words_input { width: 30px; height: 24px; line-height: 24px; text-align: center; font-size: 18px; font-family: Arial;}
 .words_letter { overflow: hidden;}
 .words_letter li {
-    width: 24px;
-    height: 24px;
+    width: 15px;
+    height: 15px;
     border: 1px #c8c3b5 solid;
-    margin:5px;
-    line-height: 24px;
+    margin:2px;
+    line-height: 15px;
     text-align: center;
     float: left;
     background: #e7e3d7;
@@ -464,7 +464,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
     font-size: 14px;
 }
 .words_letter li.hover { color: #c8c3b5;}
-.xiaoren { width: 180px; height: 200px; margin: 0 auto;}
+.xiaoren { width: 346px; height: 315px;}
 
 /*foot----------------*/
 .foot { height: 5px;}
@@ -474,6 +474,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .tab_box { width: 300px; padding: 5px; min-height: 200px; background: #FFF; border: 5px #333 solid; position: absolute; z-index:1000;}
 .tab_x { float: right;}
 .tab_con { min-height: 100px; padding: 20px 10px; text-align: center; line-height: 24px;}
+.tab_con1 { height: 100px; margin-top: 75px; text-align: center; line-height: 24px;padding: 0 10px;}
 
 .tab_btn { width: 165px; margin: 0 auto;}
 .icon_false { background: url(/assets/false.png) no-repeat #FFF center center;}
