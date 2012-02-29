@@ -1,3 +1,8 @@
+<script type="text/javascript">
+  var load_time = setTimeout(function(){
+    $("#load_message").html("SORRY,此份试题好像存在问题，管理员会尽快解决此问题，给您带来的不便敬请谅解。");
+  },10000);
+</script>
 
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 <%= javascript_include_tag "#{@answer_js_url}" %>
@@ -38,7 +43,7 @@
 </div>
 
 <!-- 试题生成入口 generate.js -->
-<div id="generate"><center style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div>
+<div id="generate"><center id="load_message" style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div>
 
 <!-- 相关词汇框 -->
 <div id="about_words_loader" style="display:none;">
