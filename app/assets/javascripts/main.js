@@ -272,6 +272,17 @@ Array.prototype.indexOf=function(el, index){
     return -1;
 }
 
+if(typeof(HTMLElement) != "undefined"){
+    HTMLElement.prototype.contains = function(obj){
+        while(obj != null && typeof(obj.tagName) != "undefined"){
+            if(obj == this)
+                return true;
+            obj = obj.parentNode;
+        }
+        return false;
+    };
+}
+
 function precal(){
     // var doc_height = $(document).height();
     //var doc_width = $(document).width();

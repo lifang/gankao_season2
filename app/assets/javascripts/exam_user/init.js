@@ -629,25 +629,17 @@ function show_single_word(ele,i){
     $("#about_word_sentences").html(sentences_html);
 }
 
-//设置select的默认值
-//function setSel(str,select,types){
-//    var setinfo=false;
-//    for(var i=0;i<select.options.length;i++){
-//        if (types==0 && select.options[i].text==str){
-//            setinfo=true;
-//        }else if (types==1 && select.options[i].value==str){
-//            setinfo=true;
-//        }
-//        if (setinfo==true){
-//            select.selectedIndex=i;
-//            break;
-//        }
-//    }
-//}
-
-function close_select_ul(problem_index,question_index){
+function close_select_ul(theEvent,obj,problem_index,question_index){ //theEvent用来传入事件，Firefox的方式
+    var browser=navigator.userAgent;   //取得浏览器属性
+    if (browser.indexOf("MSIE")>0){ //如果是IE
+        if (obj.contains(event.toElement)) return; // 如果是子元素则结束函数
+    }else{ //如果是Firefox
+        if (obj.contains(theEvent.relatedTarget)) return; // 如果是子元素则结束函数
+    }
+    /*要执行的操作*/
     $("#select_ul_"+problem_index+"_"+question_index).hide();
 }
+
 
 //确认是否重做试卷
 function confirm_redo(type){
@@ -789,11 +781,11 @@ function call_me(problem_index,question_index) {
     var max_length = 48;
     if(($("#input_inner_answer_" + id).length>0) || ($("#input_inner_answer_" + id).val() != "" )) {
         if(($("#input_inner_answer_" + id).val().length >= 11) && ($("#input_inner_answer_" + id).val().length < max_length)) {
-            $("#input_inner_answer_" + id).css("width", $("#input_inner_answer_" + id).val().length*10 + "px");
+            $("#input_inner_answer_" + id).css("width", $("#input_inner_answer_" + id).val().length*8 + "px");
         } else if ($("#input_inner_answer_" + id).val().length == max_length) {
-            $("#qinput_inner_answer_" + id).css("width", max_length*10 + "px");
+            $("#qinput_inner_answer_" + id).css("width", max_length*8 + "px");
         } else if ($("#input_inner_answer_" + id).val().length > max_length) {
-            $("#input_inner_answer_" + id).css("width", max_length*10 + 130 + "px");
+            $("#input_inner_answer_" + id).css("width", max_length*8 + 30 + "px");
         }
     }
 }
@@ -850,6 +842,7 @@ $(function(){
             "preview" : preview
         },
         success : function(data) {
+            clearTimeout(load_time);
             if(data["message"]){
                 tishi_alert(data["message"]);
             }
@@ -1106,12 +1099,14 @@ function inner_question(correct_type,question_index){
     str1 = "<span class='span_tk' id='inner_span_tk_"+init_problem+"_"+question_index+"' onmouseover='javascript:show_hedui("+init_problem+","+question_index+");' onmouseout='javascript:hide_hedui("+init_problem+","+question_index+");'>";
     switch(correct_type){
         case "0":{
+            str1 += "<span onmouseout=\"javascript:close_select_ul(event,this,"+init_problem+","+question_index+");\">";
             str1 += "<span class='select_span inner_borde_blue_"+init_problem+"_"+question_index+"' id='input_inner_answer_"+init_problem+"_"+question_index+"' onclick='javascript:toggle_select_ul("+init_problem+","+question_index+");'></span>";
-            str1 += "<span class='select_ul select_ul_"+init_problem+"' id='select_ul_"+init_problem+"_"+question_index+"' style='display:none;' onmouseover=\"javascript:$(this).css('display', 'block');\" onmouseout=\"javascript:$(this).css('display', 'none');close_select_ul("+init_problem+","+question_index+");\">";
+            str1 += "<span class='select_ul select_ul_"+init_problem+"' id='select_ul_"+init_problem+"_"+question_index+"' style='display:none;'>";
             question_attrs = store3[question_index].questionattrs.split(";-;");
             for(j=0;j<question_attrs.length;j++){
                 str1 += "<span class='select_li select_li_"+init_problem+"_"+question_index+"' onclick=\"javascript:do_inner_select('"+question_attrs[j]+"',"+init_problem+","+question_index+");\">"+question_attrs[j]+"</span>";
             };
+            str1 += "</span>";
             str1 += "</span>";
             break;
         }

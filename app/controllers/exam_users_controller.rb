@@ -127,12 +127,14 @@ class ExamUsersController < ApplicationController
   def redo_paper
     exam_user = ExamUser.find(params[:id])
     url="#{Constant::PUBLIC_PATH}#{exam_user.answer_sheet_url}"
-    doc = get_doc(url)
-    collection = ""
-    collection = doc.root.elements["collection"].text if doc.root.elements["collection"]
-    f=File.new(url,"w+")
-    f.write("#{sheet_outline.force_encoding('UTF-8')}")
-    f.close
+    if File.exist?(url)
+      doc = get_doc(url)
+      collection = ""
+      collection = doc.root.elements["collection"].text if doc.root.elements["collection"]
+      f=File.new(url,"w+")
+      f.write("#{sheet_outline.force_encoding('UTF-8')}")
+      f.close
+    end
     exam_user.update_attribute("is_submited",false)
     redirect_to "/exam_users/#{params[:id]}?category=#{params[:category]}&type=#{params[:type]}"
   end
