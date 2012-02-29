@@ -36,11 +36,13 @@
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" onclick="javascript:test_again()" name="重做">重做</a></span>
   </div>
 </div>
+<input type="hidden" value="<%=Constant::BACK_SERVER_PATH  %>" id="path_path"/>
 <% category_id = params[:category].nil? ? 2 : params[:category] %>
 <input type="hidden" value="<%= @collection_url %>" id="file_path" />
 <input type="hidden" value="<%= category_id %>" id="category_id" />
 <div class="upErrorTo_tab border_radius" id="upErrorTo_tab">
   <input type="hidden" value="" id="question_id"/>
+
   <span class="xx_x"><img src="/assets/xx.png" onclick="javascript:$('.upErrorTo_tab').css('display','none');"/></span>
   <ul>
     <li><input name="error" type="radio" value="1" />题目错误</li>
