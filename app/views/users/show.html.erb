@@ -1,22 +1,30 @@
 <%= javascript_include_tag "update_user_info.js" %>
-<div class="rcf_box">
-  <label>昵称：</label>
-  <div class="setting-item-main">
-    <input id="username" type="text" value="<%= @user.username %>" />
+<div class="main_info">
+  <div class="rcf_box">
+    <label>用户编号：</label>
+    <div class="setting-item-main">
+      <div><%= params[:id].to_i %></div>
+    </div>
   </div>
-</div>
-<div class="rcf_box">
-  <label>E-MAIL：</label>
-  <div class="setting-item-main">
-    <input id="email" type="text" value="<%=@user.email  %>"/>
+  <div class="rcf_box">
+    <label>昵称：</label>
+    <div class="setting-item-main">
+      <input id="username" type="text" value="<%= @user.username %>" />
+    </div>
   </div>
-</div>
-<div class="rcf_box rcf_box_bottom">
-  <label>学校：</label>
-  <div class="setting-item-main">
-    <input id="school" type="text" value="<%=@user.school  %>"/>
+  <div class="rcf_box">
+    <label>E-MAIL：</label>
+    <div class="setting-item-main">
+      <input id="email" type="text" value="<%=@user.email  %>"/>
+    </div>
   </div>
+  <div class="rcf_box rcf_box_bottom">
+    <label>学校：</label>
+    <div class="setting-item-main">
+      <input id="school" type="text" value="<%=@user.school  %>"/>
+    </div>
+  </div>
+  <input type="hidden" value="<%= cookies[:user_id] %>" id="id"/>
+  <div class="save_info"><button class="save_info_btn" onclick="update_users()"></button></div>
+  <div class="clear"></div>
 </div>
-<input type="hidden" value="<%= cookies[:user_id] %>" id="id"/>
-<div class="save_info"><button class="save_info_btn" onclick="update_users()"></button></div>
-<div class="clear"></div>
