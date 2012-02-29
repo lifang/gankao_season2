@@ -7,7 +7,7 @@
     <%= javascript_include_tag "application.js" %>
     <%= javascript_include_tag "users.js" %>
     <!--[if IE 6]>
-    <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>
       /* EXAMPLE */
       DD_belatedPNG.fix('*');
@@ -35,7 +35,7 @@
               <% end %>
             <%  elsif is_nomal?(category_id) %>
               <%= "(试用结束)" %>
-            <% end %></a>|<a href="/">首页</a>|<a href="/users/delete_user">退出</a></div>
+            <% end %></a>|<a href="/">首页</a>|<a href="/logins/logout">退出</a></div>
         <div class="logo"><a href="/"><img src="/assets/logo_user.png" /></a></div>
       </div>
       <div class="main">
