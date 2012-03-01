@@ -27,7 +27,7 @@
   <div class="logo"><a href="/"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
   <div class="object"><big class="object_big"><%= Category::NAME["#{category_id}"] %></big>
     <small class="object_small">
-      <% if is_trial?(category_id)
+      <% if cookies[:user_id] && is_trial?(category_id)
         order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
         day=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
         <% if day>=1 %>
@@ -35,7 +35,7 @@
         <%elsif day==0%>
           <%=  "(试用即将到期)" %><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
         <% end %>
-      <%  elsif is_nomal?(category_id) %>
+      <%  elsif cookies[:user_id] && is_nomal?(category_id) %>
         <%= " (试用结束)" %><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
       <% end %>
     </small>
