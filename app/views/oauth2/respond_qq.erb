@@ -1,0 +1,15 @@
+<script type="text/javascript">
+  $.ajax({
+    async:true,
+    dataType:'json',
+    data:{
+      access_token:"032C7D6BB31950A28397E637ECED413E"
+    },
+    url:"https://graph.qq.com/oauth2.0/me",
+    type:'get',
+    success : function(data) {
+      tishi_alert(data.message)
+      load_message();
+    }
+  });
+</script>

@@ -24,17 +24,17 @@
         <% category_id = params[:category].nil? ? 2 : params[:category] %>
         <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}") %>
         <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>?category=<%=category_id  %>'" class="red"><%= cookies[:user_name] %>
-          <% if is_trial?(category_id)%>
-            <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
-            day_end=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
-            <% if day_end>=1%>
-              <%="(试用剩#{day_end}天)"%>
-            <%  elsif day_end==0 %>
-              <%= "(试用即将到期)" %>
-            <% end %>
-          <%  elsif is_nomal?(category_id) %>
-            <%= "(试用结束)" %>
-          <% end %></a>|<a href="/">首页</a>|<a href="/logins/logout">退出</a></div>
+            <% if is_trial?(category_id)%>
+              <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
+              day_end=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
+              <% if day_end>=1%>
+                <%="(试用剩#{day_end}天)"%>
+              <%  elsif day_end==0 %>
+                <%= "(试用即将到期)" %>
+              <% end %>
+            <%  elsif is_nomal?(category_id) %>
+              <%= "(试用结束)" %>
+            <% end %></a>|<a href="/">首页</a>|<a href="/logins/logout">退出</a></div>
         <div class="logo"><a href="/"><img src="/assets/logo_user.png" /></a></div>
       </div>
       <div class="main">
@@ -56,17 +56,17 @@
               </div>
             <% end %>
             <% category_id = params[:category].nil? ? 2 : params[:category].to_i %>
-            <h1 class="vip_h1">升级为正式用户</h1>
-            <h2 class="vip_h2"><%= Category.find(category_id).name %></h2>
+            <h1 class="vip_h1"><%= Category.find(category_id).name %></h1>
             <input type="hidden" value="<%=category_id  %>" id="category"/>
+            <div><img src="/assets/tg_vip_img.png" /></div>
             <div class="tab_box">
-              <h3 class="vip_h3">方法一：</h3>
-              <div class="vip_box sq_code"><div class="sq_con"><input id="invit_code" type="text" />
-                  <button class="t_btn" onclick="accredit()">确定</button></div></div>
-              <h3 class="vip_h3">方法二：</h3>
-              <div class="vip_box vip_zfb">
-                <div class="zfb_con">
-                  <a href="javascript:void(0);" title="会员充值" onclick="check_vip()"><img src="/assets/zfb_pic.png" /></a>
+              <div class="zfb_box">
+                <div class="zfb_con"><button class="zf_btn" onclick="check_vip()"></button></div>
+              </div>
+              <div class="sqcode_box">
+                <div class="sq_con">
+                  <div class="sq_con_input"><input id="invit_code"  type="text" /></div>
+                  <div class="sq_con_btn"><button class="t_btn" onclick="accredit()">确定</button></div>
                 </div>
               </div>
             </div>
