@@ -15,6 +15,12 @@ GankaoSeason2::Application.routes.draw do
 
   get "/gankao/index"
 
+
+  resources :oauth2 do
+    collection do
+      get :request_qq
+    end
+  end
   resources :exam_raters do
     collection do
       get :session,:check_paper,:log_out

@@ -120,9 +120,11 @@ class LoginsController < ApplicationController
     else
       flash[:warn]="已添加关注"
     end
-    render :inline => "</script><div id='flash_notice' class='tishi_tab'><p><%= flash[:warn] %></p></div>
+    render :inline => "<style>.tishi_tab { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none;z-index: 1000;border-radius: 5px;} .tishi_tab p { text-align: center; line-height: 24px; font-size: 18px; color:#fff; font-family:'微软雅黑';}</style>
+    <script type='text/javascript' src='/assets/application.js'></script><script type='text/javascript' src='/assets/login.js'></script>
+     <div id='flash_notice' class='tishi_tab'><p><%= flash[:warn] %></p></div>
     <script type='text/javascript'>show_flash_div();</script><script> setTimeout(function(){
-      window.close();}, 2000)</script><% flash[:warn]=nil %>"
+      window.close();}, 3000)</script><% flash[:warn]=nil %>"
   end
 
   def  renren_like

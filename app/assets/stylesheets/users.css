@@ -63,7 +63,7 @@ img { border:none;}
 .tab_ul li { padding: 0 10px; height: 30px; line-height: 30px; float: left; margin: 0 5px; color: #999; cursor: pointer;}
 .tab_ul li.hover { border: 1px #333 solid; border-bottom: none; height: 30px; background: #FFF; color: #333;}
 
-.tab_box { padding: 10px 0;}
+.tab_box { padding: 10px 0; overflow: hidden;}
 
 .mess_top { height: 25px; line-height: 25px; padding: 2px 20px; border-bottom: 1px  #CCC solid; background: #f3f3f3;}
 .mess_top span { margin: 0 10px;}
@@ -93,33 +93,37 @@ img { border:none;}
     position: relative;
     text-align: center;
 }
+.record_none { width: 150px; height: 50px; line-height: 50px; text-align: center; border: 1px #CCC solid; margin: 50px auto; background: #f8f8f8;}
 .vip_main {
     width: 700px;
     margin: 0 auto;
     border: 1px #CCC solid;
-    height: 520px;
     position: relative;
 }
 .tishi_vip a { margin-left: 20px; color: #F00;}
 .tishi_vip a:hover { text-decoration: underline;}
-.message_vip_box { width: 500px; margin: 0 auto; padding: 10px 0;}
+.message_vip_box { width: 650px; margin: 0 auto; padding: 10px 0;}
 .vip_h1 { font-size: 18px; height: 32px; line-height: 32px; color: #006cae; text-align: center;}
+.zfb_con { position: relative;}
+.sq_con { position: relative;}
+
+.zfb_box { width: 314px; height: 177px; overflow: hidden; background: url(/assets/zfb_pic.png) no-repeat; float: left; margin-left: 6px;}
+.sqcode_box { width: 314px; height: 177px; overflow: hidden; background: url(/assets/sqcode_pic.png) no-repeat; float: left; margin-left: 6px;}
+.sq_con input { width: 145px; height: 22px; float: left; margin-right: 5px;}
+.zf_btn { width: 81px; height: 27px; background: url(/assets/zf_btn.png) no-repeat; border: none; position: absolute; top: 136px; left: 118px;}
+.sq_con_input { position: absolute; top: 70px; left: 90px;}
+.sq_con_btn { position: absolute; top: 120px; left: 120px;}
 .vip_h2 { font-size: 16px; height: 32px; line-height: 32px; color: #939393; text-align: center;}
 .vip_h3 { font-size: 14px; height: 24px; line-height: 24px; color: #333;}
 
 /*vip*/
-.record_none { width: 150px; height: 50px; line-height: 50px; text-align: center; border: 1px #CCC solid; margin: 50px auto; background: #f8f8f8;}
 
 .vip_box { width: 500px; height: 119px; overflow: hidden; margin: 10px 0 20px 0;}
 .vip_box button { float: right; margin-left: 5px; color: #F90;}
 .sq_code { background: url(/assets/vip_bg.png) no-repeat 0 0;}
 .vip_zfb { background: url(/assets/vip_bg.png) no-repeat 0 bottom;}
-.sq_con{ width: 240px; margin: 47px 0 0 143px;}
-.sq_con input { width: 145px; height: 22px; float: left; margin-right: 5px;}
-.zfb_con { width: 450px; margin: 29px 0 0 143px;}
 .zfb_con img { float: left;}
 .zfb_con select  { height: 24px; line-height: 24px; float: left; margin: 20px 0 0 5px;}
-.zfb_con button { margin-top: 20px;}
 
 
 /*翻页-----------------------*/
