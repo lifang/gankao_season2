@@ -7,7 +7,7 @@
         <li>
           <% if cookies[:user_id].nil? %>
             <a href="/specials/<%= special.examination_id %>/join?category=<%= category_id %>">
-              <span><img title="仅供正式用户使用"  src="/assets/icon_tx.png" /></span>
+              <span><img class="tooltip" name=="仅供正式用户使用"  src="/assets/icon_tx.png" /></span>
               <h2><%= special.name %></h2>
             </a>
           <% else %>
@@ -15,16 +15,16 @@
               <a href="/specials/<%= special.examination_id %>/join?category=<%= category_id %>"
                  <% if @exam_user_hash[special.examination_id]&&@exam_user_hash[special.examination_id][1] %> onclick="return already_submit('<%= @exam_user_hash[special.examination_id][0] %>','<%= @exam_user_hash[special.examination_id][2] %>')" <% end %>>
                    <% if @exam_user_hash[special.examination_id]&&@exam_user_hash[special.examination_id][1] %>
-                  <span><img title="已完成" src="/assets/icon_wc.png" /></span>
+                  <span><img class="tooltip" name=="已完成" src="/assets/icon_wc.png" /></span>
                 <% elsif @exam_user_hash[special.id] %>
-                  <span><img title="未做完" src="/assets/icon_nun.png" /></span>
+                  <span><img class="tooltip" name=="未做完" src="/assets/icon_nun.png" /></span>
                   <% end %>
                 <h2><%= special.name %></h2>
               </a>
             <% else %>
-              <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
+              <a href="javascript:void(0);"
                  onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>
-                <span><img title="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
+                <span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
                 <h2><%= special.name %></h2>
               </a>
             <% end %>

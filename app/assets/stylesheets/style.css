@@ -39,6 +39,11 @@ button.green { color:#009900;}
 .nav li a:hover { color: #aaecff;}
 .nav li a.hover { font-weight: bold; background: url(/assets/nav_hover.png) center 0px no-repeat;}
 
+.object { margin-left: 10px; float: left; height: 46px; line-height: 46px; color: #FFF; font-family: "寰蒋闆呴粦";}
+
+.object_big { font-size: 16px; padding: 0 5px;}
+.object_small { font-size: 12px; padding: 0 5px 0 10px;}
+.object a {color: #FFF; padding: 0 5px; text-decoration: underline;}
 
 .head_info {float: right; height: 46px; line-height: 46px;}
 .h_user {color: #FFF; float: left; position: relative; z-index: 100;}

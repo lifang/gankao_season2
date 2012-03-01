@@ -4,19 +4,7 @@
     <% if cookies[:user_id] %>
       <div class="h_user">
         <a href="javascript:void(0);" class="h_email email_u">邮件</a>
-        <% if is_trial?(category_id)
-          order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
-          day=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
-          <% if day>=1 %>
-            <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %><%=  "(试用剩#{day}天)" %></a><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
-          <%elsif day==0%>
-            <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %><%=  "(试用即将到期)" %></a><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
-          <% end %>
-        <%  elsif is_nomal?(category_id) %>
-          <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %><%= " (试用结束)" %></a><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
-        <% else %>
-          <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %></a>
-        <% end %>
+        <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %></a>
         |<a href="/logins/logout">退出</a>
         <div class="email_tab" style="display: none; ">
           <ul>
@@ -37,6 +25,21 @@
       </div></div>
   </div>
   <div class="logo"><a href="/"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
+  <div class="object"><big class="object_big"><%= Category::NAME["#{category_id}"] %></big>
+    <small class="object_small">
+      <% if is_trial?(category_id)
+        order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
+        day=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
+        <% if day>=1 %>
+          <%=  "(试用剩#{day}天)" %><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
+        <%elsif day==0%>
+          <%=  "(试用即将到期)" %><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
+        <% end %>
+      <%  elsif is_nomal?(category_id) %>
+        <%= " (试用结束)" %><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
+      <% end %>
+    </small>
+   </div>
   <div class="nav">
     <ul>
       <li><a href="/similarities?category=<%= category_id %>" <% if controller.controller_name=="similarities" || (controller.controller_name=="exam_users"&&params["type"]=="similarities") %> class="hover" <% end %> >真题</a></li>
