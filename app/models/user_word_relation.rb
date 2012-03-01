@@ -7,7 +7,7 @@ class UserWordRelation < ActiveRecord::Base
   def self.user_words(user_id, category_id)
     return UserWordRelation.count_by_sql(["select count(uwr.id) from user_word_relations uwr
       inner join words w on w.id = uwr.word_id
-      where w.category_id = ? and uwr.user_id = ? ", category_id, user_id])    
+      where w.category_id = ? and uwr.status = #{STATUS[:NOMAL]} and uwr.user_id = ? ", category_id, user_id])
   end
 
 end

@@ -58,6 +58,7 @@ $(document).ready(function(){
     $('.xx_x').bind('click',function(){
         $('#complete_info').hide();
         $('#first_zhez').hide();
+        delCookie("first");
         return false;
     })
 })

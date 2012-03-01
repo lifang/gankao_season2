@@ -78,8 +78,8 @@ span.correctWrong_bg, div.correctWrong_bg, .correctWrong_bg { background: #FFE8E
 .answer_textarea { padding: 5px; width: 95%; height: 180px; border: 1px solid #E2E2E2;}
 .answer_input { padding: 5px; border: 1px solid #E2E2E2;}
 
-div.q_yes, span.q_yes, select.q_yes, textarea.q_yes { border: 2px #090 solid;}
-div.q_no, span.q_no, select.q_no, textarea.q_no { border: 2px #FF6C00 solid;}
+div.q_yes, span.q_yes, select.q_yes, textarea.q_yes, input.q_yes { border: 2px #090 solid;}
+div.q_no, span.q_no, select.q_no, textarea.q_no, input.q_no { border: 2px #FF6C00 solid;}
 
 /*保存答案按钮-----*/
 .p_question_btn { margin-top: 5px; padding-left: 10px;}

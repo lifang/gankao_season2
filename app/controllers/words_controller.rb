@@ -13,6 +13,10 @@ class WordsController < ApplicationController
     if cookies[:user_id]
       @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
           "user_id" => cookies[:user_id].to_i, "category_id" => category_id.to_i})
+      @user_words = UserWordRelation.count_by_sql(["select count(uwr.id) from user_word_relations uwr
+      inner join words w on w.id = uwr.word_id where w.category_id = ?
+      and uwr.status = #{UserWordRelation::STATUS[:RECITE]}
+      and uwr.user_id = ?", category_id.to_i, cookies[:user_id].to_i])
       level_word_count = Word.recite_words(category_id.to_i)
       user_word_count = UserWordRelation.user_words(cookies[:user_id].to_i, category_id.to_i)
       @leaving_count = level_word_count + user_word_count - @already_recited.total_num
@@ -51,6 +55,9 @@ class WordsController < ApplicationController
   end
 
   def recollection
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}词汇训练"
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
     @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
@@ -58,6 +65,9 @@ class WordsController < ApplicationController
   end
 
   def use
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}词汇训练"
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
     @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
@@ -71,16 +81,13 @@ class WordsController < ApplicationController
   end
 
   def hand_man
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}词汇训练"
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
     @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
       @already_recited.total_num, params[:type])
-    @word_ids = []
-    @sentence_hash = []
-    unless @words.blank?
-      @words.collect { |word| @word_ids << word.id }
-      @sentence_hash = Word.all_sentences(@sentence_hash, @word_ids)
-    end
   end
 
   def word_log
