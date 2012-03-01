@@ -1,15 +1,38 @@
 <script type="text/javascript">
-  $.ajax({
-    async:true,
-    dataType:'json',
-    data:{
-      access_token:"032C7D6BB31950A28397E637ECED413E"
-    },
-    url:"https://graph.qq.com/oauth2.0/me",
-    type:'get',
-    success : function(data) {
-      tishi_alert(data.message)
-      load_message();
-    }
-  });
+  function callback(user)
+  {alert(user);
+    var userName = document.getElementById('userName');
+    var greetingText = document.createTextNode('Greetings, '+ user.openid + '.');
+    userName.appendChild(greetingText);
+  }
+
+  //应用的APPID，请改为你自己的
+  var appID = "YOUR_APP_ID";
+  //成功授权后的回调地址，请改为你自己的
+  var redirectURI = "http://qzs.qq.com/qzone/openapi/success.html";
+
+  //构造请求
+  if (window.location.hash.length == 0)
+  {
+    var path = 'https://graph.qq.com/oauth2.0/authorize?';
+    var queryParams = ['client_id=' + appID,'redirect_uri=' + redirectURI,'scope=' + 'get_user_info,list_album,upload_pic,add_feeds,do_like','response_type=token'];
+
+    var query = queryParams.join('&');
+    var url = path + query;
+    window.open(url);
+  }
+  else
+  {
+    //获取access token
+    var accessToken = window.location.hash.substring(1);
+    alert(accessToken);
+    //使用Access Token来获取用户的OpenID
+    var path = "https://graph.qq.com/oauth2.0/me?";
+    var queryParams = [accessToken, 'callback=callback'];
+    var query = queryParams.join('&');
+    var url = path + query;
+    var script = document.createElement('script');
+    script.src = url;
+    document.body.appendChild(script);
+  }
 </script>
