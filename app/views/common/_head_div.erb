@@ -31,15 +31,18 @@
         order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
         day=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
         <% if day>=1 %>
-          <%=  "(试用剩#{day}天)" %><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
+          <%=  "(试用剩#{day}天)" %>
         <%elsif day==0%>
-          <%=  "(试用即将到期)" %><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
+          <%=  "(试用即将到期)" %>
         <% end %>
       <%  elsif cookies[:user_id] && is_nomal?(category_id) %>
-        <%= " (试用结束)" %><a href="/users/charge_vip?category=<%= category_id %>">升级</a>
+        <%= " (试用结束)" %>
       <% end %>
     </small>
-   </div>
+    <% if cookies[:user_id] && (is_trial?(category_id)||is_nomal?(category_id)) %>
+      <a href="/users/charge_vip?category=<%= category_id %>">升级</a>
+    <% end %>
+  </div>
   <div class="nav">
     <ul>
       <li><a href="/similarities?category=<%= category_id %>" <% if controller.controller_name=="similarities" || (controller.controller_name=="exam_users"&&params["type"]=="similarities") %> class="hover" <% end %> >真题</a></li>
