@@ -12,6 +12,7 @@ class Category < ActiveRecord::Base
   SIXTH = 3
   TYPES = {"2" => "english_fourth_level", "3" => "english_sixth_level"}   # :FOURTH_LEVEL 四级； :SIXTH_LEVEL 六级
   TYPE_IDS = {:english_fourth_level => 2, :english_sixth_level => 3} # :FOURTH_LEVEL 四级； :SIXTH_LEVEL 六级
+  NAME = {"2" =>"英语四级", "3"=>"英语六级"}
 
 
 end
