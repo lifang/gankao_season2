@@ -85,6 +85,7 @@ $(document).ready(function(){
    
 })
 
+//删除大题
 function delete_this(){
     $.ajax({
         async:true,
@@ -101,7 +102,7 @@ function delete_this(){
     });
 }
 
-
+//试题听力
 function flowplayer_mp3(audio_src){
     $("#flowplayer_postion").append($("#flowplayer_loader"));
     $f("flowplayer", "/assets/flowplayer/flowplayer-3.2.7.swf", {
@@ -120,11 +121,12 @@ function flowplayer_mp3(audio_src){
         },
         onLoad: function() {
             this.setVolume(90);
-            this.setClip(audio_src);
+            this.setClip($("#path_path").val()+audio_src);
         }
     });
 }
 
+//加载大题
 function load_problem_collection(problem_index,tag){
     var total_problem=get_array(collections.problems.problem);
     var problems_tags=tag_problems[tag];
@@ -171,7 +173,7 @@ function load_problem_collection(problem_index,tag){
                         new_attrs += "<li name='"+escape(attrs[i])+"'>"+attrs[i]+"</li>"
                     }
                 } else if(correct_type=="3"){
-                    var max_length=(single_answer.length*8-40)>680 ? 680 : (single_answer.length*8-40)
+                    var max_length=(single_answer.length*8-40)>$(".m_side").width() ? ($(".m_side").width()-40): (single_answer.length*8-40)
                     element_str += "<input class='input_tk' type='text' id='"+ sign_index+"'  style='width:"+max_length+"px;' value='"+single_answer +"'"
                     if(question_type=='1'&&flag!=null&&parseInt(flag)==1){
                         element_str += "onclick=\"javascript:show_question('"+sign_index +"', this);\" onblur=\"javascript:$(this).removeClass('borde_blue');\""
@@ -410,6 +412,7 @@ function ajax_add_word(word_index){
     });
 }
 
+//相关词汇列表切换
 function show_words(index){
     $(".xg_words_ny").css("display","none");
     $("#xg_words_ny_"+index).css("display","");
@@ -417,7 +420,7 @@ function show_words(index){
 function jplayer_play(index){
     var src=$('#enunciate_url_'+index).val();
     $("#jplayer_one").jPlayer("setMedia", {
-        mp3: "http://localhost:3000"+src
+        mp3: $("#path_path").val()+src
     });
     $("#jplayer_one").jPlayer("play");
 }
@@ -549,6 +552,7 @@ function click_prev_problem(){
     $("#jplayer_play").trigger("onclick");
 }
 
+//以数组的方式加载试题
 function get_array(value){
     var result = [];
     if(value){
@@ -709,6 +713,7 @@ function show_div(id){
     jQuery(id).css('display','block');
 }
 
+//重做按钮
 function test_again(){
     var problems_tags=tag_problems[tag_types];
     var problem=get_array(collections.problems.problem)[problems_tags[problem_init]]
@@ -751,8 +756,8 @@ function test_again(){
                 var element_str="<span class='span_tk' onmouseover=\"javascript:$('#check_"+sign_index +"').css('display','');\" onmouseout=\"javascript:$('#check_"+sign_index +"').css('display','none');\" >";
                 if (inner_correct_type=="0"){
                     $("#pro_qu_ul_"+sign_index).html($("#pro_qu_ul_"+sign_index).html()+"<input id='user_answer_"+sign_index+"' value='' type='hidden' />");
-                   element_str += "<span onmouseout=\"close_span(event,this,'"+sign_index +"')\">"
-                   element_str += "<span class='select_span' id='"+sign_index+"' onclick=\"$('#select_"+ sign_index+"').css('display','');";
+                    element_str += "<span onmouseout=\"close_span(event,this,'"+sign_index +"')\">"
+                    element_str += "<span class='select_span' id='"+sign_index+"' onclick=\"$('#select_"+ sign_index+"').css('display','');";
                     element_str += "\"></span><span class='select_ul' style='display:none' id='select_"+sign_index +"' onmouseout=\"javacript:$(this).css('display','none')\" onmouseover=\"javacript:$(this).css('display','')\">" ;
                     var question_attrs=questions[sign_index].questionattrs.split(";-;");
                     for(var attr_index=0;attr_index<question_attrs.length;attr_index++){
@@ -800,7 +805,7 @@ function test_again(){
     }
 }
 
-
+//记录体面内用户答案
 function inner_value(correct_type,question_index){
     if(correct_type=="0"){
         $("#user_answer_"+question_index).val($("#"+question_index).html());
@@ -811,7 +816,7 @@ function inner_value(correct_type,question_index){
        
 }
 
-//根据小题的类型，区别操作
+//根据小题的类型加载小题
 function next_correct_type(correct_type,ele,problem_index,question_index,question_detail){
     //单选题
     var frag = document.createDocumentFragment();
@@ -860,6 +865,7 @@ function next_correct_type(correct_type,ele,problem_index,question_index,questio
     }
 }
 
+//题面外试题做题
 function do_answer(e,single_answer,question,correct_type){
     if(correct_type=="0"||correct_type=="2"){
         $(e).parent().parent().find("span").removeClass("hover");
@@ -892,6 +898,7 @@ function do_answer(e,single_answer,question,correct_type){
     }
 }
 
+//报告错误
 function for_error(){
     var question_id=$("#question_id").val();
     var paper_id=get_array(collections.problems.problem)[tag_problems[tag_types][problem_init]].paper_id;
@@ -930,15 +937,9 @@ function for_error(){
 
 //根据字符长度改变文本域的长和宽
 function call_me(self) {
-    var max_length=80;
     if(($(self).val() != null ) || ($(self).val() != "" )) {
-        if(($(self).val().length >= 20) && ($(self).val().length < max_length)) {
-            $(self).css("width", $(self).val().length*8 + "px");
-        } else if ($(self).val().length == max_length) {
-            $(self).css("width", max_length*8 + "px");
-        } else if ($(self).val().length > max_length) {
-            $(self).css("width", max_length*8+ 30 + "px");
-        }
+        var max_chars=($(self).val().length*8)<($(".m_side").width()-40)? ($(self).val().length*8):($(".m_side").width()-40);
+        $(self).css("width", max_chars + "px");
     }
 }
 
