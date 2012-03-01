@@ -1,5 +1,5 @@
-<div class="mk_h">您可以享受主观题专业老师阅卷的服务，并进一步获取信心指数，以达到更好的备考效果。</div>
 <% unless @simulations.blank? %>
+  <div class="mk_h">您可以享受主观题专业老师阅卷的服务，并进一步获取信心指数，以达到更好的备考效果。</div>
   <div class="mokao_bg">
     <ul class="mk_ul">
       <% @simulations[0, 3].each do |simulation| %>
@@ -35,19 +35,19 @@
                 <% if is_vip?(params[:category]) %>
                   <a href="javascript:void(0);"
                      onclick="javascript:show_part_score('<%= @exam_user_hash[simulation.id][0].total_score %>',
-                               '<%= @exam_user_hash[simulation.id][0].rank %>', '<%= @exam_user_hash[simulation.id][1] %>',
-                               '<%= @exam_user_hash[simulation.id][2] %>', '<%= @exam_user_hash[simulation.id][3] %>',
-                               '<%= @exam_user_hash[simulation.id][4] %>');" >查看分数</a>
+                       '<%= @exam_user_hash[simulation.id][0].rank %>', '<%= @exam_user_hash[simulation.id][1] %>',
+                       '<%= @exam_user_hash[simulation.id][2] %>', '<%= @exam_user_hash[simulation.id][3] %>',
+                       '<%= @exam_user_hash[simulation.id][4] %>');" >查看分数</a>
                   <a href="/simulations/<%= @exam_user_hash[simulation.id][0].id %>/show_result" target="_blank">查看试卷</a>
                 <% else %>
                   <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
                      onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>查看分数</a>
                   <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
                      onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>查看试卷</a>
-                <% end %>
-              <% end %>
-            <% else %>
-              <% if simulation.start_at_time and  simulation.start_at_time > Time.now %>
+                   <% end %>
+                 <% end %>
+               <% else %>
+                 <% if simulation.start_at_time and  simulation.start_at_time > Time.now %>
                 敬请关注
               <% elsif simulation.start_end_time and simulation.start_end_time < Time.now %>
                 考试已结束
@@ -60,6 +60,8 @@
       <% end %>
     </ul>
   </div>
+<% else %>
+  <img src="/assets/mk_img.png" />
 <% end %>
 
 <div class="zhezhao" style="display: none; "></div>

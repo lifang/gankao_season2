@@ -346,8 +346,11 @@ li.mk_li_hover { border-top: 2px #2875ae solid;}
 .zhenti_list li h2 { color: #333; padding-left: 20px; font-size: 14px;}
 
 /*学习计划-----------------*/
-.jihua_wei { width: 625px; margin: 0 auto; background: #efede7; border: 1px #c2bdae solid; position: relative;}
-.jihua_w_text { padding: 20px; line-height: 24px;}
+.jihua_wei { width: 625px; margin: 0 auto; position: relative;}
+.jihua_w_text { text-align: center; padding: 20px 0;}
+
+.jihua_btn_box { width: 112px; height: 43px; margin: 0 auto;}
+.jihua_btn { width: 112px; height: 43px; font-size: 16px; font-family: "微软雅黑"; color: #1f6cbb; background: url(/assets/jihua_btn.png) no-repeat; border: none;}
 .box_bottom_bg { width: 620px; height: 12px; position: absolute; bottom: -12px; background: url(/assets/box_bottom_bg.png) no-repeat;}
 
 .planTable { width: 698px; border: 1px #bebebe solid;}

@@ -55,6 +55,9 @@ class WordsController < ApplicationController
   end
 
   def recollection
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}词汇训练"
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
     @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
@@ -62,6 +65,9 @@ class WordsController < ApplicationController
   end
 
   def use
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}词汇训练"
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
     @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
@@ -75,6 +81,9 @@ class WordsController < ApplicationController
   end
 
   def hand_man
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @category = Category.find_by_id(category_id.to_i)
+    @title = "#{@category.name}词汇训练"
     @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
         "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
     @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
