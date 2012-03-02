@@ -1,4 +1,4 @@
-#encodeing: utf-8
+#encoding: utf-8
 class Oauth2Controller < ApplicationController
   include Oauth2Helper
 
