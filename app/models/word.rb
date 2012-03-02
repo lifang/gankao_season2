@@ -7,7 +7,6 @@ class Word < ActiveRecord::Base
   has_many :questions,:through=>:word_question_relations, :source => :question
   has_many :word_discriminate_relations,:dependent => :destroy
   has_many :discriminates,:through=>:word_discriminate_relations, :source => :discriminate
-  has_many :user_word_relations
 
   TYPES = {0 => "n.", 1 => "v.", 2 => "pron.", 3 => "adj.", 4 => "adv.",
     5 => "num.", 6 => "art.", 7 => "prep.", 8 => "conj.", 9 => "interj.", 10 => "u = ", 11 => "c = ", 12 => "pl = "}

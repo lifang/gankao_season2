@@ -11,7 +11,7 @@ $(document).ready(function(){
     if (word_ids == null) {
         word_ids = $("#all_words").val().split(",");
     }
-    if (getCookie("rem_word") == null) {       
+    if (getCookie("rem_word") == null) {
         var all_index = "";
         for (var i=0; i<word_ids.length; i++) {
             if (all_index != "") {
@@ -531,3 +531,5 @@ function over_part(str1, str2) {
     $("#tab_box").css('display','block');
     $("#tab_box").css('opacity','100');
 }
+
+

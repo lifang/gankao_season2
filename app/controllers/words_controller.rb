@@ -11,15 +11,11 @@ class WordsController < ApplicationController
     @meta_keywords = "#{@category.name}词汇表,大学英语四级必考词汇"
     @meta_description = "搜集#{@category.name}必考词汇1000余条，以四步训练帮助掌握词汇的用法和拼写，为应试提供扎实的基础。"
     if cookies[:user_id]
-      @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
-          "user_id" => cookies[:user_id].to_i, "category_id" => category_id.to_i})
-      @user_words = UserWordRelation.count_by_sql(["select count(uwr.id) from user_word_relations uwr
-      inner join words w on w.id = uwr.word_id where w.category_id = ?
-      and uwr.status = #{UserWordRelation::STATUS[:RECITE]}
-      and uwr.user_id = ?", category_id.to_i, cookies[:user_id].to_i])
-      level_word_count = Word.recite_words(category_id.to_i)
-      user_word_count = UserWordRelation.user_words(cookies[:user_id].to_i, category_id.to_i)
-      @leaving_count = level_word_count + user_word_count - @already_recited.total_num
+      user_word_relation = UserWordRelation.single_user_word(cookies[:user_id].to_i, category_id.to_i)
+      @leaving_count = (user_word_relation.nomal_ids.nil? or user_word_relation.nomal_ids.empty?) ? 0 :
+        (user_word_relation.nomal_ids.split(",")).length
+      @already_recited = (user_word_relation.recite_ids.nil? or user_word_relation.recite_ids.empty?) ? 0 :
+        (user_word_relation.recite_ids.split(",")).length
     else
       @leaving_count = Word.recite_words(category_id.to_i)
     end
