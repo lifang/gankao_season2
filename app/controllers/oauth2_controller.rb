@@ -1,7 +1,7 @@
 #encodeing: utf-8
 class Oauth2Controller < ApplicationController
   include Oauth2Helper
-
+  layout ""
   def request_qq
     redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::REQUEST_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
   end
@@ -28,9 +28,14 @@ class Oauth2Controller < ApplicationController
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
       ActionLog.login_log(cookies[:user_id])
-      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
+      data=true
     rescue
-      render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      data=false
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
     end
   end
 
