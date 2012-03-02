@@ -7,7 +7,7 @@ class Oauth2Controller < ApplicationController
   end
 
   def respond_qq
-    render :layout=>false
+    render :layout=>"oauth"
   end
 
   def manage_qq
