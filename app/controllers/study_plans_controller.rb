@@ -9,14 +9,6 @@ class StudyPlansController < ApplicationController
     @meta_keywords = "#{@category.name}复习方法,大学英语四级学习计划"
     @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提供#{@category.name}的应试能力。"
     @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", params[:category].to_i])
-    plan_tasks = PlanTask.find(:all,
-      :conditions => ["task_types in (#{PlanTask::TASK_TYPES[:PRACTICE]}, #{PlanTask::TASK_TYPES[:RECITE]})
-                      and period_types = #{PlanTask::PERIOD_TYPES[:EVERYDAY]} and study_plan_id = ?",
-        @study_plan.id]) if @study_plan
-    @tasks = {}
-    plan_tasks.each do |task|
-      @tasks[task.task_types] = task.num
-    end unless plan_tasks.nil? or plan_tasks.blank?
     if cookies[:user_id]
       @user_plan = UserPlanRelation.find(:first,
         :conditions => ["user_id = ? and study_plan_id = ? ", cookies[:user_id].to_i, @study_plan.id]) if @study_plan

@@ -3,10 +3,7 @@
 
 //控制做题页面主体高度
 $(function(){
-    // var doc_height = $(document).height();
-    //var doc_width = $(document).width();
     var win_height = $(window).height();
-    //var win_width = $(window).width();
     var head_height = $(".head").height();
     var mainTop_height = $(".m_top").height();
     var foot_height = $(".foot").height();
@@ -17,13 +14,9 @@ $(function(){
 
 //控制其他页面主体高度
 $(function(){
-    // var doc_height = $(document).height();
-    //var doc_width = $(document).width();
     var win_height = $(window).height();
-    //var win_width = $(window).width();
     var head_height = $(".head").height();
     var foot_height = $(".foot").height();
-
     var main_height = win_height-(head_height+foot_height);
     $(".main_Div").css('height',main_height-12);
 })
@@ -56,7 +49,6 @@ $(function(){
         && $(".email_tab")[0] != null && $(".email_tab")[0] != undefined) {
         $(".h_email")[0].onmouseover = show_email_info ;
         $(".email_tab")[0].onmouseout = close_email_info ;
-    //$(".h_email")[0].onmouseout = close_email_info;
     }
 })
 
@@ -183,6 +175,7 @@ function show_part_score(total_score, rank, part1_score, part2_score, part3_scor
 function show_exam_tishi(is_submited, simulation_id) {
     generate_flash_div("#mokao_tishi_tab");
     $("#sim_id").attr("value", simulation_id);
+    $("#mokao_tishi_tab .mk_wenti input").removeAttr("checked");
     if (is_submited == "false") {
         $("#not_join").hide();
         $("#already_join").show();
@@ -284,14 +277,11 @@ if(typeof(HTMLElement) != "undefined"){
 }
 
 function precal(){
-    // var doc_height = $(document).height();
-    //var doc_width = $(document).width();
     var win_height = $(window).height();
-    //var win_width = $(window).width();
     var head_height = $(".head").height();
     var mainTop_height = $(".m_top").height();
     var foot_height = $(".foot").height();
     var main_height = win_height-(head_height+mainTop_height+foot_height);
-    $(".m_side").css('height',main_height-12);//12为head的padding的12px
-    $(".main").css('height',main_height-12+34);//34是m_top的高度，
+    $(".m_side").css('height',main_height-12);
+    $(".main").css('height',main_height-12+34);
 }

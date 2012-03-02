@@ -1,33 +1,16 @@
-<h1>学习计划</h1>
 <% if @user_plan.nil? %>
   <div class="jihua_wei">
+    <div class="jihua_w_text"><img src="/assets/beikao.png" /></div>
     <div class="jihua_w_text">
-      <% study_day = (!@study_plan.nil? and !@study_plan.study_date.nil?) ? @study_plan.study_date : "30" %>
-      <div>面对四级，你是否有无从下手的感觉？常常很很多想法而无法坚持到底？不知道应该做什么？
-        那就请加入我们的"<%= study_day %>天突破四级"学习计划吧。
-        我们的理念很简单：真题+词汇。我们的方法很直接；
-        每天<%= @tasks[PlanTask::TASK_TYPES[:PRACTICE]].nil? ? "50" : @tasks[PlanTask::TASK_TYPES[:PRACTICE]] %>题真题+
-        <%= @tasks[PlanTask::TASK_TYPES[:RECITE]].nil? ? "50" : @tasks[PlanTask::TASK_TYPES[:RECITE]] %>个词汇。
-        我们的效果很卓著，用过都说有效。参加我们的学习计划，你会得到<%= study_day %>天额外的免费学习时间
-        （通常普通用户只有7天的试用时间而已）。怎么参与呢？
-
-        第一步 发送微博---向所有粉丝宣布，你将挑战自己，坚持<%= study_day %>天，
-        每天完成<%= @tasks[PlanTask::TASK_TYPES[:PRACTICE]].nil? ? "50" : @tasks[PlanTask::TASK_TYPES[:PRACTICE]] %>道真题，
-        记住<%= @tasks[PlanTask::TASK_TYPES[:RECITE]].nil? ? "50" : @tasks[PlanTask::TASK_TYPES[:RECITE]] %>个词汇。
-        第二步 每天登录----加入击破计划的用户，登录后会收到当天任务完成情况的提示，然后开始努力。
-        任务完成，系统会自动发出微博，宣布你完成了今天的任务。
-
-        坚持<%= study_day %>天，不但可以提升英语水平，顺利通过四级，更是对懒散的自己说不，挑战自我的英勇行为。还在等什么？马上加入！</div>
-      <div class="btn_box">
+      <div class="jihua_btn_box">
         <% if @study_plan.nil? %>
-          <button class="t_btn" disabled >马上加入</button>
+        <button class="jihua_btn" title="暂时还没有学习计划" disabled >马上加入</button>
         <% else %>
-          <button class="t_btn"
+          <button class="jihua_btn"
                   onclick="javascript:window.location.href='/study_plans/<%= @study_plan.id %>?category=<%= params[:category] %>';" >
             马上加入</button>
         <% end %>
       </div>
     </div>
-    <div class="box_bottom_bg"></div>
   </div>
 <% end %>

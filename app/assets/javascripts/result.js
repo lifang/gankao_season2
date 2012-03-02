@@ -883,7 +883,7 @@ function generate_jplayer(mp3_url, block_id) {
 function erea_with(str) {
     var width = "";
     if (str.length > 20 && str.length <= 48) {
-        width = (str.length * 10) + "px";
+        width = (str.length * 8) + "px";
     }else if (str.length > 48) {
         width = "610px";
     }

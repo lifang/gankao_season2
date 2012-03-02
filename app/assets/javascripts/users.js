@@ -57,9 +57,9 @@ function show_div(id){
     var win_width = jQuery(window).width();
     var z_layer_height = jQuery(id).height();
     var z_layer_width = jQuery(id).width();
-    jQuery(id).css('top',(win_height-z_layer_height)/2);
-    jQuery(id).css('left',(win_width-z_layer_width)/2);
-    jQuery(id).css('display','block');
+    $(id).css('top',(win_height-z_layer_height)/2);
+    $(id).css('left',(win_width-z_layer_width)/2);
+    $(id).css('display','block');
 }
 
 
