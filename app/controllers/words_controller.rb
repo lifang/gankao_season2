@@ -5,6 +5,7 @@ class WordsController < ApplicationController
   before_filter :get_role, :only => ["index", "recite_word"]
   
   def index
+    cookies.delete(:word_ids)
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
     @category = Category.find_by_id(category_id.to_i)
     @title = "#{@category.name}词汇"
@@ -30,10 +31,7 @@ class WordsController < ApplicationController
       flash[:notice] = "您的试用期已结束。[<a class='link_c' href='/users/charge_vip?category=#{params[:category]}'>升级为正式用户</a>]"
       redirect_to "/words?category=#{params[:category]}"
     else
-      @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
-          "user_id" => cookies[:user_id].to_i, "category_id" => category_id.to_i})
-      @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
-        @already_recited.total_num, params[:type])
+      @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i, params[:type])
       @word_ids = []
       @sentence_hash = []
       unless @words.blank?
@@ -54,20 +52,14 @@ class WordsController < ApplicationController
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
     @category = Category.find_by_id(category_id.to_i)
     @title = "#{@category.name}词汇训练"
-    @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
-        "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
-    @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
-      @already_recited.total_num, params[:type])
+    @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i, params[:type])
   end
 
   def use
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
     @category = Category.find_by_id(category_id.to_i)
     @title = "#{@category.name}词汇训练"
-    @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
-        "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
-    @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
-      @already_recited.total_num, params[:type])
+    @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i, params[:type])
     @word_ids = []
     @sentence_hash = []
     unless @words.blank?
@@ -80,32 +72,31 @@ class WordsController < ApplicationController
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
     @category = Category.find_by_id(category_id.to_i)
     @title = "#{@category.name}词汇训练"
-    @already_recited = ActionLog.return_log_by_types({"types" => ActionLog::TYPES[:RECITE],
-        "user_id" => cookies[:user_id].to_i, "category_id" => params[:category].to_i})
-    @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i,
-      @already_recited.total_num, params[:type])
+    unless cookies[:word_ids].nil? or cookies[:word_ids].empty?
+      @words = Word.find_by_sql(["select * from words w where id in (?)", cookies[:word_ids].split(",")])
+    else
+      @words = Word.current_recite_words(cookies[:user_id].to_i, params[:category].to_i, params[:type])
+    end
+    @word_ids = []
+    unless @words.blank?
+      @words.collect { |word| @word_ids << word.id }
+      cookies[:word_ids] = {:value =>@word_ids.join(","), :path => "/", :secure  => false}
+    end
   end
 
   def word_log
-    word_ids = params[:word_id].split(",")
-    wrong_ids = (params[:wrong_id].nil? or params[:wrong_id].empty?) ? [] : params[:wrong_id].split(",")
-    right_ids = (params[:right_id].nil? or params[:right_id].empty?) ? [] : params[:right_id].split(",")
-    leving_ids = (word_ids - wrong_ids)&right_ids
-    unless leving_ids.nil? or leving_ids.blank?
-      user_word_relation = UserWordRelation.find(:all, :conditions => ["word_id in (?)", leving_ids])
-      user_word_relation.each do |relation|
-        relation.update_attributes(:status => UserWordRelation::STATUS[:RECITE])
-      end unless user_word_relation.blank?
-      action_log = ActionLog.find(:first,
-        :conditions => ["category_id = ? and TO_DAYS(NOW())=TO_DAYS(created_at) and types = ? and user_id = ?",
-          params[:category_id].to_i, ActionLog::TYPES[:RECITE], cookies[:user_id].to_i])
-      if action_log
-        total_num = leving_ids.length + action_log.total_num
-        action_log.update_attributes(:total_num => total_num)
-      else
-        ActionLog.create(:category_id => params[:category_id].to_i, :user_id => cookies[:user_id].to_i,
-          :types => ActionLog::TYPES[:RECITE], :created_at => Time.now.to_date, :total_num => leving_ids.length)
-      end
+    puts "---------------------------------"
+    puts params[:word_id].to_i
+    UserWordRelation.add_recite_word(cookies[:user_id].to_i, params[:word_id].to_i, params[:category_id].to_i)
+    action_log = ActionLog.find(:first,
+      :conditions => ["category_id = ? and TO_DAYS(NOW())=TO_DAYS(created_at) and types = ? and user_id = ?",
+        params[:category_id].to_i, ActionLog::TYPES[:RECITE], cookies[:user_id].to_i])
+    if action_log
+      total_num = action_log.total_num + 1
+      action_log.update_attributes(:total_num => total_num)
+    else
+      ActionLog.create(:category_id => params[:category_id].to_i, :user_id => cookies[:user_id].to_i,
+        :types => ActionLog::TYPES[:RECITE], :created_at => Time.now.to_date, :total_num => 1)
     end
     render :text => ""
   end

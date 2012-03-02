@@ -29,14 +29,14 @@ class UserWordRelation < ActiveRecord::Base
   #用户增加已背诵的单词
   def self.add_recite_word(user_id, word_id, category_id)
     user_word_relation = UserWordRelation.single_user_word(user_id, category_id)
-    nomal_ids = user_word_relation.nomal_ids.gsub(",#{word_id.strip}", "") unless user_word_relation.nomal_ids.nil?
+    nomal_ids = user_word_relation.nomal_ids.split(",") - ["#{word_id}"] unless user_word_relation.nomal_ids.nil?
     recite_ids = ""
     if user_word_relation.recite_ids.nil?
-      recite_ids = word_id.strip
+      recite_ids = word_id
     else
-      recite_ids = ((user_word_relation.recite_ids.split(",")) | ["#{word_id.strip}"]).join(",")
+      recite_ids = ((user_word_relation.recite_ids.split(",")) | ["#{word_id}"]).join(",")
     end
-    user_word_relation.update_attributes(:nomal_ids => nomal_ids, :recite_ids => recite_ids)
+    user_word_relation.update_attributes(:nomal_ids => nomal_ids.join(","), :recite_ids => recite_ids)
   end
 
   #用户增加背诵的单词
@@ -44,9 +44,9 @@ class UserWordRelation < ActiveRecord::Base
     user_word_relation = UserWordRelation.single_user_word(user_id, category_id)
     nomal_ids = ""
     if user_word_relation.nomal_ids.nil?
-      nomal_ids = word_id.strip
+      nomal_ids = word_id
     else
-      nomal_ids = ((user_word_relation.nomal_ids.split(",")) | ["#{word_id.strip}"]).join(",")
+      nomal_ids = ((user_word_relation.nomal_ids.split(",")) | ["#{word_id}"]).join(",")
     end
     user_word_relation.update_attributes(:nomal_ids => nomal_ids)
   end
