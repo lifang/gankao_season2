@@ -1,9 +1,13 @@
 #encoding: utf-8
 class Oauth2Controller < ApplicationController
   include Oauth2Helper
-  layout ""
+  
   def request_qq
     redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::REQUEST_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
+  end
+
+  def respond_qq
+    render :layout=>false
   end
 
   def manage_qq
@@ -19,7 +23,7 @@ class Oauth2Controller < ApplicationController
         back_res = user_http.get("/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Oauth2Helper::APPID}&openid=#{openid}")
         user_info=JSON back_res.body
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
-#        ,:access_token=>access_token,:end_time=>Time.now+(Constant::QQ_DATE).days
+        #        ,:access_token=>access_token,:end_time=>Time.now+(Constant::QQ_DATE).days
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid)
         cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         #      else
