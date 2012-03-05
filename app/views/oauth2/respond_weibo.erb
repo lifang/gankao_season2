@@ -1,0 +1,24 @@
+<script type="text/javascript">
+  //获取access token
+  var accessToken = window.location.hash.substring(1);
+  $.ajax({
+    async:true,
+    type: "POST",
+    url: "/oauth2/add_watch_weibo.json",
+    dataType: "json",
+    data : {
+      access_token:accessToken
+    },
+    success: function(data){
+      var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1];
+      alert(data);
+      <%#*if(data){%>
+        <%#*window.opener.location.href=url;%>
+        <%#*window.close();%>
+      <%#*}else{%>
+        <%#*window.opener.location.reload();%>
+        <%#*window.close();%>
+      <%#*}%>
+    }
+  });
+</script>

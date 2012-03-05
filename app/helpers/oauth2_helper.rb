@@ -16,7 +16,15 @@ module Oauth2Helper
   }
 
 
-
+  #新浪微博参数
+  REQUEST_URL_WEIBO="https://api.weibo.com/oauth2/authorize"
+  REQUEST_WEIBO_TOKEN={
+    :response_type=>"token",
+    :client_id=>"3987186573",
+    :redirect_uri=>"#{Constant::SERVER_PATH}/oauth2/respond_weibo"
+  }
+  WEIBO_NAME="gankao2011"
+  WEIBO_ID="2359288352"
 
 
 end
