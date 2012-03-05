@@ -29,9 +29,9 @@
             <ul>
               <% if cookies[:user_id].nil? || cookies[:user_name].nil? %>
                 <li style="cursor:pointer;" onclick="javascript:window.location.href='/logins'">登录</li>
-                <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/login_from_qq', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/qq.png" /></a></li>
+                <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/request_qq', '_blank', 'height=400,width=600,left=300,top=150');"><img src="/assets/qq.png" /></a></li>
                 <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/renren_login', '_blank', 'height=500,width=600,left=300,top=100');"><img src="/assets/renren.png" /></a></li>
-                <li><a href="javascript:void(0);" onclick ="javascript:window.open('/oauth2/request_sina', '_blank', 'height=500,width=600,left=300,top=150');"><img src="/assets/sina.png" /></a></li>
+                <li><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/request_sina', '_blank', 'height=500,width=600,left=300,top=150');"><img src="/assets/sina.png" /></a></li>
               <% else %>
                 <li><span style="cursor:pointer;" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>';"><%= cookies[:user_name] %></span> | <span style="cursor:pointer;" onclick="javascript:window.location.href='/logins/logout'">退出</span></li>
               <% end %>
