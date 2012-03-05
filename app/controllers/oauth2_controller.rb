@@ -61,14 +61,16 @@ class Oauth2Controller < ApplicationController
     weibo_http = Net::HTTP.new(weibo_url, 443)
     weibo_http.use_ssl = true
     weibo_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    back_res = weibo_http.get("/2/friendships/show?access_token=#{meters["access_token"]}&source_id=#{meters["uid"]}&target_screen_name=#{Oauth2Helper::WEIBO_NAME}")
+    puts "/2/friendships/show?access_token=#{meters["access_token"]}&source_id=#{meters["uid"]}&target_screen_name=#{Oauth2Helper::WEIBO_NAME}"
+    back_res = weibo_http.get("/2/friendships/show.json?access_token=2.00wf1fZCr3pp2E21e3a5114fjHMjGC&source_id=2364578812&target_screen_name=gankao2011")
+    puts back_res.body
     user_info=JSON back_res.body
     unless user_info[:source][:following]
       add_url="api.weibo.com"
       add_http = Net::HTTP.new(add_url, 443)
       add_http.use_ssl = true
       add_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      back_res = add_http.post("/2/friendships/create?access_token=#{meters["access_token"]}&source_id=#{Oauth2Helper::WEIBO_ID}&target_screen_name=#{Oauth2Helper::WEIBO_NAME}")
+      back_res = add_http.post("/2/friendships/create.json?access_token=#{meters["access_token"]}&source_id=#{Oauth2Helper::WEIBO_ID}&target_screen_name=#{Oauth2Helper::WEIBO_NAME}")
       add_info=JSON back_res.body
       if add_info["following"]
         data="关注成功"
