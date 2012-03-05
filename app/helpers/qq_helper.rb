@@ -1,7 +1,7 @@
 # encoding: utf-8
 module QqHelper
   require 'oauth2'
-  require 'oauth'
+#  require 'oauth'
 
   #qq登录参数
   GRAPY_URL="http://openapi.qzone.qq.com/user/get_user_info"
