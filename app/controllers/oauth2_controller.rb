@@ -14,7 +14,7 @@ class Oauth2Controller < ApplicationController
     begin
       meters=params[:access_token].split("&")
       access_token=meters[0].split("=")[1]
-      expires_in=meters[1].split("=")[1]
+      expires_in=meters[1].split("=")[1].to_i
       openid=params[:open_id]
       @user= User.find_by_open_id(openid)
       if @user.nil?
@@ -80,7 +80,7 @@ class Oauth2Controller < ApplicationController
       redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
     else
       user=User.find(cookies[:user_id].to_i)
-      if user.code_type!="sina"
+      if user.code_type!="sina" || user.access_token.nil? || user.end_time>Time.now
         redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       else
         flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败")
@@ -98,15 +98,15 @@ class Oauth2Controller < ApplicationController
 
   def add_watch_weibo
     data="关注失败"
-#    begin
+    begin
       meters={}
       params[:access_token].split("&").each do |parm|
         parms=parm.split("=")
         parms.each {meters[parms[0]]=parms[1]}
       end
       data=request_weibo(meters["access_token"],meters["uid"],data)
-      #    rescue
-    #    end
+    rescue
+    end
     respond_to do |format|
       format.json {
         render :json=>{:data=>data}
