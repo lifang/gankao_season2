@@ -10,15 +10,15 @@
       access_token:accessToken
     },
     success: function(data){
+      tishi_alert(data.data);
       var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1];
-      alert(data);
-      <%#*if(data){%>
-        <%#*window.opener.location.href=url;%>
-        <%#*window.close();%>
-      <%#*}else{%>
-        <%#*window.opener.location.reload();%>
-        <%#*window.close();%>
-      <%#*}%>
+      if(data.result){
+        window.opener.location.href=url;
+        window.close();
+      }else{
+        window.opener.location.reload();
+        window.close();
+      }
     }
   });
 </script>

@@ -44,45 +44,42 @@ class Oauth2Controller < ApplicationController
   end
 
   def watch_weibo
-    redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
+    layout "oauth"
+    if cookies[:user_id].nil?
+      redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
+    else
+      user=User.find(cookies[:user_id].to_i)
+      if user.code_type!="sina"
+        redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
+      else
+        data=request_weibo(user.access_token,user.code_id)
+        render :inline => "<style>.tishi_tab { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none;z-index: 1000;border-radius: 5px;} .tishi_tab p { text-align: center; line-height: 24px; font-size: 18px; color:#fff; font-family:'微软雅黑';}</style>
+    <script type='text/javascript' src='/assets/application.js'></script><script type='text/javascript' src='/assets/login.js'></script>
+     <div id='flash_notice' class='tishi_tab'><p><%= data %></p></div>
+    <script type='text/javascript'>show_flash_div();</script><script> setTimeout(function(){
+      window.close();}, 3000)</script><% flash[:warn]=nil %>"
+      end
+    end
   end
-
   def respond_weibo
     render :layout=>"oauth"
   end
 
   def add_watch_weibo
-    meters={}
-    params[:access_token].split("&").each do |parm|
-      parms=parm.split("=")
-      parms.each {meters[parms[0]]=parms[1]}
-    end
-    weibo_url="api.weibo.com"
-    weibo_http = Net::HTTP.new(weibo_url, 443)
-    weibo_http.use_ssl = true
-    weibo_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    puts "/2/friendships/show?access_token=#{meters["access_token"]}&source_id=#{meters["uid"]}&target_screen_name=#{Oauth2Helper::WEIBO_NAME}"
-    back_res = weibo_http.get("/2/friendships/show.json?access_token=2.00wf1fZCr3pp2E21e3a5114fjHMjGC&source_id=2364578812&target_screen_name=gankao2011")
-    puts back_res.body
-    user_info=JSON back_res.body
-    unless user_info[:source][:following]
-      add_url="api.weibo.com"
-      add_http = Net::HTTP.new(add_url, 443)
-      add_http.use_ssl = true
-      add_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      back_res = add_http.post("/2/friendships/create.json?access_token=#{meters["access_token"]}&source_id=#{Oauth2Helper::WEIBO_ID}&target_screen_name=#{Oauth2Helper::WEIBO_NAME}")
-      add_info=JSON back_res.body
-      if add_info["following"]
-        data="关注成功"
-      else
-        data="关注失败"
+    begin
+      meters={}
+      params[:access_token].split("&").each do |parm|
+        parms=parm.split("=")
+        parms.each {meters[parms[0]]=parms[1]}
       end
-    else
-      data="您已关注"
+      data=request_weibo(meters["access_token"],meters["uid"])
+      result=true
+    rescue
+      result=false
     end
     respond_to do |format|
       format.json {
-        render :json=>data
+        render :json=>{:data=>data,:result=>result}
       }
     end
   end
