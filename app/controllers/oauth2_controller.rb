@@ -12,7 +12,9 @@ class Oauth2Controller < ApplicationController
 
   def manage_qq
     begin
-      access_token=params[:access_token].split("&")[0].split("=")[1]
+      meters=params[:access_token].split("&")
+      access_token=meters[0].split("=")[1]
+      expires_in=meters[1].split("=")[1]
       openid=params[:open_id]
       @user= User.find_by_open_id(openid)
       if @user.nil?
@@ -23,10 +25,10 @@ class Oauth2Controller < ApplicationController
         back_res = user_http.get("/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Oauth2Helper::APPID}&openid=#{openid}")
         user_info=JSON back_res.body
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
-        @user=User.create(:code_type=>'qq',:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+(Constant::QQ_DATE).days)
+        @user=User.create(:code_type=>'qq',:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       else
-        @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+(Constant::QQ_DATE).days)
+        @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
       end
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
@@ -81,10 +83,10 @@ class Oauth2Controller < ApplicationController
       if user.code_type!="sina"
         redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       else
-        data=request_weibo(user.access_token,user.code_id)
+        flash[:warn]=request_weibo(user.access_token,user.code_id)
         render :inline => "<style>.tishi_tab { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none;z-index: 1000;border-radius: 5px;} .tishi_tab p { text-align: center; line-height: 24px; font-size: 18px; color:#fff; font-family:'微软雅黑';}</style>
     <script type='text/javascript' src='/assets/application.js'></script><script type='text/javascript' src='/assets/login.js'></script>
-     <div id='flash_notice' class='tishi_tab'><p><%= data %></p></div>
+     <div id='flash_notice' class='tishi_tab'><p><%= flash[:warn]%></p></div>
     <script type='text/javascript'>show_flash_div();</script><script> setTimeout(function(){
       window.close();}, 3000)</script><% flash[:warn]=nil %>"
       end
@@ -95,20 +97,19 @@ class Oauth2Controller < ApplicationController
   end
 
   def add_watch_weibo
+    data="关注失败"
     begin
       meters={}
       params[:access_token].split("&").each do |parm|
         parms=parm.split("=")
         parms.each {meters[parms[0]]=parms[1]}
       end
-      data=request_weibo(meters["access_token"],meters["uid"])
-      result=true
+      data=request_weibo(meters["access_token"],meters["uid"],data)
     rescue
-      result=false
     end
     respond_to do |format|
       format.json {
-        render :json=>{:data=>data,:result=>result}
+        render :json=>{:data=>data}
       }
     end
   end
