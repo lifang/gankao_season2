@@ -85,7 +85,7 @@ class Oauth2Controller < ApplicationController
       redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
     else
       user=User.find(cookies[:user_id].to_i)
-      if user.code_type!="sina" || user.access_token.nil? || user.end_time<Time.now
+      if user.code_type!="sina" || user.access_token.nil? || user.end_time>Time.now
         redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       else
         flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败")
@@ -93,7 +93,7 @@ class Oauth2Controller < ApplicationController
     <script type='text/javascript' src='/assets/application.js'></script><script type='text/javascript' src='/assets/login.js'></script>
      <div id='flash_notice' class='tishi_tab'><p><%= flash[:warn]%></p></div>
     <script type='text/javascript'>show_flash_div();</script><script> setTimeout(function(){
- window.close();}, 3000)</script><% flash[:warn]=nil %>"
+      window.close();}, 3000)</script><% flash[:warn]=nil %>"
       end
     end
   end
@@ -103,7 +103,6 @@ class Oauth2Controller < ApplicationController
   end
 
   def add_watch_weibo
-    layout "oauth"
     data="关注失败"
     begin
       meters={}
