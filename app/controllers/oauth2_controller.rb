@@ -47,6 +47,10 @@ class Oauth2Controller < ApplicationController
     redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
   end
 
+  def respond_weibo
+    render :layout=>"oauth"
+  end
+
   def add_watch_weibo
     meters={}
     params[:access_token].split("&").each do |parm|
