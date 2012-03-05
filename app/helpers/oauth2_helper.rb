@@ -27,7 +27,7 @@ module Oauth2Helper
   WEIBO_ID="2359288352"
 
   
-  def request_weibo(access_token,code_id)
+  def request_weibo(access_token,code_id,data)
     weibo_url="api.weibo.com"
     weibo_http = Net::HTTP.new(weibo_url, 443)
     weibo_http.use_ssl = true
@@ -44,8 +44,6 @@ module Oauth2Helper
       add_info=add_http.request(request).body
       if add_info["following"]
         data="关注成功"
-      else
-        data="关注失败"
       end
     else
       data="您已关注"
