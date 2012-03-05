@@ -103,6 +103,7 @@ class Oauth2Controller < ApplicationController
   end
 
   def add_watch_weibo
+    layout "oauth"
     data="关注失败"
     begin
       meters={}

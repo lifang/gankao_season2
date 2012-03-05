@@ -58,29 +58,4 @@ class ApplicationController < ActionController::Base
   end
 
 
-
-  # START -------新浪微博API----------
-  #主方法
-  def sina_api(request)
-    uri = URI.parse("https://api.weibo.com")
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    response = http.request(request).body
-  end
-
-  #获取用户信息
-  def sina_get_user(access_token,uid)
-    request = Net::HTTP::Get.new("/2/users/show.json?access_token=#{access_token}&uid=#{uid}")
-    sina_api(request)
-  end
-
-  #发送微博
-  def sina_send_message(access_token,message)
-    request = Net::HTTP::Post.new("/2/statuses/update.json")
-    request.set_form_data({"access_token" =>access_token, "status" => message})
-    sina_api(request)
-  end
-  #END -------新浪微博API----------
-
 end

@@ -65,10 +65,11 @@ GankaoSeason2::Application.routes.draw do
   end
   resources :logins do
     collection do
-      get :friend_add_request,:renren_like,:sina_index,:add_user,:charge_vip
+      get :friend_add_request,:renren_like,:add_user,:charge_vip
       get :renren_index,:follow_me,:login_from_qq,:qq_index,:get_code,:user_code
-      get :sina_login,:friend_add
       get :renren_login,:logout
+      get :request_qq,:respond_qq,:request_sina,:respond_sina,:manage_sina,:watch_weibo,:respond_weibo
+      post :manage_qq,:add_watch_weibo
     end
   end
   resources :specials do
