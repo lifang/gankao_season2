@@ -84,13 +84,11 @@ module RenrenHelper
   end
 
   def api_key
-    "05983c17a2fd4b81a2f8032b4cd8d4f2"             #  赶考网
-    #   "5c499242c95f4d79b5e2ba1a36a808c8"            # localhost测试
+    "98a6ed88bccc409da12a8abe3ebec3c5"             #  赶考网  人人帐号： wangguanhong@hotmail.com
   end
 
   def api_secret
-    "106a4639bd1e4288ad90cd3d27235623"             #  赶考网
-    #   "bb52103339444300bd4d4bc2af84ec9e"            # localhost测试
+    "0d19833c0bc34a27a58786c07ef8d9fb"             #  赶考网  人人帐号： wangguanhong@hotmail.com
   end
 
   def access_token_url(code)
