@@ -44,4 +44,39 @@ class Oauth2Controller < ApplicationController
     end
   end
 
+  def request_sina
+    redirect_to "https://api.weibo.com/oauth2/authorize?client_id=3987186573&redirect_uri=http://www.gankao.co/oauth2/respond_sina&response_type=token"
+  end
+
+  def respond_sina
+    if cookies[:sina_url_generate]
+      cookies.delete(:sina_url_generate)
+      #发送微博
+      access_token=params[:access_token]
+      uid=params[:uid]
+      expires_in=params[:expires_in]
+      response = JSON sina_get_user(access_token,uid)
+      @user=User.where("code_id='#{response["id"]}' and code_type='sina'").first
+      if @user.nil?
+        @user=User.create(:code_id=>"#{response["id"]}",:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
+        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+      end
+      cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
+      cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
+      user_role?(cookies[:user_id])
+      ActionLog.login_log(cookies[:user_id])
+      render :inline=>"<p>#{@user.id}   #{response["screen_name"]} #{@user.code_id}</p><p>#{response.to_s}</p>"
+    else
+      cookies[:sina_url_generate]="replace('#','?')"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+   
+  end
+
+  def manage_sina
+    render :inline=>"<p>测试</p>"
+  end
+
+
+
 end

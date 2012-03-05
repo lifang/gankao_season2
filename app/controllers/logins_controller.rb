@@ -8,8 +8,10 @@ class LoginsController < ApplicationController
   layout "application", :except => "index"
 
   def sina_login
-    redirect_to "https://api.weibo.com/oauth2/authorize?client_id=3987186573&redirect_uri=http://www.gankao.co/logins/sina_index&response_type=token"
-#    render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
+    oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
+    request_token = oauth.consumer.get_request_token
+    session[:rtoken], session[:rsecret] = request_token.token, request_token.secret
+    redirect_to "#{request_token.authorize_url}&oauth_callback=http://#{request.env["HTTP_HOST"]}/logins/sina_index"
   end
 
   def renren_login
@@ -33,26 +35,24 @@ class LoginsController < ApplicationController
 
   
   def sina_index
-#    begin
-#      oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
-#      oauth.authorize_from_request(session[:rtoken],session[:rsecret], params[:oauth_verifier])
-#      session[:rtoken], session[:rsecret] = nil, nil
-#      user_info = Weibo::Base.new(oauth).verify_credentials
-#      @user=User.where("code_id='#{user_info[:id]}' and code_type='sina'").first
-#      if @user.nil?
-#        @user=User.create(:code_id=>"#{user_info[:id]}",:code_type=>'sina',:name=>user_info[:name],:username=>user_info[:name])
-#        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
-#      end
-#      cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
-#      cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
-#      user_role?(cookies[:user_id])
-#      ActionLog.login_log(cookies[:user_id])
-#      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
-#    rescue
-#      render :inline => "<script>window.opener.location.reload();window.close();</script>"
-#    end
-    
-
+    begin
+      oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
+      oauth.authorize_from_request(session[:rtoken],session[:rsecret], params[:oauth_verifier])
+      session[:rtoken], session[:rsecret] = nil, nil
+      user_info = Weibo::Base.new(oauth).verify_credentials
+      @user=User.where("code_id='#{user_info[:id]}' and code_type='sina'").first
+      if @user.nil?
+        @user=User.create(:code_id=>"#{user_info[:id]}",:code_type=>'sina',:name=>user_info[:name],:username=>user_info[:name])
+        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+      end
+      cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
+      cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
+      user_role?(cookies[:user_id])
+      ActionLog.login_log(cookies[:user_id])
+      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
+    rescue
+      render :inline => "<script>window.opener.location.reload();window.close();</script>"
+    end
   end
 
 

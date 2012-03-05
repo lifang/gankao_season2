@@ -18,7 +18,7 @@ GankaoSeason2::Application.routes.draw do
 
   resources :oauth2 do
     collection do
-      get :request_qq,:respond_qq
+      get :request_qq,:respond_qq,:request_sina,:respond_sina,:manage_sina
       post :manage_qq
     end
   end
