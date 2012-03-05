@@ -138,7 +138,6 @@ class LoginsController < ApplicationController
         render :inline => "<div id='flash_notice' class='tishi_tab'><p><%= flash[:warn] %></p></div>
                             <script type='text/javascript'>show_flash_div();</script><script> setTimeout(function(){
                             window.close();}, 3000)</script><% flash[:warn]=nil %>"
-
       end
     end
   end
