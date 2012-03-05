@@ -24,8 +24,11 @@ module Constant
   #充值vip有效期
   DATE_LONG={:vip=>90,:trail=>7} #试用七天
 
-   #考试类型
+  #考试类型
   EXAM_TYPES={:forth_level=>1,:sixth_level=>2}
+
+  QQ_DATE=90
+
 
   #vip价格
   VIP_FEE=0.01

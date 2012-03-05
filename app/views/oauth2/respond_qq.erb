@@ -1,15 +1,34 @@
 <script type="text/javascript">
-  $.ajax({
-    async:true,
-    dataType:'json',
-    data:{
-      access_token:"032C7D6BB31950A28397E637ECED413E"
-    },
-    url:"https://graph.qq.com/oauth2.0/me",
-    type:'get',
-    success : function(data) {
-      tishi_alert(data.message)
-      load_message();
-    }
-  });
+  //获取access token
+  var accessToken = window.location.hash.substring(1);
+  //使用Access Token来获取用户的OpenID
+  var path = "https://graph.qq.com/oauth2.0/me?";
+  var queryParams = [accessToken, 'callback=callback'];
+  var query = queryParams.join('&');
+  var url = path + query;
+  var script = document.createElement('script');
+  script.src = url;
+  document.body.appendChild(script);
+  function callback(user){
+    $.ajax({
+      async:true,
+      type: "POST",
+      url: "/oauth2/manage_qq.json",
+      dataType: "json",
+      data : {
+        open_id :user.openid,
+        access_token:accessToken
+      },
+      success: function(data){
+        var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1];
+        if(data){
+          window.opener.location.href=url;
+          window.close();
+        }else{
+          window.opener.location.reload();
+          window.close();
+        }
+      }
+    });
+  }
 </script>
