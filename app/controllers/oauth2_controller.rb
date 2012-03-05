@@ -83,7 +83,7 @@ class Oauth2Controller < ApplicationController
       if user.code_type!="sina"
         redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       else
-        flash[:warn]=request_weibo(user.access_token,user.code_id)
+        flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败")
         render :inline => "<style>.tishi_tab { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none;z-index: 1000;border-radius: 5px;} .tishi_tab p { text-align: center; line-height: 24px; font-size: 18px; color:#fff; font-family:'微软雅黑';}</style>
     <script type='text/javascript' src='/assets/application.js'></script><script type='text/javascript' src='/assets/login.js'></script>
      <div id='flash_notice' class='tishi_tab'><p><%= flash[:warn]%></p></div>
@@ -98,15 +98,15 @@ class Oauth2Controller < ApplicationController
 
   def add_watch_weibo
     data="关注失败"
-    begin
+#    begin
       meters={}
       params[:access_token].split("&").each do |parm|
         parms=parm.split("=")
         parms.each {meters[parms[0]]=parms[1]}
       end
       data=request_weibo(meters["access_token"],meters["uid"],data)
-    rescue
-    end
+      #    rescue
+    #    end
     respond_to do |format|
       format.json {
         render :json=>{:data=>data}
