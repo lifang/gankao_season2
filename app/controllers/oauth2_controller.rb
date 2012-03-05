@@ -56,12 +56,14 @@ class Oauth2Controller < ApplicationController
         #发送微博
         access_token=params[:access_token]
         uid=params[:uid]
-        expires_in=params[:expires_in]
+        expires_in=params[:expires_in].to_i
         response = JSON sina_get_user(access_token,uid)
         @user=User.where("code_id='#{response["id"]}' and code_type='sina'").first
         if @user.nil?
-          @user=User.create(:code_id=>"#{response["id"]}",:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
+          @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina', :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
           cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+        else
+          @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         end
         cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
@@ -95,6 +97,7 @@ class Oauth2Controller < ApplicationController
       end
     end
   end
+
   def respond_weibo
     render :layout=>"oauth"
   end
