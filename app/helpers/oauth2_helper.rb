@@ -26,7 +26,7 @@ module Oauth2Helper
   WEIBO_NAME="gankao2011"
   WEIBO_ID="2359288352"
 
-  
+  #新浪微博添加关注
   def request_weibo(access_token,code_id,data)
     weibo_url="api.weibo.com"
     weibo_http = Net::HTTP.new(weibo_url, 443)
@@ -34,6 +34,7 @@ module Oauth2Helper
     weibo_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     back_res = weibo_http.get("/2/friendships/show.json?access_token=#{access_token}&source_id=#{code_id}&target_id=#{Oauth2Helper::WEIBO_ID}")
     user_info=JSON back_res.body
+    #    测试是否已关注
     unless user_info["source"]["following"]
       add_url="api.weibo.com"
       add_http = Net::HTTP.new(add_url, 443)
@@ -75,5 +76,7 @@ module Oauth2Helper
   end
   #END -------新浪微博API----------
 
+
+ 
 
 end
