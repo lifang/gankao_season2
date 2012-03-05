@@ -46,6 +46,8 @@ class ApplicationController < ActionController::Base
     file.close
   end
 
+  # END -------XML文件操作----------
+    
   def sign?
     deny_access unless signed_in?
   end
@@ -54,7 +56,7 @@ class ApplicationController < ActionController::Base
     file = File.open(url)
     file.close
   end
-  # END -------XML文件操作----------
+
 
 
   # START -------新浪微博API----------

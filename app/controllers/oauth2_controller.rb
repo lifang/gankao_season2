@@ -51,27 +51,30 @@ class Oauth2Controller < ApplicationController
 
   def respond_sina
     if cookies[:sina_url_generate]
-      cookies.delete(:sina_url_generate)
-      #发送微博
-      access_token=params[:access_token]
-      uid=params[:uid]
-      expires_in=params[:expires_in]
-      response = JSON sina_get_user(access_token,uid)
-      @user=User.where("code_id='#{response["id"]}' and code_type='sina'").first
-      if @user.nil?
-        @user=User.create(:code_id=>"#{response["id"]}",:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
-        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+      begin
+        cookies.delete(:sina_url_generate)
+        #发送微博
+        access_token=params[:access_token]
+        uid=params[:uid]
+        expires_in=params[:expires_in]
+        response = JSON sina_get_user(access_token,uid)
+        @user=User.where("code_id='#{response["id"]}' and code_type='sina'").first
+        if @user.nil?
+          @user=User.create(:code_id=>"#{response["id"]}",:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
+          cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+        end
+        cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
+        cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
+        user_role?(cookies[:user_id])
+        ActionLog.login_log(cookies[:user_id])
+        render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
+      rescue
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end
-      cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
-      cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
-      user_role?(cookies[:user_id])
-      ActionLog.login_log(cookies[:user_id])
-      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     else
       cookies[:sina_url_generate]="replace('#','?')"
       render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
     end
-   
   end
 
   def watch_weibo
@@ -83,7 +86,7 @@ class Oauth2Controller < ApplicationController
       if user.code_type!="sina"
         redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       else
-        flash[:warn]=request_weibo(user.access_token,user.code_id)
+        flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败")
         render :inline => "<style>.tishi_tab { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none;z-index: 1000;border-radius: 5px;} .tishi_tab p { text-align: center; line-height: 24px; font-size: 18px; color:#fff; font-family:'微软雅黑';}</style>
     <script type='text/javascript' src='/assets/application.js'></script><script type='text/javascript' src='/assets/login.js'></script>
      <div id='flash_notice' class='tishi_tab'><p><%= flash[:warn]%></p></div>
@@ -98,15 +101,15 @@ class Oauth2Controller < ApplicationController
 
   def add_watch_weibo
     data="关注失败"
-    begin
+#    begin
       meters={}
       params[:access_token].split("&").each do |parm|
         parms=parm.split("=")
         parms.each {meters[parms[0]]=parms[1]}
       end
       data=request_weibo(meters["access_token"],meters["uid"],data)
-    rescue
-    end
+      #    rescue
+    #    end
     respond_to do |format|
       format.json {
         render :json=>{:data=>data}

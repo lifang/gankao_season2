@@ -5,24 +5,7 @@
 </script>
 
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
-<%= javascript_include_tag "#{@answer_js_url}" %>
-<%= javascript_include_tag "#{@paper_js_url}" %>
 
-<script type="text/javascript" >
-  //初始化参数
-  var preview = 0;
-<% if params[:preview] %>
-    preview = 1;
-<% end %>
-  var sheet = null;
-  var back_server_path = '<%= Constant::BACK_SERVER_PATH %>';
-  var category = '<%= category_id %>';
-  var init_exam_user_id ='<%= params[:id] %>';
-  var init_paper_id = "<%= @paper_id %>";
-  var sheet_url = "<%= @sheet_url %>";
-  var init_problem = 0;
-  var collection = <%= array_or_string_for_javascript(@collection) %>;
-</script>
 
 <!-- 初始化播放器  -->
 <%= render :partial=>"/common/flowplayer" %>
@@ -32,7 +15,7 @@
   <div class="icon_func">
     <div class="float_right">
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
-      <big class="problem_title"><font id="global_problem_index"></font> / <font id="global_problem_sum"></font></big>
+      <big class="problem_title"><font id="global_problem_index">-</font> / <font id="global_problem_sum">-</font></big>
       <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
       <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1);" name="缩小">缩小</a></span>
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
@@ -43,7 +26,7 @@
 </div>
 
 <!-- 试题生成入口 generate.js -->
-<div id="generate"><center style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div>
+<div id="generate"><center id="load_message" style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div>
 
 <!-- 相关词汇框 -->
 <div id="about_words_loader" style="display:none;">
@@ -95,5 +78,25 @@
   <textarea name="" id='report_error_description' cols="" rows="5"></textarea>
   <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
 </div>
+
+<%= javascript_include_tag "#{@answer_js_url}" %>
+<%= javascript_include_tag "#{@paper_js_url}" %>
+
+<script type="text/javascript" >
+  //初始化参数
+  var preview = 0;
+<% if params[:preview] %>
+    preview = 1;
+<% end %>
+  var sheet = null;
+  var back_server_path = '<%= Constant::BACK_SERVER_PATH %>';
+  var category = '<%= category_id %>';
+  var init_exam_user_id ='<%= params[:id] %>';
+  var init_paper_id = "<%= @paper_id %>";
+  var sheet_url = "<%= @sheet_url %>";
+  var init_problem = 0;
+  var collection = <%= array_or_string_for_javascript(@collection) %>;
+</script>
+
 
 <%= javascript_include_tag "/assets/exam_user/init.js" %>

@@ -10,9 +10,9 @@ gem 'mysql2', '0.3.10'
 gem 'spreadsheet', '0.6.5.5'
 gem 'will_paginate', '3.0.pre2'
 gem 'sinatra'
-gem 'oauth', '0.4.5'  #新浪微博使用oauth
+#gem 'oauth', '0.4.5'  #新浪微博使用oauth
 gem 'oauth2', '0.4.1' #人人使用oauth2
-gem 'weibo', '0.0.11'
+
 #gem "mongrel", "~> 1.2.0.pre2"
 #gem 'mongrel','1.1.5'
 #gem 'dispatcher','0.0.1'
