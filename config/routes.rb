@@ -18,8 +18,8 @@ GankaoSeason2::Application.routes.draw do
 
   resources :oauth2 do
     collection do
-      get :request_qq,:respond_qq
-      post :manage_qq
+      get :request_qq,:respond_qq,:watch_weibo,:respond_weibo
+      post :manage_qq,:add_watch_weibo
     end
   end
   resources :exam_raters do

@@ -1,6 +1,7 @@
 <script type="text/javascript">
   //获取access token
   var accessToken = window.location.hash.substring(1);
+  alert(accessToken);
   //使用Access Token来获取用户的OpenID
   var path = "https://graph.qq.com/oauth2.0/me?";
   var queryParams = [accessToken, 'callback=callback'];
