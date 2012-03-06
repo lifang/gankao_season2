@@ -5,17 +5,6 @@ Array.prototype.indexOf=function(el, index){
     return -1;
 };
 
-if(typeof(HTMLElement) != "undefined"){
-    HTMLElement.prototype.contains = function(obj){
-        while(obj != null && typeof(obj.tagName) != "undefined"){
-            if(obj == this)
-                return true;
-            obj = obj.parentNode;
-        }
-        return false;
-    };
-}
-
 //预加载MP3
 $(document).ready(function(){
     var step = $("#step_page").val();
@@ -43,6 +32,18 @@ $(document).ready(function(){
     show_part_tishi(step);
     setCookie("tishi", "2", 86400000, '/');
 })
+
+if(typeof(HTMLElement) != "undefined"){
+    HTMLElement.prototype.contains = function(obj){
+        while(obj != null && typeof(obj.tagName) != "undefined"){
+            if(obj == this)
+                return true;
+            obj = obj.parentNode;
+        }
+        return false;
+    };
+}
+
 
 //显示左侧可移动的显示单词的列表
 $(function(){
