@@ -127,4 +127,32 @@ module RenrenHelper
     return ACCESS_TOKEN_URL + "?" + grant_type + "&"+ access_code +"&" + client_id + "&"+ client_secret + "&" + redirect_uri
   end
 
+  #START -------人人API----------
+  
+  #人人发送新鲜事
+  def renren_send_message(access_token,message)
+    str = "access_token=#{access_token}"
+    str << "comment=#{message}"
+    str << "format=JSON"
+    str << "method=share.share"
+    str << "type=6"
+    str << "url=http://www.gankao.co"
+    str << "v=1.0"
+    str << "#{api_secret}"
+    sig = Digest::MD5.hexdigest(str)
+
+    query = {
+      :access_token => "#{access_token}",
+      :comment=>"#{message}",
+      :format => 'JSON',
+      :method => 'share.share',
+      :type=>"6",
+      :url=>"http://www.gankao.co",
+      :v => '1.0',
+      :sig => sig
+    }
+    response = Net::HTTP.post_form(URI.parse(URI.encode("http://api.renren.com/restserver.do")), query).body
+  end
+  #END -------人人API----------
+
 end

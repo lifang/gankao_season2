@@ -52,7 +52,8 @@ module Oauth2Helper
     return data
   end
 
-  # START -------新浪微博API----------
+  
+  #START -------新浪微博API----------
   #主方法
   def sina_api(request)
     uri = URI.parse("https://api.weibo.com")
@@ -75,8 +76,5 @@ module Oauth2Helper
     sina_api(request)
   end
   #END -------新浪微博API----------
-
-
- 
 
 end
