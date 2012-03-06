@@ -94,13 +94,13 @@ class LoginsController < ApplicationController
   end
 
   def request_sina
-    redirect_to "https://api.weibo.com/oauth2/authorize?client_id=3987186573&redirect_uri=http://www.gankao.co/logins/respond_sina&response_type=token"
+    redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Constant::SINA_CLIENT_ID}&redirect_uri=http://www.gankao.co/logins/respond_sina&response_type=token"
   end
 
   def respond_sina
-    if cookies[:sina_url_generate]
+    if cookies[:oauth2_url_generate]
       begin
-        cookies.delete(:sina_url_generate)
+        cookies.delete(:oauth2_url_generate)
         #发送微博
         access_token=params[:access_token]
         uid=params[:uid]
@@ -122,7 +122,7 @@ class LoginsController < ApplicationController
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end
     else
-      cookies[:sina_url_generate]="replace('#','?')"
+      cookies[:oauth2_url_generate]="replace('#','?')"
       render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
     end
   end
