@@ -35,7 +35,7 @@
       <div class="words_tishi border_radius" id="word_tishi">
         <div class="words_ts_box" id="word_box">
           <% @words.each do |word| %>
-            <p>
+          <p id="p_w_<%= word.id %>" class="">
               <span class="z_five" id="five_<%= word.id %>"></span>
               <%= word.name %>
             </p>
