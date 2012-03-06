@@ -74,7 +74,9 @@ class LoginsController < ApplicationController
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       else
-        @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+        if @user.end_time<Time.now
+          @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+        end
       end
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}

@@ -9,7 +9,7 @@ namespace :send do
     def send_message_qq(con,openid,access_token,user_id)
       send_parms={
         :access_token=>access_token,:openid=>openid,:oauth_consumer_key=>Oauth2Helper::APPID,
-        :format=>"json",:third_source=>1,:con=>con
+        :format=>"json",:third_source=>"1,2,3",:con=>con
       }
       url="graph.qq.com"
       http = Net::HTTP.new(url, 443)
@@ -19,12 +19,12 @@ namespace :send do
       request.set_form_data(send_parms)
       info=http.request(request).body
       puts info
-      if info["ret"]==0
+      if info["data"]["ret"].to_i==0
         p "#{user_id} user send success"
       else
         p "#{user_id} user send fail"
       end
     end
-    send_message_qq("这是测试的自动程序，请勿回复--#{Time.now}","9F19372D2446F73D30468056BECCE7C6","032C7D6BB31950A28397E637ECED413E",1)
+    send_message_qq("等待你走向大众的日子，朋友和微博一起来吧！--#{Time.now}","25D9D224988859EB546CA27DB26F21A3","9859909C27F26B8749D5D30B79570AC1",1)
   end
 end
