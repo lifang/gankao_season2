@@ -1,33 +1,8 @@
 #encoding: utf-8
 class LoginsController < ApplicationController
   require 'oauth2'
-  include RenrenHelper
   include Oauth2Helper
   layout "application", :except => "index"
-
-
-  def renren_login
-    redirect_to client.web_server.authorize_url(:redirect_uri => RenrenHelper::CALL_BACK_URL, :response_type=>'code')
-  end
-
-  def renren_index
-    begin
-      session_key = return_session_key(return_access_token(params[:code]))
-      user_info = return_user(session_key)[0]
-      @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
-      if @user.nil?
-        @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
-        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
-      end
-      cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
-      cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
-      user_role?(cookies[:user_id])
-      ActionLog.login_log(cookies[:user_id])
-      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
-    rescue
-      render :inline => "<script>window.opener.location.reload();window.close();</script>"
-    end
-  end
 
   def  renren_like
     redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Constant::RENREN_ID}&app_id=163813&redirect_uri=http%3A%2F%2Fwww.gankao.co"
@@ -165,6 +140,42 @@ class LoginsController < ApplicationController
         render :json=>{:data=>data}
       }
     end
+  end
+
+
+  def request_renren
+    redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Constant::RENREN_CLIENT_ID}&redirect_uri=http://www.gankao.co/logins/respond_renren"
+  end
+
+  def respond_renren
+    if cookies[:oauth2_url_generate]
+      begin
+        cookies.delete(:oauth2_url_generate)
+        #发送微博
+        access_token=params[:access_token]
+        expires_in=params[:expires_in].to_i
+        response = JSON(renren_get_user(access_token))[0]
+        @user=User.where("code_id=#{response["uid"].to_s} and code_type='renren'").first
+        if @user.nil?
+          @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"],:username=>response["name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
+          cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+        else
+          @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+        end
+        cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
+        cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
+        user_role?(cookies[:user_id])
+        ActionLog.login_log(cookies[:user_id])
+        render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
+      rescue
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      end
+    else
+      cookies[:oauth2_url_generate]="replace('#','?')"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+
+
   end
 
 end

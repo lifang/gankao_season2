@@ -15,13 +15,6 @@ GankaoSeason2::Application.routes.draw do
 
   get "/gankao/index"
 
-
-  resources :oauth2 do
-    collection do
-      get :request_qq,:respond_qq,:request_sina,:respond_sina,:manage_sina,:watch_weibo,:respond_weibo
-      post :manage_qq,:add_watch_weibo
-    end
-  end
   resources :exam_raters do
     collection do
       get :session,:check_paper,:log_out
@@ -66,9 +59,8 @@ GankaoSeason2::Application.routes.draw do
   resources :logins do
     collection do
       get :friend_add_request,:renren_like,:add_user,:charge_vip
-      get :renren_index,:follow_me,:login_from_qq,:qq_index,:get_code,:user_code
-      get :renren_login,:logout
-      get :request_qq,:respond_qq,:request_sina,:respond_sina,:manage_sina,:watch_weibo,:respond_weibo
+      get :follow_me,:login_from_qq,:qq_index,:get_code,:user_code,:logout
+      get :request_qq,:respond_qq,:request_sina,:respond_sina,:manage_sina,:watch_weibo,:respond_weibo,:request_renren,:respond_renren
       post :manage_qq,:add_watch_weibo
     end
   end
