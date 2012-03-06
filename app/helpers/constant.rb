@@ -27,7 +27,6 @@ module Constant
   #考试类型
   EXAM_TYPES={:forth_level=>1,:sixth_level=>2}
 
-  QQ_DATE=90
 
 
   #vip价格
