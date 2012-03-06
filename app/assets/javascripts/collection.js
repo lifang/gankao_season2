@@ -805,7 +805,7 @@ function test_again(){
     }
 }
 
-//记录体面内用户答案
+//记录题面内用户答案
 function inner_value(correct_type,question_index){
     if(correct_type=="0"){
         $("#user_answer_"+question_index).val($("#"+question_index).html());
