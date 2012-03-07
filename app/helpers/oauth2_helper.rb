@@ -26,23 +26,36 @@ module Oauth2Helper
   WEIBO_NAME="gankao2011"
   WEIBO_ID="2359288352"
 
+  #构造post请求
+  def self.create_post_http(url,route_action,params)
+    http = Net::HTTP.new(url, 443)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Post.new(route_action)
+    request.set_form_data(params)
+    return http.request(request).body
+  end
+
+  #构造get请求
+  def create_get_http(url,route)
+    http = Net::HTTP.new(url, 443)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    back_res =http.get(route)
+    return JSON back_res.body
+  end
+
   #新浪微博添加关注
   def request_weibo(access_token,code_id,data)
     weibo_url="api.weibo.com"
-    weibo_http = Net::HTTP.new(weibo_url, 443)
-    weibo_http.use_ssl = true
-    weibo_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    back_res = weibo_http.get("/2/friendships/show.json?access_token=#{access_token}&source_id=#{code_id}&target_id=#{Oauth2Helper::WEIBO_ID}")
-    user_info=JSON back_res.body
+    weibo_route="/2/friendships/show.json?access_token=#{access_token}&source_id=#{code_id}&target_id=#{Oauth2Helper::WEIBO_ID}"
+    user_info=create_get_http(weibo_url,weibo_route)
     #    测试是否已关注
     unless user_info["source"]["following"]
+      params={ :access_token=>access_token,:screen_name=>Oauth2Helper::WEIBO_NAME,:uid=>Oauth2Helper::WEIBO_ID}
+      action="/2/friendships/create.json"
       add_url="api.weibo.com"
-      add_http = Net::HTTP.new(add_url, 443)
-      add_http.use_ssl = true
-      add_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request = Net::HTTP::Post.new("/2/friendships/create.json")
-      request.set_form_data({ :access_token=>access_token,:screen_name=>Oauth2Helper::WEIBO_NAME,:uid=>Oauth2Helper::WEIBO_ID})
-      add_info=add_http.request(request).body
+      add_info=create_post_http(add_url,action,params)
       if add_info["following"]
         data="关注成功"
       end
@@ -56,7 +69,7 @@ module Oauth2Helper
   #START -------新浪微博API----------
   #
   #新浪微博主方法
-  def sina_api(request)
+  def self.sina_api(request)
     uri = URI.parse("https://api.weibo.com")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -67,14 +80,15 @@ module Oauth2Helper
   #新浪微博获取用户信息
   def sina_get_user(access_token,uid)
     request = Net::HTTP::Get.new("/2/users/show.json?access_token=#{access_token}&uid=#{uid}")
-    sina_api(request)
+    response = sina_api(request)
   end
   #
   #新浪微博发送微博
-  def sina_send_message(access_token,message)
+  def self.sina_send_message(access_token,message)
     request = Net::HTTP::Post.new("/2/statuses/update.json")
     request.set_form_data({"access_token" =>access_token, "status" => message})
-    sina_api(request)
+    response = sina_api(request)
+    puts "created by time #{response["created_at"]}"
   end
   #
   #END -------新浪微博API----------
@@ -83,14 +97,14 @@ module Oauth2Helper
   #START -------人人API----------
   #
   #人人主方法
-  def renren_api(request)
+  def self.renren_api(request)
     uri = URI.parse("http://api.renren.com")
     http = Net::HTTP.new(uri.host, uri.port)
     response = http.request(request).body
   end
   #
   #构成人人签名请求
-  def renren_sig_request(query)
+  def self.renren_sig_request(query)
     str = ""
     query.sort.each{|key,value|str<<"#{key}=#{value}"}
     str<<Constant::RENREN_API_SECRET
@@ -109,13 +123,42 @@ module Oauth2Helper
   end
   #
   #人人发送新鲜事
-  def renren_send_message(access_token,message)
-    query = {:access_token => "#{access_token}",:comment=>"#{message}",:format => 'JSON',:method => 'share.share',:type=>"6",:url=>"#{Constant::SERVER_PATH}",:v => '1.0'}
+  def self.renren_send_message(access_token,message)
+    query = {:access_token => "#{access_token}",:comment=>"#{message}",:format => 'JSON',:method => 'share.share',:type=>"6",:url=>"http://www.gankao.co",:v => '1.0'}
     request = renren_sig_request(query)
     response = renren_api(request)
+    puts response
+    puts "share time #{response["share_time"]}"
   end
   #
   #END -------人人API----------
 
 
+  #qq添加说说
+  def self.send_message_qq(con,openid,access_token,user_id)
+    send_parms={:access_token=>access_token,:openid=>openid,:oauth_consumer_key=>Oauth2Helper::APPID,:format=>"json",:third_source=>"3",:con=>con}
+    url="graph.qq.com"
+    route_action="/shuoshuo/add_topic"
+    info=create_post_http(url,route_action,send_parms)
+    if info["data"].nil?
+      p "error_code #{info["ret"]}"
+    else
+      p "user #{user_id}  send success"
+    end
+  end
+
+  #根据用户类型发送消息
+  def self.send_message(message,user_id,time)
+    begin
+      user=User.find(user_id)
+      if !user.access_token.nil? and !user.end_time.nil? and user.end_time>Time.now
+        send_message_qq(message,user.open_id,user.access_token,user_id) if user.code_type=="qq" and !user.open_id.nil?
+        renren_send_message(user.access_token,message)  if user.code_type=="renren"
+        sina_send_message(user.access_token,message) if user.code_type=="sina"
+        sleep 2
+        puts "time end #{(Time.now-time).seconds*1000}ms"
+      end
+    rescue
+    end
+  end
 end

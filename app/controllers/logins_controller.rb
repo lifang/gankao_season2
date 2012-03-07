@@ -40,11 +40,8 @@ class LoginsController < ApplicationController
       @user= User.find_by_open_id(openid)
       if @user.nil?
         user_url="graph.qq.com"
-        user_http = Net::HTTP.new(user_url, 443)
-        user_http.use_ssl = true
-        user_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        back_res = user_http.get("/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Oauth2Helper::APPID}&openid=#{openid}")
-        user_info=JSON back_res.body
+        user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Oauth2Helper::APPID}&openid=#{openid}"
+        user_info=create_get_http(user_url,user_route)
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         cookies[:first] = {:value => "1", :path => "/", :secure  => false}

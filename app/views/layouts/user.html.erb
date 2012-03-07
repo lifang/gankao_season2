@@ -23,18 +23,7 @@
     <div class="wrap">
       <div class="head">
         <% category_id = params[:category].nil? ? 2 : params[:category] %>
-        <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>'" class="red"><%= cookies[:user_name] %>
-            <% if is_trial?(category_id)%>
-              <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
-              day_end=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
-              <% if day_end>=1%>
-                <%="(试用剩#{day_end}天)"%>
-              <%  elsif day_end==0 %>
-                <%= "(试用即将到期)" %>
-              <% end %>
-            <%  elsif is_nomal?(category_id) %>
-              <%= "(试用结束)" %>
-            <% end %></a>|<a href="/">首页</a>|<a href="/logins/logout">退出</a></div>
+        <div class="user_info">你好：<%= cookies[:user_name] %>|<a href="/">首页</a>|<a href="/logins/logout">退出</a></div>
         <div class="logo"><a href="/"><img src="/assets/logo_user.png" /></a></div>
       </div>
       <% category_id = params[:category].nil? ? 2 : params[:category] %>
