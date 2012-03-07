@@ -33,7 +33,14 @@
                 </p>
               </div>
               <div class="ch_words_line">
-                <% (((@words.to_a - [word])[0,3] + [word]).sort_by{ rand }).each do |w| %>
+                <% sort_words = []
+                leving_words = @words.to_a - [word]
+                sort_words << leving_words[rand(leving_words.length)]
+                leving_words = leving_words - sort_words
+                sort_words << leving_words[rand(leving_words.length)] if leving_words.length > 0
+                leving_words = leving_words - sort_words
+                sort_words << leving_words[rand(leving_words.length)] if leving_words.length > 0
+                ((sort_words + [word]).sort_by{ rand }).each do |w| %>
                   <div class="words_btn font_size_16">
                     <a href="javascript:void(0);"
                        onclick="javascript:recollection_word(<%= word.id %>, <%= w.id %>, <%= params[:category] %>, <%= index %>, 3, '<%= params[:type] %>');">
