@@ -110,11 +110,12 @@ module Oauth2Helper
   #
   #人人发送新鲜事
   def renren_send_message(access_token,message)
-    query = {:access_token => "#{access_token}",:comment=>"#{message}",:format => 'JSON',:method => 'share.share',:type=>"6",:url=>"http://www.gankao.co",:v => '1.0'}
+    query = {:access_token => "#{access_token}",:comment=>"#{message}",:format => 'JSON',:method => 'share.share',:type=>"6",:url=>"#{Constant::SERVER_PATH}",:v => '1.0'}
     request = renren_sig_request(query)
     response = renren_api(request)
   end
   #
   #END -------人人API----------
+
 
 end
