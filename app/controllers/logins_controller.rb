@@ -5,7 +5,7 @@ class LoginsController < ApplicationController
   layout "application", :except => "index"
 
   def  renren_like
-    redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Constant::RENREN_ID}&app_id=163813&redirect_uri=http%3A%2F%2Fwww.gankao.co"
+    redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Constant::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
   end
 
   #退出
@@ -66,7 +66,7 @@ class LoginsController < ApplicationController
   end
 
   def request_sina
-    redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Constant::SINA_CLIENT_ID}&redirect_uri=http://www.gankao.co/logins/respond_sina&response_type=token"
+    redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Constant::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_sina&response_type=token"
   end
 
   def respond_sina
@@ -143,7 +143,7 @@ class LoginsController < ApplicationController
 
 
   def request_renren
-    redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Constant::RENREN_CLIENT_ID}&redirect_uri=http://www.gankao.co/logins/respond_renren"
+    redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Constant::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_renren"
   end
 
   def respond_renren
@@ -153,6 +153,7 @@ class LoginsController < ApplicationController
         #发送微博
         access_token=params[:access_token]
         expires_in=params[:expires_in].to_i
+        renren_send_message(access_token,"我在#{Time.now}的时候登录了赶考网")
         response = JSON(renren_get_user(access_token))[0]
         @user=User.where("code_id=#{response["uid"].to_s} and code_type='renren'").first
         if @user.nil?
