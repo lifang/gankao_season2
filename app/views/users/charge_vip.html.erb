@@ -38,40 +38,55 @@
         <div class="logo"><a href="/"><img src="/assets/logo_user.png" /></a></div>
       </div>
       <div class="main">
-        <div class="vip_main border_radius">
-          <div class="message_vip_box">
-            <%  order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
-            <% if order.nil? or order.types==Order::TYPES[:TRIAL_SEVEN] or order.types==Order::TYPES[:COMPETE] %>
-              <div class="tishi_vip">
-                <% if !order.nil? and ((order.end_time-Time.now.to_datetime)/1.day).to_i>0%>
-                  <%day=((order.end_time-Time.now.to_datetime)/1.day).to_i%>
-                  <% if day>=1%>
-                    您还有 <span class="red"><%= day %></span> 天试用的时间
-                  <% else %>
-                    您的试用即将到期
-                  <% end %>
-                <%else%>
-                  您的试用期限已到期
+        <div class="vip_main">
+          <%  order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{category_id } and status=#{Order::STATUS[:NOMAL]}") %>
+          <% if order.nil? or order.types==Order::TYPES[:TRIAL_SEVEN] or order.types==Order::TYPES[:COMPETE] %>
+            <div class="tishi_vip">
+              <% if !order.nil? and ((order.end_time-Time.now.to_datetime)/1.day).to_i>0%>
+                <%day=((order.end_time-Time.now.to_datetime)/1.day).to_i%>
+                <% if day>=1%>
+                  您还有 <span class="red"><%= day %></span> 天试用的时间
+                <% else %>
+                  您的试用即将到期
                 <% end %>
-              </div>
-            <% end %>
+              <%else%>
+                您的试用期限已到期
+              <% end %>
+            </div>
+          <% end %>
+          <div class="vip_text">
             <% category_id = params[:category].nil? ? 2 : params[:category].to_i %>
             <h1 class="vip_h1"><%= Category.find(category_id).name %></h1>
-            <input type="hidden" value="<%=category_id  %>" id="category"/>
-            <div><img src="/assets/tg_vip_img.png" /></div>
-            <div class="tab_box">
-              <div class="zfb_box">
-                <div class="zfb_con"><button class="zf_btn" onclick="check_vip()"></button></div>
-              </div>
-              <div class="sqcode_box">
-                <div class="sq_con">
-                  <div class="sq_con_input"><input id="invit_code"  type="text" /></div>
-                  <div class="sq_con_btn"><button class="t_btn" onclick="accredit()">确定</button></div>
-                </div>
+            <div class="vip_ul">
+              <p>正式用户课程享受以下全套服务：</p>
+              <ul>
+                <li>精校真题</li>
+                <li>全套解析</li>
+                <li>在线听力</li>
+                <li>错题收藏</li>
+                <li>带发音的词汇解析</li>
+                <li>单词记忆</li>
+                <li>模拟考试</li>
+              </ul>
+              <p class="clear"></p>
+              <p> 更多功能请自行发掘……</p>
+            </div>
+          </div>
+          <div class="tg_vip_img"><img src="/assets/tg_vip_img.png" /></div>
+          <div class="clear"></div>
+          <input type="hidden" value="<%=category_id  %>" id="category"/>
+          <div class="tab_box">
+            <div class="zfb_box">
+              <div class="zfb_con"><button class="zf_btn" onclick="check_vip()"></button></div>
+            </div>
+            <div class="sqcode_box">
+              <div class="sq_con">
+                <div class="sq_con_text">请输入你已获得的授权码</div>
+                <div class="sq_con_input"><input id="invit_code"  type="text" /></div>
+                <div class="sq_con_btn"><button class="t_btn" onclick="accredit()">确定</button></div>
               </div>
             </div>
           </div>
-          <div class="side_ying"></div>
         </div>
       </div>
       <%= render :partial => "/common/flash_div" %>
