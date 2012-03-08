@@ -2,6 +2,7 @@
 namespace :check do
   desc "check task"
   task(:task => :environment) do
+    include Oauth2Helper
     user_plans=UserPlanRelation.find_by_sql("select u.*,s.category_id from user_plan_relations u
       inner join study_plans s on u.study_plan_id=s.id")
     user_plans.each do |user_plan|
