@@ -77,12 +77,8 @@ class StudyPlansController < ApplicationController
 
   def check_task
     category_id = params[:category].nil? ? 2 : params[:category].to_i
-    check=StudyPlan.pass_task(cookies[:user_id],category_id )
-    @message=check[0]
-    @over=check[1]
-    respond_to do |format|
-      format.js
-    end
+    flash[:check]=StudyPlan.pass_task(cookies[:user_id],category_id )
+    redirect_to "/study_plans/done_plans?category=#{category_id}"
   end
 
 end

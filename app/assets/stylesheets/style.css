@@ -35,7 +35,7 @@ button.green { color:#009900;}
 .logo {margin-left: 50px; float: left; display: inline;}
 .nav { height: 46px; line-height: 46px; float: left; margin-left: 50px;}
 .nav li { float: left; display: inline;}
-.nav li a { width: 60px; height: 46px; display: block; text-align: center; color: #FFF; font-size: 14px;}
+.nav li a { padding: 0 15px; height: 46px; display: block; text-align: center; color: #FFF; font-size: 14px;}
 .nav li a:hover { color: #aaecff;}
 .nav li a.hover { font-weight: bold; background: url(/assets/nav_hover.png) center 0px no-repeat;}
 
