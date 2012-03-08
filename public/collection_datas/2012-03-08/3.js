@@ -21,7 +21,7 @@ collections = {
                     "answer":"sssss",
                     "analysis":"",
                     "user_answer":["sss"]
-                    },{
+                },{
                     "correct_type":"0",
                     "flag":"",
                     "id":"142",
@@ -34,7 +34,7 @@ collections = {
                     "answer":"ccc",
                     "analysis":"ssss",
                     "user_answer":["ddd"]
-                    },{
+                },{
                     "correct_type":"3",
                     "flag":"",
                     "id":"143",
@@ -47,8 +47,8 @@ collections = {
                     "answer":"ssss",
                     "analysis":"fggaaa",
                     "user_answer":["ddddsssssssssssssssssssdddddddddddddddddddddddddffffffffiiiiiiiillkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"]
-                    }]
-                }
-            }]
+                }]
+            }
+        }]
     }
 }

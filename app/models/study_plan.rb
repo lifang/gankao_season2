@@ -11,9 +11,8 @@ class StudyPlan < ActiveRecord::Base
     user_plan=UserPlanRelation.find_by_sql("select up.created_at,up.ended_at,sp.id,up.user_id from user_plan_relations up inner join study_plans sp on up.study_plan_id=sp.id where
      up.user_id=#{user_id} and sp.category_id=#{category} limit 1 ")[0]
     message="您还未完成今天的学习任务，离勋章只差一步坚持哦！"
-    over=false
-    practice_type=PlanTask::TASK_TYPES[:PRACTICE]
-    recite_type=PlanTask::TASK_TYPES[:RECITE]
+    practice_type="#{PlanTask::TASK_TYPES[:PRACTICE]}"
+    recite_type="#{PlanTask::TASK_TYPES[:RECITE]}"
     unless user_plan.nil?
       tasks=PlanTask.find_by_sql("select task_types,num, study_plan_id from plan_tasks where period_types=#{PlanTask::PERIOD_TYPES[:EVERYDAY]}
          and study_plan_id=#{user_plan.id}  and task_types in (#{practice_type},#{recite_type}) group by task_types")
@@ -21,7 +20,7 @@ class StudyPlan < ActiveRecord::Base
         task_num["#{task.task_types}"]=task.num
       end unless tasks.blank?
       actions=ActionLog.find_by_sql("select total_num,created_at,types from action_logs where user_id=#{user_plan.user_id}
-           and types in (#{practice_type},#{recite_type}) and category_id=#{category} and TO_DAYS(created_at)=(NOW()) ")
+           and types in (#{practice_type},#{recite_type}) and category_id=#{category} and TO_DAYS(created_at)=TO_DAYS(NOW()) ")
       actions.each do |action|
         month_action["#{action.types}"]=action.total_num
       end unless actions.blank?
@@ -31,7 +30,6 @@ class StudyPlan < ActiveRecord::Base
         else
           if  !month_action[practice_type].nil? and !month_action[recite_type].nil?  and
               month_action[practice_type].to_i >=  task_num[practice_type].to_i and month_action[recite_type].to_i >= task_num[recite_type].to_i
-            over=true
             action=ActionLog.first(:conditions=>"category_id=#{category} and user_id=#{user_plan.user_id} and types=#{ActionLog::TYPES[:STUDY_PLAY]} and created_at=#{Time.now.strftime("%Y-%m-%d")}")
             ActionLog.create(:category_id=>category,:user_id=>user_id,:types=>ActionLog::TYPES[:STUDY_PLAY],:created_at=>Time.now.strftime("%Y-%m-%d").to_s,:remark=>"今日任务已完成") if action.nil?
             message="您已完成任务，恭喜获取勋章"
@@ -39,7 +37,7 @@ class StudyPlan < ActiveRecord::Base
         end
       end
     end
-    return [message,over]
+    return message
   end
 
   def self.check_actions(user_id,category,start_time,end_time)
