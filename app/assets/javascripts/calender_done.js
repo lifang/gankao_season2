@@ -196,7 +196,3 @@ function new_calender(){
 }
 
 
-function task_over(){
-    $("#task").submit();
-}
-
