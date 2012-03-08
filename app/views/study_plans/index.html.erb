@@ -1,16 +1,15 @@
 <% if @user_plan.nil? %>
-  <div class="jihua_wei">
-    <div class="jihua_w_text"><img src="/assets/beikao.png" /></div>
-    <div class="jihua_w_text">
-      <div class="jihua_btn_box">
-        <% if @study_plan.nil? %>
-        <button class="jihua_btn" title="暂时还没有学习计划" disabled >马上加入</button>
-        <% else %>
-          <button class="jihua_btn"
-                  onclick="javascript:window.location.href='/study_plans/<%= @study_plan.id %>?category=<%= params[:category] %>';" >
-            马上加入</button>
-        <% end %>
-      </div>
+  <div class="jihua_w_h">必过挑战介绍:</div>
+  <div class="jihua_w"><img src="/assets/ji_pic.png" /></div>
+  <div class="jihua_w">
+    <div class="jihua_btn_box">
+      <% if @study_plan.nil? %>
+        <button class="jihua_btn" title="暂时还没有学习计划" disabled >我要必过</button>
+      <% else %>
+        <button class="jihua_btn"
+                onclick="javascript:window.location.href='/study_plans/<%= @study_plan.id %>?category=<%= params[:category] %>';" >
+          我要必过</button>
+      <% end %>
     </div>
   </div>
 <% end %>
