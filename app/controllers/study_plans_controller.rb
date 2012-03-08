@@ -2,6 +2,7 @@
 class StudyPlansController < ApplicationController
   before_filter :sign?, :except => ["index"]
   layout "application", :except => ['done_plans']
+  include Oauth2Helper
 
   def index
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
@@ -34,7 +35,7 @@ class StudyPlansController < ApplicationController
     end
     cookies.delete(:user_role)
     user_role?(cookies[:user_id])
-    Oauth2Helper.send_message(send_message,cookies[:user_id])
+    send_message("我已参见",cookies[:user_id])
     flash[:notice] = "感谢您参与学习计划，同时您也免费升级为网站的正式用户了！"
     redirect_to "/study_plans/done_plans?category=#{params[:category].to_i}"
   end
