@@ -78,7 +78,7 @@ class LoginsController < ApplicationController
         uid=params[:uid]
         expires_in=params[:expires_in].to_i
         response = JSON sina_get_user(access_token,uid)
-        @user=User.where("code_id='#{response["id"]}' and code_type='sina'").first
+        @user=User.find_by_code_id_and_code_type("#{response["id"]}","sina")
         if @user.nil?
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina', :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
           cookies[:first] = {:value => "1", :path => "/", :secure  => false}
@@ -154,7 +154,7 @@ class LoginsController < ApplicationController
         access_token=params[:access_token]
         expires_in=params[:expires_in].to_i
         response = JSON(renren_get_user(access_token))[0]
-        @user=User.where("code_id=#{response["uid"].to_s} and code_type='renren'").first
+        @user=User.find_by_code_id_and_code_type("#{response["uid"]}","renren")
         if @user.nil?
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"],:username=>response["name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
           cookies[:first] = {:value => "1", :path => "/", :secure  => false}
