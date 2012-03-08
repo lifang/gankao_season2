@@ -87,8 +87,8 @@ module Oauth2Helper
   def self.sina_send_message(access_token,message)
     request = Net::HTTP::Post.new("/2/statuses/update.json")
     request.set_form_data({"access_token" =>access_token, "status" => message})
-    response = sina_api(request)
-    puts "created by time #{response["created_at"]}"
+    response =JSON  sina_api(request)
+    puts "created by time #{ response["created_at"]}"
   end
   #
   #END -------新浪微博API----------
@@ -126,8 +126,7 @@ module Oauth2Helper
   def self.renren_send_message(access_token,message)
     query = {:access_token => "#{access_token}",:comment=>"#{message}",:format => 'JSON',:method => 'share.share',:type=>"6",:url=>"http://www.gankao.co",:v => '1.0'}
     request = renren_sig_request(query)
-    response = renren_api(request)
-    puts response
+    response =JSON renren_api(request)
     puts "share time #{response["share_time"]}"
   end
   #
