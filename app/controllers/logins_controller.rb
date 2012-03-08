@@ -153,7 +153,6 @@ class LoginsController < ApplicationController
         #发送微博
         access_token=params[:access_token]
         expires_in=params[:expires_in].to_i
-        renren_send_message(access_token,"我在#{Time.now}的时候登录了赶考网")
         response = JSON(renren_get_user(access_token))[0]
         @user=User.where("code_id=#{response["uid"].to_s} and code_type='renren'").first
         if @user.nil?

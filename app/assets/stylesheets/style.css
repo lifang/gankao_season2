@@ -351,11 +351,21 @@ li.mk_li_hover { border-top: 2px #2875ae solid;}
 .zhenti_list li h2 { color: #333; padding-left: 20px; font-size: 14px;}
 
 /*学习计划-----------------*/
-.jihua_wei { width: 625px; margin: 0 auto; position: relative;}
-.jihua_w_text { text-align: center; padding: 20px 0;}
+.jihua_w { text-align: center; padding: 5px 0;}
+.jihua_w_h { padding-left: 20px; font-size: 16px; padding: 5px 0;font-family: "微软雅黑"; color: #0060aa;}
+.plan_lb { width: 246px; height: 400px; float: left;}
 
 .jihua_btn_box { width: 112px; height: 43px; margin: 0 auto;}
-.jihua_btn { width: 112px; height: 43px; font-size: 16px; font-family: "微软雅黑"; color: #1f6cbb; background: url(/assets/jihua_btn.png) no-repeat; border: none;}
+.jihua_btn {
+    width: 112px;
+	height: 43px;
+	font-size: 18px;
+	font-family: "微软雅黑";
+	color: #1f6cbb;
+	background: url(/assets/jihua_btn.png) no-repeat;
+	border: none;
+	font-weight: bold;
+}
 .box_bottom_bg { width: 620px; height: 12px; position: absolute; bottom: -12px; background: url(/assets/box_bottom_bg.png) no-repeat;}
 
 .planTable { width: 698px; border: 1px #bebebe solid;}
@@ -380,7 +390,7 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 
 /*词汇练习---------------*/
 .cihui_f { width: 370px; margin: 0 auto;}
-.cihui_f div { height: 37px; line-height: 37px; margin: 30px 0;}
+.cihui_f div { line-height: 37px; margin: 30px 0;}
 .ch_f_line { font-size: 18px;}
 .ch_f_line a { float: right; width: 133px; height: 37px; display: block; overflow: hidden; text-indent: -999px;}
 .danci_hg {  background: url(/assets/danci_btn.png) 0 0 no-repeat;}
