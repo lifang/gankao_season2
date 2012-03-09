@@ -159,7 +159,7 @@ class SimulationsController < ApplicationController
 
   def reset_exam
     @exam_user = ExamUser.find_by_examination_id_and_user_id(params[:id].to_i, cookies[:user_id].to_i)
-    @exam_user.destroy
+    @exam_user.destroy if @exam_user
     do_exam
   end
 
