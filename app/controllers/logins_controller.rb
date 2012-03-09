@@ -108,10 +108,9 @@ class LoginsController < ApplicationController
       if user.code_type!="sina" || user.access_token.nil? || user.end_time<Time.now
         redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       else
-        flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败")
-        render :inline => "<div id='flash_notice' class='tishi_tab'><p><%= flash[:warn] %></p></div>
-                            <script type='text/javascript'>show_flash_div();</script><script> setTimeout(function(){
-                            window.close();}, 3000)</script><% flash[:warn]=nil %>", :layout => "oauth"
+        flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
+        render :inline => "<div style='width: 200px; height: 32px; margin: 0 auto;' id='text_body'>#{flash[:warn]}</div><script> setTimeout(function(){
+                            window.close();}, 3000)</script><% flash[:warn]=nil %>"
       end
     end
   end
@@ -122,16 +121,16 @@ class LoginsController < ApplicationController
 
   def add_watch_weibo
     layout "oauth"
-    data="关注失败"
-#    begin
+    data="关注失败，请登录微博查看"
+    begin
       meters={}
       params[:access_token].split("&").each do |parm|
         parms=parm.split("=")
         parms.each {meters[parms[0]]=parms[1]}
       end
       data=request_weibo(meters["access_token"],meters["uid"],data)
-#    rescue
-#    end
+    rescue
+    end
     respond_to do |format|
       format.json {
         render :json=>{:data=>data}, :layout => "ouath"
