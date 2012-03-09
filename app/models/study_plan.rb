@@ -8,12 +8,12 @@ class StudyPlan < ActiveRecord::Base
   def self.pass_task(user_id,category)
     task_num={}
     month_action={}
+    over=false
     user_plan=UserPlanRelation.find_by_sql("select up.created_at,up.ended_at,sp.id,up.user_id from user_plan_relations up inner join study_plans sp on up.study_plan_id=sp.id where
      up.user_id=#{user_id} and sp.category_id=#{category} limit 1 ")[0]
     message="您还未完成今天的学习任务，离勋章只差一步坚持哦！"
-    over=false
-    practice_type=PlanTask::TASK_TYPES[:PRACTICE]
-    recite_type=PlanTask::TASK_TYPES[:RECITE]
+    practice_type="#{PlanTask::TASK_TYPES[:PRACTICE]}"
+    recite_type="#{PlanTask::TASK_TYPES[:RECITE]}"
     unless user_plan.nil?
       tasks=PlanTask.find_by_sql("select task_types,num, study_plan_id from plan_tasks where period_types=#{PlanTask::PERIOD_TYPES[:EVERYDAY]}
          and study_plan_id=#{user_plan.id}  and task_types in (#{practice_type},#{recite_type}) group by task_types")
@@ -21,7 +21,7 @@ class StudyPlan < ActiveRecord::Base
         task_num["#{task.task_types}"]=task.num
       end unless tasks.blank?
       actions=ActionLog.find_by_sql("select total_num,created_at,types from action_logs where user_id=#{user_plan.user_id}
-           and types in (#{practice_type},#{recite_type}) and category_id=#{category} and TO_DAYS(created_at)=(NOW()) ")
+           and types in (#{practice_type},#{recite_type}) and category_id=#{category} and TO_DAYS(created_at)=TO_DAYS(NOW()) ")
       actions.each do |action|
         month_action["#{action.types}"]=action.total_num
       end unless actions.blank?

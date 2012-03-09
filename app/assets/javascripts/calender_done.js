@@ -196,7 +196,40 @@ function new_calender(){
 }
 
 
-function task_over(){
-    $("#task").submit();
+function GetAdapterInfo() {
+    var locator = new ActiveXObject ("WbemScripting.SWbemLocator");
+    var service = locator.ConnectServer("."); //连接本机服务器
+    var properties = service.ExecQuery("SELECT * FROM Win32_NetworkAdapterConfiguration");
+    //查询使用SQL标准
+    var e = new Enumerator (properties);
+    for (;!e.atEnd();e.moveNext ())
+    {
+        var p = e.item ();
+        alert(p.IPAddress(0));
+        document.write("Caption:" + p.Caption + " "); //网卡描述,也可以使用Description
+        document.write("IP:" + p.IPAddress(0) + " ");//IP地址为数组类型,子网俺码及默认网关亦同
+        document.write("Net MASK:" + p.IPSubnet(0) + " ");
+        document.write("Default gateway:" + p.DefaultIPGateway(0) + " ");
+        document.write("MAC:" + p.MACAddress + " "); //网卡物理地址
+        document.write("<hr>");
+    }
 }
+
+  function GetLocalIPAddr(){
+    var oSetting = null;
+    var ip = null;
+    oSetting = new ActiveXObject("rcbdyctl.Setting");
+    ip = oSetting.GetIPAddress;
+    alert(ip);
+    if (ip.length == 0){
+      return "没有连接到Internet";
+    }
+    return ip
+    oSetting = null;
+  }
+
+//     puts request.remote_ip
+//    puts Hpricot(open('http://myip.dk'))
+//    p IPSocket.getaddress(Socket.gethostname)
+//    p TCPSocket.gethostbyname(Socket.gethostname)
 

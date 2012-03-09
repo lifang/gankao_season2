@@ -33,9 +33,9 @@ button.green { color:#009900;}
 
 .head {padding: 6px 0;}
 .logo {margin-left: 50px; float: left; display: inline;}
-.nav { height: 46px; line-height: 46px; float: left; margin-left: 80px;}
+.nav { height: 46px; line-height: 46px; float: left; margin-left: 50px;}
 .nav li { float: left; display: inline;}
-.nav li a { width: 50px; height: 46px; display: block; text-align: center; color: #FFF; font-size: 14px;}
+.nav li a { padding: 0 15px; height: 46px; display: block; text-align: center; color: #FFF; font-size: 14px;}
 .nav li a:hover { color: #aaecff;}
 .nav li a.hover { font-weight: bold; background: url(/assets/nav_hover.png) center 0px no-repeat;}
 
@@ -358,34 +358,48 @@ li.mk_li_hover { border-top: 2px #2875ae solid;}
 .jihua_btn_box { width: 112px; height: 43px; margin: 0 auto;}
 .jihua_btn {
     width: 112px;
-	height: 43px;
-	font-size: 18px;
-	font-family: "微软雅黑";
-	color: #1f6cbb;
-	background: url(/assets/jihua_btn.png) no-repeat;
-	border: none;
-	font-weight: bold;
+    height: 43px;
+    font-size: 18px;
+    font-family: "微软雅黑";
+    color: #1f6cbb;
+    background: url(/assets/jihua_btn.png) no-repeat;
+    border: none;
+    font-weight: bold;
 }
 .box_bottom_bg { width: 620px; height: 12px; position: absolute; bottom: -12px; background: url(/assets/box_bottom_bg.png) no-repeat;}
-
-.planTable { width: 698px; border: 1px #bebebe solid;}
 .planTable_h { height: 38px; padding-left: 290px; background: url(/assets/planTable_h_bg.png) repeat-x;}
 .planTable_month { width: 100px; height: 38px; text-align: center; font-weight: bold; line-height: 38px; float: left;}
 .planTable_up, .planTable_down { width: 13px; height: 16px; float: left; margin-top: 12px; cursor: pointer; overflow: hidden; text-indent: -999px;}
 .planTable_up { width: 13px; height: 16px; background: url(/assets/planTable_move.png) no-repeat 0 0;}
 .planTable_down { background: url(/assets/planTable_move.png) no-repeat right 0;}
 
+.planBox { width: 960px; margin: 10px auto 0; overflow: hidden;}
+.planTable { width: 800px; margin: 0 auto; border: 1px #bebebe solid; padding: 5px; overflow: hidden;}
 .planTable_box { width: 698px; overflow: hidden; padding-bottom: 5px;}
 .planTable_box div { width: 93px; height: 68px; border: 1px #fff solid; margin: 2px 0 2px 4px; text-align: center; float: left; font-size: 36px;}
-div.pt_day { color: #333; background: url(/assets/planTable_box_bg.png) repeat-x 0 bottom; border: 1px #cccccc solid;}
-div.pt_day_new { background: url(/assets/pt_day_new_bg.png) no-repeat center top; border: 1px #3d6d92 solid; color: #FFF;}
-div.pt_day_new p { font-size: 12px; height: 22px; line-height: 22px;}
-div.pt_day_new p span { margin: 0 5px;}
-div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
-.pt_lianxi, .pt_beici { width: 25px; height: 22px; padding-left: 10px; display: block; float: left;}
-.pt_lianxi { background: url(/assets/icon_bi.png) no-repeat left center;}
-.pt_beici { background: url(/assets/icon_ben.png) no-repeat left center;}
-.pt_ztai { width: 16px; height: 16px; margin: 0 auto;}
+.pt_day {
+    width: 127px;
+    height: 105px;
+    overflow: hidden;
+    margin: 2px 2px;
+    text-align: center;
+    float: left;
+    color: #333;
+    background: url(/assets/planTable_box_bg.png) repeat-x 0 bottom;
+    border: 1px #cccccc solid;
+}
+.pt_day big { font-size: 32px; padding: 0 4px;}
+.pt_day_h { height: 32px; line-height: 32px;}
+.pt_day_new { background: url(/assets/pt_day_new_bg.png) no-repeat center top; border: 1px #3d6d92 solid; color: #FFF;}
+.pt_day_new p { font-size: 12px; height: 22px; line-height: 22px;}
+.pt_day_new p span { margin: 0 5px;}
+.pt_day_list { height: 24px; line-height: 24px; padding: 0 10px;}
+.qzt_a { float: right; color: #fff; font-size: 12px; text-align: right;}
+.pt_xunz_btn { color: #06C; border: none; background: url(/assets/pt_xunz_btn.png) no-repeat; width: 60px; height: 22px; line-height: 22px;}
+.pt_lianxi, .pt_beici { width: 24px; height: 24px; padding-left: 25px; display: block;}
+.pt_lianxi { background: url(/assets/icon_zt.png) no-repeat left center;}
+.pt_beici { background: url(/assets/icon_dc.png) no-repeat left center;}
+.pt_ztai { width: 50px; height: 56px; margin: 5px auto;}
 
 
 /*词汇练习---------------*/
@@ -409,8 +423,8 @@ div.pt_day_new p a { font-size: 12px; color: #FFF; text-decoration: underline;}
 .ch_lx_hover { position: absolute;height:17px; background: url(/assets/lx_ul_li.png) no-repeat; top: 8px; left: 70px;}
 .lx_ul li { width: 150px; height: 30px; line-height: 33px; color: #b9b9b9; float: left; margin-top: 20px;}
 .lx_ul li a {
-	padding-left: 60px;
-	color: #b9b9b9;
+    padding-left: 60px;
+    color: #b9b9b9;
 }
 .lx_ul li a.hover { color: #4799cf;}
 

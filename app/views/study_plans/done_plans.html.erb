@@ -1,47 +1,81 @@
-<%= javascript_include_tag "calender_done" %>
-<div class="m_box">
-  <h1>学习计划</h1>
-  <div class="planTable">
-    <div class="planTable_h">
-      <div class="planTable_up" id="idCalendarPre">上一个月</div>
-      <div class="planTable_month" id="date">2011-11-11</div>
-      <div class="planTable_down" id="idCalendarNext">下一个月</div>
-    </div>
-    <div class="planTable_box" id="idCalendar">
-    </div>
-  </div>
-  <div id="today" style="display:none">
-    <p><span id="whichs"></span><span><%= "#{Time.now.strftime("%m/%d")}" %></span></p>
-    <p><a href="javascript:void(0);"  id="check_over" onclick="task_over()">添加标记</a></p>
-    <p><span class="pt_lianxi tooltip" title="练习" id="practice"></span>
-      <span class="pt_beici tooltip" title="背词" id="exercise"></span></p>
-  </div>
-  <div id="medal" style="display:none">
-    <p class="pt_ztai"><img title="当日已完成" src="/assets/icon_xz.png" /></p>
-  </div>
-  <div id="yellow_card" style="display:none">
-    <p class="pt_ztai"><img title="任务失败"  src="/assets/icon_hp.png" /></p>
-  </div>
-</div>
-<input type="hidden" value="" id="all_days"/>
-<%= form_for :task,:url=>"/study_plans/check_task",:html=>{:id=>"task"},:remote=>true do %>
-  <input type="hidden" value="<%= params[:category] %>" id="category" name="category"/>
-<% end %>
-<script type="text/javascript">
-  var today=new Date();
-  var arr = [];
-  new_calender();
-  var $ = jQuery;
-<%#*$.ajax({%>
-<%#*type: "POST",%>
-<%#*url: "/study_plans/check_task.json",%>
-<%#*dataType: "json",%>
-<%#*data : {%>
-<%#*category:$("#category")%>
-<%#*},%>
-<%#*success : function(data) {%>
-<%#*//            tishi_alert(data.message);           }%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <%= render :partial => "/common/seo"  %>
+    <%= stylesheet_link_tag    "style" %>
+    <%= stylesheet_link_tag    "public" %>
+    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "main.js" %>
+    <%= javascript_include_tag "cookie.js" %>
+    <%= csrf_meta_tags %>
+    <!--[if IE 6]>
+    <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>
+      /* EXAMPLE */
+      DD_belatedPNG.fix('*');
 
-<%#*}%>
-<%#*})%>
-</script>
+      /* string argument can be any CSS selector */
+      /* .png_bg example is unnecessary */
+      /* change it to what suits you! */
+    </script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrap">
+      <%= render :partial => "/common/flash_div"  %>
+      <%= render :partial => "/common/head_div"  %>
+      <div class="clear"></div>
+      <div class="main_Div">
+        <div class="planBox">
+          <div class="planTable">
+            <%category_id = "#{params[:category]}"=="" ? 2 : params[:category]%>
+            <%= form_for :task,:url=>"/study_plans/check_task",:html=>{:id=>"task"},:remote=>true do %>
+              <input type="hidden" value="<%= params[:category] %>" id="category" name="category"/>
+            <% end %>
+            <% @day_all.each_with_index do |next_day,index| %>
+              <div class="pt_day"><div class="pt_day_h">第<big><%= index+1 %></big>天</div>
+                <%if  next_day==Time.now.strftime("%Y_%m_%d")%>
+                  <% if @day_status[next_day] %>
+                    <div class="pt_ztai"><img src="/assets/icon_jl.png" /></div>
+                  <%else %>
+                    <div class="pt_day_list"><a href="#" class="qzt_a">去做题&gt;&gt;</a><span class="pt_lianxi tooltip" name="真题"><%= @pra_exer[0] %></span></div>
+                    <div class="pt_day_list"><a href="#" class="qzt_a">去背词&gt;&gt;</a><span class="pt_beici tooltip" name="单词"><%= @pra_exer[1] %></span></div>
+                    <div class="pt_day_list"><button class="pt_xunz_btn" onclick="javascript:$('#task').submit();" >领取勋章</button></div>
+                    <script type="text/javascript">
+                      $(".pt_day_list").parent().addClass("pt_day_new");
+                    </script>
+                  <% end %>
+                <%elsif next_day<Time.now.strftime("%Y_%m_%d")%>
+                  <% if @day_status[next_day]  %>
+                    <div class="pt_ztai"><img src="/assets/icon_jl.png" /></div>
+                  <% else %>
+                    <div class="pt_ztai"><img src="/assets/icon_jg.png" /></div>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end unless @day_all.blank? %>
+          </div>
+
+        </div>
+      </div>
+      <div class="foot"></div>
+    </div>
+    <script type="text/javascript">
+
+    </script>
+    <% if !cookies[:first].nil? and cookies[:first] == "1" %>
+      <%= render :partial => "/common/complete_info" %>
+      <script type="text/javascript">
+        generate_flash_div("#complete_info");
+        $('#first_zhez').css('display','block');
+        $('#complete_info').css('display','block');
+        $('.xx_x').bind('click',function(){
+          $('#complete_info').hide();
+          $('#first_zhez').hide();
+          delCookie("first");
+          return false;
+        })
+      </script>
+    <% end %>
+  </body>
+</html>
