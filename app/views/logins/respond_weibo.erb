@@ -1,3 +1,4 @@
+<div style="width: 200px; height: 32px; margin: 0 auto;" id="text_body"></div>
 <script type="text/javascript">
   //获取access token
   var accessToken = window.location.hash.substring(1);
@@ -10,8 +11,8 @@
       access_token:accessToken
     },
     success: function(data){
-      tishi_alert(data.data);
-      <%#*setTimeout(function(){window.close();}, 3000);%>
+      $("#text_body").html(data.data);
+      setTimeout(function(){window.close();}, 3000);
     }
   });
 </script>
