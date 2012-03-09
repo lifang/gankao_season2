@@ -44,11 +44,11 @@ class StudyPlan < ActiveRecord::Base
 
   def self.check_actions(user_id,category,start_time,end_time)
     month_action=[]
-    actions=ActionLog.find_by_sql("select total_num,created_at,types from action_logs where user_id=#{user_id}
+    actions=ActionLog.find_by_sql(["select total_num,created_at,types from action_logs where user_id=#{user_id}
                         and types=#{ActionLog::TYPES[:STUDY_PLAY]} and category_id=#{category} and
-                        created_at>='#{start_time.to_datetime}' and created_at<='#{end_time.to_datetime}' ")
+                        created_at >= ? and created_at<= ?",start_time.to_datetime, end_time.to_datetime])
     actions.each do |action|
-      month_action << action.created_at.to_datetime.strftime("%Y_%m_%d").to_s
+      month_action << action.created_at.strftime("%Y_%m_%d")
     end unless actions.blank?
     return month_action
   end

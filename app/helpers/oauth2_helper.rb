@@ -27,7 +27,7 @@ module Oauth2Helper
   WEIBO_ID="2359288352"
 
   #构造post请求
-  def self.create_post_http(url,route_action,params)
+  def create_post_http(url,route_action,params)
     http = Net::HTTP.new(url, 443)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -69,7 +69,7 @@ module Oauth2Helper
   #START -------新浪微博API----------
   #
   #新浪微博主方法
-  def self.sina_api(request)
+  def sina_api(request)
     uri = URI.parse("https://api.weibo.com")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -84,7 +84,7 @@ module Oauth2Helper
   end
   #
   #新浪微博发送微博
-  def self.sina_send_message(access_token,message)
+  def sina_send_message(access_token,message)
     request = Net::HTTP::Post.new("/2/statuses/update.json")
     request.set_form_data({"access_token" =>access_token, "status" => message})
     response =JSON  sina_api(request)
@@ -97,14 +97,14 @@ module Oauth2Helper
   #START -------人人API----------
   #
   #人人主方法
-  def self.renren_api(request)
+  def renren_api(request)
     uri = URI.parse("http://api.renren.com")
     http = Net::HTTP.new(uri.host, uri.port)
     response = http.request(request).body
   end
   #
   #构成人人签名请求
-  def self.renren_sig_request(query)
+  def renren_sig_request(query)
     str = ""
     query.sort.each{|key,value|str<<"#{key}=#{value}"}
     str<<Constant::RENREN_API_SECRET
@@ -123,7 +123,7 @@ module Oauth2Helper
   end
   #
   #人人发送新鲜事
-  def self.renren_send_message(access_token,message)
+  def renren_send_message(access_token,message)
     query = {:access_token => "#{access_token}",:comment=>"#{message}",:format => 'JSON',:method => 'share.share',:type=>"6",:url=>"http://www.gankao.co",:v => '1.0'}
     request = renren_sig_request(query)
     response =JSON renren_api(request)
@@ -134,7 +134,7 @@ module Oauth2Helper
 
 
   #qq添加说说
-  def self.send_message_qq(con,openid,access_token,user_id)
+  def send_message_qq(con,openid,access_token,user_id)
     send_parms={:access_token=>access_token,:openid=>openid,:oauth_consumer_key=>Oauth2Helper::APPID,:format=>"json",:third_source=>"3",:con=>con}
     url="graph.qq.com"
     route_action="/shuoshuo/add_topic"
@@ -147,7 +147,7 @@ module Oauth2Helper
   end
 
   #根据用户类型发送消息
-  def self.send_message(message,user_id,time)
+  def send_message(message,user_id,time)
     begin
       user=User.find(user_id)
       if !user.access_token.nil? and !user.end_time.nil? and user.end_time>Time.now

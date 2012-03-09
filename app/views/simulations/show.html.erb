@@ -1,5 +1,5 @@
 <%= javascript_include_tag "#{@paper_url}" %>
-<%= javascript_include_tag "simulations" %>
+<%= javascript_include_tag "http://#{request.host_with_port}/assets/simulations.js" %>
 <%= form_for :paper , :url => "/simulations/#{@examination.id}/save_result",
   :html => {:name => "paper_form", :id => "paper_form",
   :onsubmit => "return generate_result_paper('#{@exam_user.paper_id}')"} do |f| %>
