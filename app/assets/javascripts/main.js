@@ -98,9 +98,9 @@ function generate_flash_div(style) {
 function show_flash_div() {
     $('.tishi_tab').stop();
     generate_flash_div(".tishi_tab");
-    $('.tishi_tab').delay(5000).fadeTo("slow",0,function(){
-        $(this).remove();
-    });
+//    $('.tishi_tab').delay(5000).fadeTo("slow",0,function(){
+//        $(this).remove();
+//    });
 }
 
 //创建元素
@@ -125,7 +125,6 @@ function create_element(element, name, id, class_name, type, ele_flag) {
 
 //弹出错误提示框
 function tishi_alert(str){
-    alert(str);
     var div = create_element("div",null,"flash_notice","tishi_tab border_radius",null,null);
     div.innerHTML+="<span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>";
     var p = create_element("p","","","","innerHTML");

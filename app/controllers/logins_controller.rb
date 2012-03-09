@@ -1,7 +1,5 @@
 #encoding: utf-8
 class LoginsController < ApplicationController
-  require 'oauth2'
-  include Oauth2Helper
   layout "application", :except => "index"
 
   def  renren_like
@@ -103,7 +101,6 @@ class LoginsController < ApplicationController
   end
 
   def watch_weibo
-    layout "oauth"
     if cookies[:user_id].nil?
       redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
     else
@@ -114,7 +111,7 @@ class LoginsController < ApplicationController
         flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败")
         render :inline => "<div id='flash_notice' class='tishi_tab'><p><%= flash[:warn] %></p></div>
                             <script type='text/javascript'>show_flash_div();</script><script> setTimeout(function(){
-                            window.close();}, 3000)</script><% flash[:warn]=nil %>"
+                            window.close();}, 3000)</script><% flash[:warn]=nil %>", :layout => "oauth"
       end
     end
   end
@@ -137,7 +134,7 @@ class LoginsController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        render :json=>{:data=>data}
+        render :json=>{:data=>data}, :layout => "ouath"
       }
     end
   end
