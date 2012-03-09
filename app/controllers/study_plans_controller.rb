@@ -52,7 +52,7 @@ class StudyPlansController < ApplicationController
     @title = "#{@category.name}复习计划"
     @meta_keywords = "#{@category.name}复习方法,大学英语四级学习计划"
     @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提高#{@category.name}的应试能力。"
-    plan_task=UserPlanRelation.find_by_sql("select up.created_at,up.ended_at from user_plan_relations up inner join study_plans sp on up.study_plan_id=sp.id where
+    plan_task=UserPlanRelation.find_by_sql("select up.created_at,up.ended_at,up.id from user_plan_relations up inner join study_plans sp on up.study_plan_id=sp.id where
      up.user_id=#{cookies[:user_id]} and sp.category_id=#{category_id} limit 1 ")
     @pra_exer=[0,0]
     month_action=[]
@@ -61,7 +61,9 @@ class StudyPlansController < ApplicationController
     unless plan_task.blank?
       days=plan_task[0]
       created_at=days.created_at.nil?? created_at : days.created_at.to_datetime
+      UserPlanRelation.find(plan_task.id).update_attribute(:created_at=>created_at ) if days.created_at.nil?
       end_time=days.ended_at.nil?? (created_at+29.days) : (((days.ended_at.to_datetime-created_at)/1.days).to_i==29 ? days.ended_at.to_datetime : (created_at+29.days))
+      UserPlanRelation.find(plan_task.id).update_attribute(:ended_at=>end_time) if days.ended_at.nil?
       created_at.step(end_time, 1) do |date|
         @day_all << date.strftime("%Y_%m_%d")
       end
