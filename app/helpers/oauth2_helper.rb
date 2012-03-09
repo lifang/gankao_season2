@@ -147,7 +147,7 @@ module Oauth2Helper
   end
 
   #根据用户类型发送消息
-  def send_message(message,user_id,time)
+  def send_message(message,user_id)
     begin
       user=User.find(user_id)
       if !user.access_token.nil? and !user.end_time.nil? and user.end_time>Time.now
@@ -155,7 +155,6 @@ module Oauth2Helper
         renren_send_message(user.access_token,message)  if user.code_type=="renren"
         sina_send_message(user.access_token,message) if user.code_type=="sina"
         sleep 2
-        puts "time end #{(Time.now-time).seconds*1000}ms"
       end
     rescue
     end

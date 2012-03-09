@@ -6,7 +6,6 @@ namespace :check do
     user_plans=UserPlanRelation.find_by_sql("select u.*,s.category_id from user_plan_relations u
       inner join study_plans s on u.study_plan_id=s.id")
     user_plans.each do |user_plan|
-      time=Time.now
       task_num={}
       month_action={}
       tasks=PlanTask.find_by_sql("select task_types,num, study_plan_id
@@ -39,7 +38,7 @@ namespace :check do
             puts "record has been completed"
           end
         end
-        Oauth2Helper.send_message(send_message,user_plan.user_id,time)
+        Oauth2Helper.send_message(send_message,user_plan.user_id)
       end
     end unless user_plans.blank?
   end
