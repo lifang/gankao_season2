@@ -2,6 +2,10 @@
 class StudyPlansController < ApplicationController
   before_filter :sign?, :except => ["index"]
   layout "application", :except => ['done_plans']
+  require 'hpricot'
+  require 'open-uri'
+  require 'rubygems'
+  require 'socket'
 
   def index
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
@@ -55,7 +59,7 @@ class StudyPlansController < ApplicationController
     @day_all=[]
     unless plan_task.blank?
       days=plan_task[0]
-      created_at=days.created_at.nil?? created_at  : days.created_at.to_datetime
+      created_at=days.created_at.nil?? created_at : days.created_at.to_datetime
       end_time=days.ended_at.nil?? (created_at+29.days) : (((days.ended_at.to_datetime-created_at)/1.days).to_i==29 ? days.ended_at.to_datetime : (created_at+29.days))
       created_at.step(end_time, 1) do |date|
         @day_all << date.strftime("%Y_%m_%d")
@@ -77,8 +81,12 @@ class StudyPlansController < ApplicationController
 
   def check_task
     category_id = params[:category].nil? ? 2 : params[:category].to_i
-    flash[:check]=StudyPlan.pass_task(cookies[:user_id],category_id )
-    redirect_to "/study_plans/done_plans?category=#{category_id}"
+    check=StudyPlan.pass_task(cookies[:user_id],category_id )
+    @message=check[0]
+    @over=check[1]
+    respond_to do |format|
+      format.js
+    end
   end
 
 end
