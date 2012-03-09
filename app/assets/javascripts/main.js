@@ -125,6 +125,7 @@ function create_element(element, name, id, class_name, type, ele_flag) {
 
 //弹出错误提示框
 function tishi_alert(str){
+    alert(str);
     var div = create_element("div",null,"flash_notice","tishi_tab border_radius",null,null);
     div.innerHTML+="<span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>";
     var p = create_element("p","","","","innerHTML");
