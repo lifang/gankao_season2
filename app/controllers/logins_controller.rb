@@ -126,15 +126,15 @@ class LoginsController < ApplicationController
   def add_watch_weibo
     layout "oauth"
     data="关注失败"
-    begin
+#    begin
       meters={}
       params[:access_token].split("&").each do |parm|
         parms=parm.split("=")
         parms.each {meters[parms[0]]=parms[1]}
       end
       data=request_weibo(meters["access_token"],meters["uid"],data)
-    rescue
-    end
+#    rescue
+#    end
     respond_to do |format|
       format.json {
         render :json=>{:data=>data}
