@@ -249,7 +249,7 @@ function check_vip(){
         success : function(data) {
             if(data.message){
                 vip_tishi();
-                window.open("/users/alipay_exercise?category="+data.category,'_blank','height=750,width=1000,left=200,top=50');
+                window.open("/users/alipay_exercise?category="+$("#category").val(),'_blank','height=750,width=1000,left=200,top=50');
             }else{
                 var str = (data.time == null || data.time == "") ? "" : "，截止日期是"+data.time;
                 tishi_alert("您已是vip用户"+str);

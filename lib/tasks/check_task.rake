@@ -28,10 +28,11 @@ namespace :check do
       if  task_num[practice_type].nil? or task_num[recite_type].nil?
         puts "Please create complete task"
       else
-        send_message="天上果真掉下个林妹妹，希望你别摔着 #{user_plan.user_id}--#{Time.now}"
+        send_message="必过任务计划中，你今天的备考计划还没完成哦"
         if  !month_action[practice_type].nil? and !month_action[recite_type].nil? and month_action[practice_type] >= task_num[practice_type] and month_action[recite_type] >= task_num[recite_type]
           puts "user_id #{user_plan.user_id} category_id #{user_plan.category_id} pull the job off"
           action=ActionLog.first(:conditions=>"category_id=#{user_plan.category_id} and user_id=#{user_plan.user_id} and types=#{ActionLog::TYPES[:STUDY_PLAY]} and created_at='#{1.day.ago.strftime("%Y-%m-%d")}'")
+          send_message="今天的必过计划完成了，恭喜你往成功路上有迈出了重要的一步"
           if action.nil?
             ActionLog.create(:category_id=>user_plan.category_id,:user_id=>user_plan.user_id,:types=>ActionLog::TYPES[:STUDY_PLAY],:created_at=>1.day.ago.strftime("%Y-%m-%d").to_s,:remark=>"今日任务已完成")
           else

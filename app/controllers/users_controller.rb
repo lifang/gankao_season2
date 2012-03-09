@@ -110,7 +110,7 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        render :json=>{:message => is_not_vip, :time => end_time, :category => params[:category]}
+        render :json=>{:message => is_not_vip, :time => end_time}
       }
     end
   end
@@ -123,7 +123,7 @@ class UsersController < ApplicationController
       :notify_url=>Constant::SERVER_PATH+"/users/alipay_compete",
       :subject=>"会员购买#{category.name}产品",
       :payment_type=>Constant::VIP_TYPE[:good],
-      :total_fee=>Constant::SIMULATION_FEE
+      :total_fee=>category.price.nil?? Constant::SIMULATION_FEE : category.price
     }
     out_trade_no="#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}_#{params[:category]}"
     options.merge!(:seller_email =>AlipaysHelper::SELLER_EMAIL, :partner =>AlipaysHelper::PARTNER, :_input_charset=>"utf-8", :out_trade_no=>out_trade_no)

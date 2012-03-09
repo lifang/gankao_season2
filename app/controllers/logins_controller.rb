@@ -20,7 +20,8 @@ class LoginsController < ApplicationController
   def charge_vip
     cookies.delete(:user_role)
     user_role?(cookies[:user_id])
-    redirect_to "/users/#{cookies[:user_id]}"
+    category_id = params[:category].nil? ? 2 : params[:category]
+    redirect_to "/similarities?category=#{category_id}"
   end
 
   def request_qq
