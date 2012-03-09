@@ -188,7 +188,6 @@ class ExamUsersController < ApplicationController
   
   #单词加入背诵列表
   def ajax_add_word
-    puts "-----------------------"
     puts params[:word_id]
     word = Word.find(params[:word_id].to_i)
     UserWordRelation.add_nomal_ids(cookies[:user_id], word.id, word.category_id) if word

@@ -83,7 +83,7 @@ class LoginsController < ApplicationController
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina', :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
           cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         else
-          if @user.end_time.nil?||@user.end_time<Time.now
+          if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
             @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
           end
         end
@@ -159,7 +159,9 @@ class LoginsController < ApplicationController
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"],:username=>response["name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
           cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         else
-          @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+          if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
+            @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+          end
         end
         cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
