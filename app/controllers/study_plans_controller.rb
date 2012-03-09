@@ -34,7 +34,7 @@ class StudyPlansController < ApplicationController
     end
     cookies.delete(:user_role)
     user_role?(cookies[:user_id])
-    send_message="我参加了赶考网的英语必过学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
+    send_message = "我参加了赶考网的英语必过学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
     Oauth2Helper.send_message(send_message,cookies[:user_id])
     flash[:notice] = "感谢您参与学习计划，同时您也免费升级为网站的正式用户了！"
     redirect_to "/study_plans/done_plans?category=#{params[:category].to_i}"
