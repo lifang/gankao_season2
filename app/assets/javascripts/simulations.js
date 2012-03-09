@@ -84,17 +84,7 @@ function create_paper() {
             }
         });
         already_drag_li();
-    }
-    //给移动拖动框加事件
-    if ($(".drag_tk_box").length > 0) {
-        for (var m=0; m<$(".drag_tk_box").length; m++) {
-            fix_div_top.put($(".drag_tk_box")[m].id, $(".drag_tk_box")[m].offsetTop);
-            var problem_id = $(".drag_tk_box")[m].id.split("problem_drag_");
-            var last_top = $("#problem_"+problem_id[1]).get(0).offsetTop
-            + parseInt($("#problem_"+problem_id[1]).css("height").split("px")[0]);
-            setInterval("fix_top("+last_top+", '"+$(".drag_tk_box")[m].id+"');",100);
-        }
-    }
+    }    
     setTimeout(function(){
         show_exam_time();
     }, 500);
@@ -287,6 +277,16 @@ function open_block_nav(block_id) {
     window.scrollTo(0, 0);
     if (is_fix_time) {
         start_block_audio(block_id);
+    }
+    //给移动拖动框加事件
+    if ($("#block_" + block_id + " .drag_tk_box").length > 0) {
+        for (var m=0; m<$("#block_" + block_id + " .drag_tk_box").length; m++) {
+            fix_div_top.put($("#block_" + block_id + " .drag_tk_box")[m].id, $("#block_" + block_id + " .drag_tk_box")[m].offsetTop);
+            var problem_id = $("#block_" + block_id + " .drag_tk_box")[m].id.split("problem_drag_");
+            var last_top = $("#problem_"+problem_id[1]).get(0).offsetTop
+            + parseInt($("#problem_"+problem_id[1]).css("height").split("px")[0]);
+            self.setInterval("fix_top("+last_top+", '"+$("#block_" + block_id + " .drag_tk_box")[m].id+"');",100);
+        }
     }
 }
 
@@ -1506,7 +1506,7 @@ function add_audio_cookies(audio_id) {
 //更改文本域的长度
 function start_change_length(id, flag) {
     show_que_save_button(id);
-    change_length = window.setInterval("call_me(75, " + id + ", "+ flag +")", 1);
+    change_length = self.setInterval("call_me(75, " + id + ", "+ flag +")", 1);
 }
 
 //根据字符长度改变文本域的长和宽
@@ -1580,11 +1580,11 @@ function to_next() {
 
 
 function fix_top(last_top, element_id){
-    var body_scrollTop = document.body.scrollTop|document.documentElement.scrollTop;
+    var body_scrollTop = document.body.scrollTop|document.documentElement.scrollTop;  
     if(parseInt($("#" + element_id).get(0).offsetTop-body_scrollTop)<0){
         $("#" + element_id).get(0).style.position="fixed";
         $("#" + element_id).get(0).style.top="38px";
-    }
+    }    
     if(body_scrollTop < fix_div_top.get(element_id) || body_scrollTop > last_top){
         $("#" + element_id).get(0).style.position="";
         $("#" + element_id).get(0).style.top="";

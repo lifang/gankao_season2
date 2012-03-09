@@ -16,4 +16,5 @@ CACHE MANIFEST
 NETWORK:
 http://manage.gankao.co/
 http://www.gankao.co/
-http://gankao.co/
+http://localhost:3000/
+http://localhost:3001/
