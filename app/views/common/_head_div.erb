@@ -4,7 +4,7 @@
     <% if cookies[:user_id] %>
       <div class="h_user">
         <a href="javascript:void(0);" class="h_email email_u">邮件</a>
-        <a href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %></a>
+        <a class="user_name" href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %></a>
         |<a href="/logins/logout">退出</a>
         <div class="email_tab" style="display: none; ">
           <ul>
