@@ -108,7 +108,11 @@ class LoginsController < ApplicationController
       if user.code_type!="sina" || user.access_token.nil? || user.end_time<Time.now
         redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       else
-        flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
+        begin
+          flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
+        rescue
+          flash[:warn]="关注失败，请登录微博查看"
+        end
         render :inline => "<div style='width: 200px; height: 32px; margin: 0 auto;' id='text_body'>#{flash[:warn]}</div><script> setTimeout(function(){
                             window.close();}, 3000)</script><% flash[:warn]=nil %>"
       end
