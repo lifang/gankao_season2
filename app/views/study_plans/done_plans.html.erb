@@ -22,7 +22,6 @@
   </head>
   <body>
     <div class="wrap">
-      <%= render :partial => "/common/flash_div"  %>
       <%= render :partial => "/common/head_div"  %>
       <div class="clear"></div>
       <div class="main_Div">
@@ -38,8 +37,8 @@
                   <% if @day_status[next_day] %>
                     <div class="pt_ztai"><img src="/assets/icon_jl.png" /></div>
                   <%else %>
-                    <div class="pt_day_list"><a href="#" class="qzt_a">去做题&gt;&gt;</a><span class="pt_lianxi tooltip" name="真题"><%= @pra_exer[0] %></span></div>
-                    <div class="pt_day_list"><a href="#" class="qzt_a">去背词&gt;&gt;</a><span class="pt_beici tooltip" name="单词"><%= @pra_exer[1] %></span></div>
+                    <div class="pt_day_list"><a href="/similarities?category=<%= category_id %>" class="qzt_a">去做题&gt;&gt;</a><span class="pt_lianxi tooltip" name="真题"><%= @pra_exer[0] %></span></div>
+                    <div class="pt_day_list"><a href="/words?category=<%= category_id %>" class="qzt_a">去背词&gt;&gt;</a><span class="pt_beici tooltip" name="单词"><%= @pra_exer[1] %></span></div>
                     <div class="pt_day_list"><button class="pt_xunz_btn" onclick="javascript:$('#task').submit();" >领取勋章</button></div>
                     <script type="text/javascript">
                       $(".pt_day_list").parent().addClass("pt_day_new");
@@ -55,10 +54,12 @@
               </div>
             <% end unless @day_all.blank? %>
           </div>
-
         </div>
       </div>
       <div class="foot"></div>
+    </div>
+    <div style="display: none" id="today_madel">
+      <div class="pt_ztai"><img src="/assets/icon_jl.png" /></div>
     </div>
     <% if !cookies[:first].nil? and cookies[:first] == "1" %>
       <%= render :partial => "/common/complete_info" %>

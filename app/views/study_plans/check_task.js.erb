@@ -1,4 +1,5 @@
 <%  if @over %>
-  $(".pt_day_new").html(today.getDate()+$("#medal").html());
+  $(".pt_day_list").remove();
+  $(".pt_day_new").html($(".pt_day_new").html()+$("#today_madel").html());
 <% end %>
 tishi_alert("<%= @message %>");

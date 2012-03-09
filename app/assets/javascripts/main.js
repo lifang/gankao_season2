@@ -98,7 +98,7 @@ function generate_flash_div(style) {
 function show_flash_div() {
     $('.tishi_tab').stop();
     generate_flash_div(".tishi_tab");
-    $('.tishi_tab').delay(10000).fadeTo("slow",0,function(){
+    $('.tishi_tab').delay(5000).fadeTo("slow",0,function(){
         $(this).remove();
     });
 }

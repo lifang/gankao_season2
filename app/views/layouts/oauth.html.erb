@@ -1,10 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+
+    <%= csrf_meta_tags %>
+    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "main.js" %>
+    <%= javascript_include_tag "cookie.js" %>
     <style type="css/text">
       .xx_x { cursor: pointer; position: absolute; top: 5px; right: 5px;}
       /* 提示弹出层*/
-      .tishi_tab { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none;z-index: 1000}
+      .tishi_tab { width: 288px; padding: 20px; background: url("../assets/black01_bg.png") repeat; position: absolute; display: none;z-index: 1000}
       .tishi_tab p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #fff;}
       .border_radius {
         -moz-border-radius: 5px;
@@ -14,10 +19,6 @@
         border-radius: 5px;
       }
     </style>
-    <%= javascript_include_tag "application" %>
-    <%= javascript_include_tag "main.js" %>
-    <%= javascript_include_tag "cookie.js" %>
-    <%= csrf_meta_tags %>
     <!--[if IE 6]>
     <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>

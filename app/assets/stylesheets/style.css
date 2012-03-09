@@ -32,22 +32,22 @@ button.green { color:#009900;}
 
 
 .head {padding: 6px 0;}
-.logo {margin-left: 50px; float: left; display: inline;}
-.nav { height: 46px; line-height: 46px; float: left; margin-left: 50px;}
+.logo {margin-left: 30px; float: left; display: inline;}
+.nav { height: 46px; line-height: 46px; float: left; margin-left: 40px;}
 .nav li { float: left; display: inline;}
-.nav li a { padding: 0 15px; height: 46px; display: block; text-align: center; color: #FFF; font-size: 14px;}
+.nav li a { padding: 0 10px; height: 46px; display: block; text-align: center; color: #FFF; font-size: 14px;}
 .nav li a:hover { color: #aaecff;}
 .nav li a.hover { font-weight: bold; background: url(/assets/nav_hover.png) center 0px no-repeat;}
 
-.object { margin-left: 10px; float: left; height: 46px; line-height: 46px; color: #FFF; font-family: "寰蒋闆呴粦";}
+.object { margin-left: 5px; float: left; height: 46px; line-height: 46px; color: #FFF;}
 
 .object_big { font-size: 16px; padding: 0 5px;}
-.object_small { font-size: 12px; padding: 0 5px 0 10px;}
+.object_small { font-size: 12px; padding: 0 5px;}
 .object a {color: #FFF; padding: 0 5px; text-decoration: underline;}
 
 .head_info {float: right; height: 46px; line-height: 46px;}
 .h_user {color: #FFF; float: left; position: relative; z-index: 100;}
-.h_user a { color: #FFF; padding: 0 10px; text-decoration: underline;}
+.h_user a { color: #FFF; padding: 0 5px; text-decoration: underline;}
 .h_email { width: 20px; height: 15px; display: block; float: left; margin-top: 17px; overflow: hidden; text-indent: -999px;}
 .email_u { background: url(/assets/icon_email.png) no-repeat center bottom;}
 .email_w { background: url(/assets/icon_email.png) no-repeat center top;}

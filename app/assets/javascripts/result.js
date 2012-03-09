@@ -56,17 +56,6 @@ function create_paper() {
         }
         next_last_index();
     }
-    //给移动拖动框加事件
-    if ($(".drag_tk_box").length > 0) {
-        for (var m=0; m<$(".drag_tk_box").length; m++) {
-            fix_div_top.put($(".drag_tk_box")[m].id, $(".drag_tk_box")[m].offsetTop);
-            var problem_id = $(".drag_tk_box")[m].id.split("problem_drag_");
-            var last_top = $("#problem_"+problem_id[1]).get(0).offsetTop
-            + parseInt($("#problem_"+problem_id[1]).css("height").split("px")[0]);
-            setInterval("fix_top("+last_top+", '"+$(".drag_tk_box")[m].id+"');",100);
-        }
-    }
-
 }
 
 function get_block_id(blocks) {
@@ -187,6 +176,16 @@ function open_block_nav(block_id) {
     $("#nav_block_" + block_id).css("display", "block");
     $("#block_" + block_id).css("display", "block");
     window.scrollTo(0, 0);
+    //给移动拖动框加事件
+    if ($("#block_" + block_id + " .drag_tk_box").length > 0) {
+        for (var m=0; m<$("#block_" + block_id + " .drag_tk_box").length; m++) {
+            fix_div_top.put($("#block_" + block_id + " .drag_tk_box")[m].id, $("#block_" + block_id + " .drag_tk_box")[m].offsetTop);
+            var problem_id = $("#block_" + block_id + " .drag_tk_box")[m].id.split("problem_drag_");
+            var last_top = $("#problem_"+problem_id[1]).get(0).offsetTop
+            + parseInt($("#problem_"+problem_id[1]).css("height").split("px")[0]);
+            self.setInterval("fix_top("+last_top+", '"+$("#block_" + block_id + " .drag_tk_box")[m].id+"');",100);
+        }
+    }
 }
 
 //关闭模块
