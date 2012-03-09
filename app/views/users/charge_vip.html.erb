@@ -56,7 +56,8 @@
           <% end %>
           <div class="vip_text">
             <% category_id = params[:category].nil? ? 2 : params[:category].to_i %>
-            <h1 class="vip_h1"><%= Category.find(category_id).name %></h1>
+            <% category=Category.find(category_id) %>
+            <h1 class="vip_h1"><%= category.name %></h1>
             <div class="vip_ul">
               <p>正式用户课程享受以下全套服务：</p>
               <ul>

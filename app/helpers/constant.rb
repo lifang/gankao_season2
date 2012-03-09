@@ -30,8 +30,8 @@ module Constant
 
 
   #vip价格
-  VIP_FEE=0.01
-  SIMULATION_FEE=0.01
+  VIP_FEE=48
+  SIMULATION_FEE=48
   VIP_TYPE={:good=>1,:donate=>4}   #vip支付类型
 
 
