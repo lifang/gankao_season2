@@ -285,3 +285,4 @@ function precal(){
     $(".m_side").css('height',main_height-12);
     $(".main").css('height',main_height-12+34);
 }
+

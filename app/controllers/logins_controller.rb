@@ -1,7 +1,5 @@
 #encoding: utf-8
 class LoginsController < ApplicationController
-  require 'oauth2'
-  include Oauth2Helper
   layout "application", :except => "index"
 
   def  renren_like
@@ -47,7 +45,7 @@ class LoginsController < ApplicationController
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       else
-        if @user.end_time.nil?||@user.end_time<Time.now
+        if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
           @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         end
       end
@@ -103,7 +101,6 @@ class LoginsController < ApplicationController
   end
 
   def watch_weibo
-    layout "oauth"
     if cookies[:user_id].nil?
       redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
     else
@@ -111,7 +108,11 @@ class LoginsController < ApplicationController
       if user.code_type!="sina" || user.access_token.nil? || user.end_time<Time.now
         redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       else
-        flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
+        begin
+          flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
+        rescue
+          flash[:warn]="关注失败，请登录微博查看"
+        end
         render :inline => "<div style='width: 200px; height: 32px; margin: 0 auto;' id='text_body'>#{flash[:warn]}</div><script> setTimeout(function(){
                             window.close();}, 3000)</script><% flash[:warn]=nil %>"
       end
@@ -136,7 +137,7 @@ class LoginsController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        render :json=>{:data=>data}
+        render :json=>{:data=>data}, :layout => "ouath"
       }
     end
   end

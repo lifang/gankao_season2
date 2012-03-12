@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   include Constant
   include ApplicationHelper
   include RemotePaginateHelper
+  require 'oauth2'
+  include Oauth2Helper
   require 'rexml/document'
   include REXML
 

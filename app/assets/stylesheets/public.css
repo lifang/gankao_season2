@@ -5,3 +5,6 @@
 .pagination a:active {border: #c1c1c1 1px solid; color: #000; background: #d0e7ee;}
 .pagination em { border: #289FDB 1px solid;  padding: 6px 10px; font-weight: bold; color: #289FDB; margin-right: 4px; background: #d0e7ee;}
 .pagination span.disabled { border: #c1c1c1 1px solid; padding: 6px 10px; color: #929292; margin-right: 4px;}
+/*online_qq----*/
+.online_qq { width: 114px; height: 91px; position: fixed; top: 200px; right: -85px; background: url(/assets/online_qq.png) no-repeat;}
+.online_qq p { margin: 50px 0 0 35px;}
