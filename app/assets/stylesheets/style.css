@@ -32,8 +32,8 @@ button.green { color:#009900;}
 
 
 .head {padding: 6px 0;}
-.logo {margin-left: 30px; float: left; display: inline;}
-.nav { height: 46px; line-height: 46px; float: left; margin-left: 40px;}
+.logo {margin-left: 20px; float: left; display: inline;}
+.nav { height: 46px; line-height: 46px; float: left; margin-left: 22px;}
 .nav li { float: left; display: inline;}
 .nav li a { padding: 0 10px; height: 46px; display: block; text-align: center; color: #FFF; font-size: 14px;}
 .nav li a:hover { color: #aaecff;}
@@ -52,13 +52,14 @@ button.green { color:#009900;}
 .email_u { background: url(/assets/icon_email.png) no-repeat center bottom;}
 .email_w { background: url(/assets/icon_email.png) no-repeat center top;}
 
-.email_tab { width: 83px; height: 60px; display: none; padding-top: 30px; background: url(/assets/email_tab_bg.png) no-repeat; top: 12px; left: 4px; position: absolute; z-index:-1;}
+.user_name { width: 70px; display: inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; float: left;}
+.email_tab { width: 83px; height: 60px; display: none; padding-top: 30px; background: url(/assets/email_tab_bg.png) no-repeat; top: 12px; left: -1px; position: absolute; z-index:-1;}
 .email_tab li { height: 24px; line-height: 24px;}
 .email_tab li a { color: #FFF; text-decoration: none;}
 .email_tab li a:hover { color: #CCC;}
 .email_tab li a span { padding-left: 5px;}
 
-.h_banner { float: left; margin: 0 20px;}
+.h_banner { float: left; margin: 0 10px;}
 
 
 
@@ -486,8 +487,8 @@ li.mk_li_hover { border-top: 2px #2875ae solid;}
 .words_input { width: 30px; height: 24px; line-height: 24px; text-align: center; font-size: 18px; font-family: Arial;}
 .words_letter { overflow: hidden;}
 .words_letter li {
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     border: 1px #c8c3b5 solid;
     margin:2px;
     line-height: 15px;
@@ -499,7 +500,7 @@ li.mk_li_hover { border-top: 2px #2875ae solid;}
     font-size: 14px;
 }
 .words_letter li.hover { color: #c8c3b5;}
-.xiaoren { width: 346px; height: 315px;}
+.xiaoren { width: 346px; height: 315px; margin: 0 auto;}
 
 /*foot----------------*/
 .foot { height: 5px;}

@@ -50,7 +50,6 @@ module Oauth2Helper
     weibo_url="api.weibo.com"
     weibo_route="/2/friendships/show.json?access_token=#{access_token}&source_id=#{code_id}&target_id=#{Oauth2Helper::WEIBO_ID}"
     user_info=create_get_http(weibo_url,weibo_route)
-    #    测试是否已关注
     unless user_info["source"]["following"]
       params={ :access_token=>access_token,:screen_name=>Oauth2Helper::WEIBO_NAME,:uid=>Oauth2Helper::WEIBO_ID}
       action="/2/friendships/create.json"

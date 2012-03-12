@@ -1,7 +1,5 @@
 #encoding: utf-8
 class LoginsController < ApplicationController
-  require 'oauth2'
-  include Oauth2Helper
   layout "application", :except => "index"
 
   def  renren_like
@@ -103,7 +101,6 @@ class LoginsController < ApplicationController
   end
 
   def watch_weibo
-    layout "oauth"
     if cookies[:user_id].nil?
       redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
     else
@@ -140,7 +137,7 @@ class LoginsController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        render :json=>{:data=>data}
+        render :json=>{:data=>data}, :layout => "ouath"
       }
     end
   end
