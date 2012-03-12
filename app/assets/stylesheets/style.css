@@ -572,6 +572,3 @@ input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033f
 
 .userMess_h1 { font-size: 16px; text-align: center;}
 
-/*online_qq----*/
-.online_qq { width: 114px; height: 91px; position: fixed; top: 200px; right: -85px; background: url(/assets/online_qq.png) no-repeat;}
-.online_qq p { margin: 50px 0 0 35px;}
