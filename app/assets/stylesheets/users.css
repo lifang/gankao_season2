@@ -163,3 +163,7 @@ img { border:none;}
 /* 提示弹出层*/
 .tishi_tab {width: 288px; height: 82px; padding:30px 10px 10px 10px; background: url(/assets/tishi_tab_bg.png) no-repeat; position: fixed; display: none;z-index: 9999;}
 .tishi_tab p  { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; font-weight:bold; color: #ffffff;}
+
+/*online_qq----*/
+.online_qq { width: 114px; height: 91px; position: fixed; top: 200px; right: -85px; background: url(/assets/online_qq.png) no-repeat;}
+.online_qq p { margin: 50px 0 0 35px;}

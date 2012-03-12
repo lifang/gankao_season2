@@ -4,7 +4,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>登录 - 赶考网</title>
-    <link href="/assets/login.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/login.css" rel="stylesheet" type="text/css" />
+        <%= javascript_include_tag "/assets/application.js" %>
     <!--[if IE 6]>
     <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>
@@ -36,6 +37,7 @@
         <p>Copyright © 2011-2012 &nbsp;&nbsp;苏州协创软件有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>
         <p>建议使用IE6以上版本、firefox、Chrome等浏览器</p>
       </div>
+      <%= render :partial => "/common/online_qq"  %>
     </div>
   </body>
 </html>

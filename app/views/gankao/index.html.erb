@@ -92,6 +92,7 @@
         <p>Copyright © 2011-2012 &nbsp;&nbsp;苏州协创软件有限公司&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>
         <p>建议使用IE6以上版本、firefox、Chrome等浏览器</p>
       </div>
+      <%= render :partial => "/common/online_qq"  %>
     </div>
     <% if !cookies[:first].nil? and cookies[:first] == "1" %>
       <%= render :partial => "/common/complete_info" %>
