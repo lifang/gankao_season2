@@ -1,5 +1,7 @@
 # encoding: utf-8
 module Oauth2Helper
+  require 'net/http'
+  require "uri"
 
   #qq登录参数
   REQUEST_URL_QQ="https://graph.qq.com/oauth2.0/authorize"
@@ -79,15 +81,14 @@ module Oauth2Helper
   #新浪微博获取用户信息
   def sina_get_user(access_token,uid)
     request = Net::HTTP::Get.new("/2/users/show.json?access_token=#{access_token}&uid=#{uid}")
-    response = sina_api(request)
+    response = JSON sina_api(request)
   end
   #
   #新浪微博发送微博
   def sina_send_message(access_token,message)
     request = Net::HTTP::Post.new("/2/statuses/update.json")
     request.set_form_data({"access_token" =>access_token, "status" => message})
-    response =JSON  sina_api(request)
-    puts "created by time #{ response["created_at"]}"
+    response =JSON sina_api(request)
   end
   #
   #END -------新浪微博API----------
@@ -118,7 +119,7 @@ module Oauth2Helper
   def renren_get_user(access_token)
     query = {:access_token => access_token,:format => 'JSON',:method => 'xiaonei.users.getInfo',:v => '1.0'}
     request = renren_sig_request(query)
-    response = renren_api(request)
+    response = JSON renren_api(request)
   end
   #
   #人人发送新鲜事
@@ -126,10 +127,44 @@ module Oauth2Helper
     query = {:access_token => "#{access_token}",:comment=>"#{message}",:format => 'JSON',:method => 'share.share',:type=>"6",:url=>"http://www.gankao.co",:v => '1.0'}
     request = renren_sig_request(query)
     response =JSON renren_api(request)
-    puts "share time #{response["share_time"]}"
   end
   #
   #END -------人人API----------
+
+
+  #START -------开心网API----------
+  #
+  #开心主方法
+  def kaixin_api(request)
+    uri = URI.parse("https://api.kaixin001.com")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    response = http.request(request).body
+  end
+  #
+  #开心获取accesstoken
+  def kaixin_accesstoken(code)
+    request = Net::HTTP::Get.new("/oauth2/access_token?grant_type=authorization_code&code=#{code}&client_id=#{Constant::KAIXIN_API_KEY}&client_secret=#{Constant::KAIXIN_API_SECRET}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_kaixin")
+    response = JSON kaixin_api(request)
+  end
+  #
+  #开心获取用户信息
+  def kaixin_get_user(access_token)
+    puts "/users/me.json?access_token=#{access_token}"
+    request = Net::HTTP::Get.new("/users/me.json?access_token=#{access_token}")
+    response = JSON kaixin_api(request)
+  end
+  #
+  #开心发送新鲜事
+#  def kaixin_send_message(access_token,message)
+#    request = Net::HTTP::Post.new("/2/statuses/update.json")
+#    request.set_form_data({"access_token" =>access_token, "status" => message})
+#    response =JSON  kaixin_api(request)
+#  end
+  #
+  #END -------开心网API----------
+
 
 
   #qq添加说说

@@ -36,6 +36,10 @@ module Constant
   RENREN_CLIENT_ID = "182012"
   RENREN_API_KEY = "98a6ed88bccc409da12a8abe3ebec3c5"             
   RENREN_API_SECRET = "0d19833c0bc34a27a58786c07ef8d9fb"
-  
+
+  #开心网应用信息 gankao@hotmail.com  comdo2010
+  KAIXIN_CLIENT_ID = "100027854"
+  KAIXIN_API_KEY = "27441526722922ac851e7ffc334a9785"
+  KAIXIN_API_SECRET = "d034fd25c28b4e3dd0759ad7428a2f59"
 
 end

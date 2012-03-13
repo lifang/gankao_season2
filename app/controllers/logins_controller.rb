@@ -76,7 +76,7 @@ class LoginsController < ApplicationController
         access_token=params[:access_token]
         uid=params[:uid]
         expires_in=params[:expires_in].to_i
-        response = JSON sina_get_user(access_token,uid)
+        response = sina_get_user(access_token,uid)
         @user=User.find_by_code_id_and_code_type("#{response["id"]}","sina")
         if @user.nil?
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina', :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
@@ -151,10 +151,9 @@ class LoginsController < ApplicationController
     if cookies[:oauth2_url_generate]
       begin
         cookies.delete(:oauth2_url_generate)
-        #发送微博
         access_token=params[:access_token]
         expires_in=params[:expires_in].to_i
-        response = JSON(renren_get_user(access_token))[0]
+        response = renren_get_user(access_token)[0]
         @user=User.find_by_code_id_and_code_type("#{response["uid"]}","renren")
         if @user.nil?
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"],:username=>response["name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
@@ -176,8 +175,36 @@ class LoginsController < ApplicationController
       cookies[:oauth2_url_generate]="replace('#','?')"
       render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
     end
-
-
   end
+
+  def request_kaixin
+    redirect_to "http://api.kaixin001.com/oauth2/authorize?response_type=code&client_id=#{Constant::KAIXIN_API_KEY}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_kaixin&scope=basic&display=page"
+  end
+
+  def respond_kaixin
+    begin
+      oauth2 = kaixin_accesstoken(params[:code])
+      access_token = oauth2["access_token"]
+      expires_in = oauth2["expires_in"].to_i
+      response = kaixin_get_user(access_token)
+      @user=User.find_by_code_id_and_code_type("#{response["uid"]}","kaixin")
+      if @user.nil?
+        @user=User.create(:code_id=>response["uid"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
+        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+      else
+        if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
+          @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+        end
+      end
+      cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
+      cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
+      user_role?(cookies[:user_id])
+      ActionLog.login_log(cookies[:user_id])
+      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
+    rescue
+      render :inline => "<script>window.opener.location.reload();window.close();</script>"
+    end
+  end
+
 
 end
