@@ -62,6 +62,7 @@ GankaoSeason2::Application.routes.draw do
       get :follow_me,:login_from_qq,:qq_index,:get_code,:user_code,:logout
       get :request_qq,:respond_qq,:request_sina,:respond_sina,:manage_sina,:watch_weibo,:respond_weibo,:request_renren,:respond_renren
       post :manage_qq,:add_watch_weibo
+      get :request_kaixin,:respond_kaixin
     end
   end
   resources :specials do

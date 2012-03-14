@@ -47,8 +47,8 @@ button.green { color:#009900;}
 
 .head_info {float: right; height: 46px; line-height: 46px;}
 .h_user {color: #FFF; float: left; position: relative; z-index: 100;}
-.h_user a { color: #FFF; padding: 0 5px; text-decoration: underline;}
-.h_email { width: 20px; height: 15px; display: block; float: left; margin-top: 17px; overflow: hidden; text-indent: -999px;}
+.h_user a { color: #FFF; padding: 0 5px; text-decoration: underline;text-align: center;}
+.h_email { width: 20px; height: 15px; display: block; float: left; margin-top: 16px; overflow: hidden; text-indent: -999px;}
 .email_u { background: url(/assets/icon_email.png) no-repeat center bottom;}
 .email_w { background: url(/assets/icon_email.png) no-repeat center top;}
 

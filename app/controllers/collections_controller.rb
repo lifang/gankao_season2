@@ -3,25 +3,28 @@ class CollectionsController < ApplicationController
   layout 'exam_user'
   require 'rexml/document'
   include REXML
-  before_filter :sign?, :except => ["error"]
+  before_filter :sign?, :except => ["index","error"]
   
   def index
-    if is_nomal?(params[:category])
-      redirect_to "/collections/not_vip?category=#{params[:category]}"
+    unless cookies[:user_id]
+      redirect_to "/collections/error?category=#{params[:category]}"
     else
-      collection=Collection.find_by_user_id_and_category_id(cookies[:user_id],params[:category].to_i)
-      unless collection.nil?
-        category_id = "#{params[:category]}"=="" ? 2 : params[:category]
-        @category = Category.find_by_id(category_id.to_i)
-        @title = "#{@category.name}真题收藏"
-        @meta_keywords = "自动收藏做错的#{@category.name}真题"
-        @meta_description = "自动收藏做错的#{@category.name}真题"
-        @collection_js="#{collection.collection_url}"
+      if is_nomal?(params[:category])
+        redirect_to "/collections/not_vip?category=#{params[:category]}"
       else
-        redirect_to "/collections/error?category=#{params[:category]}"
+        collection=Collection.find_by_user_id_and_category_id(cookies[:user_id],params[:category].to_i)
+        unless collection.nil?
+          category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+          @category = Category.find_by_id(category_id.to_i)
+          @title = "#{@category.name}真题收藏"
+          @meta_keywords = "自动收藏做错的#{@category.name}真题"
+          @meta_description = "自动收藏做错的#{@category.name}真题"
+          @collection_js="#{collection.collection_url}"
+        else
+          redirect_to "/collections/error?category=#{params[:category]}"
+        end
       end
     end
-    
   end
 
   def load_words
