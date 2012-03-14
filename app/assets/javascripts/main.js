@@ -286,3 +286,14 @@ function precal(){
     $(".main").css('height',main_height-12+34);
 }
 
+// AD鍗曡婊氬姩
+function AutoScroll(obj){
+$(obj).find("ul:first").animate({
+marginTop:"-25px"
+},500,function(){
+$(this).css({marginTop:"0px"}).find("li:first").appendTo(this);
+});
+}
+$(document).ready(function(){
+setInterval('AutoScroll(".AD_scrollDiv")',3000)
+});
