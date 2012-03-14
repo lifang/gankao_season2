@@ -1,0 +1,13 @@
+<div class="AD_text">
+  <div class="AD_scrollDiv">
+    <%ip= Advert.ip_advert(request.remote_ip) 
+    ip=IpTable.first(:conditions=>["start_at<=? and end_at <= ?",ip,ip])
+    ads=Advert.find_by_sql("select a.content from adverts a inner join regions r on r.id=a.region_id where r.name='#{ip.city_name}'")
+  %>
+    <ul>
+     <% ads.each do |ad| %>
+      <li><%= ad.content %></li>
+      <%end unless ads.blank?%>
+    </ul>
+  </div>
+</div>
