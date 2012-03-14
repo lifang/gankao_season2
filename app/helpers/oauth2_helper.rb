@@ -30,17 +30,19 @@ module Oauth2Helper
 
   #构造post请求
   def create_post_http(url,route_action,params)
-    http = Net::HTTP.new(url, 443)
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     request = Net::HTTP::Post.new(route_action)
     request.set_form_data(params)
-    return http.request(request).body
+    return JSON http.request(request).body
   end
 
   #构造get请求
   def create_get_http(url,route)
-    http = Net::HTTP.new(url, 443)
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     back_res =http.get(route)
@@ -49,7 +51,7 @@ module Oauth2Helper
 
   #新浪微博添加关注
   def request_weibo(access_token,code_id,data)
-    weibo_url="api.weibo.com"
+    weibo_url="https://api.weibo.com"
     weibo_route="/2/friendships/show.json?access_token=#{access_token}&source_id=#{code_id}&target_id=#{Oauth2Helper::WEIBO_ID}"
     user_info=create_get_http(weibo_url,weibo_route)
     unless user_info["source"]["following"]
@@ -157,11 +159,11 @@ module Oauth2Helper
   end
   #
   #开心发送新鲜事
-#  def kaixin_send_message(access_token,message)
-#    request = Net::HTTP::Post.new("/2/statuses/update.json")
-#    request.set_form_data({"access_token" =>access_token, "status" => message})
-#    response =JSON  kaixin_api(request)
-#  end
+  #  def kaixin_send_message(access_token,message)
+  #    request = Net::HTTP::Post.new("/2/statuses/update.json")
+  #    request.set_form_data({"access_token" =>access_token, "status" => message})
+  #    response =JSON  kaixin_api(request)
+  #  end
   #
   #END -------开心网API----------
 
@@ -170,13 +172,22 @@ module Oauth2Helper
   #qq添加说说
   def send_message_qq(con,openid,access_token,user_id)
     send_parms={:access_token=>access_token,:openid=>openid,:oauth_consumer_key=>Oauth2Helper::APPID,:format=>"json",:third_source=>"3",:con=>con}
-    url="graph.qq.com"
-    route_action="/shuoshuo/add_topic"
-    info=create_post_http(url,route_action,send_parms)
+    info=create_post_http("https://graph.qq.com","/shuoshuo/add_topic",send_parms)
     if info["data"].nil?
       p "error_code #{info["ret"]}"
     else
       p "user #{user_id}  send success"
+    end
+  end
+
+  #开心网添加记录
+  def send_message_kaixin(access_token,message)
+    url="https://api.kaixin001.com"
+    info=create_post_http(url,"/records/add.json",{:access_token=>access_token,:content=>message})
+    if info["rid"].nil?
+      p "error code - #{info["error"]}"
+    else
+      p "record id is  #{info["rid"]}"
     end
   end
 
@@ -188,6 +199,7 @@ module Oauth2Helper
         send_message_qq(message,user.open_id,user.access_token,user_id) if user.code_type=="qq" and !user.open_id.nil?
         renren_send_message(user.access_token,message)  if user.code_type=="renren"
         sina_send_message(user.access_token,message) if user.code_type=="sina"
+        send_message_kaixin(user.access_token,message) if  user.code_type=="kaixin"
         sleep 2
       end
     rescue
