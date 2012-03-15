@@ -174,9 +174,9 @@ module Oauth2Helper
     send_parms={:access_token=>access_token,:openid=>openid,:oauth_consumer_key=>Oauth2Helper::APPID,:format=>"json",:third_source=>"3",:con=>con}
     info=create_post_http("https://graph.qq.com","/shuoshuo/add_topic",send_parms)
     if info["data"].nil?
-      p "error_code #{info["ret"]}"
+      p "qq error_code #{info["ret"]}"
     else
-      p "user #{user_id}  send success"
+      p "qq user #{user_id}  send success"
     end
   end
 
@@ -185,9 +185,9 @@ module Oauth2Helper
     url="https://api.kaixin001.com"
     info=create_post_http(url,"/records/add.json",{:access_token=>access_token,:content=>message})
     if info["rid"].nil?
-      p "error code - #{info["error"]}"
+      p "kaixin error code - #{info["error"]}"
     else
-      p "record id is  #{info["rid"]}"
+      p "kaixin user-record id is  #{info["rid"]}"
     end
   end
 
@@ -195,7 +195,7 @@ module Oauth2Helper
   def send_message(message,user_id)
     begin
       user=User.find(user_id)
-      if !user.access_token.nil? and !user.end_time.nil? and user.end_time>Time.now
+      if !user.access_token.nil? and user.access_token!="" and !user.end_time.nil? and user.end_time>Time.now
         send_message_qq(message,user.open_id,user.access_token,user_id) if user.code_type=="qq" and !user.open_id.nil?
         renren_send_message(user.access_token,message)  if user.code_type=="renren"
         sina_send_message(user.access_token,message) if user.code_type=="sina"
