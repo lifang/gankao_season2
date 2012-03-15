@@ -81,13 +81,13 @@ GankaoSeason2::Application.routes.draw do
   end
   resources :words do
     collection do
-      get 'recite_word', 'recollection', 'use', 'hand_man'
+      get 'recite_word', 'recollection', 'use', 'hand_man',"renren"
       post 'word_log'
     end
   end
   resources :users do
     collection do
-      get :delete_user,:email_info,:mess_info,:record_info,:record,:alipay_exercise,:charge_vip
+      get :delete_user,:email_info,:mess_info,:record_info,:record,:alipay_exercise,:charge_vip,:renren
       post :delete_mess,:update_users,:alipay_compete,:accredit_check,:check_vip
     end
     member do
