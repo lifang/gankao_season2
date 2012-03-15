@@ -23,6 +23,7 @@
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" <% if params[:preview] %> onclick="javascript:window.location.reload();" <% else %>onclick="javascript:confirm_redo('<%= params["type"] %>');" <% end %>>重做</a></span>
   </div>
+  <%= render :partial=>"/common/advert"  %>
 </div>
 
 <!-- 试题生成入口 generate.js -->

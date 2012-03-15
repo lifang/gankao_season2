@@ -4,7 +4,7 @@ namespace :check do
   task(:task => :environment) do
     include Oauth2Helper
     user_plans=UserPlanRelation.find_by_sql("select u.*,s.category_id from user_plan_relations u
-      inner join study_plans s on u.study_plan_id=s.id")
+      inner join study_plans s on u.study_plan_id=s.id where TO_DAYS(NOW())<=TO_DAYS(u.ended_at)")
     user_plans.each do |user_plan|
       task_num={}
       month_action={}
@@ -27,7 +27,11 @@ namespace :check do
       if  task_num[practice_type].nil? or task_num[recite_type].nil?
         puts "Please create complete task"
       else
-        send_message="赶考必过挑战计划中，今天的必过挑战任务还没完成，~~~~(>_<)~~~~ "
+        if user_plan.ended_at.strftime("%Y_%m_%d")==Time.now.strftime("%Y_%m_%d")
+          send_message="你参加的赶考网的必过挑战应经是最后一天了，谢谢你的坚持，坚持就是胜利，预祝你必过成功"
+        else
+          send_message="赶考必过挑战计划中，今天的必过挑战任务还没完成，~~~~(>_<)~~~~ "
+        end
         if  !month_action[practice_type].nil? and !month_action[recite_type].nil? and month_action[practice_type] >= task_num[practice_type] and month_action[recite_type] >= task_num[recite_type]
           puts "user_id #{user_plan.user_id} category_id #{user_plan.category_id} pull the job off"
           action=ActionLog.first(:conditions=>"category_id=#{user_plan.category_id} and user_id=#{user_plan.user_id} and types=#{ActionLog::TYPES[:STUDY_PLAY]} and created_at='#{1.day.ago.strftime("%Y-%m-%d")}'")
