@@ -195,4 +195,20 @@ class UsersController < ApplicationController
     @title = "消费记录 - 赶考网"
   end
 
+  def renren
+    category = params[:category].nil? ? "2" : params[:category]
+    @user= User.where(:id=>params[:user_id])[0]
+    @code_id = @user.nil? ? "error" : @user.code_id.nil? ? "gankao" : @user.code_id
+    if @code_id != "error" && @code_id == params[:code_id]
+      cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
+      cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
+      user_role?(cookies[:user_id])
+      ActionLog.login_log(cookies[:user_id])
+      redirect_to "/users/charge_vip?category=#{category}"
+    else
+      render :inline=>"用户验证失败，为了保证用户的帐号安全，此次访问被系统拒绝。给您带来的不便，请您谅解。"
+      return false
+    end
+  end
+
 end
