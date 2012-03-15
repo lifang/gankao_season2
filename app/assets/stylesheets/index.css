@@ -19,11 +19,14 @@ img { border:none;}
 .wrap {}
 
 .head { height: 50px; background: url(/assets/_bg.png) repeat;}
-.head_box { width: 960px; height: 50px; margin: 0 auto; overflow: hidden;}
-.logo { width: 110px; height: 50px; margin-left: 10px;}
+.head_box { width: 960px; height: 50px; line-height: 50px; margin: 0 auto; overflow: hidden;}
+.logo { width: 110px; height: 50px; margin-left: 10px; float: left;}
 .login { float: right; height: 22px; color: #FFF; margin: 14px 10px 0 0;}
 .login li { padding: 0 5px; height: 22px; line-height: 22px; float: left; display: inline;}
-
+.nav { float: left; padding-left: 100px;}
+.nav li { float: left; padding: 0 15px; font-family: "微软雅黑";}
+.nav li a { color: #FFF; font-size: 16px;}
+.nav li a:hover {color: #aaecff;}
 .main { width: 960px; padding: 20px 0; margin: 0 auto; overflow: hidden;}
 
 .js_banner { height: 280px; font-family: "微软雅黑";}

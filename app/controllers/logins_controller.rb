@@ -178,7 +178,7 @@ class LoginsController < ApplicationController
   end
 
   def request_kaixin
-    redirect_to "http://api.kaixin001.com/oauth2/authorize?response_type=code&client_id=#{Constant::KAIXIN_API_KEY}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_kaixin&scope=basic create_records&display=page"
+    redirect_to "http://api.kaixin001.com/oauth2/authorize?response_type=code&client_id=#{Constant::KAIXIN_API_KEY}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_kaixin&scope=basic%20create_records&display=page"
   end
 
   def respond_kaixin

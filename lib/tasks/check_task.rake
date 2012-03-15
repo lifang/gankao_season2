@@ -4,7 +4,7 @@ namespace :check do
   task(:task => :environment) do
     include Oauth2Helper
     user_plans=UserPlanRelation.find_by_sql("select u.*,s.category_id from user_plan_relations u
-      inner join study_plans s on u.study_plan_id=s.id")
+      inner join study_plans s on u.study_plan_id=s.id where TO_DAYS(NOW())<=TO_DAYS(u.ended_at)")
     user_plans.each do |user_plan|
       task_num={}
       month_action={}
