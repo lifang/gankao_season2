@@ -158,13 +158,6 @@ module Oauth2Helper
     response = JSON kaixin_api(request)
   end
   #
-  #开心发送新鲜事
-  #  def kaixin_send_message(access_token,message)
-  #    request = Net::HTTP::Post.new("/2/statuses/update.json")
-  #    request.set_form_data({"access_token" =>access_token, "status" => message})
-  #    response =JSON  kaixin_api(request)
-  #  end
-  #
   #END -------开心网API----------
 
 
