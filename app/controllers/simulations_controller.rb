@@ -12,9 +12,8 @@ class SimulationsController < ApplicationController
     @meta_description = "精心编选，针对2012年6月#{@category.name}的3场模拟考试，帮助全面掌握备考状况，熟悉考试流程。"
     sql = "select e.* from examinations e
           where e.is_published = #{Examination::IS_PUBLISHED[:ALREADY]}
-          and e.types = #{Examination::TYPES[:SIMULATION]} and e.status != #{Examination::STATUS[:CLOSED]}
-          and e.is_published = #{Examination::IS_PUBLISHED[:ALREADY]}
-          and e.category_id = ? "
+          and e.status != #{Examination::STATUS[:CLOSED]}
+          and e.category_id = ? and e.types = #{Examination::TYPES[:SIMULATION]} "
     @simulations = Examination.find_by_sql([sql, params[:category].to_i])
     examination_ids = []
     @exam_user_hash = {}
@@ -31,7 +30,7 @@ class SimulationsController < ApplicationController
         rescue
           @exam_user_hash[eu.examination_id] += [0, 0, 0, 0]
         end
-      end      
+      end
     end
   end
 
@@ -147,7 +146,7 @@ class SimulationsController < ApplicationController
 
   def cancel_exam
     @exam_user = ExamUser.find_by_examination_id_and_user_id(params[:id].to_i, cookies[:user_id].to_i)
-    @exam_user.destroy
+    @exam_user.destroy if @exam_user
     render :update do |page|
       page.replace_html "remote_div" , :text => ""
     end

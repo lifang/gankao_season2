@@ -172,17 +172,11 @@ function show_part_score(total_score, rank, part1_score, part2_score, part3_scor
 }
 
 //显示模拟考试进入考试前的提示
-function show_exam_tishi(is_submited, simulation_id) {
+function show_exam_tishi(simulation_id) {
     generate_flash_div("#mokao_tishi_tab");
     $("#sim_id").attr("value", simulation_id);
     $("#mokao_tishi_tab .mk_wenti input").removeAttr("checked");
-    if (is_submited == "false") {
-        $("#not_join").hide();
-        $("#already_join").show();
-    } else {
-        $("#not_join").show();
-        $("#already_join").hide();
-    }
+    $("#not_join").show();
     $('.zhezhao').css('display','block');
     $('#mokao_tishi_tab').css('display','block');
     $('.xx_x').bind('click',function(){
@@ -192,13 +186,39 @@ function show_exam_tishi(is_submited, simulation_id) {
     })
 }
 
+function show_exam_choose(simulation_id, tab_id) {
+    generate_flash_div("#" + tab_id);
+    $("#sim_id").attr("value", simulation_id);
+    $('.zhezhao').css('display','block');
+    $("#" + tab_id).css('display','block');
+    $('.xx_x').bind('click',function(){
+        $('.tab_box').hide();
+        $('.zhezhao').hide();
+        return false;
+    });
+    $('#cencel_m_b').bind('click',function(){
+        $('.tab_box').hide();
+        $('.zhezhao').hide();
+        return false;
+    })
+}
+
 //跳转到开始考试页面
 function goto_exam() {
     var sim_id = $("#sim_id").val();
-    $('#error_p').hide();
     $('.tab_box').hide();
     $('.zhezhao').hide();
     window.open("/simulations/"+ sim_id +"/do_exam");
+}
+
+function error_exam() {
+    $("#goto_m_b").attr("disabled", "true");
+    $('#error_p').css('display', 'block');
+}
+
+function can_exam() {
+    $('#error_p').hide();
+    $("#goto_m_b").removeAttr("disabled");
 }
 
 //提交之前完成的试卷
