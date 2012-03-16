@@ -2,6 +2,7 @@
   <div class="AD_scrollDiv">
     <%ads= Advert.ip_advert(request.remote_ip)%>
     <ul>
+      <li><%=request.remote_ip  %></li>
       <% ads.each do |ad| %>
         <li><%= ad.content %></li>
       <%end unless ads.blank?%>
