@@ -1,7 +1,7 @@
 # encoding: utf-8
 class UsersController < ApplicationController
   layout 'user',:except=>["charge_vip"]
-  before_filter :sign?
+  before_filter :sign? ,:except=>["renren"]
   respond_to :html, :xml, :json
   include AlipaysHelper
   @@m = Mutex.new
