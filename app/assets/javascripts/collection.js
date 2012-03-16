@@ -375,15 +375,16 @@ function add_words(words_sentences,q_index){
         var ch_text=xg_word_ny.appendChild(create_element("div", null, null, "ch_text", null, "innerHTML"));
         var ch_words_line_1=ch_text.appendChild(create_element("div", null, "ch_words_line", "ch_words_line", null, "innerHTML"));
         var ch_words_line_2=ch_text.appendChild(create_element("div", null, "ch_words_line", "ch_words_line", null, "innerHTML"));
-        var ch_words_line_3=ch_text.appendChild(create_element("div", null, "ch_words_line_"+q_index, "ch_words_line", null, "innerHTML"));
-        ch_words_line_1.innerHTML="<span class='font_size_24' id='name_"+q_index +"'>"+single_word[0].name +"</span><span id='types_"+q_index +"'>"+
-        types[single_word[0].types] +"</span><span id='phonetic_"+q_index +"'>"+single_word[0].phonetic +"</span>\n\
-                <a href='#'onclick=javascript:jplayer_play('"+ q_index+"_"+i+"');><img src='/assets/icon_fy.png' /></a> <a href='javascript:void(0);' title='加入背诵单词' onclick=\"javascript:ajax_add_word('"+ q_index+"_"+i+"');\"><img src='/assets/join_bs.png' /></a>"
-        ch_words_line_2.innerHTML="<p class='font_size_16' id='en_mean_"+ q_index+"'>"+single_word[0].en_mean +"</p><p id='ch_mean_"+q_index +"'>"+single_word[0].ch_mean +"</p>";
+        var ch_words_line_3=ch_text.appendChild(create_element("div", null, "ch_words_line", "ch_words_line", null, "innerHTML"));
+        var ch_words_line_4=ch_text.appendChild(create_element("div", null, "ch_words_line_"+q_index, "ch_words_line", null, "innerHTML"));
+        ch_words_line_1.innerHTML="<span class='font_size_24' id='name_"+q_index +"'>"+single_word[0].name +"</span> <a href='javascript:void(0);' title='加入背诵单词' onclick=\"javascript:ajax_add_word('"+ q_index+"_"+i+"');\"><img src='/assets/join_bs.png' /></a>"
+        ch_words_line_2.innerHTML="<span id='types_"+q_index +"'>"+types[single_word[0].types] +"</span><span id='phonetic_"+q_index +"'>"+single_word[0].phonetic +"</span>\n\
+                <a href='#'onclick=javascript:jplayer_play('"+ q_index+"_"+i+"');><img src='/assets/icon_fy.png' /></a>"
+        ch_words_line_3.innerHTML="<p class='font_size_16' id='en_mean_"+ q_index+"'>"+single_word[0].en_mean +"</p><p id='ch_mean_"+q_index +"'>"+single_word[0].ch_mean +"</p>";
         var sentence=single_word[1];
         if(sentence.length!=0){
             for(var s=0;s<sentence.length;s++){
-                var li=ch_words_line_3.appendChild(create_element("li", null, null, null, null, "innerHTML"));
+                var li=ch_words_line_4.appendChild(create_element("li", null, null, null, null, "innerHTML"));
                 li.innerHTML=""+sentence[s].description;
             }
         }

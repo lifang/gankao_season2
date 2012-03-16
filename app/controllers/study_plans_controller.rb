@@ -7,7 +7,7 @@ class StudyPlansController < ApplicationController
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
     @category = Category.find_by_id(category_id.to_i)
     @title = "#{@category.name}复习计划"
-    @meta_keywords = "#{@category.name}复习方法,大学英语四级学习计划"
+    @meta_keywords = "#{@category.name}复习方法,#{@category.name}必过挑战"
     @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提供#{@category.name}的应试能力。"
     @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", params[:category].to_i])
     if cookies[:user_id]
@@ -20,7 +20,8 @@ class StudyPlansController < ApplicationController
   end
 
   def show
-    @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", params[:category].to_i])
+    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
+    @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", category_id])
     plan_date = @study_plan.study_date.nil? ? Constant::STUDY_DATE : (@study_plan.study_date - 1)
     upr = UserPlanRelation.find_by_user_id_and_study_plan_id(cookies[:user_id].to_i, @study_plan.id)
     unless upr
@@ -30,18 +31,19 @@ class StudyPlansController < ApplicationController
       order=Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]}",
           cookies[:user_id].to_i, params[:category].to_i])
       if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
-        Order.create(:user_id => cookies[:user_id].to_i,:category_id => params[:category].to_i, :total_price => 0,
+        Order.create(:user_id => cookies[:user_id].to_i,:category_id => category_id, :total_price => 0,
           :types => Order::TYPES[:OTHER], :status => Order::STATUS[:NOMAL], :remark => "参加学习计划",
           :start_time => Time.now,:end_time => (Time.now + Constant::DATE_LONG[:vip].days))
         order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
       end
       cookies.delete(:user_role)
       user_role?(cookies[:user_id])
-      send_message = "我参加了赶考网的英语必过学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
+      categry_name=Category.find(category_id).name
+      send_message = "我参加了赶考网的#{categry_name}必过挑战学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
       send_message(send_message, cookies[:user_id])
-      flash[:notice] = "感谢您参与学习计划，同时您也免费升级为网站的正式用户了！"
+      flash[:notice] = "感谢您参与必过挑战，同时您也免费升级为#{categry_name}的正式用户了！"
     end
-    redirect_to "/study_plans/done_plans?category=#{params[:category].to_i}"
+    redirect_to "/study_plans/done_plans?category=#{category_id}"
   end
 
 
@@ -50,7 +52,7 @@ class StudyPlansController < ApplicationController
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
     @category = Category.find_by_id(category_id.to_i)
     @title = "#{@category.name}复习计划"
-    @meta_keywords = "#{@category.name}复习方法,大学英语四级学习计划"
+    @meta_keywords = "#{@category.name}复习方法,#{@category.name}必过挑战"
     @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提高#{@category.name}的应试能力。"
     plan_task = UserPlanRelation.find_by_sql("select up.created_at,up.ended_at,up.id, sp.study_date from user_plan_relations up
       inner join study_plans sp on up.study_plan_id=sp.id where
