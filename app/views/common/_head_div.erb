@@ -46,7 +46,7 @@
     <ul>
       <li><a href="/similarities?category=<%= category_id %>" <% if controller.controller_name=="similarities" || (controller.controller_name=="exam_users"&&params["type"]=="similarities") %> class="hover" <% end %> >真题</a></li>
       <li><a href="/specials?category=<%= category_id %>" <% if controller.controller_name=="specials" || (controller.controller_name=="exam_users"&&params["type"]=="specials") %> class="hover" <% end %> >专题</a></li>
-      <li><a href="/words?category=<%= category_id %>"       <% if controller.controller_name=="words" %> class="hover" <% end %> >词汇</a></li>
+      <li><a href="/words?category=<%= category_id %>"       <% if controller.controller_name=="words" %> class="hover" <% end %> >单词</a></li>
       <li><a href="/simulations?category=<%= category_id %>" <% if controller.controller_name=="simulations" %> class="hover" <% end %> >模考</a></li>
       <% if cookies[:user_id].nil? or (!cookies[:user_id].nil? and !is_nomal?(params[:category])) %>
         <li><a href="/collections?category=<%= category_id %>" <% if controller.controller_name=="collections" %> class="hover" <% end %> >收藏</a></li>

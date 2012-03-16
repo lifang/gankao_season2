@@ -428,12 +428,17 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
 
 
 /*词汇练习---------------*/
-.cihui_f { width: 370px; margin: 0 auto;}
-.cihui_f div { line-height: 37px; margin: 30px 0;}
-.ch_f_line { font-size: 18px;}
+.cihui_box { width: 450px; height: 160px; margin: 10px auto; background: url(/assets/cihui_box_bg.png) no-repeat; padding: 20px 100px; position: relative;}
+.ch_f_line { font-size: 18px; line-height: 37px; margin: 10px 0; overflow: hidden;}
 .ch_f_line a { float: right; width: 133px; height: 37px; display: block; overflow: hidden; text-indent: -999px;}
 .danci_hg {  background: url(/assets/danci_btn.png) 0 0 no-repeat;}
 .danci_bc { background: url(/assets/danci_btn.png) 0 bottom no-repeat;}
+
+.intr_flash { width: 700px; border: 2px #333 solid; background: #FFF; z-index: 1000; padding: 5px; display: none; position: absolute; overflow: hidden;}
+.intr_flash_box {}
+
+.intr_flash_a { position: absolute; top: 20px; right: 10px; color: #333; height: 20px; line-height: 20px;}
+.intr_flash_a:hover { text-decoration: underline;}
 
 /*单词认读--回想释义--词汇运用--拼写游戏*/
 .cihui_lx { width:627px; margin: 0 auto; overflow: hidden;}
