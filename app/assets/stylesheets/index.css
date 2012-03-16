@@ -90,9 +90,11 @@ img { border:none;}
 .zhezhao { width:100%; height: 100%; left:0; position:absolute; top:0; background:#000; opacity:0.5; filter:alpha(opacity=50); z-index:888;}
 
 /*tab_box------------*/
-.userMess_tab_box { background: #FFF; border: 2px #333 solid; position: fixed; z-index:1000;}
+.userMess_tab_box { background: #FFF; border: 2px #333 solid; position: absolute; z-index:1000;}
+.tab_box { width: 300px; padding: 10px; background: #FFF; border: 2px #333 solid; position: absolute; z-index:1000;display: none;}
+.tab_btn { width: 180px; margin: 0 auto;}
 .tab_x { float: right;}
-.tab_con { min-height: 100px; padding: 20px 10px; line-height: 24px;}
+.tab_con { padding: 20px 10px; text-align: center; line-height: 24px;}
 
 /*个人信息*/
 .main_info { width: 500px; padding: 10px; margin: 0 auto;}

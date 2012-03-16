@@ -108,3 +108,15 @@ function tishi_alert(str){
 function close_tishi_tab(){
     $(".tishi_tab").remove();
 }
+
+//将弹出层放置在页面中间
+function show_div(id){
+    var scolltop = document.body.scrollTop|document.documentElement.scrollTop;
+    var win_height = document.documentElement.clientHeight;//jQuery(document).height();
+    var win_width = jQuery(window).width();
+    var z_layer_height = jQuery(id).height();
+    var z_layer_width = jQuery(id).width();
+    $(id).css('top',(win_height-z_layer_height)/2);
+    $(id).css('left',(win_width-z_layer_width)/2);
+    $(id).css('display','block');
+}
