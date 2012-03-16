@@ -118,5 +118,6 @@ function show_div(id){
     var z_layer_width = jQuery(id).width();
     $(id).css('top',(win_height-z_layer_height)/2);
     $(id).css('left',(win_width-z_layer_width)/2);
+    $(".zhezhao").css('display','');
     $(id).css('display','block');
 }
