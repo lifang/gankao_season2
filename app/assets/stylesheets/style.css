@@ -19,6 +19,7 @@ button.green { color:#009900;}
 .xx_x { cursor: pointer; position: absolute; top: 5px; right: 5px;}
 .t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none;}
 .btn_box { width: 81px; height: 27px; margin: 0 auto;}
+.btn_box00 { width: 180px; height: 27px; margin: 0 auto;}
 .border_radius {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -600,3 +601,5 @@ input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033f
 .AD_text { position: absolute; top: 4px; right: 250px;}
 .AD_scrollDiv{ height:25px; line-height:25px; overflow:hidden; color: #FFF;text-align: right;}
 .AD_scrollDiv li{ height:25px;padding-left:10px;}
+
+
