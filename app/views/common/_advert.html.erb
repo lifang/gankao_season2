@@ -1,6 +1,6 @@
 <div class="AD_text">
   <div class="AD_scrollDiv">
-    <%ads= Advert.ip_advert(request.remote_ip)%>
+    <%ads= Advert.ip_advert("122.192.51.206")%>
     <ul>
       <% ads.each do |ad| %>
         <li><%= ad.content %></li>

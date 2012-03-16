@@ -5,8 +5,7 @@ class Advert < ActiveRecord::Base
   def self.ip_advert(ips)
     true_ip=0
     ips.split(".").each_with_index {|ip,index|  true_ip +=(ip.to_i)*(256**(3-index))}
-    ip=true_ip.to_s(2)
-    ip_t=IpTable.first(:conditions=>["start_at<=? and end_at >= ?",ip,ip])
+    ip_t=IpTable.first(:conditions=>["start_at<=? and end_at >= ?",true_ip,true_ip])
     sql="select a.content from adverts a inner join regions r on r.id=a.region_id inner join regions re on re.id=r.parent_id where 1=1"
     unless ip_t.nil?
       unless  ip_t.city_name.nil?
@@ -18,6 +17,5 @@ class Advert < ActiveRecord::Base
       sql += " order by a.created_at desc  limit 10"
     end
     return Advert.find_by_sql(sql)
-    return 
   end
 end
