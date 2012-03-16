@@ -15,7 +15,7 @@
           <% else %>
             <% if is_vip?(params[:category]) %>
               <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
-                   onclick="return already_submit('<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>>
+                   onclick="return already_submit('<%= similarity.id %>','<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>>
                    <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
                   <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
                 <% elsif @exam_user_hash[similarity.id] %>
@@ -34,7 +34,7 @@
             <% else %>
               <% if similarity.is_free %>
                 <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
-                     onclick="return already_submit('<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>>
+                     onclick="return already_submit('<%= similarity.id %>','<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>>
                      <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
                     <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
                   <% elsif @exam_user_hash[similarity.id] %>
@@ -58,16 +58,40 @@
   <%=  will_paginate @similarities ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
 </div>
 
+<div id="already_submit_div" class="tab_box border_radius" style="display:none;">
+  <input type="hidden" id="already_submit_ex_id" value=""></input>
+  <input type="hidden" id="already_submit_eu_id" value=""></input>
+  <input type="hidden" id="already_submit_sheet_url" value=""></input>
+  <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#already_submit_div').hide();" /></span>
+  <div class="tab_con">
+    <div>你已经做完了该份试卷，你是否要重做题目？</div>
+  </div>
+  <div class="btn_box00"><button class="t_btn" onclick="javascript:view_paper();"> 不,只想浏览 </button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:redo_paper();"> 好,我要重做 </button></div>
+</div>
+
+
 <script type="text/javascript">
 
-  function already_submit(eu_id,sheet_url){
-    if(confirm("你已经做完了该真题，你想重做该真题么？\n 点击\"确定\"重做，点击\"取消\"只浏览试题")){
-      sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
-      window.location.href="/exam_users/"+eu_id+"/redo_paper?category="+<%= category_id %>+"&type=similarities";
-      return false;
-    }else{
-      return true;
-    }
+  function already_submit(eu_id,ex_id,sheet_url){
+    generate_flash_div("#already_submit_div");
+    $("#already_submit_eu_id").val(eu_id);
+    $("#already_submit_ex_id").val(ex_id);
+    $("#already_submit_sheet_url").val(sheet_url);
+    return false;
+  }
+
+  function view_paper(){
+    var eu_id = $("#already_submit_eu_id").val();
+    $("#already_submit_div").hide();
+    window.location.href="/similarities/"+eu_id+"/join?category=<%= category_id %>";
+  }
+
+  function redo_paper(){
+    var ex_id = $("#already_submit_ex_id").val();
+    var sheet_url = $("#already_submit_sheet_url").val();
+    sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
+    $("#already_submit_div").hide();
+    window.location.href="/exam_users/"+ex_id+"/redo_paper?category=<%= category_id %>&sheet_url="+sheet_url+"&type=similarities";
   }
 </script>
 <%= render :partial => "/common/online_qq"  %>
