@@ -1,7 +1,7 @@
 <script type="text/javascript">
   var load_time = setTimeout(function(){
     $("#load_message").html("SORRY,此份试题好像存在问题，管理员会尽快解决此问题，给您带来的不便敬请谅解。");
-  },10000);
+  },15000);
 </script>
 
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
@@ -39,13 +39,13 @@
       <div class="ch_text">
         <div class="ch_words_line">
           <span class="font_size_24" id='about_word_name'></span>
+          <a href="javascript:void(0);" class="tooltip" name="加入我的单词本" onclick="javascript:ajax_add_word($('#about_word_id').val());"><img src="/assets/join_bs.png" /></a>
         </div>
         <div class="ch_words_line">
           <span id='about_word_types'></span><span id='about_word_phonetic'></span>
           <input type="hidden" id="about_word_enunciate_url" />
           <input type="hidden" id="about_word_id" />
           <a href="javascript:void(0);" class="tooltip" name="发音" onclick="javascript:play_word_enunciate($('#about_word_enunciate_url').val());"><img alt="gankao" src="/assets/icon_fy.png" /></a>
-          <a href="javascript:void(0);" class="tooltip" name="加入背诵单词" onclick="javascript:ajax_add_word($('#about_word_id').val());"><img src="/assets/join_bs.png" /></a>
         </div>
         <div class="ch_words_line">
           <p class="font_size_16" id='about_word_en_mean'></p>

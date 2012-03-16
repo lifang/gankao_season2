@@ -191,7 +191,7 @@ class ExamUsersController < ApplicationController
     puts params[:word_id]
     word = Word.find(params[:word_id].to_i)
     UserWordRelation.add_nomal_ids(cookies[:user_id], word.id, word.category_id) if word
-    @message="该单词已经添加到背诵列表中。"
+    @message="单词已添加到你的单词本，你可以登录赶考网进行背诵。"
     respond_to do |format|
       format.json {
         render :json=>{:message=>@message}

@@ -53,7 +53,8 @@
       <% else %>
         <li><a class="tooltip_vip" title="仅供正式用户使用" href="/collections/not_vip?category=<%= category_id %>">收藏</a></li>
       <% end %>
-      <li><a href="/study_plans?category=<%= category_id %>" <% if controller.controller_name=="study_plans" %> class="hover" <% end %> >必过挑战</a></li>
+      <li><a href="/study_plans?category=<%= category_id %>" 
+             class="orange <% if controller.controller_name=="study_plans" %>hover<% end %>"><strong>必过挑战</strong></a></li>
     </ul>
   </div>
   <div class="clear"></div>

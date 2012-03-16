@@ -141,7 +141,7 @@ function pro_qu_t(problem_index){
             last_opened_question = null;
         }else{
             pro_qu_div.show();
-            replace_answer_span.hide();
+            //replace_answer_span.hide();
             $(this).parent().parent().removeClass("p_q_line");
             if(problems[problem_index]["question_type"]=="1"){
                 $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)").addClass("borde_blue");

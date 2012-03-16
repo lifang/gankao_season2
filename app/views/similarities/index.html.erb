@@ -21,7 +21,7 @@
                 <% elsif @exam_user_hash[similarity.id] %>
                   <span><img class="tooltip" name="未做完" src="/assets/icon_nun.png" /></span>
                 <% elsif !similarity.is_free %>
-                  <span><img  class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
+                  <span><img src="/assets/icon_tx.png" /></span>
                 <% end %>
                 <h2><%= similarity.title %></h2>
               </a>
