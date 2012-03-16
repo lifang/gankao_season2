@@ -110,7 +110,6 @@ function already_drag_li() {
     }
 }
 
-
 function get_block_id(blocks) {
     if (tof(blocks) == "array") {
         for (var i=0; i<blocks.length;i++) {
@@ -841,11 +840,18 @@ function onTimer() {
         document.getElementById("paper_form").submit();
         setTimeout(function(){
             var flash_div = create_element("div", null, "flash_notice", "tishi_tab", null, "innerHTML");
-            flash_div.innerHTML = "<p>答卷时间已到，请您停止答题，系统已经自动帮您提交试卷</p>";
+            flash_div.innerHTML = "<p>答卷时间已到，请您停止答题，系统已经自动帮您交卷</p>";
             document.body.appendChild(flash_div);
             show_flash_div();
         }, 100);
         return;
+    } else if (start == 300) {
+        setTimeout(function(){
+            var flash_div = create_element("div", null, "flash_notice", "tishi_tab", null, "innerHTML");
+            flash_div.innerHTML = "<p>还剩5分钟答题时间，请您尽快答题并交卷</p>";
+            document.body.appendChild(flash_div);
+            show_flash_div();
+        }, 100);
     }
     var current_time = start;
 
@@ -1075,7 +1081,7 @@ function question_color(question_id, is_nomal) {
                 $("#que_out_" + question_id + " textarea").removeClass("q_no").addClass("q_yes");
             } else if ($("#que_out_" + question_id + " .select_span").attr("id") != undefined) {
                 $("#que_out_" + question_id + " .select_span").removeClass("q_no").addClass("q_yes");
-            }  else if ($("#que_out_" + question_id + " .input_tk").attr("id") != undefined) {
+            } else if ($("#que_out_" + question_id + " .input_tk").attr("id") != undefined) {
                 $("#que_out_" + question_id + " .input_tk").removeClass("q_no").addClass("q_yes");
             }
             $("#a_que_nav_" + question_id).removeClass("pink").addClass("lvse");
@@ -1200,6 +1206,10 @@ function generate_result_paper(paper_id) {
         }
         if (answer_length < (problem_ids.length-1)) {
             if(!confirm('您还有题尚未答完，确定要交卷么?')) {
+                flag = false;
+            }
+        } else {
+            if(!confirm('您已经答完所有题，确定要交卷么?')) {
                 flag = false;
             }
         }
@@ -1560,22 +1570,6 @@ function erea_height(h, str) {
 function out_exam() {
     window.onbeforeunload = null;
     local_storage_answer("close");
-}
-
-//模拟考试下次再考
-function to_next() {
-    window.onbeforeunload = null;
-    var examination_id = $("#examination_id").val();
-    $.ajax({
-        async:true,
-        complete:function(request){
-            window.close();
-        },
-        dataType:'script',
-        url:"/simulations/"+ examination_id +"/cancel_exam",
-        type:'post'
-    });
-    return false;
 }
 
 

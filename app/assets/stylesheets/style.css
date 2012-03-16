@@ -9,7 +9,7 @@ button { cursor: pointer;}
 .float_right { float: right;}
 .position_re { position: relative;}
 .red { color: #F00;}
-.orange { color: #ff6c00;}
+.orange { color: #F90;}
 .gray { color: #999;}
 .span_right, span.span_right, input.span_right {background: #EEFFEE;}
 .span_error, span.span_error, input.span_error {background: #FFEAEA;}
@@ -38,6 +38,7 @@ button.green { color:#009900;}
 .nav li a { padding: 0 10px; height: 46px; display: block; text-align: center; color: #FFF; font-size: 14px;}
 .nav li a:hover { color: #aaecff;}
 .nav li a.hover { font-weight: bold; background: url(/assets/nav_hover.png) center 0px no-repeat;}
+.nav li a.orange { color: #F90;}
 
 .object { margin-left: 5px; float: left; height: 46px; line-height: 46px; color: #FFF;}
 
@@ -313,24 +314,47 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
 /*模考------------------------*/
 
 .mk_h { margin: 20px 0 10px; line-height: 24px; text-align: center;}
-.mokao_bg { width: 650px; height: 250px; margin: 0 auto; background: url(/assets/mokao_bg.png) no-repeat;}
-.mk_ul { width: 650px; height: 190px; margin: 0 auto;}
+.mokao_bg { width: 700px; height: 250px;}
+.mokao_img { width: 480px;}
+.mk_ul { width: 220px; border: 1px  #CCC solid; border-bottom: none; float: right;background:#f6f6f6;}
 .mk_ul li {
-    width: 215px;
-    height: 176px;
-    float: left;
-    border-right: 1px #dedede dotted;
-    border-top: 2px #fff solid;
-    color: #333;
-    padding: 10px 0 0 0;
-    margin-top: 1px;
+    width: 220px;
+	color: #333;
+	overflow: hidden;
+	line-height: 24px;
+	border-bottom: 1px #ccc solid;
+	position: relative;
+
 }
-.mk_ul li h1 { height: 40px; line-height: 40px; text-align: center; font-size: 16px;}
-.mk_ul li h3 { height: 20px; line-height: 20px; text-align: center; font-size: 12px; color: #666; font-weight: 100;}
-li.mk_li_hover { border-top: 2px #2875ae solid;}
-.mk_click { width: 160px; height: 37px; line-height: 37px; margin: 20px auto 10px; text-align: center;}
-.mk_click a { margin: 0 13px; text-decoration: underline;}
-.mk_click button { width: 110px; height: 37px; line-height: 37px; background: url(/assets/tt_btn.png) no-repeat; border: none; color: #2875ae;}
+
+.mk_li_bg { background:#fff;}
+
+.mk_ul_h {
+    width: 20px;
+	font-family:"微软雅黑";
+	border-right: 1px #ccc solid;
+	float: left;
+	text-align: center;
+	font-size: 14px;
+	line-height: 18px;
+	padding: 10px 4px;
+	background: url(/assets/mk_title_bg.png) repeat-y;
+}
+.mk_title_bg {color: #fff; font-weight: bold; background: url(/assets/mk_title_bg00.png) repeat-y; }
+
+.mk_begin { color: #fff; font-weight: bold;}
+.mk_ul_ny { width: 191px; float: left;}
+
+.mk_ul_text { height: 50px; line-height: 60px; text-align: center; font-size: 14px;}
+.mk_ul_p { text-align: center; margin: 10px 0;}
+
+
+.mk_fenshu { font-size: 28px;}
+.fenshu_xx { position: absolute; right: 40px; bottom: 38px; font-size: 12px; color: #2875AE;}
+.mk_btn_blue { color:#2875AE; font-weight: bold;}
+
+.c_btn { width: 110px; height: 37px; line-height: 37px; background: url(/assets/tt_btn.png) no-repeat; border: none; color: #2875ae;}
+
 
 .mk_chengj { padding: 20px 10px;}
 .mk_chengj h1 { height: 24px; line-height: 24px; font-size: 14px; font-weight: 600; margin-top: 20px;}
@@ -340,9 +364,9 @@ li.mk_li_hover { border-top: 2px #2875ae solid;}
 .mk_time { width: 64px; height: 64px; margin: 0 auto;}
 
 .mk_wenti { text-align: left;}
-.mk_wenti ul { padding: 10px 0;}
+.mk_wenti ul { padding: 5px 0;}
 .mk_wenti li { padding-left: 20px;}
-
+.mk_wenti p { line-height: 24px; padding: 5px 0;}
 
 /*真题列表------------------*/
 .zhenti_list { width:625px; margin: 0 auto;  overflow: hidden;}
@@ -507,12 +531,12 @@ li.mk_li_hover { border-top: 2px #2875ae solid;}
 
 
 /*tab_box------------*/
-.tab_box { width: 300px; padding: 5px; min-height: 200px; background: #FFF; border: 5px #333 solid; position: absolute; z-index:1000;}
+.tab_box { width: 300px; padding: 10px; background: #FFF; border: 5px #333 solid; position: absolute; z-index:1000;}
 .tab_x { float: right;}
-.tab_con { min-height: 100px; padding: 20px 10px; text-align: center; line-height: 24px;}
+.tab_con { padding: 20px 10px; text-align: center; line-height: 24px;}
 .tab_con1 { height: 100px; margin-top: 75px; text-align: center; line-height: 24px;padding: 0 10px;}
 
-.tab_btn { width: 165px; margin: 0 auto;}
+.tab_btn { width: 180px; margin: 0 auto;}
 .icon_false { background: url(/assets/false.png) no-repeat #FFF center center;}
 .icon_true { background: url(/assets/true.png) no-repeat #FFF center center;}
 
