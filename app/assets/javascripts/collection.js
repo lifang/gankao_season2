@@ -915,8 +915,8 @@ function for_error(){
         data : {
             "post":{
                 "paper_id":paper_id,
-                "user_id":getCookies("user_id"),
-                "user_name":getCookies("user_name"),
+                "user_id":getCookie("user_id"),
+                "user_name":getCookie("user_name"),
                 "description":$("#error_content").val(),
                 "error_type":error_type,
                 "question_id":question_id
