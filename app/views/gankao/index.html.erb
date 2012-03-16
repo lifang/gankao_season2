@@ -102,9 +102,9 @@
           </div>
         </div>
         <div class="tuiguang">
-          <div><a href="#"><img src="/assets/xianshi.png" title="限时推广，仅需48元。" onclick="show_div('.tab_box')" /></a></div>
+          <div><a href="#"><img src="/assets/xianshi.png" title="限时推广，仅需48元。" onclick="$('#tishi_text').html('请你选择充值的科目');show_div('.tab_box')" /></a></div>
           <div><a href="#"><img src="/assets/huafei.png" title="帮助我们推广，获取话费回报。" /></a></div>
-          <div><a href="#"><img src="/assets/jihua.png" title="要成功，就要对自己狠一点。" onclick="show_div('.tab_box')" /></a></div>
+          <div><a href="#"><img src="/assets/jihua.png" title="要成功，就要对自己狠一点。" onclick="$('#tishi_text').html('请你选择升级的科目');show_div('.tab_box')" /></a></div>
         </div>
         <div class="gz_weibo"><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/renren_like');"><img src="/assets/renren_zhuye.png" /></a><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/watch_weibo', '_blank', 'height=500,width=600,left=300,top=150');"><img src="/assets/sina_weibo.png" /></a></div>
       </div>
@@ -118,10 +118,11 @@
     <% if !cookies[:first].nil? and cookies[:first] == "1" %>
       <%= render :partial => "/common/complete_info" %>
     <% end %>
+    <div class="zhezhao" style="display: none"></div>
     <div class="tab_box border_radius">
-      <span class="xx_x"><img src="/assets/x.png" onclick="javascript:$('.tab_box').css('display','none')" /></span>
+      <span class="xx_x"><img src="/assets/x.png" onclick="javascript:$('.tab_box').css('display','none');$('.zhezhao').css('display','none');" /></span>
       <div class="tab_con">
-        <p>请你选择充值的科目</p>
+        <p id="tishi_text">请你选择充值的科目</p>
       </div>
       <div class="tab_btn"><button class="t_btn" onclick="window.location.href='/users/charge_vip?category=2'">英语四级</button>&nbsp;<button class="t_btn" onclick="window.location.href='/users/charge_vip?category=3'">英语六级</button></div>
     </div>
