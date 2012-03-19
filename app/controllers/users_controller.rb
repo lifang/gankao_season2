@@ -2,6 +2,7 @@
 class UsersController < ApplicationController
   layout 'user',:except=>["charge_vip"]
   before_filter :sign? ,:except=>["renren"]
+  before_filter :get_role, :only => ["charge_vip"]
   respond_to :html, :xml, :json
   include AlipaysHelper
   @@m = Mutex.new
@@ -14,7 +15,11 @@ class UsersController < ApplicationController
   #更新个人信息
   def update_users
     user = User.find(cookies[:user_id].to_i)
-    user.update_attributes(params[:info]) if user
+    if user
+    params[:info][:username] = user.username if params[:info][:username].empty?
+    params[:info][:email] = user.email if params[:info][:email].empty?
+    user.update_attributes(params[:info]) 
+    end
     cookies.delete(:first) unless cookies[:first].nil?
     data="个人信息更新成功。"
     respond_to do |format|
@@ -202,7 +207,7 @@ class UsersController < ApplicationController
     if @code_id != "error" && @code_id == params[:code_id]
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
-      user_role?(cookies[:user_id])
+      get_role
       ActionLog.login_log(cookies[:user_id])
       redirect_to "/users/charge_vip?category=#{category}"
     else

@@ -1,18 +1,18 @@
-<h1>词汇练习</h1>
-<div class="cihui_f">
+<div class="cihui_box">
+  <h2>我的单词本</h2>
   <div class="ch_f_line">
     <% if cookies[:user_id].nil? %>
       <a href="/words/recite_word?category=<%= params[:category] %>&type=old" class="danci_hg">回顾</a>
       <p>已掌握单词：<span class="orange">0</span></p>
     <% else %>
       <% if is_nomal?(params[:category]) %>
-        <a href="javascript:void(0);"  class="danci_hg tooltip_vip" title="仅供正式用户使用" 
+        <a href="javascript:void(0);"  class="danci_hg tooltip_vip" title="仅供正式用户使用"
            onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>回顾</a>
-      <% else %>
-        <% if @already_recited > 0 %>
+         <% else %>
+           <% if @already_recited > 0 %>
           <a href="javascript:void(0);"
              onclick="javascript:start_word('<%= params[:category] %>', 'old');" class="danci_hg">回顾</a>
-        <% else %>
+           <% else %>
           <a href="javascript:void(0);" title="您目前还没有已经掌握的单词" class="danci_hg">回顾</a>
         <% end %>
       <% end %>
@@ -25,20 +25,24 @@
       <p>未掌握单词：<span class="orange"><%= (@leaving_count > 0) ? @leaving_count : 0 %></span></p>
     <% else %>
       <% if is_nomal?(params[:category]) %>
-        <a href="javascript:void(0);"  class="danci_bc tooltip_vip" title="仅供正式用户使用" 
+        <a href="javascript:void(0);"  class="danci_bc tooltip_vip" title="仅供正式用户使用"
            onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>背词</a>
-      <% else %>
-        <% if @leaving_count > 0 %>
+         <% else %>
+           <% if @leaving_count > 0 %>
           <a href="javascript:void(0);"
              onclick="javascript:start_word('<%= params[:category] %>', 'new');" class="danci_bc">背词</a>
-        <% else %>
+           <% else %>
           <a href="javascript:void(0);" title="您目已经没有未掌握的单词了" class="danci_hg">背词</a>
         <% end %>
       <% end %>
       <p>未掌握单词：<span class="orange"><%= (@leaving_count > 0) ? @leaving_count : 0 %></span></p>
     <% end %>
   </div>
-  <div><img src="/assets/word_pic.png" /></div>
-  <div><span class="orange">*</span>会从需要学习的词语中随机选出对应数量的词汇进行练习。</div>
 </div>
+<div class="cihui_box">
+  <a href="javascript:void(0);" class="intr_flash_a">如何添加词汇到自己的单词本?</a>
+  <h2>四步掌握核心词汇</h2>
+  <div><img src="/assets/word_pic.png" /></div>
+</div>
+<%= render :partial => "flash_div"  %>
 <%= render :partial => "/common/online_qq"  %>

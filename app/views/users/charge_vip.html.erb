@@ -36,10 +36,10 @@
       <div class="head">
         <% category_id = params[:category].nil? ? 2 : params[:category] %>
         <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}") %>
-        <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>?category=<%=category_id  %>'" class="red"><%= cookies[:user_name] %>
+        <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>?category=<%=category_id  %>'" class="red"><%= cookies[:user_name] ? cookies[:user_name] : "游客" %>
             <% if is_trial?(category_id)%>
               <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
-              day_end=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
+              day_end= (order and order.end_time) ? ((order.end_time - Time.now.to_datetime)/1.day).to_i : -1 %>
               <% if day_end>=1%>
                 <%="(试用剩#{day_end}天)"%>
               <%  elsif day_end==0 %>

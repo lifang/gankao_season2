@@ -306,14 +306,31 @@ function precal(){
     $(".main").css('height',main_height-12+34);
 }
 
-// AD鍗曡婊氬姩
 function AutoScroll(obj){
-$(obj).find("ul:first").animate({
-marginTop:"-25px"
-},500,function(){
-$(this).css({marginTop:"0px"}).find("li:first").appendTo(this);
-});
+    $(obj).find("ul:first").animate({
+        marginTop:"-25px"
+    },500,function(){
+        $(this).css({
+            marginTop:"0px"
+        }).find("li:first").appendTo(this);
+    });
 }
 $(document).ready(function(){
-setInterval('AutoScroll(".AD_scrollDiv")',3000)
+    setInterval('AutoScroll(".AD_scrollDiv")',3000)
 });
+
+//显示单词操作的flash
+$(function(){
+    if ($('.intr_flash_a').length > 0) {
+        $('.intr_flash_a').bind('click',function(){
+            $('.zhezhao').css('display','block');
+            generate_flash_div(".intr_flash");
+            return false;
+        })
+        $('.xx_x').bind('click',function(){
+            $('.intr_flash').hide();
+            $('.zhezhao').hide();
+            return false;
+        })
+    }
+})
