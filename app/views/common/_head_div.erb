@@ -4,7 +4,7 @@
     <% if cookies[:user_id] %>
       <div class="h_user">
         <a href="javascript:void(0);" class="h_email email_u">邮件</a>
-        <a class="user_name" href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] %></a>|<a href="/logins/logout">退出</a>
+        <a class="user_name" href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>"><%= cookies[:user_name] ? cookies[:user_name] : "游客" %></a>|<a href="/logins/logout">退出</a>
         <div class="email_tab" style="display: none; ">
           <ul>
             <li><a href="/users/<%= cookies[:user_id] %>/info?target=0&category=<%= category_id %>">收件箱:<span class="orange"><%=Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SINGLE]} and target_id=#{cookies[:user_id]}")  %></span></a></li>
@@ -28,7 +28,7 @@
     <small class="object_small">
       <% if cookies[:user_id] && is_trial?(category_id)
         order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
-        day=((order.end_time - Time.now.to_datetime)/1.day).to_i%>
+        day= (order and order.end_time) ? ((order.end_time - Time.now.to_datetime)/1.day).to_i : -1 %>
         <% if day>=1 %>
           <%=  "(试用剩#{day}天)" %>
         <%elsif day==0%>

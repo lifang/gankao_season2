@@ -1,8 +1,7 @@
 <div class="AD_text">
   <div class="AD_scrollDiv">
-    <%ads= Advert.ip_advert(request.remote_ip)%>
+    <%ads= Advert.ip_advert(request.headers["HTTP_X_REAL_IP"]) %>
     <ul>
-      <%= request.remote_ip %>
       <% ads.each do |ad| %>
         <li><%= ad.content %></li>
       <%end unless ads.blank?%>
