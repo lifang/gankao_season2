@@ -108,7 +108,7 @@ class WordsController < ApplicationController
     if @code_id != "error" && @code_id == params[:code_id]
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
-      user_role?(cookies[:user_id])
+      get_role
       ActionLog.login_log(cookies[:user_id])
       redirect_to "/words?category=#{category}"
     else

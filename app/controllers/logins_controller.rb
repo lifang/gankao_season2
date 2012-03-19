@@ -45,6 +45,7 @@ class LoginsController < ApplicationController
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       else
+        ActionLog.login_log(@user.id)
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
           @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         end
@@ -52,7 +53,6 @@ class LoginsController < ApplicationController
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
-      ActionLog.login_log(cookies[:user_id])
       data=true
     rescue
       data=false
@@ -82,6 +82,7 @@ class LoginsController < ApplicationController
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina', :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
           cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         else
+          ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
             @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
           end
@@ -89,7 +90,6 @@ class LoginsController < ApplicationController
         cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
         user_role?(cookies[:user_id])
-        ActionLog.login_log(cookies[:user_id])
         render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -159,6 +159,7 @@ class LoginsController < ApplicationController
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"],:username=>response["name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
           cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         else
+          ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
             @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
           end
@@ -166,7 +167,6 @@ class LoginsController < ApplicationController
         cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
         user_role?(cookies[:user_id])
-        ActionLog.login_log(cookies[:user_id])
         render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -192,6 +192,7 @@ class LoginsController < ApplicationController
         @user=User.create(:code_id=>response["uid"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds)
         cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       else
+        ActionLog.login_log(@user.id)
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
           @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         end
@@ -199,7 +200,6 @@ class LoginsController < ApplicationController
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
-      ActionLog.login_log(cookies[:user_id])
       render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
