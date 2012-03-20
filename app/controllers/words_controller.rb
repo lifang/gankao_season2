@@ -101,7 +101,7 @@ class WordsController < ApplicationController
     render :text => ""
   end
 
-  def renren 
+  def renren
     category = params[:category].nil? ? "2" : params[:category]
     @user= User.where(:id=>params[:user_id])[0]
     @code_id = @user.nil? ? "error" : @user.code_id.nil? ? "gankao" : @user.code_id
