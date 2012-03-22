@@ -7,6 +7,7 @@ img { border: none;}
 button { cursor: pointer;}
 .clear { clear: both;}
 .float_right { float: right;}
+.float_left { float: left;}
 .position_re { position: relative;}
 .red { color: #F00;}
 .orange { color: #F90;}
@@ -320,11 +321,11 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
 .mk_ul { width: 220px; border: 1px  #CCC solid; border-bottom: none; float: right;background:#f6f6f6;}
 .mk_ul li {
     width: 220px;
-	color: #333;
-	overflow: hidden;
-	line-height: 24px;
-	border-bottom: 1px #ccc solid;
-	position: relative;
+    color: #333;
+    overflow: hidden;
+    line-height: 24px;
+    border-bottom: 1px #ccc solid;
+    position: relative;
 
 }
 
@@ -332,14 +333,14 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
 
 .mk_ul_h {
     width: 20px;
-	font-family:"微软雅黑";
-	border-right: 1px #ccc solid;
-	float: left;
-	text-align: center;
-	font-size: 14px;
-	line-height: 18px;
-	padding: 10px 4px;
-	background: url(/assets/mk_title_bg.png) repeat-y;
+    font-family:"微软雅黑";
+    border-right: 1px #ccc solid;
+    float: left;
+    text-align: center;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 10px 4px;
+    background: url(/assets/mk_title_bg.png) repeat-y;
 }
 .mk_title_bg {color: #fff; font-weight: bold; background: url(/assets/mk_title_bg00.png) repeat-y; }
 
@@ -541,6 +542,12 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
 .tab_x { float: right;}
 .tab_con { padding: 20px 10px; text-align: center; line-height: 24px;}
 .tab_con1 { height: 100px; margin-top: 75px; text-align: center; line-height: 24px;padding: 0 10px;}
+
+.fankui_tab_box { width: 400px; padding: 10px; background: #FFF; border: 2px #333 solid; position: absolute; z-index:1000;}
+.fankui_list { line-height: 32px; margin: 10px 0;}
+.fankui_list label { width: 80px; padding: 0 5px; display: inline-block; text-align: right;}
+.fankui_list input { height: 24px; border: 1px #CCCCCC solid; width: 265px;}
+.fankui_list textarea { width: 265px; height: 150px; border: 1px #CCCCCC solid;}
 
 .tab_btn { width: 180px; margin: 0 auto;}
 .icon_false { background: url(/assets/false.png) no-repeat #FFF center center;}
