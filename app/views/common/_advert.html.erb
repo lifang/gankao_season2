@@ -3,7 +3,7 @@
     <%ads= Advert.ip_advert(request.headers["HTTP_X_REAL_IP"]) %>
     <ul>
       <% ads.each do |ad| %>
-        <li><%= ad.content %></li>
+        <li><%= ad.content.html_safe %></li>
       <%end unless ads.blank?%>
     </ul>
   </div>
