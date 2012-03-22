@@ -56,7 +56,7 @@ class ExamUsersController < ApplicationController
   end
 
   def ajax_report_error
-    find_arr = ReportError.find_by_sql("select id from report_errors where user_id=#{params["post"]["user_id"]} and question_id=#{params["post"]["question_id"]} and error_type=#{params["post"]["error_type"]}")
+    find_arr = ReportError.find_by_sql("select id from report_errors where user_id=#{params["post"]["user_id"]} and question_id=#{params["post"]["question_id"]} and error_type=#{params["post"]["error_type"]} and status=#{ReportError::STATUS[:UNSOVLED]}")
     if find_arr.length>0
       data={:message=>"您已经提交过此错误，感谢您的支持。"}
     else

@@ -32,7 +32,7 @@ class StudyPlansController < ApplicationController
           cookies[:user_id].to_i, params[:category].to_i])
       if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
         Order.create(:user_id => cookies[:user_id].to_i,:category_id => category_id, :total_price => 0,
-          :types => Order::TYPES[:OTHER], :status => Order::STATUS[:NOMAL], :remark => "参加学习计划",
+          :types => Order::TYPES[:MUST], :status => Order::STATUS[:NOMAL], :remark => "参加学习计划",
           :start_time => Time.now,:end_time => (Time.now + Constant::DATE_LONG[:vip].days))
         order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
       end

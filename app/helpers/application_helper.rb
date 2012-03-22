@@ -26,11 +26,13 @@ module ApplicationHelper
   def user_role?(user_id)
     if cookies[:user_role].nil?
       cookies[:user_role] = {:value => "", :path => "/", :secure  => false}
+      cookies[:must] = {:value =>nil, :path => "/", :secure  => false}
       orders = Order.find(:all, :conditions => ["user_id = ? and status = #{Order::STATUS[:NOMAL]}", user_id.to_i])
       orders.each do |order|
         if order.types == Order::TYPES[:CHARGE] or order.types == Order::TYPES[:OTHER] or
-            order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:RENREN]
+            order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:RENREN] or order.types == Order::TYPES[:MUST]
           this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
+          cookies[:must]= cookies[:must].nil? ? "#{order.category_id}=" : (cookies[:must] + "&#{order.category_id}=") if order.types == Order::TYPES[:MUST]
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
         elsif order.types == Order::TYPES[:TRIAL_SEVEN]
           if order.end_time < Time.now or order.status == false            
@@ -84,6 +86,10 @@ module ApplicationHelper
   #是否普通用户
   def is_nomal?(category_id)
     return category_role(category_id) == Order::USER_ORDER[:NOMAL]
+  end
+
+  def is_must?(category_id)
+    return !cookies[:must].nil? && cookies[:must]=~ /#{category_id}/
   end
 
   #判断句子中是否有当前单词
