@@ -199,6 +199,7 @@ class LoginsController < ApplicationController
       end
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
+      cookies.delete(:user_role)
       user_role?(cookies[:user_id])
       render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     rescue
