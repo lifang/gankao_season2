@@ -36,7 +36,7 @@
     <div class="wrap">
       <div class="head">
         <% category_id = params[:category].nil? ? 2 : params[:category] %>
-        <div class="user_info">你好：<%= cookies[:user_name] ? cookies[:user_name] : "游客" %>|<a href="/">首页</a>|<a href="/logins/logout">退出</a></div>
+        <div class="user_info">你好：<%= (cookies[:user_name].nil? or cookies[:user_name].empty?) ? "游客" : cookies[:user_name] %>|<a href="/">首页</a>|<a href="/logins/logout">退出</a></div>
         <div class="logo"><a href="/"><img src="/assets/logo_user.png" /></a></div>
       </div>
       <% category_id = params[:category].nil? ? 2 : params[:category] %>

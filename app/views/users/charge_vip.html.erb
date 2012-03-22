@@ -36,7 +36,7 @@
       <div class="head">
         <% category_id = params[:category].nil? ? 2 : params[:category] %>
         <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and category_id = #{category_id}") %>
-        <div class="user_info">你好：<a href="#" onclick="javascript:window.location.href='/users/<%= cookies[:user_id] %>?category=<%=category_id  %>'" class="red"><%= cookies[:user_name] ? cookies[:user_name] : "游客" %>
+        <div class="user_info">你好：<a href="/users/<%= cookies[:user_id] %>?category=<%=category_id  %>"  class="red"><%= (cookies[:user_name].nil? or cookies[:user_name].empty?) ? "游客" : cookies[:user_name] %>
             <% if is_trial?(category_id)%>
               <%  order = Order.first(:conditions=>"user_id = #{cookies[:user_id]} and types = #{Order::TYPES[:TRIAL_SEVEN]} and status=#{Order::STATUS[:NOMAL]} and category_id = #{category_id}")
               day_end= (order and order.end_time) ? ((order.end_time - Time.now.to_datetime)/1.day).to_i : -1 %>
