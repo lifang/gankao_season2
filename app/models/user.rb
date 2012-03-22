@@ -8,8 +8,9 @@ class User < ActiveRecord::Base
   has_many :study_plans,:through=>:user_plan_relations, :source => :study_plan
   has_many :send_notices, :foreign_key => "send_id", :source => :notice
   has_many :recive_notices, :foreign_key => "target_id", :source => :notice
-  has_one :collections
+  has_many :collections
   has_one :user_word_relation
+  has_many :feedbacks
 
   attr_accessor :password
   validates:password, :confirmation=>true,:length=>{:within=>6..20}, :allow_nil => true
