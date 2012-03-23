@@ -614,4 +614,8 @@ input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033f
 .AD_scrollDiv{ height:25px; line-height:25px; overflow:hidden; color: #FFF;text-align: right;}
 .AD_scrollDiv li{ height:25px;padding-left:10px;}
 
-
+/*挑战失败----*/
+.challengeLoss { width: 530px; margin: 100px auto;}
+.challengeLoss div { margin: 40px auto; text-align: center;}
+.cLoss_btn_box { width: 110px; margin: 0 auto;}
+.cLoss_btn_box button { font-weight: bold; font-size: 15px;}

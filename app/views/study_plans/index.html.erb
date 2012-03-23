@@ -7,8 +7,20 @@
         <button class="jihua_btn" title="暂时还没有必过挑战" disabled >我要必过</button>
       <% else %>
         <button class="jihua_btn"
-                onclick="javascript:window.location.href='/study_plans/<%= @study_plan.id %>?category=<%= params[:category] %>';" >
+                onclick="javascript:window.location.href='/study_plans/<%= @study_plan.id %>?category=<%= params[:category] %>';">
           我要必过</button>
+      <% end %>
+    </div>
+  </div>
+<% elsif @user_plan.status == false %>
+  <div class="challengeLoss">
+    <div><img src="/assets/challengeLoss.png" /></div>
+    <div class="cLoss_btn_box">
+      <% if @user_plan.num < StudyPlan::CAN_JOIN_TIME %>
+        <button class="c_btn"
+                onclick="javascript:window.location.href='/study_plans/<%= @study_plan.id %>?category=<%= params[:category] %>';">
+          最后一次挑战
+        </button>
       <% end %>
     </div>
   </div>
