@@ -919,7 +919,8 @@ function for_error(){
                 "user_name":getCookie("user_name"),
                 "description":$("#error_content").val(),
                 "error_type":error_type,
-                "question_id":question_id
+                "question_id":question_id,
+                "category_id":$("#category_id").val()
             }
         },
         success : function(data) {
