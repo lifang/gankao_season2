@@ -124,16 +124,16 @@
       <div class="tab_con">
         <p id="tishi_text">请你选择充值的科目</p>
       </div>
-      <div class="tab_btn"><button class="t_btn" <%if is_vip?(Category::TYPE_IDS[:english_fourth_level]) %>onclick='tishi_alert("您已经是正式用户了，无需升级")' <%else%>onclick="window.location.href='/users/charge_vip?category=<%= Category::TYPE_IDS[:english_fourth_level] %>'"<%end%>>英语四级</button>&nbsp;
-        <button class="t_btn" <%if is_vip?(Category::TYPE_IDS[:english_sixth_level]) %>onclick='tishi_alert("您已经是正式用户了，无需升级")' <%else%>onclick="window.location.href='/users/charge_vip?category=<%=Category::TYPE_IDS[:english_sixth_level]%>'"<%end%>>英语六级</button></div>
+      <div class="tab_btn"><button class="t_btn" <%if is_vip?(Category::TYPE_IDS[:english_fourth_level])&&!is_must?(Category::TYPE_IDS[:english_fourth_level]) %>onclick='tishi_alert("您已经是正式用户了，无需升级")' <%else%>onclick="window.location.href='/study_plans?category=<%= Category::TYPE_IDS[:english_fourth_level] %>'"<%end%>>英语四级</button>
+        &nbsp;<button class="t_btn" <%if is_vip?(Category::TYPE_IDS[:english_sixth_level])&&!is_must?(Category::TYPE_IDS[:english_sixth_level]) %>onclick='tishi_alert("您已经是正式用户了，无需升级")' <%else%>onclick="window.location.href='/study_plans?category=<%=Category::TYPE_IDS[:english_sixth_level]%>'"<%end%>>英语六级</button></div>
     </div>
-  <div class="tab_box border_radius" id="xishi">
+    <div class="tab_box border_radius" id="xishi">
       <span class="xx_x"><img src="/assets/x.png" onclick="javascript:$('.tab_box').css('display','none');$('.zhezhao').css('display','none');" /></span>
       <div class="tab_con">
         <p id="tishi_text">请你选择充值的科目</p>
       </div>
-      <div class="tab_btn"><button class="t_btn" <%if is_vip?(Category::TYPE_IDS[:english_fourth_level])&&!is_must?(Category::TYPE_IDS[:english_fourth_level]) %>onclick='tishi_alert("您已经是正式用户了，无需升级")' <%else%>onclick="window.location.href='/study_plans?category=<%= Category::TYPE_IDS[:english_fourth_level] %>'"<%end%>>英语四级</button>
-        &nbsp;<button class="t_btn" <%if is_vip?(Category::TYPE_IDS[:english_sixth_level])&&!is_must?(Category::TYPE_IDS[:english_sixth_level]) %>onclick='tishi_alert("您已经是正式用户了，无需升级")' <%else%>onclick="window.location.href='/study_plans?category=<%=Category::TYPE_IDS[:english_sixth_level]%>'"<%end%>>英语六级</button></div>
+    <div class="tab_btn"><button class="t_btn" <%if is_vip?(Category::TYPE_IDS[:english_fourth_level]) %>onclick='tishi_alert("您已经是正式用户了，无需升级")' <%else%>onclick="window.location.href='/users/charge_vip?category=<%= Category::TYPE_IDS[:english_fourth_level] %>'"<%end%>>英语四级</button>&nbsp;
+        <button class="t_btn" <%if is_vip?(Category::TYPE_IDS[:english_sixth_level]) %>onclick='tishi_alert("您已经是正式用户了，无需升级")' <%else%>onclick="window.location.href='/users/charge_vip?category=<%=Category::TYPE_IDS[:english_sixth_level]%>'"<%end%>>英语六级</button></div>
     </div>
   </body>
 </html>
