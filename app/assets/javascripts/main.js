@@ -315,9 +315,7 @@ function AutoScroll(obj){
         }).find("li:first").appendTo(this);
     });
 }
-$(document).ready(function(){
-    setInterval('AutoScroll(".AD_scrollDiv")',3000)
-});
+
 
 //显示单词操作的flash
 $(function(){

@@ -20,4 +20,5 @@ class Advert < ActiveRecord::Base
     end
     return Advert.find_by_sql(sql)
   end
+
 end
