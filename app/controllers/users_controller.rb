@@ -222,7 +222,7 @@ class UsersController < ApplicationController
     UserMailer.fankui(feedback,cookies[:user_name]).deliver
     respond_to do |format|
       format.json {
-        render :json=>{:message =>"反馈信息已经收到。我们会尽快回复您。"}
+        render :json=>{:message =>""}
       }
     end
   end
