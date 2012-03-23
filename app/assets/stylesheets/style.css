@@ -17,7 +17,7 @@ button { cursor: pointer;}
 
 button.green { color:#009900;}
 .blue { color: #2875AE;}
-.xx_x { cursor: pointer; position: absolute; top: 5px; right: 5px;}
+.xx_x { cursor: pointer; position: absolute; top: 5px; right: 5px;z-index: 1500;}
 .t_btn { width: 81px; height: 27px; line-height: 27px; text-align: center; background: url(/assets/t_btn.png) no-repeat; border: none;}
 .btn_box { width: 81px; height: 27px; margin: 0 auto;}
 .btn_box00 { width: 180px; height: 27px; margin: 0 auto;}
@@ -554,7 +554,7 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
 .icon_true { background: url(/assets/true.png) no-repeat #FFF center center;}
 
 /* 提示弹出层*/
-.tishi_tab { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none;z-index: 1000}
+.tishi_tab { width: 288px; padding: 20px; background: url(/assets/black01_bg.png) repeat; position: absolute; display: none;z-index: 1500;}
 .tishi_tab p { text-align: center; line-height: 24px; font-size: 14px; font-family:"微软雅黑"; color: #fff;}
 
 /*提交错误弹出层-----*/

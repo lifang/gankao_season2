@@ -91,12 +91,12 @@ function generate_flash_div(style) {
     var z_layer_width = jQuery(style).width();
     jQuery(style).css('top',(win_height-z_layer_height)/2 + scolltop);
     jQuery(style).css('left',(win_width-z_layer_width)/2);
-    jQuery(style).css('display','block');
+    jQuery(style).show();
 }
 
 //提示框弹出层
 function show_flash_div() {
-    $('.tishi_tab').stop();
+  $('.tishi_tab').stop();
     generate_flash_div(".tishi_tab");
     $('.tishi_tab').delay(5000).fadeTo("slow",0,function(){
         $(this).remove();

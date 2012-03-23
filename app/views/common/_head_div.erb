@@ -40,6 +40,10 @@
       <div class="fankui_list"><label class="float_left"><span class="red">*</span>反馈内容:</label><textarea id="fankui_content" name="" cols="" rows=""></textarea></div>
       <div class="tab_btn"><button class="t_btn" onclick="javascript:ajax_send_fankui();">发送</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:$('#fankui_tab_box').hide();">取消</button></div>
     </div>
+    <div id="fankui_success" class="fankui_tab_box border_radius" style="display:none;">
+      <div style="text-align: center;">反馈信息发送成功，我们会尽快给您回复。</div>
+      <div style="width: 81px; margin: 0 auto;"><button class="t_btn" onclick="javascript:$('#fankui_success').hide();">确认</button></div>
+    </div>
   </div>
   <div class="logo"><a href="/"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
   <div class="object"><big class="object_big"><%= Category::NAME["#{category_id}"] %></big>

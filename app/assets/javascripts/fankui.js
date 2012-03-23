@@ -26,9 +26,8 @@ function ajax_send_fankui(){
             "category_id":category_id,
             "answer":answer,
             "content":content
-        },
-        success : function(data) {
-            tishi_alert(data.message);
         }
     });
+    generate_flash_div("#fankui_success");
+    $("#fankui_success").show();
 }
