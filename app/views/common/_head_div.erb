@@ -20,18 +20,16 @@
         <%= javascript_include_tag "fankui" %>
         <ul>
           <li><a <% if is_vip?(category_id)&&!is_must?(category_id) %>
-                href="#" onclick="tishi_alert('您已经是正式用户了，无需升级')"
+                href="javascript:void(0);" onclick="tishi_alert('您已经是正式用户了，无需升级')"
               <% else%>
                 href="/users/charge_vip?category=<%= category_id %>"
-
-              <% end %>
-              ><img src="/assets/banner.png"/></a></li>
+              <% end %>><img src="/assets/banner.png"/></a></li>
           <li style="display:none;"><a <% if is_vip?(category_id) %>
-                href="#" onclick="tishi_alert('您已经是正式用户了，无需升级')"
+                href="javascript:void(0);" onclick="tishi_alert('您已经是正式用户了，无需升级')"
               <% else %>
                 href="/study_plans?category=<%= category_id %>"
               <%end%>><img src="/assets/banner8.png"/></a></li>
-          <li style="display:none;"><a href="#"><img src="/assets/banner9.png"/></a></li>
+          <li style="display:none;"><a href="javascript:void(0);"><img src="/assets/banner9.png"/></a></li>
           <li style="display:none;"><a href="javascript:void(0);" <% if cookies[:user_id] %> onclick="javascript:fankui();" <% else %> onclick="javascript:tishi_alert('请您先登录');" <% end %> ><img src="/assets/fankui.png"/></a></li>
         </ul>
       </div></div> 
@@ -77,8 +75,5 @@
              class="orange <% if controller.controller_name=="study_plans" %>hover<% end %>"><strong>必过挑战</strong></a></li>
     </ul>
   </div>
-
-
-
   <div class="clear"></div>
 </div>
