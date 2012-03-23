@@ -17,23 +17,29 @@
       <div class="h_user"><a href="/logins">登录</a></div>
     <% end %>
     <div class="h_banner"><div class="change">
+        <%= javascript_include_tag "fankui" %>
         <ul>
           <li><a <% if is_vip?(category_id)&&!is_must?(category_id) %>
-                href="#" onclick="tishi_alert('您已经是正式用户了，无需升级')"
+                href="javascript:void(0);" onclick="tishi_alert('您已经是正式用户了，无需升级')"
               <% else%>
                 href="/users/charge_vip?category=<%= category_id %>"
-
-              <% end %>
-              ><img src="/assets/banner.png"/></a></li>
+              <% end %>><img src="/assets/banner.png"/></a></li>
           <li style="display:none;"><a <% if is_vip?(category_id) %>
-                href="#" onclick="tishi_alert('您已经是正式用户了，无需升级')"
+                href="javascript:void(0);" onclick="tishi_alert('您已经是正式用户了，无需升级')"
               <% else %>
                 href="/study_plans?category=<%= category_id %>"
               <%end%>><img src="/assets/banner8.png"/></a></li>
-          <li style="display:none;"><a href="#"><img src="/assets/banner9.png"/></a></li>
-           <li style="display:none;"><a href="javascript:void(0);" <% if cookies[:user_id] %> onclick="javascript:fankui();" <% else %> onclick="javascript:tishi_alert('请您先登录');" <% end %> ><img src="/assets/fankui.png"/></a></li>
+          <li style="display:none;"><a href="javascript:void(0);"><img src="/assets/banner9.png"/></a></li>
+          <li style="display:none;"><a href="javascript:void(0);" <% if cookies[:user_id] %> onclick="javascript:fankui();" <% else %> onclick="javascript:tishi_alert('请您先登录');" <% end %> ><img src="/assets/fankui.png"/></a></li>
         </ul>
-      </div></div>
+      </div></div> 
+    <div id="fankui_tab_box" class="fankui_tab_box border_radius" style="display:none;">
+      <div class="fankui_list"><label>科 目:</label><span><%= category_id.to_i==2 ? "大学英语四级" : category_id.to_i==3 ? "大学英语六级" : "未指定" %></span></div>
+      <input type="hidden" id="fankui_category_id" value="<%= category_id %>"></input>
+      <div class="fankui_list"><label><span class="red">*</span>联系方式:</label><input id="fankui_answer" name="" type="text" /></div>
+      <div class="fankui_list"><label class="float_left"><span class="red">*</span>反馈内容:</label><textarea id="fankui_content" name="" cols="" rows=""></textarea></div>
+      <div class="tab_btn"><button class="t_btn" onclick="javascript:ajax_send_fankui();">发送</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:$('#fankui_tab_box').hide();">取消</button></div>
+    </div>
   </div>
   <div class="logo"><a href="/"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
   <div class="object"><big class="object_big"><%= Category::NAME["#{category_id}"] %></big>
@@ -69,54 +75,5 @@
              class="orange <% if controller.controller_name=="study_plans" %>hover<% end %>"><strong>必过挑战</strong></a></li>
     </ul>
   </div>
-
-  <div id="fankui_tab_box" class="fankui_tab_box border_radius" style="display:none;">
-    <div class="fankui_list"><label>科 目:</label><span><%= category_id.to_i==2 ? "大学英语四级" : category_id.to_i==3 ? "大学英语六级" : "未指定" %></span></div>
-    <input type="hidden" id="fankui_category_id" value="<%= category_id %>"></input>
-    <div class="fankui_list"><label><span class="red">*</span>联系方式:</label><input id="fankui_answer" name="" type="text" /></div>
-    <div class="fankui_list"><label class="float_left"><span class="red">*</span>反馈内容:</label><textarea id="fankui_content" name="" cols="" rows=""></textarea></div>
-    <div class="tab_btn"><button class="t_btn" onclick="javascript:ajax_send_fankui();">发送</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:$('#fankui_tab_box').hide();">取消</button></div>
-  </div>
-
-  <script type="text/javascript">
-    
-    function fankui(){
-      generate_flash_div("#fankui_tab_box");
-      $("#fankui_answer").val("");
-      $("#fankui_content").val("");
-      $("#fankui_tab_box").show();
-    }
-
-    function ajax_send_fankui(){
-      var category_id = $("#fankui_category_id").val();
-      var answer = $("#fankui_answer").val();
-      var content = $("#fankui_content").val();
-      if(answer.trim()==""){
-        tishi_alert("请留下您的联系方式。");
-        return false;
-      }
-      if(content.trim()==""){
-        tishi_alert("请提供您的反馈信息。");
-        return false;
-      }
-      $("#fankui_tab_box").hide();
-      $.ajax({
-        type: "POST",
-        url: "/users/ajax_send_fankui.json",
-        dataType: "json",
-        data : {
-          "category_id":category_id,
-          "answer":answer,
-          "content":content
-        },
-        success : function(data) {
-          tishi_alert(data.message);
-        }
-      });
-    }
-
-  </script>
-
-
   <div class="clear"></div>
 </div>

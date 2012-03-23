@@ -42,4 +42,7 @@ module Constant
   KAIXIN_API_KEY = "27441526722922ac851e7ffc334a9785"
   KAIXIN_API_SECRET = "d034fd25c28b4e3dd0759ad7428a2f59"
 
+  #ADMIN EMAIL  管理员的邮箱，反馈信息的目标邮箱
+  FANKUI_EMAIL = "jeffrey6052@163.com"
+
 end

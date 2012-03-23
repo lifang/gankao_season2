@@ -925,7 +925,8 @@ function ajax_report_error(){
                 "user_name":$("#report_error_user_name").val(),
                 "description":$("#report_error_description").val(),
                 "error_type":$(".report_error_radio:checked").val(),
-                "question_id":$("#report_error_question_id").val()
+                "question_id":$("#report_error_question_id").val(),
+                "category_id":$("#category_id").val()
             }
         },
         success : function(data) {

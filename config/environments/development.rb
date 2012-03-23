@@ -23,8 +23,8 @@ GankaoSeason2::Application.configure do
     :port => 587,
     :domain => "gmail.com",
     :authentication => :plain,
-    :user_name => "robot@gankao.co",
-    :password => "comdo2010"
+    :user_name => "xuqiyong@comdosoft.com",
+    :password => "hero2000"
   }
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
