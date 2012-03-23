@@ -176,6 +176,8 @@ function show_exam_tishi(simulation_id) {
     generate_flash_div("#mokao_tishi_tab");
     $("#sim_id").attr("value", simulation_id);
     $("#mokao_tishi_tab .mk_wenti input").removeAttr("checked");
+    $("#goto_m_b").attr("disabled", "true");
+    $("#error_p").hide();
     $("#not_join").show();
     $('.zhezhao').css('display','block');
     $('#mokao_tishi_tab').css('display','block');
