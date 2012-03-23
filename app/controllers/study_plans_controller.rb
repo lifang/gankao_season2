@@ -13,9 +13,7 @@ class StudyPlansController < ApplicationController
     if cookies[:user_id]
       @user_plan = UserPlanRelation.find(:first,
         :conditions => ["user_id = ? and study_plan_id = ? ", cookies[:user_id].to_i, @study_plan.id]) if @study_plan
-      unless @user_plan.nil?
-        redirect_to "/study_plans/done_plans?category=#{params[:category].to_i}"
-      end
+      redirect_to "/study_plans/done_plans?category=#{params[:category].to_i}" unless @user_plan.nil? or @user_plan.status == false
     end
   end
 
@@ -24,10 +22,20 @@ class StudyPlansController < ApplicationController
     @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", category_id])
     plan_date = @study_plan.study_date.nil? ? Constant::STUDY_DATE : (@study_plan.study_date - 1)
     upr = UserPlanRelation.find_by_user_id_and_study_plan_id(cookies[:user_id].to_i, @study_plan.id)
-    unless upr
+    new_record = false
+    if upr.nil?
+      new_record = true
       UserPlanRelation.create(:user_id => cookies[:user_id].to_i, :study_plan_id => @study_plan.id,
-        :created_at => Time.now.to_date, :ended_at => Time.now.to_date + plan_date.days )
-    
+        :created_at => Time.now.to_date, :ended_at => Time.now.to_date + plan_date.days, 
+        :status => StudyPlan::STATUS[:NOMAL], :num => 1)
+    elsif upr.status == false and upr.num < StudyPlan::CAN_JOIN_TIME
+      new_record = true
+      upr.update_attributes(:num => StudyPlan::CAN_JOIN_TIME, :status => StudyPlan::STATUS[:NOMAL],
+        :created_at => Time.now.to_date, :ended_at => Time.now.to_date + plan_date.days)
+    else
+      flash[:notice] = "您已经没有机会再参加学习计划了！"
+    end
+    if new_record
       order=Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]}",
           cookies[:user_id].to_i, params[:category].to_i])
       if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]

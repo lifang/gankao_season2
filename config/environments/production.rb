@@ -46,8 +46,19 @@ GankaoSeason2::Application.configure do
   # config.assets.precompile += %w( search.js )
 
   # Disable delivery errors, bad email addresses will be ignored
-  # config.action_mailer.raise_delivery_errors = false
-
+  config.action_mailer.raise_delivery_errors = false
+  ActionMailer::Base.delivery_method = :smtp
+  ActionMailer::Base.smtp_settings = {
+    #:location       => '/usr/sbin/sendmail',
+    #:arguments      => '-i -t'
+    :address => "smtp.gmail.com",
+    :port => 587,
+    :domain => "gmail.com",
+    :authentication => :plain,
+    :user_name => "robot@gankao.co",
+    :password => "comdo2010"
+  }
+  
   # Enable threaded mode
   # config.threadsafe!
 

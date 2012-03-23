@@ -4,7 +4,8 @@ namespace :check do
   task(:task => :environment) do
     include Oauth2Helper
     user_plans=UserPlanRelation.find_by_sql("select u.*,s.category_id from user_plan_relations u
-      inner join study_plans s on u.study_plan_id=s.id where TO_DAYS(NOW())<=TO_DAYS(u.ended_at)")
+      inner join study_plans s on u.study_plan_id=s.id where TO_DAYS(NOW())<=TO_DAYS(u.ended_at)
+      and status = #{StudyPlan::STATUS[:NOMAL]}")
     user_plans.each do |user_plan|
       task_num={}
       month_action={}
@@ -45,5 +46,21 @@ namespace :check do
         Oauth2Helper.send_message(send_message,user_plan.user_id)
       end
     end unless user_plans.blank?
+    is_user_lost(user_plans)
   end
+  
+  def is_user_lost(user_plans)
+    user_plans.each do |user_plan|
+      study_plan_count = ActionLog.count_by_sql(["select count(id) from action_logs
+        where created_at > ? and types = ? and user_id = ?", user_plan.created_at,
+        ActionLog::TYPES[:STUDY_PLAY], user_plan.user_id])
+      days = (user_plan.ended_at - user_plan.created_at)/1.day
+      if days - study_plan_count >= 3
+        UserPlanRelation.update(user_plan.id, :status => StudyPlan::STATUS[:LOST])
+        send_message="我的赶考必过挑战计划挑战失败了，~~~~(>_<)~~~~"
+        Oauth2Helper.send_message(send_message, user_plan.user_id)
+      end
+    end unless user_plans.blank?
+  end
+
 end

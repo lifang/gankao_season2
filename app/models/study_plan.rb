@@ -5,6 +5,9 @@ class StudyPlan < ActiveRecord::Base
   has_many :user_plan_relations,:dependent => :destroy
   has_many :users,:through=>:user_plan_relations, :source => :user
 
+  STATUS = {:NOMAL => 1, :LOST => 0} #学习计划状态 0 正常 1 失败
+  CAN_JOIN_TIME = 2 #用户可以参加学习计划的次数
+
   def self.pass_task(user_id,category)
     task_num={}
     month_action={}
