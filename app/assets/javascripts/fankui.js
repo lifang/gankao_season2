@@ -18,7 +18,6 @@ function ajax_send_fankui(){
         return false;
     }
     $("#fankui_tab_box").hide();
-    tishi_alert("反馈信息已经收到。我们会尽快回复您。");
     $.ajax({
         type: "POST",
         url: "/users/ajax_send_fankui.json",
@@ -29,4 +28,6 @@ function ajax_send_fankui(){
             "content":content
         }
     });
+    generate_flash_div("#fankui_success");
+    $("#fankui_success").show();
 }
