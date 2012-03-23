@@ -218,7 +218,8 @@ class UsersController < ApplicationController
 
   #反馈信息
   def ajax_send_fankui
-    Feedback.create(:user_id=>cookies[:user_id],:category_id=>params[:category_id].to_i,:answer=>params[:answer],:description=>params[:content])
+    feedback = Feedback.create(:user_id=>cookies[:user_id],:category_id=>params[:category_id].to_i,:answer=>params[:answer],:description=>params[:content])
+    UserMailer.fankui(feedback,cookies[:user_name]).deliver
     respond_to do |format|
       format.json {
         render :json=>{:message =>"反馈信息已经收到。我们会尽快回复您。"}
