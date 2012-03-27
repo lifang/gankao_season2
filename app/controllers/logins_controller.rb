@@ -31,7 +31,7 @@ class LoginsController < ApplicationController
   end
 
   def manage_qq
-    begin
+    #begin
       meters=params[:access_token].split("&")
       access_token=meters[0].split("=")[1]
       expires_in=meters[1].split("=")[1].to_i
@@ -54,9 +54,9 @@ class LoginsController < ApplicationController
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
       data=true
-    rescue
-      data=false
-    end
+    #rescue
+      #data=false
+    #end
     respond_to do |format|
       format.json {
         render :json=>data

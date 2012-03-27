@@ -2,6 +2,7 @@
 module Oauth2Helper
   require 'net/http'
   require "uri"
+  require 'openssl'
 
   #qq登录参数
   REQUEST_URL_QQ="https://graph.qq.com/oauth2.0/authorize"

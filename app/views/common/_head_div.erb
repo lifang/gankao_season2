@@ -19,12 +19,12 @@
     <div class="h_banner"><div class="change">
         <%= javascript_include_tag "fankui" %>
         <ul>
-          <li><a <% if is_vip?(category_id)&&!is_must?(category_id) %>
+          <li><a <% if cookies[:user_id] and is_vip?(category_id)&&!is_must?(category_id) %>
                 href="javascript:void(0);" onclick="tishi_alert('您已经是正式用户了，无需升级')"
               <% else%>
                 href="/users/charge_vip?category=<%= category_id %>"
               <% end %>><img src="/assets/banner.png"/></a></li>
-          <li style="display:none;"><a <% if is_vip?(category_id) %>
+          <li style="display:none;"><a <% if cookies[:user_id] and is_vip?(category_id) %>
                 href="javascript:void(0);" onclick="tishi_alert('您已经是正式用户了，无需升级')"
               <% else %>
                 href="/study_plans?category=<%= category_id %>"
