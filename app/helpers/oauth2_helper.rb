@@ -39,6 +39,7 @@ module Oauth2Helper
     return JSON http.request(request).body
   end
 
+  
   #构造get请求
   def create_get_http(url,route)
     uri = URI.parse(url)
