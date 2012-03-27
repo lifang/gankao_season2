@@ -60,7 +60,7 @@ module Oauth2Helper
     unless user_info["source"]["following"]
       params={ :access_token=>access_token,:screen_name=>Oauth2Helper::WEIBO_NAME,:uid=>Oauth2Helper::WEIBO_ID}
       action="/2/friendships/create.json"
-      add_url="api.weibo.com"
+      add_url="https://api.weibo.com"
       add_info=create_post_http(add_url,action,params)
       if add_info["following"]
         data="关注成功"
