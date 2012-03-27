@@ -40,13 +40,15 @@ module Oauth2Helper
     return JSON http.request(request).body
   end
 
+  
   #构造get请求
   def create_get_http(url,route)
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    back_res =http.get(route)
+    request= Net::HTTP::Get.new(route)
+    back_res =http.request(request)
     return JSON back_res.body
   end
 
