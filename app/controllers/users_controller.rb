@@ -1,7 +1,7 @@
 # encoding: utf-8
 class UsersController < ApplicationController
   layout 'user',:except=>["charge_vip"]
-  before_filter :sign? ,:except=>["renren"]
+  before_filter :sign? ,:except=>["renren","alipay_compete"]
   before_filter :get_role, :only => ["charge_vip"]
   respond_to :html, :xml, :json
   include AlipaysHelper
@@ -169,7 +169,7 @@ class UsersController < ApplicationController
             begin
               Order.transaction do
                 order=Order.first(:conditions=>"user_id=#{trade_nu[0]} and category_id=#{trade_nu[2]} and status=#{Order::STATUS[:NOMAL]}")
-                if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
+                if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE] || order.types==Order::TYPES[:MUST]
                   Order.create(:user_id=>trade_nu[0],:category_id=>trade_nu[2].to_i,:types=>Order::TYPES[:CHARGE],
                     :out_trade_no=>"#{params[:out_trade_no]}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",
                     :start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG[:vip].days)
