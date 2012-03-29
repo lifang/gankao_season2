@@ -6,9 +6,13 @@
       <% if @study_plan.nil? %>
         <button class="jihua_btn" title="暂时还没有必过挑战" disabled >我要必过</button>
       <% else %>
+        <% if @free_count > 0 %>
         <button class="jihua_btn"
                 onclick="javascript:window.location.href='/study_plans/<%= @study_plan.id %>?category=<%= params[:category] %>';">
-          我要必过</button>
+          我要必过</button><span>剩余免费名额<%= @free_count %></span>
+          <% else %>
+          <button class="jihua_btn" disabled>我要必过</button><span>今日免费名额已经领取完啦</span>
+           <% end %>
       <% end %>
     </div>
   </div>

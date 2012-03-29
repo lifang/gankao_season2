@@ -10,6 +10,7 @@ class StudyPlansController < ApplicationController
     @meta_keywords = "#{@category.name}复习方法,#{@category.name}必过挑战"
     @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提供#{@category.name}的应试能力。"
     @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", params[:category].to_i])
+    @free_count = Order.must_count
     if cookies[:user_id]
       @user_plan = UserPlanRelation.find(:first,
         :conditions => ["user_id = ? and study_plan_id = ? ", cookies[:user_id].to_i, @study_plan.id]) if @study_plan
@@ -24,10 +25,14 @@ class StudyPlansController < ApplicationController
     upr = UserPlanRelation.find_by_user_id_and_study_plan_id(cookies[:user_id].to_i, @study_plan.id)
     new_record = false
     if upr.nil?
-      new_record = true
-      UserPlanRelation.create(:user_id => cookies[:user_id].to_i, :study_plan_id => @study_plan.id,
-        :created_at => Time.now.to_date, :ended_at => Time.now.to_date + plan_date.days, 
-        :status => StudyPlan::STATUS[:NOMAL], :num => 1)
+      unless Order.must_count > 0
+        flash[:notice] = "今天的免费名额已经抢光喽，您可以[<a class='link_c' href='/users/charge_vip?category=#{params[:category]}'>升级为正式用户</a>]！"
+      else
+        new_record = true
+        UserPlanRelation.create(:user_id => cookies[:user_id].to_i, :study_plan_id => @study_plan.id,
+          :created_at => Time.now.to_date, :ended_at => Time.now.to_date + plan_date.days,
+          :status => StudyPlan::STATUS[:NOMAL], :num => 1)
+      end
     elsif upr.status == false and upr.num < StudyPlan::CAN_JOIN_TIME
       new_record = true
       upr.update_attributes(:num => StudyPlan::CAN_JOIN_TIME, :status => StudyPlan::STATUS[:NOMAL],
@@ -50,8 +55,10 @@ class StudyPlansController < ApplicationController
       send_message = "我参加了赶考网的#{categry_name}必过挑战学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
       send_message(send_message, cookies[:user_id])
       flash[:notice] = "感谢您参与必过挑战，同时您也免费升级为#{categry_name}的正式用户了！"
-    end
-    redirect_to "/study_plans/done_plans?category=#{category_id}"
+      redirect_to "/study_plans/done_plans?category=#{category_id}"
+    else
+      redirect_to "/study_plans?category=#{category_id}"
+    end    
   end
 
 

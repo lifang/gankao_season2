@@ -23,11 +23,11 @@ $(function(){
 
 
 //tooltip提示
-$(function(){
+$(function(){    
     var x = -20;
     var y = 15;
     $(".tooltip").mouseover(function(e){
-        var tooltip = "<div class='tooltip_box'><div class='tooltip_next'><span class='ignore_ts'>"+this.name+"</span></div></div>";
+        var tooltip = "<div class='tooltip_box'><div class='tooltip_next'><span class='ignore_ts'>"+$(this).attr("name")+"</span></div></div>";
         $("body").append(tooltip);
         $(".tooltip_box").css({
             "top":(e.pageY+y)+"px",
