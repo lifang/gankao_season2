@@ -56,13 +56,13 @@ function rp(str){
 //字体放大、缩小
 var tgs = new Array( 'div','td','tr');
 var szs = new Array('x-small','small','medium','large');
-var startSz = 1;
+var startSz = 2;
 function ts( trgt,inc ) {
     if (!document.getElementById) return
     var d = document,cEl = null,sz = startSz,i,j,cTags;
     sz += inc;
     if ( sz < 0 ) sz = 0;
-    if ( sz > 3 ) sz = 3;
+    if ( sz > 6 ) sz = 6;
     startSz = sz;
     if ( !( cEl = d.getElementById( trgt ) ) ) cEl = d.getElementsByTagName( trgt )[ 0 ];
     cEl.style.fontSize = szs[ sz ];
