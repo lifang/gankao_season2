@@ -7,6 +7,7 @@ class StudyPlan < ActiveRecord::Base
 
   STATUS = {:NOMAL => 1, :LOST => 0} #学习计划状态 0 正常 1 失败
   CAN_JOIN_TIME = 2 #用户可以参加学习计划的次数
+  FREE_USER_PAN_OFF = 50 #可以有免费的50个名额
 
   def self.pass_task(user_id,category)
     task_num={}
