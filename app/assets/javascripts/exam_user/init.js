@@ -55,14 +55,14 @@ function rp(str){
 
 //字体放大、缩小
 var tgs = new Array( 'div','td','tr');
-var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
-var startSz = 2;
+var szs = new Array('x-small','small','medium','large');
+var startSz = 1;
 function ts( trgt,inc ) {
     if (!document.getElementById) return
     var d = document,cEl = null,sz = startSz,i,j,cTags;
     sz += inc;
     if ( sz < 0 ) sz = 0;
-    if ( sz > 6 ) sz = 6;
+    if ( sz > 3 ) sz = 3;
     startSz = sz;
     if ( !( cEl = d.getElementById( trgt ) ) ) cEl = d.getElementsByTagName( trgt )[ 0 ];
     cEl.style.fontSize = szs[ sz ];
@@ -917,7 +917,7 @@ function tooltip(){
     var x = -20;
     var y = 15;
     $(".tooltip_"+init_problem).mouseover(function(e){
-        var tooltip = "<div class='tooltip_box'><div class='tooltip_next'>"+this.name+"</div></div>";
+        var tooltip = "<div class='tooltip_box'><div class='tooltip_next'><span class='ignore_ts'>"+this.name+"</span></div></div>";
         $("body").append(tooltip);
         $(".tooltip_box").css({
             "top":(e.pageY+y)+"px",
@@ -957,12 +957,13 @@ function left_side(){
         $("#m_side_"+init_problem).append(element1);
         element3 = create_element("ul",null,"draggable_list_"+init_problem,null,null,"innerHTML");
         $(element1).append(element3);
+        element3.innerHTML+="<div><span class='red'>*</span>拖选下面的单词到相应的答案位置。</div>";
         drag_attrs = drag_attrs.sort();
         str1="";
         for(i=0;i<drag_attrs.length;i++){
             str1 += "<li name='"+drag_attrs[i]+"' class='draggable_attr_"+init_problem+"'>"+drag_attrs[i]+"</li>"
         }
-        $(element3).html(str1);
+        element3.innerHTML+=(str1);
         for(i=0;i<problems[init_problem].questions.question.length;i++){
             $("#droppable_"+init_problem+"_"+i).droppable({
                 drop: function( event, ui ) {

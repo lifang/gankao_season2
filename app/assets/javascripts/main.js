@@ -27,7 +27,7 @@ $(function(){
     var x = -20;
     var y = 15;
     $(".tooltip").mouseover(function(e){
-        var tooltip = "<div class='tooltip_box'><div class='tooltip_next'>"+$(this).attr("name")+"</div></div>";
+        var tooltip = "<div class='tooltip_box'><div class='tooltip_next ignore_ts'><span class='ignore_ts'>"+this.name+"</span></div></div>";
         $("body").append(tooltip);
         $(".tooltip_box").css({
             "top":(e.pageY+y)+"px",
@@ -306,6 +306,16 @@ function precal(){
     var main_height = win_height-(head_height+mainTop_height+foot_height);
     $(".m_side").css('height',main_height-12);
     $(".main").css('height',main_height-12+34);
+}
+
+function AutoScroll(obj){
+    $(obj).find("ul:first").animate({
+        marginTop:"-25px"
+    },500,function(){
+        $(this).css({
+            marginTop:"0px"
+        }).find("li:first").appendTo(this);
+    });
 }
 
 
