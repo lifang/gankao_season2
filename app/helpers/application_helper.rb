@@ -32,8 +32,8 @@ module ApplicationHelper
         if order.types == Order::TYPES[:MUST] or order.types == Order::TYPES[:SINA] or order.types == Order::TYPES[:RENREN] or
             order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:CHARGE] or order.types == Order::TYPES[:OTHER]
           this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
-          cookies[:must]= cookies[:must].nil? ? "#{order.category_id}=" : (cookies[:must] + "&#{order.category_id}=") if order.types == Order::TYPES[:MUST]
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
+          cookies[:must]= cookies[:must].nil? ? "#{order.category_id}=" : (cookies[:must] + "&#{order.category_id}=") if order.types == Order::TYPES[:MUST]          
         elsif order.types == Order::TYPES[:TRIAL_SEVEN]
           if order.end_time < Time.now or order.status == false            
             this_order = "#{order.category_id}=#{Order::USER_ORDER[:NOMAL]}"
@@ -124,5 +124,5 @@ module ApplicationHelper
     unless cookies[:user_id].nil? or params[:category].nil?
       user_order(params[:category].to_i, cookies[:user_id].to_i)
     end
-  end  
+  end
 end

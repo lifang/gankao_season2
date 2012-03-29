@@ -2,6 +2,7 @@
 module Oauth2Helper
   require 'net/http'
   require "uri"
+  require 'openssl'
 
   #qq登录参数
   REQUEST_URL_QQ="https://graph.qq.com/oauth2.0/authorize"
@@ -39,13 +40,15 @@ module Oauth2Helper
     return JSON http.request(request).body
   end
 
+  
   #构造get请求
   def create_get_http(url,route)
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    back_res =http.get(route)
+    request= Net::HTTP::Get.new(route)
+    back_res =http.request(request)
     return JSON back_res.body
   end
 
@@ -57,8 +60,7 @@ module Oauth2Helper
     unless user_info["source"]["following"]
       params={ :access_token=>access_token,:screen_name=>Oauth2Helper::WEIBO_NAME,:uid=>Oauth2Helper::WEIBO_ID}
       action="/2/friendships/create.json"
-      add_url="api.weibo.com"
-      add_info=create_post_http(add_url,action,params)
+      add_info=create_post_http(weibo_url,action,params)
       if add_info["following"]
         data="关注成功"
       end

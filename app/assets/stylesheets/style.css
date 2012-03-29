@@ -610,10 +610,9 @@ input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033f
 .userMess_h1 { font-size: 16px; text-align: center;}
 
 /*AD-----------------------*/
-.AD_text { position: absolute; top: 4px; right: 250px;}
-.AD_scrollDiv{ height:25px; line-height:25px; overflow:hidden; color: #FFF;text-align: right;}
-.AD_scrollDiv li{ height:25px;padding-left:10px;}
-.AD_scrollDiv li a { color: #FFF;}
+.AD_text { width: 500px; height:25px; line-height:25px; position: absolute; top: 4px; right: 250px; overflow:hidden; color: #FFF;}
+.AD_text a { color: #FFF;}
+.AD_text a:hover { color: #F00;}
 
 /*挑战失败----*/
 .challengeLoss { width: 530px; margin: 100px auto;}

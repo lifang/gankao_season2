@@ -38,7 +38,7 @@ class LoginsController < ApplicationController
       openid=params[:open_id]
       @user= User.find_by_open_id(openid)
       if @user.nil?
-        user_url="graph.qq.com"
+        user_url="https://graph.qq.com"
         user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Oauth2Helper::APPID}&openid=#{openid}"
         user_info=create_get_http(user_url,user_route)
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
