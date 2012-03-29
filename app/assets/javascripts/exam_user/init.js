@@ -55,7 +55,7 @@ function rp(str){
 
 //字体放大、缩小
 var tgs = new Array( 'div','td','tr');
-var szs = new Array('x-small','small','medium','large');
+var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
 var startSz = 2;
 function ts( trgt,inc ) {
     if (!document.getElementById) return
