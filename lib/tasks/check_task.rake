@@ -53,10 +53,13 @@ namespace :check do
     user_plans.each do |user_plan|
       study_plan_count = ActionLog.count_by_sql(["select count(id) from action_logs
         where created_at > ? and types = ? and user_id = ?", user_plan.created_at,
-        ActionLog::TYPES[:STUDY_PLAY], user_plan.user_id])
+          ActionLog::TYPES[:STUDY_PLAY], user_plan.user_id])
       days = (user_plan.ended_at - user_plan.created_at)/1.day
       if days - study_plan_count >= 3
         UserPlanRelation.update(user_plan.id, :status => StudyPlan::STATUS[:LOST])
+        order=Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]} and types = ?",
+            cookies[:user_id].to_i, params[:category].to_i, Order::TYPES[:MUST]])
+        order.update_attributes(:status => Order::STATUS[:INVALIDATION])
         send_message="我的赶考必过挑战计划挑战失败了，~~~~(>_<)~~~~"
         Oauth2Helper.send_message(send_message, user_plan.user_id)
       end

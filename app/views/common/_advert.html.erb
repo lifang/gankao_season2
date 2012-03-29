@@ -1,10 +1,10 @@
 <div class="AD_text">
-  <div class="AD_scrollDiv">
-    <%ads= Advert.ip_advert(request.headers["HTTP_X_REAL_IP"]) %>
-    <ul>
-      <% ads.each do |ad| %>
-        <li><%= ad.content.html_safe %></li>
-      <%end unless ads.blank?%>
-    </ul>
-  </div>
+  <%ads= Advert.ip_advert(request.headers["HTTP_X_REAL_IP"]) %>
+  <% unless ads.blank? %>
+  <marquee direction="left">
+    <% ads.each do |ad| %>
+      <%= ad.content.html_safe %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <%end %>
+    </marquee>
+  <% end %>
 </div>
