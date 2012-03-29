@@ -1,6 +1,6 @@
 # encoding: utf-8
 class StudyPlansController < ApplicationController
-  before_filter :sign?, :except => ["index"]
+  before_filter :sign?, :except => ["index","renren"]
   layout "application", :except => ['done_plans']
 
   def index
@@ -108,6 +108,24 @@ class StudyPlansController < ApplicationController
     @over=check[1]
     respond_to do |format|
       format.js
+    end
+  end
+
+  #从应用快捷登录
+  def renren
+    puts request.path
+    category = params[:category].nil? ? "2" : params[:category]
+    @user= User.where(:id=>params[:user_id])[0]
+    @code_id = @user.nil? ? "error" : @user.code_id.nil? ? "gankao" : @user.code_id
+    if @code_id != "error" && @code_id == params[:code_id]
+      cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
+      cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
+      get_role
+      ActionLog.login_log(cookies[:user_id])
+      redirect_to "/study_plans?category=#{category}"
+    else
+      render :inline=>"用户验证失败，为了保证用户的帐号安全，此次访问被系统拒绝。给您带来的不便，请您谅解。"
+      return false
     end
   end
 

@@ -200,6 +200,7 @@ class UsersController < ApplicationController
     @title = "消费记录 - 赶考网"
   end
 
+    #从应用快捷登录
   def renren
     category = params[:category].nil? ? "2" : params[:category]
     @user= User.where(:id=>params[:user_id])[0]
