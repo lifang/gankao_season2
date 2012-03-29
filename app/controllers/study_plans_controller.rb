@@ -25,7 +25,7 @@ class StudyPlansController < ApplicationController
     upr = UserPlanRelation.find_by_user_id_and_study_plan_id(cookies[:user_id].to_i, @study_plan.id)
     new_record = false
     if upr.nil?
-      unless Order.must_count > 0
+      if Order.must_count <= 0 and !is_vip?(category_id)
         flash[:notice] = "今天的免费名额已经抢光喽，您可以[<a class='link_c' href='/users/charge_vip?category=#{params[:category]}'>升级为正式用户</a>]！"
       else
         new_record = true
@@ -41,20 +41,24 @@ class StudyPlansController < ApplicationController
       flash[:notice] = "您已经没有机会再参加学习计划了！"
     end
     if new_record
-      order=Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]}",
-          cookies[:user_id].to_i, params[:category].to_i])
-      if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
-        Order.create(:user_id => cookies[:user_id].to_i,:category_id => category_id, :total_price => 0,
-          :types => Order::TYPES[:MUST], :status => Order::STATUS[:NOMAL], :remark => "参加学习计划",
-          :start_time => Time.now,:end_time => (Time.now + Constant::DATE_LONG[:vip].days))
-        order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
+      notice_str = "感谢您参与必过挑战"
+      if !is_vip?(category_id)
+        order=Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]}",
+            cookies[:user_id].to_i, params[:category].to_i])
+        if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
+          Order.create(:user_id => cookies[:user_id].to_i,:category_id => category_id, :total_price => 0,
+            :types => Order::TYPES[:MUST], :status => Order::STATUS[:NOMAL], :remark => "参加学习计划",
+            :start_time => Time.now,:end_time => (Time.now + Constant::DATE_LONG[:vip].days))
+          order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
+        end
+        cookies.delete(:user_role)
+        user_role?(cookies[:user_id])
+        notice_str += "，同时您也免费升级为#{categry_name}的正式用户了！"
       end
-      cookies.delete(:user_role)
-      user_role?(cookies[:user_id])
-      categry_name=Category.find(category_id).name
+      categry_name = Category.find(category_id).name
       send_message = "我参加了赶考网的#{categry_name}必过挑战学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
       send_message(send_message, cookies[:user_id])
-      flash[:notice] = "感谢您参与必过挑战，同时您也免费升级为#{categry_name}的正式用户了！"
+      flash[:notice] = notice_str
       redirect_to "/study_plans/done_plans?category=#{category_id}"
     else
       redirect_to "/study_plans?category=#{category_id}"
