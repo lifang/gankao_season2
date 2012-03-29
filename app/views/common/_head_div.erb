@@ -5,7 +5,7 @@
       <div class="h_user">
         <a href="javascript:void(0);" class="h_email email_u">邮件</a>
         <a class="user_name" href="/users/<%= cookies[:user_id] %>?category=<%= category_id %>">
-          <%= (cookies[:user_name].nil? or cookies[:user_name].empty?) ? "游客" : cookies[:user_name] %></a>|<a href="/logins/logout">退出</a>
+          <%= (cookies[:user_name].nil? or cookies[:user_name].empty?) ? "游客" : cookies[:user_name] %></a><span class="ignore_ts">|</span><a class="ignore_ts" href="/logins/logout">退出</a>
         <div class="email_tab" style="display: none; ">
           <ul>
             <li><a href="/users/<%= cookies[:user_id] %>/info?target=0&category=<%= category_id %>">收件箱:<span class="orange"><%=Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SINGLE]} and target_id=#{cookies[:user_id]}")  %></span></a></li>
@@ -61,7 +61,7 @@
       <% end %>
     </small>
     <% if cookies[:user_id] && (is_trial?(category_id)||is_nomal?(category_id)) %>
-      <a href="/users/charge_vip?category=<%= category_id %>">升级</a>
+      <a class="ignore_ts" href="/users/charge_vip?category=<%= category_id %>">升级</a>
     <% end %>
   </div>
   <div class="nav">

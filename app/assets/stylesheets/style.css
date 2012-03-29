@@ -55,7 +55,7 @@ button.green { color:#009900;}
 .email_u { background: url(/assets/icon_email.png) no-repeat center bottom;}
 .email_w { background: url(/assets/icon_email.png) no-repeat center top;}
 
-.user_name { width: 70px; display: inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; float: left;}
+.user_name { width: 70px; display: inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; float: left;font-size:12px;}
 .email_tab { width: 83px; height: 60px; display: none; padding-top: 30px; background: url(/assets/email_tab_bg.png) no-repeat; top: 12px; left: -1px; position: absolute; z-index:-1;}
 .email_tab li { height: 24px; line-height: 24px;}
 .email_tab li a { color: #FFF; text-decoration: none;}
@@ -84,7 +84,7 @@ button.green { color:#009900;}
 .icon_func span { padding: 0 5px; overflow: hidden; width: 25px; height: 25px; display: block; float: left; }
 .icon_func span a { width: 25px; height: 25px; display: block; text-indent: -999px; overflow: hidden;}
 
-span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inline-block; color: #CCC; text-align: center;}
+span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inline-block; color: #CCC; text-align: center;font-size:12px;}
 
 .icon_again {}
 .icon_again a { background: url(/assets/icon_func.png) no-repeat 0 0;}
@@ -128,6 +128,7 @@ span.problem_title { width: 65px; height: 24px; line-height: 24px; display: inli
     float: left;
     color: #CCC;
     text-align: center;
+    font-size: 12px;
 }
 .problem_text {font-size: 12px; line-height: 24px; padding: 10px; text-align:justify;}
 .problem_text div { padding: 5px 0; width:100%}
@@ -619,3 +620,6 @@ input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033f
 .challengeLoss div { margin: 40px auto; text-align: center;}
 .cLoss_btn_box { width: 110px; margin: 0 auto;}
 .cLoss_btn_box button { font-weight: bold; font-size: 15px;}
+
+/* 固定字体大小，即无视字体放大、缩小功能 */
+.ignore_ts {font-size:12px;}
