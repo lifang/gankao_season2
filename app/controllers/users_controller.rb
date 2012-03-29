@@ -1,7 +1,7 @@
 # encoding: utf-8
 class UsersController < ApplicationController
   layout 'user',:except=>["charge_vip"]
-  before_filter :sign? ,:except=>["renren"]
+  before_filter :sign? ,:except=>["renren", "alipay_compete"]
   before_filter :get_role, :only => ["charge_vip"]
   respond_to :html, :xml, :json
   include AlipaysHelper
