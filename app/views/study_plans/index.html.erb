@@ -1,18 +1,19 @@
 <% if @user_plan.nil? %>
-  <div class="jihua_w_h">必过挑战介绍:</div>
   <div class="jihua_w"><img src="/assets/ji_pic.png" /></div>
   <div class="jihua_w">
     <div class="jihua_btn_box">
       <% if @study_plan.nil? %>
         <button class="jihua_btn" title="暂时还没有必过挑战" disabled >我要必过</button>
       <% else %>
-        <% if @free_count > 0 %>
+
         <button class="jihua_btn"
                 onclick="javascript:window.location.href='/study_plans/<%= @study_plan.id %>?category=<%= params[:category] %>';">
-          我要必过</button><span>剩余免费名额<%= @free_count %></span>
-          <% else %>
-          <button class="jihua_btn" disabled>我要必过</button><span>今日免费名额已经领取完啦</span>
-           <% end %>
+          我要必过</button>
+        <% if @free_count > 0 %>
+          <span>剩余免费名额<%= @free_count %></span>
+        <% else %>
+          <span>今日免费名额已经领取完啦</span>
+        <% end %>
       <% end %>
     </div>
   </div>
