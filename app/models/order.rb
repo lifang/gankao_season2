@@ -8,7 +8,8 @@ class Order< ActiveRecord::Base
   USER_ORDER = {:VIP => 0, :TRIAL => 1, :NOMAL => 2} #根据order类型和状态判断当前用户的情况：0 vip  1 试用用户  2 普通用户
 
   def Order.must_count
-    return StudyPlan::FREE_USER_PAN_OFF - Order.count(:id, :conditions => "status = #{STATUS[:NOMAL]} and types = #{TYPES[:MUST]}")
+    return StudyPlan::FREE_USER_PAN_OFF - Order.count(:id, 
+      :conditions => "status = #{STATUS[:NOMAL]} and types = #{TYPES[:MUST]} and TO_DAYS(created_at) = TO_DAYS(NOW())")
   end
 
 end
