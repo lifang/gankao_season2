@@ -56,6 +56,8 @@ class StudyPlansController < ApplicationController
             cookies[:user_id].to_i, params[:category].to_i, Order::TYPES[:MUST]])
         must_order.update_attributes(:status => Order::STATUS[:NOMAL]) unless must_order.nil?
         order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
+        cookies.delete(:user_role)
+        user_role?(cookies[:user_id])
       end
     else
       new_record = false
