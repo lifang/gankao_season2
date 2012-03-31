@@ -61,16 +61,6 @@ class StudyPlansController < ApplicationController
       flash[:notice] = "您已经没有机会再参加学习计划了！"
     end
     if new_record
-      #      if !is_vip?(category_id)
-      #        order=Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]}",
-      #            cookies[:user_id].to_i, params[:category].to_i])
-      #        if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
-      #          Order.create(:user_id => cookies[:user_id].to_i,:category_id => category_id, :total_price => 0,
-      #            :types => Order::TYPES[:MUST], :status => Order::STATUS[:NOMAL], :remark => "参加学习计划",
-      #            :start_time => Time.now,:end_time => (Time.now + Constant::DATE_LONG[:vip].days))
-      #          order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
-      #        end
-      #      end
       send_message = "我参加了赶考网的#{categry_name}必过挑战学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
       send_message(send_message, cookies[:user_id])
       flash[:notice] = notice_str
