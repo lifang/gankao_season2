@@ -569,6 +569,9 @@ function open_report_error(question_id){
     $("#report_error_description").val("");
     $(".report_error_radio").attr("checked",false);
     $("#report_error_question_id").val(question_id);
+    if(params_type=="specials" && problems[init_problem].paper_id!=null){
+       $("#report_error_paper_id").val(problems[init_problem].paper_id);
+    }
 }
 
 //ajax报告错误
@@ -689,7 +692,7 @@ function clone_flowplayer(selector,audio_src){
 
 //题面后小题加入收藏夹
 function normal_add_collect(problem_index,question_index){
-    if(controller_name == "specials"){
+    if(params_type == "specials" && problems[problem_index].paper_id!=null){
         var paper_id = problems[problem_index].paper_id;
     }else{
         var paper_id = init_paper_id;
@@ -726,7 +729,7 @@ function normal_add_collect(problem_index,question_index){
 
 //题面中小题加入收藏夹
 function special_add_collect(problem_index,question_index){
-    if(controller_name == "specials"){
+    if(params_type == "specials" && problems[problem_index].paper_id!=null){
         var paper_id = problems[problem_index].paper_id;
     }else{
         var paper_id = init_paper_id;
