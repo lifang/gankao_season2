@@ -50,12 +50,12 @@ class StudyPlansController < ApplicationController
     elsif upr.status == false and upr.num < StudyPlan::CAN_JOIN_TIME
       upr.update_attributes(:num => StudyPlan::CAN_JOIN_TIME, :status => StudyPlan::STATUS[:NOMAL],
         :created_at => Time.now.to_date, :ended_at => Time.now.to_date + plan_date.days)
-      #      if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
-      #        must_order=Order.first(:conditions =>["user_id = ? and category_id = ?  and types = ?",
-      #            cookies[:user_id].to_i, params[:category].to_i, Order::TYPES[:MUST]])
-      #        must_order.update_attributes(:status => Order::STATUS[:NOMAL]) unless must_order.nil?
-      #        order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
-      #      end
+      if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
+        must_order=Order.first(:conditions =>["user_id = ? and category_id = ?  and types = ?",
+            cookies[:user_id].to_i, params[:category].to_i, Order::TYPES[:MUST]])
+        must_order.update_attributes(:status => Order::STATUS[:NOMAL]) unless must_order.nil?
+        order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
+      end
     else
       new_record = false
       flash[:notice] = "您已经没有机会再参加学习计划了！"

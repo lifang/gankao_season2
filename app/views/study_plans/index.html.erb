@@ -8,13 +8,15 @@
         <button class="jihua_btn"
                 onclick="javascript:window.location.href='/study_plans/<%= @study_plan.id %>?category=<%= params[:category] %>';">
           我要必过</button>
-        <% if @free_count > 0 %>
-          <span>剩余免费名额<%= @free_count %></span>
-        <% else %>
-          <span>今日免费名额已经领取完啦</span>
-        <% end %>
       <% end %>
     </div>
+  </div>
+  <div class="jihua_w red">
+    <% if @free_count > 0 %>
+      <span>剩余免费名额<%= @free_count %></span>
+    <% else %>
+      <span>今日免费名额已经领取完啦</span>
+    <% end %>
   </div>
 <% elsif @user_plan.status == false %>
   <div class="challengeLoss">
