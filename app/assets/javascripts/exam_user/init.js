@@ -689,6 +689,11 @@ function clone_flowplayer(selector,audio_src){
 
 //题面后小题加入收藏夹
 function normal_add_collect(problem_index,question_index){
+    if(controller_name == "specials"){
+        var paper_id = problems[problem_index].paper_id;
+    }else{
+        var paper_id = init_paper_id;
+    }
     if(sheet_url!=""){
         $.ajax({
             type: "POST",
@@ -696,7 +701,7 @@ function normal_add_collect(problem_index,question_index){
             dataType: "json",
             data : {
                 "sheet_url" : sheet_url,
-                "paper_id" : init_paper_id,
+                "paper_id" : paper_id,
                 "problem_index" : problem_index,
                 "question_index" : question_index,
                 "problem" : JSON.stringify(problems[problem_index]),
@@ -721,6 +726,11 @@ function normal_add_collect(problem_index,question_index){
 
 //题面中小题加入收藏夹
 function special_add_collect(problem_index,question_index){
+    if(controller_name == "specials"){
+        var paper_id = problems[problem_index].paper_id;
+    }else{
+        var paper_id = init_paper_id;
+    }
     if(sheet_url!=""){
         $.ajax({
             type: "POST",
@@ -730,7 +740,7 @@ function special_add_collect(problem_index,question_index){
                 "sheet_url" : sheet_url,
                 "problem_index" : problem_index,
                 "question_index" : question_index,
-                "paper_id" : init_paper_id,
+                "paper_id" : paper_id,
                 "problem_json" : JSON.stringify(problems[problem_index]),
                 "user_answer" : $("#exam_user_answer_"+problem_index+"_"+question_index).val(),
                 "question_answer" : answers[problem_index][question_index]["answer"]==null ? "" : answers[problem_index][question_index]["answer"],
@@ -783,7 +793,7 @@ function call_me(problem_index,question_index) {
     var max_length = $("#m_side_"+problem_index).width();
     var text_length=$("#input_inner_answer_" + id).val().length*8;
     if(($("#input_inner_answer_" + id).length>0) || ($("#input_inner_answer_" + id).val() != "" )) {
-         var max=text_length>(max_length-40)?(max_length-40): text_length;
+        var max=text_length>(max_length-40)?(max_length-40): text_length;
         $("#input_inner_answer_" + id).css("width", max + "px");
     }
 }
@@ -828,7 +838,21 @@ for(i=0;i<problems.length;i++){
 var problem_resource; //题目的最外层元素
 var questions_resource; //小题列表最外层元素
 var question_resource; //单个小题细节最外层元素
-var word_type = {"0":"n.","1":"v.","2":"pron.","3":"adj.","4":"adv.","5":"num.","6":"art.","7":"prep.","8":"conj.","9":"interj.","10":"u = ","11":"c = ","12":"pl = "} ; //单词类型
+var word_type = {
+    "0":"n.",
+    "1":"v.",
+    "2":"pron.",
+    "3":"adj.",
+    "4":"adv.",
+    "5":"num.",
+    "6":"art.",
+    "7":"prep.",
+    "8":"conj.",
+    "9":"interj.",
+    "10":"u = ",
+    "11":"c = ",
+    "12":"pl = "
+} ; //单词类型
 
 $(function(){
     $.ajax({
