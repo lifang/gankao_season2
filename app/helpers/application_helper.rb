@@ -51,7 +51,8 @@ module ApplicationHelper
   def user_order(category_id, user_id)
     user_role?(user_id) if cookies[:user_role].nil?
     unless cookies[:user_role] =~ /#{category_id}/
-      order = Order.find(:first, :conditions => ["user_id = ? and category_id = ?", user_id.to_i, category_id.to_i])
+      order = Order.find(:first, :conditions => ["user_id = ? and category_id = ? and status = #{Order::STATUS[:INVALIDATION]}",
+          user_id.to_i, category_id.to_i])
       if order
         this_order = "#{category_id}=#{Order::USER_ORDER[:NOMAL]}"
       else
