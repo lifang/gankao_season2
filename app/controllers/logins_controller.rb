@@ -213,4 +213,35 @@ class LoginsController < ApplicationController
   end
 
 
+  def request_baidu
+    redirect_to "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=#{Constant::BAIDU_API_KEY}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_baidu"
+  end
+
+  def respond_baidu
+    begin
+      oauth2 = baidu_accesstoken(params[:code])
+      access_token = oauth2["access_token"]
+      expires_in = oauth2["expires_in"].to_i
+      response = baidu_get_user(access_token)
+      @user=User.find_by_code_id_and_code_type("#{response["uid"]}","baidu")
+      if @user.nil?
+        @user=User.create(:code_id=>response["uid"],:code_type=>'baidu',:name=>response["uname"],
+          :username=>response["uname"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
+        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+      else
+        ActionLog.login_log(@user.id)
+        if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
+          @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+        end
+      end
+      cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
+      cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
+      cookies.delete(:user_role)
+      user_role?(cookies[:user_id])
+      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
+    rescue
+      render :inline => "<script>window.opener.location.reload();window.close();</script>"
+    end
+  end
+
 end

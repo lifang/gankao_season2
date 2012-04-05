@@ -7,13 +7,16 @@ img { border:none;}
 .logo { width: 170px; height: 60px; margin-left: 10px;}
 .login_pic { width: 530px; height: 370px; margin: 0 5px; float: left; background: url(/assets/login_pic.png) no-repeat;}
 .login_area { width: 319px; height: 351px; background: url(/assets/login_area_bg.png) no-repeat; float: left;}
-.login_area ul { width: 176px; height: 165px; display: block; list-style: none; margin: 70px auto;}
-.login_area ul li { width: 176px; height: 35px; margin: 20px 0;}
+.login_area ul { width: 176px; display: block; list-style: none; margin: 60px auto;}
+.login_area ul li { width: 176px; height: 35px; margin: 12px 0;}
 .login_area ul li a { width: 176px; height: 35px; display: block; overflow: hidden; text-indent: -999px;}
 .login_sina { background: url(/assets/login_li.png) no-repeat 0 0;}
 .login_renren { background: url(/assets/login_li.png) no-repeat 0 -68px;}
 .login_qq { background: url(/assets/login_li.png) no-repeat 0 -129px;}
-.login_kaixin { background: url(/assets/login_kaixin.png) no-repeat}
+.login_kaixin { background: url(/assets/login_li.png) no-repeat 0 -187px;}
+.login_baidu { background: url(/assets/login_li.png) no-repeat 0 -244px;}
 .foot { border-top: 1px #CCC solid; padding: 10px 0; margin-top: 50px;}
 .foot p { text-align: center; line-height: 24px; color: #999;}
 .foot p a { color: #999;}
+
+
