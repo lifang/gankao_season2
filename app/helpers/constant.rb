@@ -1,7 +1,7 @@
 # encoding: utf-8
 module Constant
-  # SERVER_PATH = "http://localhost:3001"
-  SERVER_PATH = "http://127.0.0.1:3001"
+   SERVER_PATH = "http://localhost:3001"
+  #SERVER_PATH = "http://127.0.0.1:3001"
   BACK_SERVER_PATH = "http://localhost:3000"
   
   #项目文件目录

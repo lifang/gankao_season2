@@ -623,3 +623,25 @@ input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033f
 
 /* 固定字体大小，即无视字体放大、缩小功能 */
 .ignore_ts {font-size:12px;}
+
+/*ipad----------------*/
+.ipad_tab { width: 700px; height: 645px; background: url(/assets/ipad_bg.jpg) no-repeat; position: absolute; z-index: 1000;}
+.ipad_btn { width: 112px; height: 43px; margin: 550px auto 0;}
+.ipad_btn button {
+	width: 112px;
+	height: 43px;
+	font-size: 18px;
+	font-family: "微软雅黑";
+	color: #ff8400;
+	background: url(/assets/jihua_btn.png) no-repeat;
+	border: none;
+	font-weight: bold;
+}
+.gz_weibo { margin: 10px auto; overflow: hidden; width: 155px;}
+.ipad_h1 { font-size: 24px; color: #ff8400;}
+.gz_weibo span { width: 149px; height: 50px; display: block; background: url(/assets/weibo_bg.png) no-repeat;  float: left; margin-top: 10px;}
+.gz_weibo a { color: #1582BD; height: 40px; line-height: 40px; display: block; padding-left: 35px; margin-top: 5px; font-size: 16px; text-shadow: 0 1px 0 #F0F0F0;font-family: "微软雅黑"; }
+
+.logo_s { background: url(/assets/logo_sina.png) no-repeat 5px center;}
+.logo_r { background: url(/assets/logo_renren.png) no-repeat 5px center;}
+.logo_q { background: url(/assets/logo_qq.png) no-repeat 5px center;}
