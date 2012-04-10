@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   attr_accessor :password
   validates:password, :confirmation=>true,:length=>{:within=>6..20}, :allow_nil => true
 
-  FROM = {"sina" => "新浪微博", "renren" => "人人网", "qq" => "腾讯网"}
+  FROM = {"sina" => "新浪微博", "renren" => "人人网", "qq" => "腾讯网", "kaixin" => "开心网", "baidu" => "百度"}
   TIME_SORT = {:ASC => 0, :DESC => 1}   #用户列表按创建时间正序倒序排列
   U_FROM = {:WEB => 0, :APP => 1} #注册用户来源，0 网站   1 应用
   USER_FROM = {0 => "网站" , 1 => "应用"}
