@@ -157,6 +157,10 @@ class LoginsController < ApplicationController
         access_token=params[:access_token]
         expires_in=params[:expires_in].to_i
         response = renren_get_user(access_token)[0]
+        unless response["uid"]
+          redirect_to "/"
+          return false
+        end
         @user=User.find_by_code_id_and_code_type("#{response["uid"]}","renren")
         if @user.nil?
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"], :username=>response["name"],
@@ -191,6 +195,10 @@ class LoginsController < ApplicationController
       access_token = oauth2["access_token"]
       expires_in = oauth2["expires_in"].to_i
       response = kaixin_get_user(access_token)
+      unless response["uid"]
+        redirect_to "/"
+        return false
+      end
       @user=User.find_by_code_id_and_code_type("#{response["uid"]}","kaixin")
       if @user.nil?
         @user=User.create(:code_id=>response["uid"],:code_type=>'kaixin',:name=>response["name"],
@@ -223,6 +231,10 @@ class LoginsController < ApplicationController
       access_token = oauth2["access_token"]
       expires_in = oauth2["expires_in"].to_i
       response = baidu_get_user(access_token)
+      unless response["uid"]
+        redirect_to "/"
+        return false
+      end
       @user=User.find_by_code_id_and_code_type("#{response["uid"]}","baidu")
       if @user.nil?
         @user=User.create(:code_id=>response["uid"],:code_type=>'baidu',:name=>response["uname"],
