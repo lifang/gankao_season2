@@ -24,7 +24,8 @@ class StudyPlansController < ApplicationController
     plan_date = @study_plan.study_date.nil? ? Constant::STUDY_DATE : (@study_plan.study_date - 1)
     upr = UserPlanRelation.find_by_user_id_and_study_plan_id(cookies[:user_id].to_i, @study_plan.id)
     new_record = true
-    order=Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]}",cookies[:user_id].to_i, params[:category].to_i])
+    order = Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]}",
+        cookies[:user_id].to_i, params[:category].to_i])
     notice_str = "感谢您参与必过挑战"
     categry_name = Category.find(category_id).name
     if upr.nil?

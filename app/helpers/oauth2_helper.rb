@@ -155,13 +155,44 @@ module Oauth2Helper
   #
   #开心获取用户信息
   def kaixin_get_user(access_token)
-    puts "/users/me.json?access_token=#{access_token}"
     request = Net::HTTP::Get.new("/users/me.json?access_token=#{access_token}")
     response = JSON kaixin_api(request)
   end
   #
   #END -------开心网API----------
 
+
+  #START -------百度API----------
+  #
+  #百度主方法
+  def baidu_api(request)
+    uri = URI.parse("https://openapi.baidu.com")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    response = http.request(request).body
+  end
+  #
+  #百度获取accesstoken
+  def baidu_accesstoken(code)
+    request = Net::HTTP::Get.new("/oauth/2.0/token?grant_type=authorization_code&code=#{code}&client_id=#{Constant::BAIDU_API_KEY}&client_secret=#{Constant::BAIDU_API_SECRET}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_baidu")
+    response = JSON baidu_api(request)
+  end
+  #
+  #百度获取用户信息
+  def baidu_get_user(access_token)
+    request = Net::HTTP::Get.new("/users/me.json?access_token=#{access_token}")
+    response = JSON baidu_api(request)
+  end
+  #
+  #
+  #百度获取用户信息
+  def baidu_get_user(access_token)
+    request = Net::HTTP::Get.new("/rest/2.0/passport/users/getLoggedInUser?access_token=#{access_token}")
+    response = JSON baidu_api(request)
+  end
+  #
+  #END -------百度API----------
 
 
   #qq添加说说

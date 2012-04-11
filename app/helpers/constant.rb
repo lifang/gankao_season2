@@ -1,6 +1,7 @@
 # encoding: utf-8
 module Constant
-  SERVER_PATH = "http://localhost:3001"
+   SERVER_PATH = "http://localhost:3001"
+  #SERVER_PATH = "http://127.0.0.1:3001"
   BACK_SERVER_PATH = "http://localhost:3000"
   
   #项目文件目录
@@ -41,6 +42,11 @@ module Constant
   KAIXIN_CLIENT_ID = "100027854"
   KAIXIN_API_KEY = "27441526722922ac851e7ffc334a9785"
   KAIXIN_API_SECRET = "d034fd25c28b4e3dd0759ad7428a2f59"
+
+  #百度网应用信息
+  BAIDU_CLIENT_ID = "251809"
+  BAIDU_API_KEY = "BrFpUvlWxiWLKmqvSpOuQjML"
+  BAIDU_API_SECRET = "pGK4NMDgf3P3Ch2cqXlHWQZVOFq72AXz"
 
   #ADMIN EMAIL  管理员的邮箱，反馈信息的目标邮箱
   FANKUI_EMAIL = "jeffrey6052@163.com"
