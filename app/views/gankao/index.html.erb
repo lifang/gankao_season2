@@ -70,12 +70,13 @@
             <div class="scroll_text"></div>
             <div class="nav_btn"><a href="/similarities?category=2"><img src="/assets/cet4_btn.png" /></a><a href="/similarities?category=3"><img src="/assets/cet6_btn.png" /></a></div>
             <div class="scroll_show">
-              <a href="#" target="_blank"><img src="/assets/banner1.png" alt="<h1>网上练习</h1>全部新四六级真题，在线方式练习，边做边对答案，超高效率。" /></a>
-              <a href="#" target="_blank"><img src="/assets/banner2.png" alt="<h1>在线听力</h1>听力题包含在线收听的MP3，按题切分，无需到处寻找听力资料，省心省力更省时间。
-                                               " /></a>
-              <a href="#" target="_blank"><img src="/assets/banner3.png" alt="<h1>模拟考试</h1>考前模拟考试，完全按照考试难度出题，限时答题，帮助你掌握备考状况。" /></a>
-              <a href="#" target="_blank"><img src="/assets/banner4.png" alt="<h1>在线背词</h1>精选1500常考词汇，汇集中英释义和例句，4种记忆挑战游戏，提升你的词汇量。" /></a>
-              <a href="#" target="_blank"><img src="/assets/banner5.png" alt="<h1>必过挑战</h1>为期30天的必过挑战，透过微博或者人人广而告之，不仅让复习循序渐进，更通过公开的方式督促自己。" /></a>
+              <a href="javascript:void(0);"><img src="/assets/banner1.png" alt="<h1>网上练习</h1>全部新四六级真题，在线方式练习，边做边对答案，超高效率。" /></a>
+              <a href="javascript:void(0);">
+                <img src="/assets/banner2.png" alt="<h1>在线听力</h1>听力题包含在线收听的MP3，按题切分，无需到处寻找听力资料，省心省力更省时间。" />
+              </a>
+              <a href="javascript:void(0);"><img src="/assets/banner3.png" alt="<h1>模拟考试</h1>考前模拟考试，完全按照考试难度出题，限时答题，帮助你掌握备考状况。" /></a>
+              <a href="javascript:void(0);"><img src="/assets/banner4.png" alt="<h1>在线背词</h1>精选1500常考词汇，汇集中英释义和例句，4种记忆挑战游戏，提升你的词汇量。" /></a>
+              <a href="javascript:void(0);"><img src="/assets/banner5.png" alt="<h1>必过挑战</h1>为期30天的必过挑战，透过微博或者人人广而告之，不仅让复习循序渐进，更通过公开的方式督促自己。" /></a>
             </div>
 
             <div class="scroll_num"><a>1</a><a>2</a><a>3</a><a>4</a><a>5</a></div>
@@ -103,9 +104,9 @@
           </div>
         </div>
         <div class="tuiguang">
-          <div><a href="#"><img src="/assets/xianshi.png" title="限时推广，仅需48元。" onclick="$('#xishi #tishi_text').html('请选择您需要充值的科目');show_div('#xishi')" /></a></div>
-          <div><a href="#"><img src="/assets/huafei.png" title="帮助我们推广，获取话费回报。" /></a></div>
-          <div><a href="#"><img src="/assets/jihua.png" title="要成功，就要对自己狠一点。" onclick="$('#mianfei #tishi_text').html('请选择您需要免费升级的科目');show_div('#mianfei')" /></a></div>
+          <div><a href="javascript:void(0);" onclick="$('#xishi #tishi_text').html('请选择您需要充值的科目');show_div('#xishi');"><img src="/assets/xianshi.png" title="限时推广，仅需48元。" /></a></div>
+          <div><a href="javascript:void(0);" onclick="$('#activity #tishi_text').html('请选择您需要参加活动的科目');show_div('#activity');"><img src="/assets/huafei.png" title="接受挑战，赢取'牛排'。" /></a></div>
+          <div><a href="javascript:void(0);" onclick="$('#mianfei #tishi_text').html('请选择您需要免费升级的科目');show_div('#mianfei');" ><img src="/assets/jihua.png" title="要成功，就要对自己狠一点。"/></a></div>
         </div>
         <div class="gz_weibo"><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/renren_like');"><img src="/assets/renren_zhuye.png" /></a><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/watch_weibo', '_blank', 'height=500,width=600,left=300,top=150');"><img src="/assets/sina_weibo.png" /></a></div>
       </div>
@@ -136,6 +137,14 @@
       </div>
       <div class="tab_btn"><button class="t_btn" <%if cookies[:user_id] and is_vip?(Category::TYPE_IDS[:english_fourth_level])&&!is_must?(Category::TYPE_IDS[:english_fourth_level]) %>onclick='tishi_alert("您已经是正式用户了，无需升级")' <%else%>onclick="window.location.href='/users/charge_vip?category=<%= Category::TYPE_IDS[:english_fourth_level] %>'"<%end%>>英语四级</button>
         &nbsp;<button class="t_btn" <%if cookies[:user_id] and is_vip?(Category::TYPE_IDS[:english_sixth_level])&&!is_must?(Category::TYPE_IDS[:english_sixth_level]) %>onclick='tishi_alert("您已经是正式用户了，无需升级")' <%else%>onclick="window.location.href='/users/charge_vip?category=<%=Category::TYPE_IDS[:english_sixth_level]%>'"<%end%>>英语六级</button></div>
+    </div>
+    <div class="tab_box border_radius" id="activity">
+      <span class="xx_x"><img src="/assets/x.png" onclick="javascript:$('.tab_box').css('display','none');$('.zhezhao').css('display','none');" /></span>
+      <div class="tab_con">
+        <p id="tishi_text">请你选择参加活动的科目</p>
+      </div>
+      <div class="tab_btn"><button class="t_btn" <%if cookies[:user_id] and is_join_plan?(Category::TYPE_IDS[:english_fourth_level]) %>onclick='tishi_alert("您已经参加了接受挑战，赢取‘牛排’的活动")' <%else%>onclick="window.location.href='/study_plans?category=<%= Category::TYPE_IDS[:english_fourth_level] %>'"<%end%>>英语四级</button>
+        &nbsp;<button class="t_btn" <%if cookies[:user_id] and is_join_plan?(Category::TYPE_IDS[:english_sixth_level]) %>onclick='tishi_alert("您已经参加了接受挑战，赢取‘牛排’的活动")' <%else%>onclick="window.location.href='/study_plans?category=<%=Category::TYPE_IDS[:english_sixth_level]%>'"<%end%>>英语六级</button></div>
     </div>
   </body>
 </html>

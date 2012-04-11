@@ -132,4 +132,15 @@ module ApplicationHelper
       user_order(params[:category].to_i, cookies[:user_id].to_i)
     end
   end
+
+  #判断是否参加过学习计划
+  def is_join_plan?(category_id)
+    if cookies[:user_id]
+      is_has = UserPlanRelation.count_by_sql(["select u.id from user_plan_relations u inner join study_plans s
+            on s.id = u.study_plan_id where s.category_id = ? and u.status = #{StudyPlan::STATUS[:NOMAL]} 
+            and u.is_activity = #{UserPlanRelation::IS_ACTIVITY[:YES]} and u.user_id = ?  ",
+          category_id, cookies[:user_id]])
+      return is_has > 0
+    end
+  end
 end
