@@ -71,6 +71,7 @@
         </div>
       </div>
       <div class="foot"></div>
+      <%= render :partial => "/common/activity_tab" unless is_join_plan?(params[:category])  %>
       <%= render :partial => "/common/online_qq"  %>
     </div>
     <div style="display: none" id="today_madel">
