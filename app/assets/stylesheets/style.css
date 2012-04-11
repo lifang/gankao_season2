@@ -637,8 +637,12 @@ input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033f
 	border: none;
 	font-weight: bold;
 }
+.zf_weibo {margin: 530px auto 0; overflow: hidden; width: 507px; font-family: "微软雅黑";}
+.ipad_h1 { height: 24px; line-height: 24px; font-size: 14px; color: #ff8400; padding-left: 20px;text-shadow: 0 1px 0 #F0F0F0;}
+.zf_weibo span { width: 149px; height: 50px; display: block; background: url(/assets/weibo_bg.png) no-repeat;  float: left; margin: 0 10px;}
+.zf_weibo a { color: #1582BD; height: 40px; line-height: 40px; display: block; padding-left: 45px; margin-top: 5px; font-size: 16px; text-shadow: 0 1px 0 #F0F0F0; }
+
 .gz_weibo { margin: 10px auto; overflow: hidden; width: 155px;}
-.ipad_h1 { font-size: 24px; color: #ff8400;}
 .gz_weibo span { width: 149px; height: 50px; display: block; background: url(/assets/weibo_bg.png) no-repeat;  float: left; margin-top: 10px;}
 .gz_weibo a { color: #1582BD; height: 40px; line-height: 40px; display: block; padding-left: 35px; margin-top: 5px; font-size: 16px; text-shadow: 0 1px 0 #F0F0F0;font-family: "微软雅黑"; }
 
