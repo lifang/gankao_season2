@@ -24,6 +24,7 @@ class StudyPlansController < ApplicationController
     plan_date = @study_plan.study_date.nil? ? Constant::STUDY_DATE : (@study_plan.study_date - 1)
     upr = UserPlanRelation.find_by_user_id_and_study_plan_id(cookies[:user_id].to_i, @study_plan.id)
     new_record = true
+    just_not_join = false
     order = Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]}",
         cookies[:user_id].to_i, params[:category].to_i])
     notice_str = "感谢您参与必过挑战"
@@ -31,10 +32,12 @@ class StudyPlansController < ApplicationController
     if upr.nil?
       user_plan={:user_id => cookies[:user_id].to_i, :study_plan_id => @study_plan.id,:created_at => Time.now.to_date,
         :ended_at => Time.now.to_date + plan_date.days,:status => StudyPlan::STATUS[:NOMAL], :num => 1}
+      user_plan[:is_activity] = UserPlanRelation::IS_ACTIVITY[:YES] unless params[:activity].nil? or params[:activity].empty?
       if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
         unless Order.must_count > 0
           new_record = false
-          flash[:notice] = "今天的免费名额已经抢光喽，您可以[<a class='link_c' href='/users/charge_vip?category=#{params[:category]}'>升级为正式用户</a>]！"
+          flash[:notice] = "今天的免费名额已经抢光喽，
+            您可以[<a class='link_c' href='/users/charge_vip?category=#{params[:category]}'>升级为正式用户</a>]！"
         else
           UserPlanRelation.create(user_plan)
           Order.create(:user_id => cookies[:user_id].to_i,:category_id => category_id, :total_price => 0,
@@ -49,8 +52,10 @@ class StudyPlansController < ApplicationController
         UserPlanRelation.create(user_plan)
       end
     elsif upr.status == false and upr.num < StudyPlan::CAN_JOIN_TIME
-      upr.update_attributes(:num => StudyPlan::CAN_JOIN_TIME, :status => StudyPlan::STATUS[:NOMAL],
-        :created_at => Time.now.to_date, :ended_at => Time.now.to_date + plan_date.days)
+      new_attr = {:num => StudyPlan::CAN_JOIN_TIME, :status => StudyPlan::STATUS[:NOMAL],
+        :created_at => Time.now.to_date, :ended_at => Time.now.to_date + plan_date.days}
+      new_attr[:is_activity] = UserPlanRelation::IS_ACTIVITY[:YES] unless params[:activity].nil? or params[:activity].empty?
+      upr.update_attributes(new_attr)
       if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
         must_order=Order.first(:conditions =>["user_id = ? and category_id = ?  and types = ?",
             cookies[:user_id].to_i, params[:category].to_i, Order::TYPES[:MUST]])
@@ -60,19 +65,28 @@ class StudyPlansController < ApplicationController
         user_role?(cookies[:user_id])
       end
     else
-      new_record = false
-      flash[:notice] = "您已经没有机会再参加学习计划了！"
+      if upr.status == true
+        just_not_join = true
+        upr.update_attributes(:is_activity => UserPlanRelation::IS_ACTIVITY[:YES]) unless
+        params[:activity].nil? or params[:activity].empty?
+      else
+        new_record = false
+        flash[:notice] = "您已经没有机会再参加学习计划了！"
+      end
     end
-    if new_record
-      send_message = "我参加了赶考网的#{categry_name}必过挑战学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
-      send_message(send_message, cookies[:user_id])
-      flash[:notice] = notice_str
-      redirect_to "/study_plans/done_plans?category=#{category_id}"
+    unless just_not_join
+      if new_record
+        send_message = "我参加了赶考网的#{categry_name}必过挑战学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
+        send_message(send_message, cookies[:user_id])
+        flash[:notice] = notice_str
+        redirect_to "/study_plans/done_plans?category=#{category_id}"
+      else
+        redirect_to "/study_plans?category=#{category_id}"
+      end
     else
-      redirect_to "/study_plans?category=#{category_id}"
+      redirect_to "/study_plans/done_plans?category=#{category_id}"
     end
   end
-
 
 
   def done_plans
