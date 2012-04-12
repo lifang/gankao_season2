@@ -135,7 +135,6 @@ class StudyPlansController < ApplicationController
 
   #从应用快捷登录
   def renren
-    puts request.path
     category = params[:category].nil? ? "2" : params[:category]
     @user= User.where(:id=>params[:user_id])[0]
     @code_id = @user.nil? ? "error" : @user.code_id.nil? ? "gankao" : @user.code_id
@@ -150,5 +149,17 @@ class StudyPlansController < ApplicationController
       return false
     end
   end
+
+  def plan_renren
+    if params["flag"]&&params["flag"]=="success"&&cookies[:activity_data]
+      puts cookies[:activity_data]
+      data = cookies[:activity_data].split("_")
+      render :inline => "<script>window.opener.document.getElementById('ipad_div').innerHTML='<center><h1>已经分享到人人，感谢您的参与</h1></center>'; window.opener.location.href='/study_plans/#{data[0]}?category=#{data[1]}&activity=activity';window.close();</script>"
+    else
+      render :inline=>"<script type='text/javascript'>window.close();</script>"
+    end
+  end
+
+  
 
 end
