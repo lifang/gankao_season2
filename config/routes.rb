@@ -45,6 +45,9 @@ GankaoSeason2::Application.routes.draw do
       get :done_plans,:renren,:plan_renren
       post :plan_status,:check_task
     end
+    member do
+      get :action_link
+    end
   end
   resources :exam_users do
     collection do

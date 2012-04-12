@@ -162,6 +162,10 @@ class StudyPlansController < ApplicationController
     end
   end
 
+  #分享的链接
+  def action_link
+    redirect_to "/study_plans?category=#{params[:id]}"
+  end
   
 
 end
