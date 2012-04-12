@@ -19,7 +19,7 @@
     <span><a href="javascript:void(0);" onclick="javascript:window.open('<%= @sina_url %>');setTimeout(function(){window.location.href='/study_plans/<%= @study_plan.id %>?category=<%= params[:category] %>&activity=activity';},2000);" target="_blank" class="logo_s">转发新浪微博</a></span>
     <span><a href="#" class="logo_q" onclick="share_steak(<%= @study_plan.id %>)">转发qq空间</a></span>
     <input type="hidden" value="<%= Constant::SHARE_IMG %>" id="img_url" />
-    <input type="hidden" value="<%= "www.gankao.co" %>" id="share_url" />
+    <input type="hidden" value="<%= request.url %>" id="share_url" />
     <input type="hidden" value="<%= params[:category] %>" id="share_category" />
   </div>
 </div>

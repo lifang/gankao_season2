@@ -69,7 +69,7 @@ function share_steak(study_plan_id){
 
         // 可选。用户操作后的回调方法。
         onSuccess : function (opt) {
-            window.location.href="/study_plans/"+opt.context.plan_id +"?category="+opt.context.category;
+            window.location.href="/study_plans/"+opt.context.plan_id +"?activity=1&category="+opt.context.category;
         },
 
         // 可选。用户取消操作后的回调方法。
