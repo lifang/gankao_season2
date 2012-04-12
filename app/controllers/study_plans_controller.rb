@@ -137,4 +137,12 @@ class StudyPlansController < ApplicationController
     end
   end
 
+  def plan_renren
+    if params["flag"]&&params["flag"]=="success"
+      render :inline=>"人人新鲜事发送成功"
+    else
+      render :inline=>"<script type='text/javascript'>window.close();</script>"
+    end
+  end
+
 end
