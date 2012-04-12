@@ -51,4 +51,7 @@ module Constant
   #ADMIN EMAIL  管理员的邮箱，反馈信息的目标邮箱
   FANKUI_EMAIL = "jeffrey6052@163.com"
 
+
+  #分享活动图片
+  SHARE_IMG=SERVER_PATH+"/share_steak.png"
 end
