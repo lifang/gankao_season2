@@ -97,6 +97,7 @@ class StudyPlansController < ApplicationController
     @title = "#{@category.name}复习计划"
     @meta_keywords = "#{@category.name}复习方法,#{@category.name}必过挑战"
     @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提高#{@category.name}的应试能力。"
+    @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", category_id])
     plan_task = UserPlanRelation.find_by_sql("select up.created_at,up.ended_at,up.id, sp.study_date from user_plan_relations up
       inner join study_plans sp on up.study_plan_id=sp.id where
       up.user_id=#{cookies[:user_id]} and sp.category_id=#{category_id} limit 1 ")
