@@ -32,7 +32,7 @@ function ajax_send_fankui(){
     $("#fankui_success").show();
 }
 
-function share_steak(){
+function share_steak(study_plan_id){
     var img_url=$("#img_url").val();
     var share_url=$("#share_url").val();
     var category=$("#share_category").val();
@@ -65,24 +65,20 @@ function share_steak(){
 
         // 可选。透传参数，用于onSuccess回调时传入的参数，用于识别请求。
 
-        context:"share",
+        context:{"plan_id":study_plan_id,"category":category},
 
         // 可选。用户操作后的回调方法。
-
         onSuccess : function (opt) {
-            alert("Succeeded: " + opt.context);
+            window.location.href="/study_plans/"+opt.context.plan_id +"?category="+opt.context.category;
         },
 
         // 可选。用户取消操作后的回调方法。
-
         onCancel : function () {
-            alert("Cancelled: " + opt.context);
+            tishi_alert("取消分享将不能获得参加抽奖的机会");
         },
 
         // 可选。对话框关闭时的回调方法。
-
         onClose : function () {
-            alert("Closed")
         }
 
     });
