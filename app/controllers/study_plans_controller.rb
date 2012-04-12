@@ -155,14 +155,17 @@ class StudyPlansController < ApplicationController
 
   def plan_renren
     if params["flag"]&&params["flag"]=="success"&&cookies[:activity_data]
-      puts cookies[:activity_data]
       data = cookies[:activity_data].split("_")
       render :inline => "<script>window.opener.document.getElementById('ipad_div').innerHTML='<center><h1>已经分享到人人，感谢您的参与</h1></center>'; window.opener.location.href='/study_plans/#{data[0]}?category=#{data[1]}&activity=activity';window.close();</script>"
     else
-      render :inline=>"<script type='text/javascript'>window.close();</script>"
+      render :inline=>"<script type='text/javascript'>alert('很抱歉，分享失败，您可以重新尝试');window.close();</script>"
     end
   end
 
+  #分享的链接
+  def action_link
+    redirect_to "/study_plans?category=#{params[:id]}"
+  end
   
 
 end
