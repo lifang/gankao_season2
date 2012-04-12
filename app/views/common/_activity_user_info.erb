@@ -1,0 +1,30 @@
+<%= javascript_include_tag "update_user_info.js" %>
+<div class="zhezhao" id="ac_zhez" style="display: none;"></div>
+<div class="userMess_tab_box border_radius" id="activity_user_info">
+  <span class="xx_x"><img src="/assets/x.png" /></span>
+  <div class="tab_con">
+    <div class="userMess_h1">请补充完整您个人信息，以便活动结束后联系您</div>
+    <div class="main_info">
+      <div class="rcf_box">
+        <label>姓名：</label>
+        <div class="setting-item-main">
+          <input name="name" id="name" type="text" />
+        </div>
+      </div>
+      <div class="rcf_box">
+        <label>E-MAIL：</label>
+        <div class="setting-item-main">
+          <input name="email" id="email" type="text" />
+        </div>
+      </div>
+      <div class="rcf_box rcf_box_bottom">
+        <label>QQ：</label>
+        <div class="setting-item-main">
+          <input name="mobilephone" id="mobilephone" type="text" />
+        </div>
+      </div>
+      <div class="save_info"><button class="save_info_btn" onclick="javascript:complete_activity_user();"></button></div>
+      <div class="clear"></div>
+    </div>
+  </div>
+</div>

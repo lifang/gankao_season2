@@ -16,9 +16,12 @@ class UsersController < ApplicationController
   def update_users
     user = User.find(cookies[:user_id].to_i)
     if user
-    params[:info][:username] = user.username if params[:info][:username].empty?
-    params[:info][:email] = user.email if params[:info][:email].empty?
-    user.update_attributes(params[:info]) 
+    params[:info][:username] = user.username if params[:info][:username].nil? or params[:info][:username].empty?
+    params[:info][:name] = user.name if params[:info][:name].nil? or params[:info][:name].empty?
+    params[:info][:email] = user.email if params[:info][:email].nil? or params[:info][:email].empty?
+    params[:info][:school] = user.school if params[:info][:school].nil? or params[:info][:school].empty?
+    params[:info][:mobilephone] = user.mobilephone if params[:info][:mobilephone].nil? or params[:info][:mobilephone].empty?
+    user.update_attributes(params[:info])
     end
     cookies.delete(:first) unless cookies[:first].nil?
     data="个人信息更新成功。"
