@@ -42,14 +42,13 @@ function share_steak(study_plan_id){
         content="六级"
     }
     fusion2.dialog.share
-
     ({
         // 可选。分享应用的URL，点击该URL可以进入应用，必须是应用在平台内的地址。
         url:share_url,
 
         // 可选。默认展示在输入框里的分享理由。
 
-        desc:"赶考网的"+content +"必过挑战太给力，提高英语过"+ content+"还有机会拿“The new iPad”，”牛排”也很给力啊",
+        desc:"赶考网的"+content +"必过挑战太给力，提高英语过"+ content+"还有机会拿“The new iPad”，”牛排”也很给力啊"+share_url,
 
         // 必须。应用简要描述。
 
@@ -65,7 +64,10 @@ function share_steak(study_plan_id){
 
         // 可选。透传参数，用于onSuccess回调时传入的参数，用于识别请求。
 
-        context:{"plan_id":study_plan_id,"category":category},
+        context:{
+            "plan_id":study_plan_id,
+            "category":category
+        },
 
         // 可选。用户操作后的回调方法。
         onSuccess : function (opt) {
