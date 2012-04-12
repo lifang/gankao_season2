@@ -35,5 +35,6 @@
     </div>
   </div>
 <% end %>
+  <% cookies[:activity_data] = "#{@study_plan.id}_#{params[:category]}" %>
 <%= render :partial => "/common/activity_tab" %>
 <%= render :partial => "/common/online_qq" %>
