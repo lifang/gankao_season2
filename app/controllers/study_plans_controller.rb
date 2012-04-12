@@ -10,7 +10,7 @@ class StudyPlansController < ApplicationController
     @meta_keywords = "#{@category.name}复习方法,#{@category.name}必过挑战"
     @meta_description = "30日的复习计划，包含背词和真题，通过一月努力可以帮助提供#{@category.name}的应试能力。"
     @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", params[:category].to_i])
-    @free_count = Order.must_count
+    @free_count = Order.must_count(category_id)
     if cookies[:user_id]
       @user_plan = UserPlanRelation.find(:first,
         :conditions => ["user_id = ? and study_plan_id = ? ", cookies[:user_id].to_i, @study_plan.id]) if @study_plan
@@ -27,14 +27,14 @@ class StudyPlansController < ApplicationController
     just_not_join = false
     order = Order.first(:conditions =>["user_id = ? and category_id = ? and status = #{Order::STATUS[:NOMAL]}",
         cookies[:user_id].to_i, params[:category].to_i])
-    notice_str = "感谢您参与必过挑战"
+    notice_str = "感谢您参与必过挑战，您需要每天背诵20个单词，做20道真题，并坚持30天"
     categry_name = Category.find(category_id).name
     if upr.nil?
       user_plan={:user_id => cookies[:user_id].to_i, :study_plan_id => @study_plan.id,:created_at => Time.now.to_date,
         :ended_at => Time.now.to_date + plan_date.days,:status => StudyPlan::STATUS[:NOMAL], :num => 1}
       user_plan[:is_activity] = UserPlanRelation::IS_ACTIVITY[:YES] unless params[:activity].nil? or params[:activity].empty?
       if order.nil? || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:COMPETE]
-        unless Order.must_count > 0
+        unless Order.must_count(category_id) > 0
           new_record = false
           flash[:notice] = "今天的免费名额已经抢光喽，
             您可以[<a class='link_c' href='/users/charge_vip?category=#{params[:category]}'>升级为正式用户</a>]！"
@@ -74,22 +74,24 @@ class StudyPlansController < ApplicationController
         flash[:notice] = "您已经没有机会再参加学习计划了！"
       end
     end
+    activity_par = (params[:activity].nil? or params[:activity].empty?) ? "" : "&activity=1"
     unless just_not_join
       if new_record
         send_message = "我参加了赶考网的#{categry_name}必过挑战学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
         send_message(send_message, cookies[:user_id])
         flash[:notice] = notice_str
-        redirect_to "/study_plans/done_plans?category=#{category_id}"
+        redirect_to "/study_plans/done_plans?category=#{category_id}#{activity_par}"
       else
         redirect_to "/study_plans?category=#{category_id}"
       end
     else
-      redirect_to "/study_plans/done_plans?category=#{category_id}"
+      redirect_to "/study_plans/done_plans?category=#{category_id}#{activity_par}"
     end
   end
 
 
   def done_plans
+    @activity = 2 unless params[:activity].nil? or params[:activity].empty? #用于判断用户更新个人信息的框
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
     @category = Category.find_by_id(category_id.to_i)
     @title = "#{@category.name}复习计划"
