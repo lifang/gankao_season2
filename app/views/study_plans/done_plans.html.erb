@@ -77,23 +77,25 @@
     <div style="display: none" id="today_madel">
       <div class="pt_ztai"><img src="/assets/icon_jl.png" /></div>
     </div>
-    <% unless @activity.nil? or @activity != 1 %>
+    <% if !cookies[:act_flag].nil? and cookies[:act_flag] == "1"  %>
       <%= render :partial => "/common/activity_user_info" %>
       <script type="text/javascript">
+        setCookie("act_flag","1");
         generate_flash_div("#activity_user_info");
         $('#ac_zhez').css('display','block');
         $('#activity_user_info').css('display','block');
-        $('.xx_x').bind('click',function(){
+        $('#close_activity').bind('click',function(){
+          delCookie("act_flag");
           $('#activity_user_info').hide();
           $('#ac_zhez').hide();
           return false;
         })
       </script>
     <% end %>
-    <% if !cookies[:first].nil? and cookies[:first] == "1" %>
-      <%= render :partial => "/common/complete_info" %>
+    <%# if !cookies[:first].nil? and cookies[:first] == "1"  %>
+      <%#= render :partial => "/common/complete_info" %>
       <script type="text/javascript">
-        generate_flash_div("#complete_info");
+     /*   generate_flash_div("#complete_info");
         $('#first_zhez').css('display','block');
         $('#complete_info').css('display','block');
         $('.xx_x').bind('click',function(){
@@ -101,8 +103,8 @@
           $('#first_zhez').hide();
           delCookie("first");
           return false;
-        })
+        }) */
       </script>
-    <% end %>
+    <%# end %>
   </body>
 </html>
