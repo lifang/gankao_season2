@@ -1,6 +1,6 @@
 # encoding: utf-8
 class StudyPlansController < ApplicationController
-  before_filter :sign?, :except => ["index","renren"]
+  before_filter :sign?, :except => ["index","renren","action_link"]
   layout "application", :except => ['done_plans']
 
   def index
