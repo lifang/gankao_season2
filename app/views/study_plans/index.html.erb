@@ -22,6 +22,7 @@
       <span>今日免费名额已经领取完啦</span>
     <% end %>
   </div>
+  <%= render :partial => "/common/activity_tab" %>
 <% elsif @user_plan.status == false %>
   <div class="challengeLoss">
     <div><img src="/assets/challengeLoss.png" /></div>
@@ -34,6 +35,8 @@
       <% end %>
     </div>
   </div>
+  <% if @user_plan.num < StudyPlan::CAN_JOIN_TIME %>
+    <%= render :partial => "/common/activity_tab" %>
+  <% end %>
 <% end %>
-<%= render :partial => "/common/activity_tab" %>
 <%= render :partial => "/common/online_qq" %>
