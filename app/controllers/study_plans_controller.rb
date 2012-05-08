@@ -1,6 +1,6 @@
 # encoding: utf-8
 class StudyPlansController < ApplicationController
-  before_filter :sign?, :except => ["index","renren"]
+  before_filter :sign?, :except => ["index","renren","action_link"]
   layout "application", :except => ['done_plans']
 
   def index
@@ -74,24 +74,23 @@ class StudyPlansController < ApplicationController
         flash[:notice] = "您已经没有机会再参加学习计划了！"
       end
     end
-    activity_par = (params[:activity].nil? or params[:activity].empty?) ? "" : "&activity=1"
+    cookies[:act_flag] = {:value => "1", :path => "/", :secure  => false} unless params[:activity].nil? or params[:activity].empty?
     unless just_not_join
       if new_record
         send_message = "我参加了赶考网的#{categry_name}必过挑战学习计划，请大家监督我的学习成果，我会坚持到最后的胜利！"
         send_message(send_message, cookies[:user_id])
         flash[:notice] = notice_str
-        redirect_to "/study_plans/done_plans?category=#{category_id}#{activity_par}"
+        redirect_to "/study_plans/done_plans?category=#{category_id}"
       else
         redirect_to "/study_plans?category=#{category_id}"
       end
     else
-      redirect_to "/study_plans/done_plans?category=#{category_id}#{activity_par}"
+      redirect_to "/study_plans/done_plans?category=#{category_id}"
     end
   end
 
 
   def done_plans
-    @activity = 2 unless params[:activity].nil? or params[:activity].empty? #用于判断用户更新个人信息的框
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
     @category = Category.find_by_id(category_id.to_i)
     @title = "#{@category.name}复习计划"

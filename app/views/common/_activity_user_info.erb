@@ -1,9 +1,10 @@
 <%= javascript_include_tag "update_user_info.js" %>
 <div class="zhezhao" id="ac_zhez" style="display: none;"></div>
 <div class="userMess_tab_box border_radius" id="activity_user_info">
-  <span class="xx_x"><img src="/assets/x.png" /></span>
+  <span class="xx_x" id="close_activity"><img src="/assets/x.png" /></span>
   <div class="tab_con">
-    <div class="userMess_h1">请补充完整您个人信息，以便活动结束后联系您</div>
+    <div class="userMess_h1">请补充您个人信息，以便活动结束后联系您，不完善将视为放弃机会</div>
+    <p style="color:red;">参与必过挑战，您需要每天背诵20个单词，做20道真题，并坚持30天</p>
     <div class="main_info">
       <div class="rcf_box">
         <label>姓名：</label>
@@ -28,3 +29,4 @@
     </div>
   </div>
 </div>
+<%= cookies.delete(:act_flag) %>

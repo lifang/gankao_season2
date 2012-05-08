@@ -1,3 +1,15 @@
+function checkspace(checkstr){
+    var str = '';
+    for(var i = 0; i < checkstr.length; i++) {
+        str = str + ' ';
+    }
+    if (str == checkstr){
+        return true;
+    } else{
+        return false;
+    }
+}
+
 function update_users(){
     var info={};
     info["username"]=$("#username").val();
@@ -24,15 +36,11 @@ function complete_activity_user() {
     var info = {};
     var name = $("#name").val();
     var email = $("#email").val();
-    if (name != null && name != "") {
+    if (name == null || checkspace(name)) {
         tishi_alert("请您填写您的姓名。");
         return false;
     }
-    if (email != null && email != "") {
-        tishi_alert("请您填写您的邮箱。");
-        return false;
-    }
-    if (email != null && email != "") {
+    if (email == null || checkspace(email)) {
         tishi_alert("请您填写您的邮箱。");
         return false;
     }

@@ -24,6 +24,7 @@ class UsersController < ApplicationController
     user.update_attributes(params[:info])
     end
     cookies.delete(:first) unless cookies[:first].nil?
+    cookies.delete(:act_flag) unless cookies[:act_flag].nil?
     data="个人信息更新成功。"
     respond_to do |format|
       format.json {
