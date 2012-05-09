@@ -1,0 +1,40 @@
+<div class="zhezhao" id="j_t_zz" style="display: none"></div>
+<div class="tz_tab_box border_radius" id="j_t_div">
+  <p class="tz_padding_l">欢迎参加</p>
+  <h1 class="tz_padding_l">30天领跑四六级</h1>
+  <div class="tz_info">
+    <table width="100%" border="0" cellspacing="1" cellpadding="0">
+      <tbody><tr>
+          <td>
+            <div class="tz_info_s">英语四级<span>
+                <input name="category_id" type="radio" class="tz_input_ra" checked value="<%= Category::TYPE_IDS[:english_fourth_level] %>"/></span>
+            </div>
+            <div class="tz_info_s">英语六级<span>
+                <input name="category_id" type="radio" class="tz_input_ra" value="<%= Category::TYPE_IDS[:english_sixth_level] %>"/></span>
+            </div>
+          </td>
+          <td><font color="red">*</font><label>授权码：</label><input name="invit_code" id="invit_code" type="text" class="tz_input_text"/></td>
+        </tr>
+        <tr>
+          <td><font color="red">*</font><label>昵称：</label><input name="username" id="username" type="text" class="tz_input_text"/></td>
+          <td><font color="red">*</font><label>E-MAIL：</label><input name="email" id="email" type="text" class="tz_input_text"/></td>
+        </tr>
+        <tr>
+          <td><label>学校：</label><input name="school" id="school" type="text" class="tz_input_text"/></td>
+          <td><div class="tz_btn"><button class="c_btn" type="button" onclick="javascript:new_p_form();" >我要挑战</button></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tz_gz_box"><h1>如何参与</h1><img src="/assets/tz_gz.jpg"/></div>
+  <div class="tz_jl_box">
+    <h1>有何奖励</h1>
+    <ul>
+      <li>帮你复习四六级。</li>
+      <li>更有机会获得The New iPad.</li>
+    </ul>
+    <img src="/assets/tz_ipad.jpg"/>
+  </div>
+  <div class="clear"></div>
+
+</div>

@@ -1,15 +1,3 @@
-function checkspace(checkstr){
-    var str = '';
-    for(var i = 0; i < checkstr.length; i++) {
-        str = str + ' ';
-    }
-    if (str == checkstr){
-        return true;
-    } else{
-        return false;
-    }
-}
-
 function update_users(){
     var info={};
     info["username"]=$("#username").val();

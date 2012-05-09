@@ -146,5 +146,17 @@
       <div class="tab_btn"><button class="t_btn" <%if cookies[:user_id] and is_join_plan?(Category::TYPE_IDS[:english_fourth_level]) %>onclick='tishi_alert("您已经参加了接受挑战，赢取‘牛排’的活动")' <%else%>onclick="window.location.href='/study_plans?category=<%= Category::TYPE_IDS[:english_fourth_level] %>'"<%end%>>英语四级</button>
         &nbsp;<button class="t_btn" <%if cookies[:user_id] and is_join_plan?(Category::TYPE_IDS[:english_sixth_level]) %>onclick='tishi_alert("您已经参加了接受挑战，赢取‘牛排’的活动")' <%else%>onclick="window.location.href='/study_plans?category=<%=Category::TYPE_IDS[:english_sixth_level]%>'"<%end%>>英语六级</button></div>
     </div>
+    <% should_show = true
+    if !cookies[:user_id].nil? and 
+        ((is_j_p_not_a?(Category::TYPE_IDS[:english_fourth_level]) and is_j_p_not_a?(Category::TYPE_IDS[:english_sixth_level])) or !cookies[:never_j].nil?)
+      should_show = false
+    end
+    %>
+    <% if should_show and @join_tab.nil? %>
+      <%= render :partial => "/gankao/join_plan" %>
+    <% end %>
+    <% if @join_tab and cookies[:never_j].nil? %>
+      <%= render :partial => "/gankao/join_tab" %>
+    <% end %>
   </body>
 </html>

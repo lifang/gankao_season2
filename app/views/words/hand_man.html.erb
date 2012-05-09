@@ -27,7 +27,11 @@
           <div class="ch_words_shu">(<%= (index + 1) %>)</div>
           <div class="ch_words_line">
             <p><% (0..(word.name.gsub(" ", "").length-1)).each do |i| %>
-              <input id="letter_<%= i %>" readonly type="text" class="words_input" value=""/>
+                <% if !("a".."z").include?(word.name.gsub(" ", "")[i]) %>
+                  <%= (word.name)[i] %>
+                <% else %>
+                  <input id="letter_<%= i %>" readonly type="text" class="words_input" value=""/>
+                <% end %>
               <% end %></p>
             <p class="font_size_16"><%= word.en_mean %></p>
           </div>

@@ -52,15 +52,33 @@ function generate_flash_div(style) {
 }
 
 $(document).ready(function(){
-    generate_flash_div("#complete_info");
-    $('#first_zhez').css('display','block');
-    $('#complete_info').css('display','block');
-    $('.xx_x').bind('click',function(){
-        $('#complete_info').hide();
-        $('#first_zhez').hide();
-        delCookie("first");
-        return false;
-    })
+    if ($('#join_zz').length > 0) {
+        generate_flash_div("#j_p_div");
+        $('#join_zz').css('display','block');
+        $('#j_p_div').show();
+        $('.rember_j').bind('click',function(){
+            $('#j_p_div').hide();
+            $('#join_zz').hide();
+            if (getCookie("user_id") != null) {
+                setCookie("never_j", "yes", 2592000000, '/');
+            }
+            return false;
+        })
+    } else if ($("#j_t_div").length > 0) {
+        generate_flash_div("#j_t_div");
+        $('#j_t_zz').css('display','block');
+        $('#j_t_div').show();
+    } else {
+        generate_flash_div("#complete_info");
+        $('#first_zhez').css('display','block');
+        $('#complete_info').css('display','block');
+        $('.xx_x').bind('click',function(){
+            $('#complete_info').hide();
+            $('#first_zhez').hide();
+            delCookie("first");
+            return false;
+        })
+    } 
 })
 
 //提示框弹出层
@@ -120,4 +138,65 @@ function show_div(id){
     $(id).css('left',(win_width-z_layer_width)/2);
     $(".zhezhao").css('display','');
     $(id).css('display','block');
+}
+
+//验证
+function new_p_form() {
+    var info = {};
+    var invit_code = $("#invit_code").val();
+    var username = $("#username").val();
+    var email = $("#email").val();
+    if (invit_code == null || checkspace(invit_code)) {
+        tishi_alert("请您填写授权码。");
+        return false;
+        
+    }
+    if (username == null || checkspace(username)) {
+        tishi_alert("请您填写您的姓名。");
+        return false;
+    }
+    if (email == null || checkspace(email)) {
+        tishi_alert("请您填写您的邮箱。");
+        return false;
+    }
+    info["invit_code"]=$("#invit_code").val();
+    info["username"]=$("#username").val();
+    info["school"]=$("#school").val();
+    info["email"]=$("#email").val();
+    info["category_id"] = $(".tz_input_ra:checked").val();
+    $.ajax({
+        async:true,
+        dataType:'json',
+        data:{
+            info:info
+        },
+        url:"/study_plans/join",
+        type:'post',
+        success : function(data) {            
+            if (data.message == "") {
+                window.location.href = "/study_plans?category=" + $(".tz_input_ra:checked").val();
+            } else {
+             tishi_alert(data.message);
+             if (data.message.length > 14) {
+                $('#j_t_div').hide();
+                $('#j_t_zz').hide();
+                setCookie("never_j", "yes", 2592000000, '/');
+             }
+            }
+        }
+    });
+    return false;
+
+}
+
+function checkspace(checkstr){
+    var str = '';
+    for(var i = 0; i < checkstr.length; i++) {
+        str = str + ' ';
+    }
+    if (str == checkstr){
+        return true;
+    } else{
+        return false;
+    }
 }

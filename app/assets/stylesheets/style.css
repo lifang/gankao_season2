@@ -649,3 +649,7 @@ input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033f
 .logo_s { background: url(/assets/logo_sina.png) no-repeat 5px center;}
 .logo_r { background: url(/assets/logo_renren.png) no-repeat 5px center;}
 .logo_q { background: url(/assets/logo_qzone.png) no-repeat 5px center;}
+
+/*挑战--已参加*/
+.plan_guize { width: 800px; margin: 0 auto 10px ; text-align: right;}
+.plan_guize_tab { width: 700px; height: 414px; padding: 10px; border: 2px #333 solid; background: #FFF; position: absolute; z-index: 1000;}
