@@ -199,8 +199,8 @@ module Oauth2Helper
   def send_message_qq(con,openid,access_token,user_id)
     send_parms={:access_token=>access_token,:openid=>openid,:oauth_consumer_key=>Oauth2Helper::APPID,:format=>"json",:third_source=>"3",:con=>con}
     info=create_post_http("https://graph.qq.com","/shuoshuo/add_topic",send_parms)
-    if info["data"].nil?
-      p "qq error_code #{info["ret"]}"
+    if info["data"]["ret"].nil?
+      p "qq error_code #{info["data"]["ret"]}"
     else
       p "qq user #{user_id}  send success"
     end
@@ -222,7 +222,7 @@ module Oauth2Helper
     begin
       user=User.find(user_id)
       if !user.access_token.nil? and user.access_token!="" and !user.end_time.nil? and user.end_time>Time.now
-        message +="赶考网http://www.gankao.co"
+        message +="赶考网http://www.gankao.co --#{Time.now.strftime(("%Y-%m-%d"))}"
         send_message_qq(message,user.open_id,user.access_token,user_id) if user.code_type=="qq" and !user.open_id.nil?
         renren_send_message(user.access_token,message)  if user.code_type=="renren"
         sina_send_message(user.access_token,message) if user.code_type=="sina"
