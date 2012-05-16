@@ -105,7 +105,7 @@
         </div>
         <div class="tuiguang">
           <div><a href="javascript:void(0);" onclick="$('#xishi #tishi_text').html('请选择您需要充值的科目');show_div('#xishi');"><img src="/assets/xianshi.png" title="限时推广，仅需48元。" /></a></div>
-          <div><a href="javascript:void(0);" onclick="$('#activity #tishi_text').html('请选择您需要参加活动的科目');show_div('#activity');"><img src="/assets/huafei.png" title="接受挑战，赢取'牛排'。" /></a></div>
+          <div><a href="javascript:void(0);" ><img src="/assets/46.png" title="下次考试时间为6月16号" /></a></div>
           <div><a href="javascript:void(0);" onclick="$('#mianfei #tishi_text').html('请选择您需要免费升级的科目');show_div('#mianfei');" ><img src="/assets/jihua.png" title="要成功，就要对自己狠一点。"/></a></div>
         </div>
         <div class="gz_weibo"><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/renren_like');"><img src="/assets/renren_zhuye.png" /></a><a href="javascript:void(0);" onclick ="javascript:window.open('/logins/watch_weibo', '_blank', 'height=500,width=600,left=300,top=150');"><img src="/assets/sina_weibo.png" /></a></div>
@@ -146,17 +146,17 @@
       <div class="tab_btn"><button class="t_btn" <%if cookies[:user_id] and is_join_plan?(Category::TYPE_IDS[:english_fourth_level]) %>onclick='tishi_alert("您已经参加了接受挑战，赢取‘牛排’的活动")' <%else%>onclick="window.location.href='/study_plans?category=<%= Category::TYPE_IDS[:english_fourth_level] %>'"<%end%>>英语四级</button>
         &nbsp;<button class="t_btn" <%if cookies[:user_id] and is_join_plan?(Category::TYPE_IDS[:english_sixth_level]) %>onclick='tishi_alert("您已经参加了接受挑战，赢取‘牛排’的活动")' <%else%>onclick="window.location.href='/study_plans?category=<%=Category::TYPE_IDS[:english_sixth_level]%>'"<%end%>>英语六级</button></div>
     </div>
-    <% should_show = true
+    <%# should_show = true
     if !cookies[:user_id].nil? and 
         ((is_j_p_not_a?(Category::TYPE_IDS[:english_fourth_level]) and is_j_p_not_a?(Category::TYPE_IDS[:english_sixth_level])) or !cookies[:never_j].nil?)
       should_show = false
     end
     %>
-    <% if should_show and @join_tab.nil? %>
-      <%= render :partial => "/gankao/join_plan" %>
-    <% end %>
-    <% if @join_tab and cookies[:never_j].nil? %>
-      <%= render :partial => "/gankao/join_tab" %>
-    <% end %>
+    <%# if should_show and @join_tab.nil? %>
+      <%#= render :partial => "/gankao/join_plan" %>
+    <%# end %>
+    <%# if @join_tab and cookies[:never_j].nil? %>
+      <%#= render :partial => "/gankao/join_tab" %>
+    <%# end %>
   </body>
 </html>

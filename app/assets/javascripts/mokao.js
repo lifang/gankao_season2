@@ -27,7 +27,7 @@ function flash_remove(tab) {
 //提示框样式设定
 function generate_flash_div(style) {
     var scolltop = document.body.scrollTop|document.documentElement.scrollTop;
-    var win_height = document.documentElement.clientHeight;//jQuery(document).height();
+    var win_height = jQuery(window).height();//document.documentElement.clientHeight;
     var win_width = jQuery(window).width();
     var z_layer_height = jQuery(style).height();
     var z_layer_width = jQuery(style).width();
