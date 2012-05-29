@@ -165,6 +165,58 @@ class StudyPlansController < ApplicationController
   def action_link
     redirect_to "/study_plans?category=#{params[:id]}"
   end
-  
+
+  #授权码参加必过挑战
+  def join
+    data = ""
+    code = InviteCode.first(:conditions => ["code = ? and category_id = ?",
+        params[:info][:invit_code].strip, params[:info][:category_id]])
+    if code.nil?
+      data = "邀请码不存在"
+    else
+      if code.user_id
+        data = "邀请码已被使用"
+      else
+        cookies[:never_j] = {:value => "yes", :path => "/", :secure  => false}
+        @study_plan = StudyPlan.find(:first, :conditions => ["category_id = ?", code.category_id])
+        plan_date = @study_plan.study_date.nil? ? Constant::STUDY_DATE : (@study_plan.study_date - 1)
+        upr = UserPlanRelation.find_by_user_id_and_study_plan_id(cookies[:user_id].to_i, @study_plan.id)
+        categry_name = Category.find(code.category_id).name
+        if upr.nil?
+          user_plan={:user_id => cookies[:user_id].to_i, :study_plan_id => @study_plan.id,:created_at => Time.now.to_date,
+            :ended_at => Time.now.to_date + plan_date.days,:status => StudyPlan::STATUS[:NOMAL], :num => 1}
+            UserPlanRelation.create(user_plan)
+        elsif upr.status == false and upr.num < StudyPlan::CAN_JOIN_TIME
+          new_attr = {:num => StudyPlan::CAN_JOIN_TIME, :status => StudyPlan::STATUS[:NOMAL],
+            :created_at => Time.now.to_date, :ended_at => Time.now.to_date + plan_date.days}
+          new_attr[:is_activity] = UserPlanRelation::IS_ACTIVITY[:YES] unless params[:activity].nil? or params[:activity].empty?
+          upr.update_attributes(new_attr)
+        else
+          unless upr.status == true
+            data = "您已经没有机会再参加#{categry_name}学习计划了！"
+          end
+        end
+        if data.empty?
+          order = Order.first(:conditions=> "user_id=#{cookies[:user_id]}
+          and category_id=#{code.category_id} and status=#{Order::STATUS[:NOMAL]}")
+          if order.nil? || order.types==Order::TYPES[:COMPETE] || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:MUST]
+            code.update_attributes(:use_time=>Time.now, :user_id=>cookies[:user_id])
+            Order.create(:user_id=>cookies[:user_id],:category_id=>code.category_id,:types=>Order::TYPES[:ACCREDIT],
+              :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",
+              :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,
+              :end_time=>Time.now+Constant::DATE_LONG[:vip].days)
+            cookies.delete(:user_role)
+            user_role?(cookies[:user_id])
+            order.update_attributes(:status=>Order::STATUS[:INVALIDATION]) unless order.nil?
+          end
+        end
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:message=>data}
+      }
+    end
+  end
 
 end

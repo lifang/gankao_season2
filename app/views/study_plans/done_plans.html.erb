@@ -38,8 +38,12 @@
       <%= render :partial => "/common/flash_div"  %>
       <%= render :partial => "/common/head_div"  %>
       <div class="clear"></div>
-      <div class="main_Div">
+      <div class="main_Div">        
         <div class="planBox">
+          <div class="plan_guize">
+            <button class="t_btn"
+                    onclick="javascript: generate_flash_div('#guize_tab');$('#guize_z').show();$('#guize_tab').show();">规则</button>
+          </div>
           <div class="planTable">
             <%category_id = "#{params[:category]}"=="" ? 2 : params[:category]%>
             <%= form_for :task,:url=>"/study_plans/check_task",:html=>{:id=>"task"},:remote=>true do %>
@@ -71,8 +75,9 @@
         </div>
       </div>
       <div class="foot"></div>
-      <%= render :partial => "/common/activity_tab" unless is_join_plan?(params[:category])  %>
+      <%#= render :partial => "/common/activity_tab" unless is_join_plan?(params[:category])  %>
       <%= render :partial => "/common/online_qq"  %>
+      <%= render :partial => "/study_plans/guize"  %>
     </div>
     <div style="display: none" id="today_madel">
       <div class="pt_ztai"><img src="/assets/icon_jl.png" /></div>
@@ -92,19 +97,5 @@
         })
       </script>
     <% end %>
-    <%# if !cookies[:first].nil? and cookies[:first] == "1"  %>
-      <%#= render :partial => "/common/complete_info" %>
-      <script type="text/javascript">
-     /*   generate_flash_div("#complete_info");
-        $('#first_zhez').css('display','block');
-        $('#complete_info').css('display','block');
-        $('.xx_x').bind('click',function(){
-          $('#complete_info').hide();
-          $('#first_zhez').hide();
-          delCookie("first");
-          return false;
-        }) */
-      </script>
-    <%# end %>
   </body>
 </html>

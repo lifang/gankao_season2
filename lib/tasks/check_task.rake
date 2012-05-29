@@ -49,7 +49,7 @@ namespace :check do
             send_message += "，这已经是最后一天了，希望你能保持好素质和队形，自备好干粮、饮水和小板凳做好最后的冲刺"
           end
         end
-        Oauth2Helper.send_message(send_message,user_plan.user_id)
+        #Oauth2Helper.send_message(send_message,user_plan.user_id)
       end
     end unless user_plans.blank?
   end

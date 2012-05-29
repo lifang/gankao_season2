@@ -43,7 +43,7 @@ GankaoSeason2::Application.routes.draw do
   resources :study_plans do
     collection do
       get :done_plans,:renren,:plan_renren
-      post :plan_status,:check_task
+      post :plan_status,:check_task, :join
     end
     member do
       get :action_link
@@ -96,6 +96,12 @@ GankaoSeason2::Application.routes.draw do
     end
     member do
       get :info,:record
+    end
+  end
+
+  resources :gankao do
+    collection do
+      get :goto_plan
     end
   end
   # Sample resource route with options:

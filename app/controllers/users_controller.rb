@@ -83,7 +83,7 @@ class UsersController < ApplicationController
       else
         data="升级成功"
         order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{code.category_id} and status=#{Order::STATUS[:NOMAL]}")
-        if order.nil? || order.types==Order::TYPES[:COMPETE] || order.types==Order::TYPES[:TRIAL_SEVEN]
+        if order.nil? || order.types==Order::TYPES[:COMPETE] || order.types==Order::TYPES[:TRIAL_SEVEN] || order.types==Order::TYPES[:MUST]
           code.update_attributes(:use_time=>Time.now, :user_id=>cookies[:user_id])
           Order.create(:user_id=>cookies[:user_id],:category_id=>code.category_id,:types=>Order::TYPES[:ACCREDIT],
             :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",

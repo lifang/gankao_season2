@@ -120,3 +120,36 @@ img { border:none;}
 .online_qq p { margin: 50px 0 0 35px;}
 
 .zhezhao { width:100%; height: 100%; left:0; position:absolute; top:0; background:#000; opacity:0.5; filter:alpha(opacity=50); z-index:888;}
+
+/*挑战必过----*/
+.tz_d_box { width: 400px; padding: 10px; background: #FFF; border: 2px #333 solid; position: absolute; z-index:1000;}
+.tz_ta_h { font-size: 15px; height: 45px; line-height: 45px;}
+.tz_ta_div { height: 27px; padding: 10px 0 10px 66px; border-bottom: 1px #CCCCCC solid; clear: left;}
+.tz_ta_div span { padding: 0 10px; width: 90px; height: 27px; line-height: 27px; display: block; float: left;}
+.tz_ta_div  a { color: #03F; text-decoration: underline;}
+
+/*挑战tab-----tz_tab_box*/
+.tz_tab_box { width: 725px; padding: 10px; background: #FFF; border: 2px #333 solid; position: absolute; z-index:1000;}
+.tz_tab_box h1 { font-size: 16px; line-height: 32px;}
+.tz_gz_box { float: left;}
+.tz_jl_box { float: left; margin-left: 5px;}
+.tz_jl_box li { line-height: 24px; list-style: circle inside; padding-left: 10px; font-size: 14px;}
+
+.tz_xx { margin: 10px auto; padding-left: 20px;}
+.tz_xx_div { height: 32px; line-height: 32px;}
+.tz_xx label { width: 140px; float: left; font-size: 16px; font-weight: bold;}
+.tz_xx input { width: 150px; height: 30px;}
+
+.tz_info { padding: 10px;}
+.tz_info table { background: #CCC;}
+.tz_info table td { background: #FFF; padding: 5px 10px; height: 37px; line-height: 37px;}
+.tz_input_text { width: 160px; border: 1px #CCCCCC solid; height: 24px;}
+.tz_input_ra { border: 1px #CCCCCC solid; height: 24px;}
+.tz_info table td label { width: 60px; display: inline-block; text-align: right;}
+.tz_info_s { float: left; margin: 0 10px; height: 24px; line-height: 24px;}
+.tz_info_s span { float: right; padding-left: 10px;}
+.tz_btn { width: 110px; margin: 0 auto;}
+.tz_btn button { font-size: 14px; font-weight: bold;}
+.c_btn { width: 110px; height: 37px; line-height: 37px; background: url(/assets/tt_btn.png) no-repeat; border: none; color: #2875ae;}
+.tz_padding_l { padding-left: 10px;}
+
