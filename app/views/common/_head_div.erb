@@ -1,3 +1,4 @@
+<script type="text/javascript" src="http://cbjs.baidu.com/js/m.js"></script>
 <% category_id = params[:category].nil? ? 2 : params[:category] %>
 <div class="head">
   <div class="head_info">
@@ -22,7 +23,7 @@
     <% end %>
     <div class="h_banner"><div class="change">
         <script type="text/javascript">BAIDU_CLB_fillSlot("378590");</script>
-        <%#= javascript_include_tag "fankui" %>
+<%#= javascript_include_tag "fankui" %>
       </div></div> 
     <div id="fankui_tab_box" class="fankui_tab_box border_radius" style="display:none;">
       <div class="fankui_list"><label>科 目:</label><span><%= category_id.to_i==2 ? "大学英语四级" : category_id.to_i==3 ? "大学英语六级" : "未指定" %></span></div>
